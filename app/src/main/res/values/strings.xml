@@ -25,4 +25,8 @@
     <string name="market_button_blue">模拟交易</string>
     <string name="market_button_green">开户</string>
     <string name="market_button_red">实盘交易</string>
+    <!--MomentFragment-->
+    <string name="moment_tab_dynamic">动态</string>
+    <string name="moment_tab_message">消息</string>
+    <string name="moment_tab_follow">关注</string>
 </resources>

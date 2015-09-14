@@ -10,12 +10,15 @@
     <color name="secondary_text">#B8B8B8</color>
     <color name="secondary_dark">#292929</color>
 
+
+    <color name="button_blue">#3381E3</color>
+    <color name="button_green">#33A337</color>
+    <color name="button_red">#BD342E</color>
+
     <!--tabIndicatorColor of marketfragment-->
     <color name="market_IndicatorColor">#3381E3</color>
 
-    <color name="market_blue">#3381E3</color>
-    <color name="market_green">#33A337</color>
-    <color name="market_red">#BD342E</color>
 
-
+    <!--colors of MomentFragment-->
+    <color name="moment_blue">#268DFF</color>
 </resources>

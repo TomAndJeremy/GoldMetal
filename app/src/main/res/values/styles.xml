@@ -46,4 +46,12 @@
         <item name="android:layout_margin">7dp</item>
         <item name="android:textSize">@dimen/market_hint_size</item>
     </style>
+    <style name="MomentFragment_Tabs_text">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">@drawable/moment_tab_selector</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/moment_tab_size</item>
+    </style>
 </resources>

@@ -6,4 +6,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="head_title_size">20dp</dimen>
     <dimen name="market_hint_size">15sp</dimen>
+    <dimen name="moment_tab_size">20dp</dimen>
 </resources>
