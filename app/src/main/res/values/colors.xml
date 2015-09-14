@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--底部与顶部的颜色-->
+    <color name="colorPrimary">#202020</color>
+    <!--statusbar的颜色，-->
+    <color name="colorPrimaryDark">#171717</color>
+    <!--mainactivity选中的tab文字颜色-->
+    <color name="primary">#2A92FF</color>
+    <!--未选中的tab文字颜色,普通文字的颜色-->
+    <color name="secondary_text">#B8B8B8</color>
+    <color name="secondary_dark">#292929</color>
+
+    <!--tabIndicatorColor of marketfragment-->
+    <color name="market_IndicatorColor">#3381E3</color>
+
+    <color name="market_blue">#3381E3</color>
+    <color name="market_green">#33A337</color>
+    <color name="market_red">#BD342E</color>
+
+
+</resources>

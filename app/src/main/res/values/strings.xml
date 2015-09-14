@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">GoldMetal</string>
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment1">Hello blank fragment1</string>
+    <string name="hello_blank_fragment2">Hello blank fragment2</string>
+    <string name="hello_blank_fragment3">Hello blank fragment3</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="head_title_main">国金贵金属</string>
+    
+    
+    
+    <!--MarketFragment-->
+    <string name="market_type">类型</string>
+    <string name="market_sale">卖出</string>
+    <string name="market_buy">买入</string>
+    <string name="market_high_low">高低</string>
+    <string name="market_ups_downs">涨跌</string>
+    
+    <string name="market_button_blue">模拟交易</string>
+    <string name="market_button_green">开户</string>
+    <string name="market_button_red">实盘交易</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MyHeadView">
+        <attr name="headtitle" format="string"></attr>
+        <attr name="leftimg" format="integer"></attr>
+        <attr name="rightimg" format="integer"></attr>
+        <attr name="righttext" format="string"></attr>
+        <attr name="lefttext" format="string"></attr>
+    </declare-styleable>
+</resources>
