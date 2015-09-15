@@ -1,39 +1,29 @@
 package com.juttec.goldmetal.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.juttec.goldmetal.R;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link MoreFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * 更多界面
  */
-public class MoreFragment extends BaseFragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+public class MoreFragment extends BaseFragment implements View.OnClickListener{
     private static final String ARG_PARAM1 = "param1";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
-    private String mParam2;
 
-  //  private OnFragmentInteractionListener mListener;
+    private RelativeLayout rl_disclaimer;//免责声明
+    private RelativeLayout rl_feedback;//意见反馈
+    private RelativeLayout rl_about;//关于我们
+    private RelativeLayout rl_update;//检查更新
+    private RelativeLayout rl_instructions;//使用说明
+    private RelativeLayout rl_share;//分享app
+    private RelativeLayout rl_setting;//系统设置
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @return A new instance of fragment BlankFragment5.
-     */
-    // TODO: Rename and change types and number of parameters
     public static MoreFragment newInstance(String param1) {
         MoreFragment fragment = new MoreFragment();
         Bundle args = new Bundle();
@@ -57,47 +47,64 @@ public class MoreFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_more, container, false);
+        View view = inflater.inflate(R.layout.fragment_more, container, false);
+        initView(view);
+        return view;
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p/>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        public void onFragmentInteraction(Uri uri);
-//    }
 
+    /**
+     * 初始化控件
+     */
+    private void initView(View  view){
+        rl_disclaimer = (RelativeLayout)view.findViewById(R.id.rl_disclaimer);
+        rl_disclaimer.setOnClickListener(this);
+
+        rl_feedback= (RelativeLayout)view.findViewById(R.id.rl_feedback);
+        rl_feedback.setOnClickListener(this);
+
+        rl_about= (RelativeLayout)view.findViewById(R.id.rl_about);
+        rl_about.setOnClickListener(this);
+
+        rl_update= (RelativeLayout)view.findViewById(R.id.rl_update);
+        rl_update.setOnClickListener(this);
+
+        rl_instructions= (RelativeLayout)view.findViewById(R.id.rl_instructions);
+        rl_instructions.setOnClickListener(this);
+
+        rl_share= (RelativeLayout)view.findViewById(R.id.rl_share);
+        rl_share.setOnClickListener(this);
+
+        rl_setting= (RelativeLayout)view.findViewById(R.id.rl_setting);
+        rl_setting.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+
+            case R.id.rl_disclaimer:
+
+                break;
+            case R.id.rl_feedback:
+
+                break;
+            case R.id.rl_about:
+
+                break;
+            case R.id.rl_update:
+
+                break;
+            case R.id.rl_instructions:
+
+                break;
+            case R.id.rl_share:
+
+                break;
+            case R.id.rl_setting:
+
+                break;
+        }
+    }
 }

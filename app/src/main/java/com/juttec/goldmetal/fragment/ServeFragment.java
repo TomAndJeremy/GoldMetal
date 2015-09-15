@@ -1,40 +1,25 @@
 package com.juttec.goldmetal.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.juttec.goldmetal.R;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link ServeFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * 服务界面
  */
-public class ServeFragment extends BaseFragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+public class ServeFragment extends BaseFragment implements View.OnClickListener{
     private static final String ARG_PARAM1 = "param1";
 
-    // TODO: Rename and change types of parameters
+    private RelativeLayout rl_price_conversion;//价格换算
+    private RelativeLayout rl_trading_firm;//实盘交易
+    private RelativeLayout rl_trading_simulated;//模拟交易
+    private RelativeLayout rl_trading_rules;//交易规则
+
     private String mParam1;
-    private String mParam2;
-
-    //private OnFragmentInteractionListener mListener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BlankFragment4.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ServeFragment newInstance(String param1) {
         ServeFragment fragment = new ServeFragment();
         Bundle args = new Bundle();
@@ -59,46 +44,48 @@ public class ServeFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_serve, container, false);
+        View view = inflater.inflate(R.layout.fragment_serve, container, false);
+        initView(view);
+        return view;
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p/>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        public void onFragmentInteraction(Uri uri);
-//    }
 
+    /**
+     * 初始化控件
+     */
+    private void initView(View  view){
+        rl_price_conversion = (RelativeLayout)view.findViewById(R.id.rl_price_conversion);
+        rl_price_conversion.setOnClickListener(this);
+
+        rl_trading_firm= (RelativeLayout)view.findViewById(R.id.rl_trading_firm);
+        rl_trading_firm.setOnClickListener(this);
+
+        rl_trading_simulated= (RelativeLayout)view.findViewById(R.id.rl_trading_simulated);
+        rl_trading_simulated.setOnClickListener(this);
+
+        rl_trading_rules= (RelativeLayout)view.findViewById(R.id.rl_trading_rules);
+        rl_trading_rules.setOnClickListener(this);
+
+    }
+
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+
+            case R.id.rl_price_conversion:
+
+                break;
+            case R.id.rl_trading_firm:
+
+                break;
+            case R.id.rl_trading_simulated:
+
+                break;
+            case R.id.rl_trading_rules:
+
+                break;
+        }
+    }
 }
