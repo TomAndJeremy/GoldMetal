@@ -31,8 +31,35 @@
     <string name="moment_tab_follow">关注</string>
 
 
+
     <!-- NewsFragment-->
     <string name="news_headlines">财经头条</string>
+    <string name="news_calendar">财经日历</string>
+    <string name="news_broadcast">快讯直播</string>
+    <string name="news_review">机构评论</string>
+    <string name="news_analysis">深度解析</string>
+    <string name="news_announcement">交易公告</string>
+    <string name="news_institution">投资机构</string>
+
+
+    <!-- ServerFragment-->
+    <string name="server_price_conversion">价格换算</string>
+    <string name="server_trading_firm">实盘交易</string>
+    <string name="server_trading_simulated">模拟交易</string>
+    <string name="server_trading_rules">交易规则</string>
+
+
+    <!-- MoreFragment-->
+    <string name="more_disclaimer">免责声明</string>
+    <string name="more_fadeback">意见反馈</string>
+    <string name="more_about">关于我们</string>
+    <string name="more_update">检查更新</string>
+    <string name="more_instructions">使用说明</string>
+    <string name="more_share">分享APP</string>
+    <string name="more_setting">系统设置</string>
+
+
+
 
 
 </resources>
