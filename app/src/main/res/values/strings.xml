@@ -17,8 +17,6 @@
     <string name="head_title_server">服务</string>
     <string name="head_title_more">更多</string>
 
-    <!-- Activity中 标题栏中的  标题-->
-    <string name="head_title_share">分享APP</string>
 
 
     <!--MarketFragment-->
