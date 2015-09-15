@@ -21,4 +21,14 @@
 
     <!--colors of MomentFragment-->
     <color name="moment_blue">#268DFF</color>
+
+
+    <!-- 资讯、 服务 、更多 Fragment中  RelativeLayout 点击时的背景颜色-->
+    <color name="more_rela_pressed">#A3A3A3</color>
+    <!-- 资讯、 服务 、更多 Fragment中  RelativeLayout 正常时的背景颜色-->
+    <color name="more_rela_normal">#F8F8F8</color>
+
+
+
+
 </resources>

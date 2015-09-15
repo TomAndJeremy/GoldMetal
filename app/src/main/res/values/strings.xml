@@ -29,4 +29,10 @@
     <string name="moment_tab_dynamic">动态</string>
     <string name="moment_tab_message">消息</string>
     <string name="moment_tab_follow">关注</string>
+
+
+    <!-- NewsFragment-->
+    <string name="news_headlines">财经头条</string>
+
+
 </resources>

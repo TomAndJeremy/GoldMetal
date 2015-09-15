@@ -54,4 +54,8 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">@dimen/moment_tab_size</item>
     </style>
+
+
+
+
 </resources>

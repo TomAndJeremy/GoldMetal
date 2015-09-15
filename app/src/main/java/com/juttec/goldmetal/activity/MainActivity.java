@@ -5,20 +5,14 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.MyFragmentPagerAdapter;
-import com.juttec.goldmetal.customview.HeadLayout;
 import com.juttec.goldmetal.fragment.BaseFragment;
 
 public class MainActivity extends AppCompatActivity implements BaseFragment.OnFragmentInteractionListener {
     ViewPager viewPager;
     TabLayout tabLayout;
- HeadLayout headLayout;
-    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +35,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         viewPager.setOffscreenPageLimit(5);
         tabLayout = (TabLayout) this.findViewById(R.id.tabLayout);
 
-        headLayout = (HeadLayout) this.findViewById(R.id.head_layout);
 
-        imageView = (ImageView) headLayout.findViewById(R.id.left_img);//得到自定义布局中的控件
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "11213", Toast.LENGTH_LONG).show();
-            }
-        });
 
 
         //初始化adapter
