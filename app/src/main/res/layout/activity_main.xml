@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:headview="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,12 +9,10 @@
 
     <com.juttec.goldmetal.customview.HeadLayout
         android:id="@+id/head_layout"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        headview:headtitle="@string/head_title_main"
-        headview:leftimg="@mipmap/nav_btn_market_message"
-        headview:rightimg="@mipmap/nav_btn_market_user"/>
+        style="@style/HeadBarStytle"
+        app:headtitle="@string/head_title_main"
+        app:leftimg="@mipmap/nav_btn_market_message"
+        app:rightimg="@mipmap/nav_btn_market_user"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
