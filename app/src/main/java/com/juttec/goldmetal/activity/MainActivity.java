@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         viewPager.setCurrentItem(1);
         viewPager.setCurrentItem(0);
 
-        startActivity(new Intent(this,LoginActivity.class));
+
     }
 
     /*
