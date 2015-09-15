@@ -36,6 +36,8 @@
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.7">
 
+
+
                 </ImageView>
 
                 <com.juttec.goldmetal.customview.CircleImageView
