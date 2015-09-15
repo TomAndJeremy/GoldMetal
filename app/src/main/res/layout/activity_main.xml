@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.juttec.goldmetal.customview.HeadLayout
-        android:id="@+id/head_layout"
-        style="@style/HeadBarStytle"
-        app:headtitle="@string/head_title_main"
-        app:leftimg="@mipmap/nav_btn_market_message"
-        app:rightimg="@mipmap/nav_btn_market_user"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"

@@ -23,10 +23,19 @@
     <color name="moment_blue">#268DFF</color>
 
 
+
+
     <!-- 资讯、 服务 、更多 Fragment中  RelativeLayout 点击时的背景颜色-->
     <color name="more_rela_pressed">#A3A3A3</color>
-    <!-- 资讯、 服务 、更多 Fragment中  RelativeLayout 正常时的背景颜色-->
+    <!-- 资讯、 服务 、更多 Fragment的背景颜色   以及Fragment 中  RelativeLayout 正常时的背景颜色-->
     <color name="more_rela_normal">#F8F8F8</color>
+
+    <!-- 资讯、 服务 、更多 Fragment中  RelativeLayout里 字体的颜色-->
+    <color name="rl_text_color">#272727</color>
+
+    <!-- 资讯、 服务 、更多 Fragment中  分割线的背景颜色-->
+    <color name="divide_line">#DADADA</color>
+
 
 
 

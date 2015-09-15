@@ -1,10 +1,131 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:headview="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.juttec.goldmetal.fragment.BlankFragment2">
+    android:background="@color/more_rela_normal"
+    android:orientation="vertical"
+    tools:context="com.juttec.goldmetal.fragment.NewsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment2" />
 
-</FrameLayout>
+    <com.juttec.goldmetal.customview.HeadLayout
+        android:id="@+id/head_layout"
+        style="@style/HeadBarStytle"
+        headview:headtitle="@string/head_title_news"
+       />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <RelativeLayout
+                android:id="@+id/rl_headlines"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                   style="@style/rl_text_style"
+                    android:text="@string/news_headlines"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_calendar"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/news_calendar"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_broadcast"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/news_broadcast"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+
+
+            <RelativeLayout
+                android:id="@+id/rl_review"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/news_review"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_analysis"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/news_analysis"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_announcement"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/news_announcement"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_institution"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/news_institution"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

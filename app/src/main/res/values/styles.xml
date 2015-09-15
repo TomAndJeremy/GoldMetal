@@ -59,9 +59,51 @@
     <item name="android:paddingLeft">10dp</item>
     <item name="android:paddingRight">10dp</item>
     <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">?attr/actionBarSize</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="android:background">@color/colorPrimary</item>
 </style>
+
+    <!-- 资讯、服务、更多Fragment 中 RelativeLayout的样式-->
+    <style name="relativeLayout_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/more_rela_selector</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingTop">@dimen/rl_padding_top</item>
+        <item name="android:paddingBottom">@dimen/rl_padding_bottom</item>
+        <item name="android:paddingLeft">@dimen/rl_padding_left</item>
+        <item name="android:paddingRight">@dimen/rl_padding_right</item>
+
+    </style>
+
+    <!-- 资讯、服务、更多Fragment 中 RelativeLayout里textview的样式-->
+    <style name="rl_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/rl_text_color</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/rl_text_size</item>
+    </style>
+
+
+    <!-- 资讯、服务、更多Fragment 中 RelativeLayout里ImageView的样式-->
+    <style name="rl_image_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:src">@mipmap/content_news_org_icon_arrow_right</item>
+    </style>
+
+
+    <!-- 资讯、服务、更多Fragment 中 分割线的样式-->
+    <style name="divide_line_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/divide_line_height</item>
+        <item name="android:background">@color/divide_line</item>
+    </style>
+
+
 
 
 </resources>

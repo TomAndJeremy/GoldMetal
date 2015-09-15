@@ -11,20 +11,26 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-    <string name="head_title_main">国金贵金属</string>
-    
-    
-    
+    <!-- Fragment中 标题栏中的  标题-->
+    <string name="head_title_market">国金贵金属</string>
+    <string name="head_title_news">资讯</string>
+    <string name="head_title_server">服务</string>
+    <string name="head_title_more">更多</string>
+
+
+
     <!--MarketFragment-->
     <string name="market_type">类型</string>
     <string name="market_sale">卖出</string>
     <string name="market_buy">买入</string>
     <string name="market_high_low">高低</string>
     <string name="market_ups_downs">涨跌</string>
-    
     <string name="market_button_blue">模拟交易</string>
     <string name="market_button_green">开户</string>
     <string name="market_button_red">实盘交易</string>
+
+
+
     <!--MomentFragment-->
     <string name="moment_tab_dynamic">动态</string>
     <string name="moment_tab_message">消息</string>
@@ -51,7 +57,7 @@
 
     <!-- MoreFragment-->
     <string name="more_disclaimer">免责声明</string>
-    <string name="more_fadeback">意见反馈</string>
+    <string name="more_feedback">意见反馈</string>
     <string name="more_about">关于我们</string>
     <string name="more_update">检查更新</string>
     <string name="more_instructions">使用说明</string>
@@ -60,7 +66,5 @@
 
 <!--LoginActivity-->
     <string name="login">登录</string>
-
-
 
 </resources>

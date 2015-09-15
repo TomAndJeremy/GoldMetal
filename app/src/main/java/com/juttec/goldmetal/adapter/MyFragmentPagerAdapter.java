@@ -20,7 +20,7 @@ import com.juttec.goldmetal.fragment.ServeFragment;
  */
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 5;
-    private String tabTitles[] = new String[]{"行情", "咨询", "交易圈", "服务", "更多"};//tab的文字
+    private String tabTitles[] = new String[]{"行情", "资讯", "交易圈", "服务", "更多"};//tab的文字
     private int[] tabIcon = new int[]{R.drawable.tabicon_market, R.drawable.tabicon_news,
             R.drawable.tabicon_moment, R.drawable.tabicon_serve,
             R.drawable.tabicon_more};//tab的icon

@@ -1,10 +1,133 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:headview="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.juttec.goldmetal.fragment.BlankFragment5">
+    android:background="@color/more_rela_normal"
+    android:orientation="vertical"
+    tools:context="com.juttec.goldmetal.fragment.MoreFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <com.juttec.goldmetal.customview.HeadLayout
+        android:id="@+id/head_layout"
+        style="@style/HeadBarStytle"
+        headview:headtitle="@string/head_title_more"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <RelativeLayout
+                android:id="@+id/rl_disclaimer"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/more_disclaimer"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_feedback"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/more_feedback"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_about"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/more_about"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+
+
+            <RelativeLayout
+                android:id="@+id/rl_update"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/more_update"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_instructions"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/more_instructions"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_share"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/more_share"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_setting"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/more_setting"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

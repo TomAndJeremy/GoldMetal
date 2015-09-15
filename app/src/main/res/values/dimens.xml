@@ -4,7 +4,24 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="head_title_size">25dp</dimen>
+    <dimen name="head_title_size">20dp</dimen>
     <dimen name="market_hint_size">15sp</dimen>
     <dimen name="moment_tab_size">20dp</dimen>
+
+
+
+    <!-- 资讯、服务、更多Fragment 中 RelativeLayout 里的 字体的大小-->
+    <dimen name="rl_text_size">18sp</dimen>
+    <!-- 资讯、服务、更多Fragment 中 RelativeLayout 的各种padding-->
+    <dimen name="rl_padding_left">15dp</dimen>
+    <dimen name="rl_padding_right">15dp</dimen>
+    <dimen name="rl_padding_top">15dp</dimen>
+    <dimen name="rl_padding_bottom">15dp</dimen>
+
+    <!-- 资讯、服务、更多Fragment 中 分割线的 高度-->
+    <dimen name="divide_line_height">0.5dp</dimen>
+
+
+
+
 </resources>
