@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Fragment 中 RelativeLayout 的 自定义点击效果-->
+
+    <item android:state_pressed="true"
+        android:drawable="@color/more_rela_pressed">
+    </item>
+
+    <item
+        android:drawable="@color/more_rela_normal">
+    </item>
+
+
+</selector>
