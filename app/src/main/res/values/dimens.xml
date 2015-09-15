@@ -22,4 +22,15 @@
     <dimen name="divide_line_height">0.5dp</dimen>
     <!-- LoginActivity-->
     <dimen name="login_button_textsize">20sp</dimen>
+
+
+
+    <!-- ShareActivity 中 分享图片的大小-->
+    <dimen name="share_img">30dp</dimen>
+    <!-- 字体与图片之间的  间距大小-->
+    <dimen name="share_img_divide">15dp</dimen>
+
+
+
+
 </resources>

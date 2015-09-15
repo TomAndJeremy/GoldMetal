@@ -1,0 +1,120 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:headview="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/more_rela_normal"
+    android:orientation="vertical"
+    tools:context="com.juttec.goldmetal.activity.ShareActivity">
+
+
+    <com.juttec.goldmetal.customview.HeadLayout
+        android:id="@+id/head_layout"
+        style="@style/HeadBarStytle"
+        headview:headtitle="@string/head_title_share"
+        headview:leftimg="@mipmap/nav_btn_backa_arrow"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <RelativeLayout
+                android:id="@+id/share_sina_firends"
+                style="@style/relativeLayout_style">
+
+                <ImageView
+                    android:id="@+id/iv_sina_friends"
+                    style="@style/share_image_style"
+                    android:src="@mipmap/content_more_share_icon_weibo" />
+
+                <TextView
+                    android:layout_toRightOf="@+id/iv_sina_friends"
+                    android:layout_marginLeft="@dimen/share_img_divide"
+                    style="@style/rl_text_style"
+                    android:text="@string/share_sina_friends"/>
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+            <RelativeLayout
+                android:id="@+id/share_wechat_friends"
+                style="@style/relativeLayout_style">
+
+                <ImageView
+                    android:id="@+id/iv_wechat_friends"
+                    style="@style/share_image_style"
+                    android:src="@mipmap/content_more_share_icon_wechart" />
+
+                <TextView
+                    android:layout_toRightOf="@+id/iv_wechat_friends"
+                    android:layout_marginLeft="@dimen/share_img_divide"
+                    style="@style/rl_text_style"
+                    android:text="@string/share_wechat_friends"/>
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+            <RelativeLayout
+                android:id="@+id/share_friends"
+                style="@style/relativeLayout_style">
+
+                <ImageView
+                    android:id="@+id/iv_friends"
+                    style="@style/share_image_style"
+                    android:src="@mipmap/content_more_share_icon_friends" />
+
+                <TextView
+                    android:layout_toRightOf="@+id/iv_friends"
+                    android:layout_marginLeft="@dimen/share_img_divide"
+                    style="@style/rl_text_style"
+                    android:text="@string/share_friends"/>
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+
+
+            <RelativeLayout
+                android:id="@+id/share_qq_friends"
+                style="@style/relativeLayout_style">
+
+                <ImageView
+                    android:id="@+id/iv_qq_friends"
+                    style="@style/share_image_style"
+                    android:src="@mipmap/content_more_share_icon_qq" />
+
+                <TextView
+                    android:layout_toRightOf="@+id/iv_qq_friends"
+                    android:layout_marginLeft="@dimen/share_img_divide"
+                    style="@style/rl_text_style"
+                    android:text="@string/share_qq_friends"/>
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+            <RelativeLayout
+                android:id="@+id/share_qq_zone"
+                style="@style/relativeLayout_style">
+
+                <ImageView
+                    android:id="@+id/iv_qq_zone"
+                    style="@style/share_image_style"
+                    android:src="@mipmap/content_more_share_icon_zone" />
+
+                <TextView
+                    android:layout_toRightOf="@+id/iv_qq_zone"
+                    android:layout_marginLeft="@dimen/share_img_divide"
+                    style="@style/rl_text_style"
+                    android:text="@string/share_qq_zone"/>
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

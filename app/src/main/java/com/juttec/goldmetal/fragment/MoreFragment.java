@@ -1,5 +1,6 @@
 package com.juttec.goldmetal.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.activity.ShareActivity;
 
 /**
  * 更多界面
@@ -82,6 +84,8 @@ public class MoreFragment extends BaseFragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        Intent intent = null;
+
         switch (v.getId()){
 
             case R.id.rl_disclaimer:
@@ -100,6 +104,8 @@ public class MoreFragment extends BaseFragment implements View.OnClickListener{
 
                 break;
             case R.id.rl_share:
+                intent = new Intent(getActivity(), ShareActivity.class);
+                getActivity().startActivity(intent);
 
                 break;
             case R.id.rl_setting:

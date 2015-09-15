@@ -66,6 +66,20 @@
 
 <!--LoginActivity-->
     <string name="login">登录</string>
+    <string name="title_activity_share">ShareActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+
+
+
+
+    <!-- ShareActivity中-->
+    <string name="head_title_share">分享APP</string>
+    <string name="share_sina_friends">分享给新浪微博好友</string>
+    <string name="share_wechat_friends">分享给微信好友</string>
+    <string name="share_friends">分享到朋友圈</string>
+    <string name="share_qq_friends">分享给QQ好友</string>
+    <string name="share_qq_zone">分享到QQ空间</string>
 
     <string name="hint_name">请输入用户名</string>
     <string name="hint_password">请输入密码</string>

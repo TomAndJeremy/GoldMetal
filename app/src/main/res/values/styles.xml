@@ -81,6 +81,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/rl_text_color</item>
         <item name="android:gravity">center</item>
+        <item name="android:layout_centerVertical">true</item>
         <item name="android:textSize">@dimen/rl_text_size</item>
     </style>
 
@@ -111,5 +112,17 @@
         <item name="android:background">@drawable/content_btn_bg_blue</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <!--ShareActivity 中 RelativeLayout里ImageView的样式-->
+    <style name="share_image_style">
+        <item name="android:layout_width">@dimen/share_img</item>
+        <item name="android:layout_height">@dimen/share_img</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+
+
+>>>>>>> Stashed changes
 
 </resources>
