@@ -6,9 +6,13 @@
 
     <com.juttec.goldmetal.customview.HeadLayout
        style="@style/HeadBarStytle"
-        app:headtitle="@string/head_title_main"
-        app:leftimg="@mipmap/nav_btn_backa_arrow"
-        app:rightimg="@mipmap/nav_btn_market_user">
+        app:headtitle="@string/login"
+        app:leftimg="@mipmap/nav_btn_backa_arrow">
 
     </com.juttec.goldmetal.customview.HeadLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"></LinearLayout>
 </LinearLayout>
