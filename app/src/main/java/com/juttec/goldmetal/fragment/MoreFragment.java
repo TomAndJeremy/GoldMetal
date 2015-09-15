@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.activity.AboutActivity;
+import com.juttec.goldmetal.activity.FeedbackActivity;
 import com.juttec.goldmetal.activity.ShareActivity;
 
 /**
@@ -92,9 +94,13 @@ public class MoreFragment extends BaseFragment implements View.OnClickListener{
 
                 break;
             case R.id.rl_feedback:
+                intent = new Intent(getActivity(), FeedbackActivity.class);
+                getActivity().startActivity(intent);
 
                 break;
             case R.id.rl_about:
+                intent = new Intent(getActivity(), AboutActivity.class);
+                getActivity().startActivity(intent);
 
                 break;
             case R.id.rl_update:

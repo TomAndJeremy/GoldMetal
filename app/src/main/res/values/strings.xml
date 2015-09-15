@@ -79,15 +79,30 @@
     <string name="share_qq_friends">分享给QQ好友</string>
     <string name="share_qq_zone">分享到QQ空间</string>
 
+
+    <!-- AboutActivity中-->
+    <string name="head_title_about">关于我们</string>
+
+
+    <!-- FeedbackActivity中-->
+    <string name="head_title_feedback">意见反馈</string>
+
+
+
+
+
     <string name="hint_name">请输入用户名</string>
     <string name="hint_password">请输入密码</string>
     <string name="remember_pwd">记住密码</string>
     <string name="forget_pwd">忘记密码?</string>
+
     <!--FindBackActivity-->
     <string name="find_pwd">找回密码</string>
     <string name="hint_phone">找回密码</string>
     <string name="hint_identify_code">请输入验证码</string>
     <string name="hint_find_pwd">新密码</string>
     <string name="hint_confirm_pwd">确认密码</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_feedback">FeedbackActivity</string>
 
 </resources>
