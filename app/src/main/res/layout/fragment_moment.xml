@@ -76,6 +76,7 @@
                         style="@style/MomentFragment_Tabs_text"
                         android:text="@string/moment_tab_follow" />
 
+
                 </LinearLayout>
 
             </LinearLayout>
