@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="AppTheme.Base">
 
@@ -55,13 +54,13 @@
         <item name="android:textSize">@dimen/moment_tab_size</item>
     </style>
 
-<style name="HeadBarStytle">
-    <item name="android:paddingLeft">10dp</item>
-    <item name="android:paddingRight">10dp</item>
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:background">@color/colorPrimary</item>
-</style>
+    <style name="HeadBarStytle">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
 
     <!-- 资讯、服务、更多Fragment 中 RelativeLayout的样式-->
     <style name="relativeLayout_style">
@@ -103,7 +102,14 @@
         <item name="android:background">@color/divide_line</item>
     </style>
 
+    <style name="CheckBoxStyle">
+        <item name="android:button">@drawable/checkbox</item>
+    </style>
 
-
+    <style name="BigButtonStyle">
+        <item name="android:layout_height">60dp</item>
+        <item name="android:background">@drawable/content_btn_bg_blue</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 
 </resources>

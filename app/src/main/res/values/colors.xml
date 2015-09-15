@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="white">#ffffff</color>
+    <!-- 按钮的蓝色-->
+    <color name="button_bule">#207ADB</color>
+
+
     <!--底部与顶部的颜色-->
     <color name="colorPrimary">#202020</color>
     <!--statusbar的颜色，-->
@@ -38,6 +44,8 @@
 
 
 
-
+<!--LoginActivity-->
+    <!-- 输入框边框-->
+    <color name="input_border">#D9D9D9</color>
 
 </resources>

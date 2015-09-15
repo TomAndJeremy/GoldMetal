@@ -1,5 +1,6 @@
 package com.juttec.goldmetal.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -23,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         //让tablayout响应，使第一个tab变色
         viewPager.setCurrentItem(1);
         viewPager.setCurrentItem(0);
+
+
     }
 
     /*
