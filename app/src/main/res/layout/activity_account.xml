@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/more_rela_normal"
+    android:orientation="vertical"
+    tools:context="com.juttec.goldmetal.activity.AccountActivity">
+
+    <com.juttec.goldmetal.customview.HeadLayout
+        style="@style/HeadBarStytle"
+        app:headtitle="@string/account"
+
+        app:lefttext="@string/contact"
+        app:righttext="@string/refresh"></com.juttec.goldmetal.customview.HeadLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/input_to_board"
+        android:layout_marginRight="@dimen/input_to_board"
+        android:layout_marginTop="@dimen/input_to_board"
+        android:text="@string/basic_information"
+        android:textColor="@color/secondary_text"
+        android:textSize="@dimen/register_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/input_to_board"
+        android:background="@drawable/login_input_border"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                style="@style/InputImg"
+                android:text="@string/ID" />
+
+            <TextView style="@style/EditTextStyle" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/input_border" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                style="@style/InputImg"
+                android:text="@string/nickname" />
+
+            <TextView
+                style="@style/EditTextStyle"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:background="@mipmap/content_account_btn_change" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                style="@style/InputImg"
+                android:text="@string/name" />
+
+            <TextView
+                style="@style/EditTextStyle"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:background="@mipmap/content_account_btn_change" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                style="@style/InputImg"
+                android:text="@string/phone" />
+
+            <TextView
+                style="@style/EditTextStyle"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:background="@mipmap/content_account_btn_change" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                style="@style/InputImg"
+                android:text="@string/QQ" />
+
+            <TextView
+                style="@style/EditTextStyle"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:background="@mipmap/content_account_btn_change" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/input_to_board"
+        android:background="@drawable/login_input_border"
+        android:drawableRight="@mipmap/content_account_icon_arrow"
+        android:padding="15dp"
+        android:text="@string/hint_change_pwd"
+        android:textSize="@dimen/base_text"></TextView>
+
+    <Button
+        style="@style/BigButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_margin="20dp"
+        android:text="@string/sing_out"
+        android:textSize="@dimen/login_button_text" />
+</LinearLayout>

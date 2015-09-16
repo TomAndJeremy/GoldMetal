@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/price_background"
+    android:orientation="vertical"
+    tools:context="com.juttec.goldmetal.activity.PriceReductionActivity">
+
+    <com.juttec.goldmetal.customview.HeadLayout
+        style="@style/HeadBarStytle"
+        app:headtitle="@string/price_reduction"
+        app:leftimg="@mipmap/nav_btn_backa_arrow"></com.juttec.goldmetal.customview.HeadLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dip">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/item1_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="美元/盎司"
+                    android:textColor="@color/price_red"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/etcorner_shape"
+                    android:gravity="center"
+                    android:text="16.18"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    android:id="@+id/item2_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="="
+                    android:textColor="#ffffff" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/item3_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="人民币/千克"
+                    android:textColor="@color/price_red"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/etcorner_shape"
+                    android:gravity="center"
+                    android:text="3180"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/item4_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:layout_marginTop="30dp"
+                android:text="="
+
+                android:textColor="#ffffff" />
+
+            <LinearLayout
+                android:id="@+id/item5_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="人民币/盎司"
+                    android:textColor="@color/price_red"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/etcorner_shape"
+                    android:gravity="center"
+                    android:text="98.92"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dip"
+        android:layout_marginTop="10dip"
+        android:text="美元：人民币=1：6.1137"
+        android:textColor="@color/price_red"
+        android:textSize="14sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginRight="@dimen/input_to_board"
+        android:layout_marginLeft="@dimen/input_to_board"
+        android:background="@drawable/gridview_corner"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dip"
+        android:layout_marginTop="10dip"
+        android:text="备注：括号内数值为对应平台与标准报价的溢价值"
+        android:textColor="#8E4546"
+        android:textSize="14sp" />
+
+</LinearLayout>

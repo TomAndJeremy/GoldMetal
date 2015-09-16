@@ -12,6 +12,7 @@
         android:id="@+id/left_img" />
 
     <TextView
+        android:textColor="@color/white"
         android:id="@+id/left_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,6 +34,7 @@
         android:layout_alignParentRight="true"/>
 
     <TextView
+        android:textColor="@color/white"
         android:id="@+id/right_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

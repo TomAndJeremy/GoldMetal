@@ -2,6 +2,7 @@
 <resources>
 
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
     <!-- 按钮的蓝色-->
     <color name="button_bule">#207ADB</color>
 
@@ -44,13 +45,24 @@
 
 
 
-    <!--LoginActivity-->
-    <!-- 输入框边框-->
-    <color name="input_border">#D9D9D9</color>
 
 
     <!--FeedbackActivity-->
     <!-- 输入反馈信息的背景-->
     <color name="feedback_linear_gray">#E6E6E6</color>
+    <!-- contact to us-->
+    <color name="contact_back">#ECECEC</color>
+    <color name="contact_black">#303030</color>
 
+
+    <!--LoginActivity-->
+    <!-- 输入框边框-->
+    <color name="input_border">#D9D9D9</color>
+
+
+    <!-- price reduction-->
+    <color name="price_red">#FB4E48</color>
+    <color name="price_background">#2C2C2C</color>
+    <color name="etcorner_solid">#424041</color>
+    <color name="gridview_background">#262626</color>
 </resources>

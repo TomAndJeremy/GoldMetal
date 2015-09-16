@@ -9,9 +9,17 @@
         style="@style/HeadBarStytle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:headtitle="@string/find_pwd">
+        app:headtitle="@string/register">
 
     </com.juttec.goldmetal.customview.HeadLayout>
+
+    <TextView
+        android:layout_marginTop="@dimen/input_to_board"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/register_title"
+        android:text="@string/phone_register" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,7 +70,7 @@
 
         <EditText
             style="@style/EditTextStyle"
-            android:hint="@string/hint_identify_code" />
+            android:hint="@string/hint_phone" />
     </LinearLayout>
 
     <LinearLayout
@@ -84,9 +92,8 @@
                 android:src="@mipmap/content_account_icon_password" />
 
             <EditText
-                android:id="@+id/login_et_pwd"
                 style="@style/EditTextStyle"
-                android:hint="@string/hint_new_pwd" />
+                android:hint="@string/hint_password" />
 
 
         </LinearLayout>
@@ -107,9 +114,8 @@
                 android:src="@mipmap/content_account_icon_password" />
 
             <EditText
-                android:id="@+id/login_et_name"
                 style="@style/EditTextStyle"
-                android:hint="@string/hint_confirm_pwd" />
+                android:hint="@string/register_confirm_pwd" />
 
 
         </LinearLayout>
@@ -120,6 +126,6 @@
         style="@style/BigButtonStyle"
         android:layout_width="match_parent"
         android:layout_margin="20dp"
-        android:text="@string/ok"
+        android:text="@string/register"
         android:textSize="@dimen/login_button_text" />
 </LinearLayout>

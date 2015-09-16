@@ -34,8 +34,7 @@
     <string name="moment_tab_message">消息</string>
     <string name="moment_tab_follow">关注</string>
 
-
-
+    
     <!-- NewsFragment-->
     <string name="news_headlines">财经头条</string>
     <string name="news_calendar">财经日历</string>
@@ -62,11 +61,17 @@
     <string name="more_share">分享APP</string>
     <string name="more_setting">系统设置</string>
 
-<!--LoginActivity-->
-    <string name="login">登录</string>
+
     <string name="title_activity_share">ShareActivity</string>
 
     <string name="hello_world">Hello world!</string>
+
+
+
+
+
+
+
 
 
 
@@ -87,9 +92,15 @@
     <!-- FeedbackActivity中-->
     <string name="head_title_feedback">意见反馈</string>
 
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_feedback">FeedbackActivity</string>
 
 
 
+
+
+    <!--LoginActivity-->
+    <string name="login">登录</string>
 
     <string name="hint_name">请输入用户名</string>
     <string name="hint_password">请输入密码</string>
@@ -98,11 +109,36 @@
 
     <!--FindBackActivity-->
     <string name="find_pwd">找回密码</string>
-    <string name="hint_phone">找回密码</string>
+    <string name="hint_phone">请输入手机号</string>
     <string name="hint_identify_code">请输入验证码</string>
-    <string name="hint_find_pwd">新密码</string>
+    <string name="hint_new_pwd">新密码</string>
     <string name="hint_confirm_pwd">确认密码</string>
-    <string name="title_activity_about">AboutActivity</string>
-    <string name="title_activity_feedback">FeedbackActivity</string>
+    <string name="ok">确定</string>
+    <string name="title_activity_register">RegisterActivity</string>
 
+    <!-- registerActivity-->
+    <string name="register">注册</string>
+    <string name="phone_register">手机注册</string>
+    <string name="register_confirm_pwd">请确认密码</string>
+
+    <!--Contact to us-->
+    <string name="contact">联系我们</string>
+    <!-- cahnge password-->
+    <string name="hint_change_pwd">修改密码</string>
+    <string name="hint_old_pwd">旧密码</string>
+    <string name="hint_pwd_confirm">密码确认</string>
+    <!-- account-->
+    <string name="account">账号</string>
+
+    <string name="refresh">刷新</string>
+    <string name="nickname">昵称  </string>
+    <string name="name">姓名  </string>
+    <string name="phone">手机  </string>
+    <string name="QQ">QQ   </string>
+    <string name="sing_out">退出当前账号</string>
+    <string name="basic_information">基本信息</string>
+    <string name="ID">掌金ID</string>
+
+    <!-- The price reduction-->
+    <string name="price_reduction">价格换算</string>
 </resources>

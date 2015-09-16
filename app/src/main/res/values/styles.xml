@@ -1,8 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="AppTheme.Base">
-
-    </style>
+    <style name="AppTheme" parent="AppTheme.Base"></style>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -81,7 +79,6 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/rl_text_color</item>
         <item name="android:gravity">center</item>
-        <item name="android:layout_centerVertical">true</item>
         <item name="android:textSize">@dimen/rl_text_size</item>
     </style>
 
@@ -112,7 +109,14 @@
         <item name="android:background">@drawable/content_btn_bg_blue</item>
         <item name="android:textColor">@color/white</item>
     </style>
-
+    <!-- 输入框边上的图片-->
+    <style name="InputImg">
+    <item name="android:layout_marginRight">10dp</item>
+    <item name="android:layout_marginLeft">10dp</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/base_text</item>
+    </style>
     <!--ShareActivity 中 RelativeLayout里ImageView的样式-->
     <style name="share_image_style">
         <item name="android:layout_width">@dimen/share_img</item>
@@ -123,6 +127,21 @@
 
 
 
->>>>>>> Stashed changes
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="EditTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@null</item>
+        <item name="android:textSize">@dimen/base_text</item>
+    </style>
+
+
+    <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
+
+    <!--<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
 
 </resources>
