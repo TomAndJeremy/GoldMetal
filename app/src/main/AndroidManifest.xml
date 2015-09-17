@@ -20,7 +20,7 @@
 
         <activity
             android:name=".activity.ShareActivity"
-            android:label="@string/title_activity_share"
+            android:label="ShareActivity"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.AboutActivity"
@@ -51,6 +51,17 @@
         <activity
             android:name=".activity.RegisterActivity"
             android:label="RegisterActivity"></activity>
+
+        <activity
+            android:name=".activity.SettingActivity"
+            android:label="SettingActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.ParameterSettingActivity"
+            android:label="ParameterSettingActivity"
+            android:screenOrientation="portrait"></activity>
+
+
     </application>
 
 </manifest>

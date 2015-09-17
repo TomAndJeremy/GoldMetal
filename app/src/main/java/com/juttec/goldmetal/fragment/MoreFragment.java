@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.AboutActivity;
 import com.juttec.goldmetal.activity.FeedbackActivity;
+import com.juttec.goldmetal.activity.SettingActivity;
 import com.juttec.goldmetal.activity.ShareActivity;
 
 /**
@@ -115,6 +116,8 @@ public class MoreFragment extends BaseFragment implements View.OnClickListener{
 
                 break;
             case R.id.rl_setting:
+                intent = new Intent(getActivity(),  SettingActivity.class);
+                getActivity().startActivity(intent);
 
                 break;
         }

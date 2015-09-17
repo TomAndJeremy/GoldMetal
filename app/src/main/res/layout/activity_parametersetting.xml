@@ -1,0 +1,134 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:headview="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/more_rela_normal"
+    android:orientation="vertical"
+    tools:context="com.juttec.goldmetal.fragment.MoreFragment">
+
+
+    <com.juttec.goldmetal.customview.HeadLayout
+        android:id="@+id/head_layout"
+        style="@style/HeadBarStytle"
+        headview:headtitle="@string/head_title_parametersetting"
+        headview:leftimg="@mipmap/nav_btn_backa_arrow"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <RelativeLayout
+                android:id="@+id/rl_macd"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/parameter_macd"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_boll"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/parameter_boll"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_kdj"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/parameter_kdj"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+
+
+            <RelativeLayout
+                android:id="@+id/rl_rsi"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/parameter_rsi"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_sma"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/parameter_sma"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_ema"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/parameter_ema"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_env"
+                style="@style/relativeLayout_style">
+
+                <TextView
+                    style="@style/rl_text_style"
+                    android:text="@string/parameter_env"/>
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    style="@style/rl_image_style" />
+
+            </RelativeLayout>
+            <View  style="@style/divide_line_style"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
