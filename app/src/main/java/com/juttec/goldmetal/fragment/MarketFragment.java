@@ -1,13 +1,19 @@
 package com.juttec.goldmetal.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.activity.AccountActivity;
+import com.juttec.goldmetal.activity.LoginActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,12 +66,38 @@ public class MarketFragment extends BaseFragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_market, container, false);
+
+        init(view);
+
+
+        return view;
+    }
+
+    private void init(View view) {
+
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.market_tablayout);
         tabLayout.addTab(tabLayout.newTab().setText("自选"));
         tabLayout.addTab(tabLayout.newTab().setText("现货"));
         tabLayout.addTab(tabLayout.newTab().setText("股票"));
 
-        return view;
+
+        RelativeLayout head = (RelativeLayout) view.findViewById(R.id.head_layout);
+        ImageView leftimg = (ImageView) head.findViewById(R.id.left_img);
+        ImageView rightimg = (ImageView) head.findViewById(R.id.right_img);
+
+
+        leftimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        rightimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), AccountActivity.class));
+            }
+        });
     }
 
 

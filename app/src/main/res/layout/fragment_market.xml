@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:headview="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,8 +10,9 @@
     <com.juttec.goldmetal.customview.HeadLayout
         android:id="@+id/head_layout"
         style="@style/HeadBarStytle"
-        headview:headtitle="@string/head_title_market"
-        headview:leftimg="@mipmap/nav_btn_market_message"/>
+        app:headtitle="@string/head_title_market"
+        app:leftimg="@mipmap/nav_btn_market_message"
+        app:rightimg="@mipmap/nav_btn_market_user" />
 
     <LinearLayout
 
@@ -73,6 +75,8 @@
 
 
     </LinearLayout>
+
+
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"

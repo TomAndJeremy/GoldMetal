@@ -4,7 +4,7 @@
 
 
 
-<!--fragment   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -->
+    <!--fragment   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -->
 
     <!-- Fragment中 标题栏中的  标题-->
     <string name="head_title_market">国金贵金属</string>
@@ -30,7 +30,7 @@
     <string name="moment_tab_message">消息</string>
     <string name="moment_tab_follow">关注</string>
 
-    
+
     <!-- NewsFragment-->
     <string name="news_headlines">财经头条</string>
     <string name="news_calendar">财经日历</string>
@@ -61,7 +61,7 @@
 
 
 
-<!--activity    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -->
+    <!--activity    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -->
 
     <!-- ShareActivity中-->
     <string name="head_title_share">分享APP</string>
@@ -155,4 +155,27 @@
 
     <!-- The price reduction-->
     <string name="price_reduction">价格换算</string>
+
+    <!-- Chartactivity-->
+    <string name="chart_period">周期</string>
+    <string name="chart_index">指标</string>
+    <string name="chart_high">最高</string>
+
+    <string name="chart_today">今天</string>
+    <string name="chart_low">最低</string>
+    <string name="chart_yestoday">昨天</string>
+    <string name="chrat_time">分时图</string>
+    <string name="chart_K_line">K线</string>
+    <string name="chart_free_remind">免费提醒</string>
+    <string name="chart_msg_remind">短息提醒</string>
+    <string name="chart_real_trading">实盘交易</string>
+
+    <!-- FreeRemindActivity-->
+
+    <string name="floating_remind">浮动提醒</string>
+    <string name="base_price">基准价</string>
+    <string name="floating_value">浮动值</string>
+    <string name="remind_value">提醒值</string>
+    <string name="point_remind">点位提醒</string>
+    <string name="add">添加</string>
 </resources>

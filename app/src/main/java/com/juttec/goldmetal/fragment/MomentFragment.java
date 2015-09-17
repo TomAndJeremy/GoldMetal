@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.MomentRecyclerViewAdapter;
 
@@ -91,11 +92,15 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         });
 
 
+
         /*初始化Recyclerview*/
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.moment_recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+
+
+
         String[] dataset = new String[100];
         for (int i = 0; i < dataset.length; i++) {
             dataset[i] = "item" + i;
@@ -159,11 +164,11 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
                 int orientation =  ((LinearLayoutManager) layout).getOrientation();
                 if (orientation == LinearLayoutManager.VERTICAL) {
-                    View child = ((LinearLayoutManager) layout).getChildAt(0);
+                    View child = layout.getChildAt(0);
                     if (child != null) {
                         int position =((RecyclerView)view).getChildPosition(child);
                         if (position == 0) {
-                            apply = child.getTop() >=((RecyclerView)view).getTop();
+                            apply = child.getTop() >= view.getTop();
                         }
                     } else {
                         apply = true;

@@ -1,10 +1,14 @@
 <resources>
+
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="head_title_size">20dp</dimen>
+
+
+
+    <dimen name="head_title_size">20sp</dimen>
     <dimen name="market_hint_size">15sp</dimen>
     <dimen name="moment_tab_size">20dp</dimen>
 
@@ -13,10 +17,10 @@
     <!-- 资讯、服务、更多Fragment 中 RelativeLayout 里的 字体的大小-->
     <dimen name="rl_text_size">18sp</dimen>
     <!-- 资讯、服务、更多Fragment 中 RelativeLayout 的各种padding-->
-    <dimen name="rl_padding_left">15dp</dimen>
-    <dimen name="rl_padding_right">15dp</dimen>
-    <dimen name="rl_padding_top">15dp</dimen>
-    <dimen name="rl_padding_bottom">15dp</dimen>
+    <dimen name="rl_padding_left">16dp</dimen>
+    <dimen name="rl_padding_right">16dp</dimen>
+    <dimen name="rl_padding_top">16dp</dimen>
+    <dimen name="rl_padding_bottom">16dp</dimen>
 
     <!-- 资讯、服务、更多Fragment 中 分割线的 高度-->
     <dimen name="divide_line_height">0.5dp</dimen>
@@ -31,11 +35,13 @@
     <!-- 字体与图片之间的  间距大小-->
     <dimen name="share_img_divide">15dp</dimen>
     <!-- InputBox to board-->
-    <dimen name="input_to_board">20dp</dimen>
+    <dimen name="input_to_board">16dp</dimen>
     <!-- title of RegisterActivity-->
     <dimen name="register_title">25sp</dimen>
     <!-- accountActivity-->
-    <dimen name="base_text">18sp</dimen>
+    <dimen name="base_text">19sp</dimen>
+
+    <!-- FreeRemind-->
 
 
 </resources>
