@@ -6,6 +6,7 @@
         <attr name="rightimg" format="integer"></attr>
         <attr name="righttext" format="string"></attr>
         <attr name="lefttext" format="string"></attr>
+        <attr name="back" format="boolean"></attr>
     </declare-styleable>
     <declare-styleable name="CircleImageView">
         <attr name="civ_border_width" format="dimension" />

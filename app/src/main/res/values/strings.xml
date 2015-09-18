@@ -29,6 +29,8 @@
     <string name="moment_tab_dynamic">动态</string>
     <string name="moment_tab_message">消息</string>
     <string name="moment_tab_follow">关注</string>
+    <string name="publish_msg">发布消息</string>
+    <string name="moment">交易圈</string>
 
 
     <!-- NewsFragment-->
@@ -178,4 +180,7 @@
     <string name="remind_value">提醒值</string>
     <string name="point_remind">点位提醒</string>
     <string name="add">添加</string>
+    <!-- PublishTopicActivity-->
+    <string name="publish_topic_title">发表话题</string>
+    <string name="publish">发表</string>
 </resources>

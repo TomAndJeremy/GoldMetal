@@ -1,9 +1,11 @@
 package com.juttec.goldmetal.customview;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,9 +21,12 @@ public class HeadLayout extends RelativeLayout {
 
     public HeadLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+
         LayoutInflater.from(context).inflate(R.layout.custom_head, this);
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.MyHeadView);
 
+        boolean back=array.getBoolean(R.styleable.MyHeadView_back,true);
 
         String titleText = array.getString(R.styleable.MyHeadView_headtitle);
         TextView title = (TextView) this.findViewById(R.id.head_title);
@@ -33,9 +38,20 @@ public class HeadLayout extends RelativeLayout {
             leftTextView.setText(leftText);
         }
         int leftimg = array.getResourceId(R.styleable.MyHeadView_leftimg, 0);
+
         if (leftimg != 0) {
             ImageView leftImageView = (ImageView) this.findViewById(R.id.left_img);
             leftImageView.setImageResource(leftimg);
+            if (back){
+                leftImageView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((Activity)getContext()).finish();
+                    }
+                });
+
+            }
+
         }
 
         String rightText = array.getString(R.styleable.MyHeadView_righttext);
@@ -49,7 +65,11 @@ public class HeadLayout extends RelativeLayout {
             ImageView rightImageView = (ImageView) this.findViewById(R.id.right_img);
             rightImageView.setImageResource(rightimg);
         }
+
+
         array.recycle();
+
+
 
     }
 

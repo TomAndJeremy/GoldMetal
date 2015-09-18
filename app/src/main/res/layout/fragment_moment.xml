@@ -7,8 +7,9 @@
 
     <com.juttec.goldmetal.customview.HeadLayout
         style="@style/HeadBarStytle"
-
-        app:leftimg="@mipmap/nav_btn_backa_arrow"></com.juttec.goldmetal.customview.HeadLayout>
+        app:leftimg="@mipmap/nav_btn_backa_arrow"
+        app:righttext="@string/publish_msg"
+        app:headtitle="@string/moment"></com.juttec.goldmetal.customview.HeadLayout>
 
 
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
