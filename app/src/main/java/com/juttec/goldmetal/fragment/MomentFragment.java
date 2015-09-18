@@ -1,6 +1,5 @@
 package com.juttec.goldmetal.fragment;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,16 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.MomentRecyclerViewAdapter;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import com.juttec.goldmetal.adapter.RecycleViewWithHeadAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -94,6 +89,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
         /*初始化Recyclerview*/
+
+        View myHead = View.inflate(getActivity(), R.layout.recycleview_head, null);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.moment_recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -108,8 +105,13 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         // 创建Adapter，并指定数据集
 
         MomentRecyclerViewAdapter adapter = new MomentRecyclerViewAdapter(dataset, getActivity());
+
+        RecycleViewWithHeadAdapter myAdapter=new RecycleViewWithHeadAdapter<>(adapter);
+        myAdapter.addHeader(myHead);
+
+
         // 设置Adapter
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(myAdapter);
 
 
 
@@ -117,7 +119,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
         //init tabs
-        initTabs(view);
+       // initTabs(view);
 
 
         return view;
