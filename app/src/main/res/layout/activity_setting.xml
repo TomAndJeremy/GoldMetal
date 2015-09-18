@@ -24,6 +24,7 @@
                     style="@style/rl_text_style"
                     android:text="@string/setting_screen_light"/>
 
+
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="30dp"
@@ -31,6 +32,7 @@
                     style="@style/share_image_style"
                     android:src="@mipmap/content_market_remind_btn_on"
                     android:layout_alignParentRight="true"/>
+
 
             </RelativeLayout>
             <View  style="@style/divide_line_style"/>

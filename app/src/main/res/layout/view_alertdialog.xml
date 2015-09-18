@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lLayout_bg"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_mydialog_select"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/txt_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:textColor="@color/dialog_title"
+        android:textSize="@dimen/dialog_title_size"
+         android:text="QQ号码修改"/>
+
+    <TextView
+        android:id="@+id/txt_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="好好学习 天天向上"
+        android:textColor="@color/dialog_msg"
+        android:textSize="@dimen/dialog_msg_size"
+        />
+
+    <EditText
+        android:id="@+id/edittxt_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:padding="8dp"
+        android:background="@drawable/bg_mydialog_edit"
+        android:textSize="@dimen/dialog_button_size" />
+
+    <LinearLayout
+        android:id="@+id/dialog_Group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <View
+        android:id="@+id/dialog_marBottom"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/dialog_divide_line" />
+
+    <LinearLayout
+        android:id="@+id/ll_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btn_pos"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/bg_dialog_btn_pos"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dialog_button_size"
+            android:text="确定"/>
+
+        <View
+            android:id="@+id/img_line"
+            android:layout_width="0.5dp"
+            android:layout_height="50dp"
+            android:background="@color/dialog_divide_line" />
+
+        <Button
+            android:id="@+id/btn_neg"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/bg_dialog_btn_neg"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dialog_button_size"
+            android:text="取消"
+            />
+    </LinearLayout>
+
+
+
+        <Button
+            android:id="@+id/btn_single"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:background="@drawable/bg_dialog_btn_single"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dialog_button_size"
+            android:text="确定"/>
+
+</LinearLayout>
