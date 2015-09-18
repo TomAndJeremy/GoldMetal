@@ -107,6 +107,8 @@
     <string name="title_activity_feedback">FeedbackActivity</string>
 
 
+    <!-- AnalysisActivity中-->
+    <string name="head_title_analysis">深度解析</string>
 
 
 
@@ -183,4 +185,9 @@
     <!-- PublishTopicActivity-->
     <string name="publish_topic_title">发表话题</string>
     <string name="publish">发表</string>
+
+
+
+
+
 </resources>

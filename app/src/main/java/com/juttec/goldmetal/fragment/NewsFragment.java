@@ -1,6 +1,7 @@
 package com.juttec.goldmetal.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.activity.AnalysisActivity;
 
 /**
  * 资讯界面
@@ -84,6 +86,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        Intent intent = null;
         switch (v.getId()){
 
             case R.id.rl_headlines:
@@ -99,6 +102,10 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener{
 
                 break;
             case R.id.rl_analysis:
+                //深度解析
+                intent = new Intent(getActivity(), AnalysisActivity.class);
+                startActivity(intent);
+
 
                 break;
             case R.id.rl_announcement:
