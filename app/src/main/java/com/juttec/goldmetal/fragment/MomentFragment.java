@@ -2,6 +2,7 @@ package com.juttec.goldmetal.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -75,14 +76,20 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
         //下拉刷新
         final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
-        refreshLayout.setColorSchemeColors(Color.BLUE,Color.RED,Color.GREEN);
+        refreshLayout.setColorSchemeColors(Color.BLUE, Color.RED, Color.GREEN);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // TODO: 2015/9/14  
                 refreshLayout.setRefreshing(true);
+                refreshLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                    }
+                },2000);
                 Toast.makeText(getActivity(), "121312", Toast.LENGTH_LONG).show();
-                
+
             }
         });
 
@@ -97,7 +104,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         recyclerView.setLayoutManager(layoutManager);
 
 
-
         String[] dataset = new String[100];
         for (int i = 0; i < dataset.length; i++) {
             dataset[i] = "item" + i;
@@ -106,7 +112,15 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
         MomentRecyclerViewAdapter adapter = new MomentRecyclerViewAdapter(dataset, getActivity());
 
-        RecycleViewWithHeadAdapter myAdapter=new RecycleViewWithHeadAdapter<>(adapter);
+        adapter.setOnItemClickListener(new MomentRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(View v, int posion) {
+                Snackbar.make(v, "this is " + posion, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+        RecycleViewWithHeadAdapter myAdapter = new RecycleViewWithHeadAdapter<>(adapter);
+
         myAdapter.addHeader(myHead);
 
 
@@ -114,12 +128,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         recyclerView.setAdapter(myAdapter);
 
 
-
-
-
-
         //init tabs
-       // initTabs(view);
+        // initTabs(view);
 
 
         return view;
@@ -161,14 +171,14 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         boolean apply = false;
         if (view != null && view instanceof RecyclerView) {
 
-            RecyclerView.LayoutManager layout = ((RecyclerView)view).getLayoutManager();
+            RecyclerView.LayoutManager layout = ((RecyclerView) view).getLayoutManager();
             if (layout != null && layout instanceof LinearLayoutManager) {
 
-                int orientation =  ((LinearLayoutManager) layout).getOrientation();
+                int orientation = ((LinearLayoutManager) layout).getOrientation();
                 if (orientation == LinearLayoutManager.VERTICAL) {
                     View child = layout.getChildAt(0);
                     if (child != null) {
-                        int position =((RecyclerView)view).getChildPosition(child);
+                        int position = ((RecyclerView) view).getChildPosition(child);
                         if (position == 0) {
                             apply = child.getTop() >= view.getTop();
                         }

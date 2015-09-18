@@ -13,6 +13,7 @@ import android.widget.TextView;
  */
 public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecyclerViewAdapter.ViewHolder> {
 
+    private OnItemClickListener mOnItemClickListener;
 
     // 数据集
     private String[] mDataset;
@@ -36,9 +37,15 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
         holder.mTextView.setText(mDataset[position]);
+        holder.mTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnItemClickListener.onClick(v, position);
+            }
+        });
     }
 
     @Override
@@ -54,6 +61,14 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             super(itemView);
             mTextView = (TextView) itemView;
         }
+    }
+
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener){
+        this.mOnItemClickListener=mOnItemClickListener;
+    }
+
+    public interface OnItemClickListener{
+        void onClick(View v, int posion);
     }
 }
 
