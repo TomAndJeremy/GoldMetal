@@ -13,7 +13,8 @@
         app:headtitle="@string/account"
 
         app:lefttext="@string/contact"
-        app:righttext="@string/refresh"></com.juttec.goldmetal.customview.HeadLayout>
+        app:righttext="@string/refresh"
+        android:id="@+id/head_layout"></com.juttec.goldmetal.customview.HeadLayout>
 
     <TextView
         android:layout_width="wrap_content"

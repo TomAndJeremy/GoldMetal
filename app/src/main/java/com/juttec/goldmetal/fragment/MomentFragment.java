@@ -1,33 +1,27 @@
 package com.juttec.goldmetal.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.activity.PublishTopicActivity;
 import com.juttec.goldmetal.adapter.MomentRecyclerViewAdapter;
 import com.juttec.goldmetal.adapter.RecycleViewWithHeadAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MomentFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class MomentFragment extends BaseFragment implements View.OnClickListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
 
     // TODO: Rename and change types of parameters
@@ -37,16 +31,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     TextView dynamic, message, follow;
 
 
-    // private OnFragmentInteractionListener mListener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @return A new instance of fragment BlankFragment3.
-     */
-    // TODO: Rename and change types and number of parameters
     public static MomentFragment newInstance(String param1) {
         MomentFragment fragment = new MomentFragment();
         Bundle args = new Bundle();
@@ -73,6 +57,9 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_moment, container, false);
 
+        RelativeLayout head = (RelativeLayout) view.findViewById(R.id.head_layout);
+        TextView rightText = (TextView) head.findViewById(R.id.right_text);
+        rightText.setOnClickListener(this);
 
         //下拉刷新
         final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
@@ -87,7 +74,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                     public void run() {
                         refreshLayout.setRefreshing(false);
                     }
-                },2000);
+                }, 2000);
                 Toast.makeText(getActivity(), "121312", Toast.LENGTH_LONG).show();
 
             }
@@ -97,14 +84,18 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
         /*初始化Recyclerview*/
 
-        View myHead = View.inflate(getActivity(), R.layout.recycleview_head, null);
+        View myHead = View.inflate(getActivity(), R.layout.recycleview_head, null);//头布局
+        //init tabs
+        initTabs(myHead);
+
+
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.moment_recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
 
-        String[] dataset = new String[100];
+        String[] dataset = new String[20];
         for (int i = 0; i < dataset.length; i++) {
             dataset[i] = "item" + i;
         }
@@ -119,19 +110,14 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                         .setAction("Action", null).show();
             }
         });
-        RecycleViewWithHeadAdapter myAdapter = new RecycleViewWithHeadAdapter<>(adapter);
 
+        // 添加头部
+        RecycleViewWithHeadAdapter myAdapter = new RecycleViewWithHeadAdapter<>(adapter);
         myAdapter.addHeader(myHead);
 
 
         // 设置Adapter
         recyclerView.setAdapter(myAdapter);
-
-
-        //init tabs
-        // initTabs(view);
-
-
         return view;
     }
 
@@ -158,37 +144,16 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
             case R.id.moment_btn_follow:
                 follow.setSelected(true);
                 break;
+            case R.id.right_text:
+                startActivity(new Intent(getActivity(), PublishTopicActivity.class));
+                break;
         }
     }
 
+    //取消选择
     private void cancelSelect() {
         dynamic.setSelected(false);
         message.setSelected(false);
         follow.setSelected(false);
     }
-
-    public boolean isViewTop(View view) {
-        boolean apply = false;
-        if (view != null && view instanceof RecyclerView) {
-
-            RecyclerView.LayoutManager layout = ((RecyclerView) view).getLayoutManager();
-            if (layout != null && layout instanceof LinearLayoutManager) {
-
-                int orientation = ((LinearLayoutManager) layout).getOrientation();
-                if (orientation == LinearLayoutManager.VERTICAL) {
-                    View child = layout.getChildAt(0);
-                    if (child != null) {
-                        int position = ((RecyclerView) view).getChildPosition(child);
-                        if (position == 0) {
-                            apply = child.getTop() >= view.getTop();
-                        }
-                    } else {
-                        apply = true;
-                    }
-                }
-            }
-        }
-        return apply;
-    }
-
 }

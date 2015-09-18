@@ -1,5 +1,6 @@
 package com.juttec.goldmetal.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.activity.AccountActivity;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 
 
@@ -59,6 +61,10 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
     private void initView(View view){
         iv_search = (ImageView) view.findViewById(R.id.market_search);
+
+        ImageView rightImg = (ImageView) view.findViewById(R.id.right_img);
+        rightImg.setOnClickListener(this);
+
         iv_search.setOnClickListener(this);
     }
 
@@ -76,6 +82,9 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                             }
                         }).show();
 
+                break;
+            case R.id.right_img:
+                startActivity(new Intent(getActivity(), AccountActivity.class));
                 break;
         }
 

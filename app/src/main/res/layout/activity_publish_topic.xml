@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,16 +8,43 @@
     tools:context="com.juttec.goldmetal.activity.PublishTopicActivity">
 
     <com.juttec.goldmetal.customview.HeadLayout
+        android:id="@+id/head_layout"
         style="@style/HeadBarStytle"
-
         app:headtitle="@string/publish_topic_title"
         app:leftimg="@mipmap/nav_btn_backa_arrow"></com.juttec.goldmetal.customview.HeadLayout>
 
     <EditText
+        android:id="@+id/publis_topic_et"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/head_layout"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:background="@drawable/login_input_border"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="200dp"/>
+        android:gravity="top"
+        android:padding="8dp" />
 
-</LinearLayout>
+    <ImageButton
+        android:id="@+id/publis_topic_bt_emoji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/publis_topic_et"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+
+        android:background="@mipmap/content_moment_icon_expression" />
+    <ImageButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/publis_topic_et"
+    android:layout_toRightOf="@+id/publis_topic_bt_emoji"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+
+    android:background="@mipmap/content_moment_icon_add" />
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/publis_topic_et"
+        android:layout_toRightOf="@+id/publis_topic_bt_emoji"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+
+        android:background="@mipmap/content_moment_icon_add" />
+</RelativeLayout>
