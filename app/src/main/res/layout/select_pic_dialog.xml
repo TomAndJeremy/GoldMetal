@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_mydialog_select"
+    android:orientation="vertical">
+
+    <TextView
+
+        android:id="@+id/txt_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:gravity="center"
+        android:text="选择图片"
+        android:textColor="@color/dialog_title"
+        android:textSize="@dimen/dialog_title_size" />
+
+    <TextView
+        android:id="@+id/camera_shooting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:background="#1A1A1A"
+        android:gravity="center"
+        android:text="相机拍摄"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dialog_title_size" />
+
+    <View
+        android:id="@+id/dialog_marBottom"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/dialog_divide_line" />
+
+    <TextView
+        android:id="@+id/photo_album"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:background="#1A1A1A"
+        android:gravity="center"
+        android:text="本地图库"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dialog_title_size" />
+
+    <Button
+        android:id="@+id/btn_single"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_dialog_btn_single"
+        android:text="取消"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dialog_button_size" />
+
+
+
+
+</LinearLayout>

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.FollowActivity;
+import com.juttec.goldmetal.activity.MessageActivity;
 import com.juttec.goldmetal.activity.PublishTopicActivity;
 import com.juttec.goldmetal.adapter.MomentRecyclerViewAdapter;
 import com.juttec.goldmetal.adapter.RecycleViewWithHeadAdapter;
@@ -134,16 +135,17 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        cancelSelect();
+
         switch (v.getId()) {
             case R.id.moment_btn_dynamic:
                 dynamic.setSelected(true);
                 break;
             case R.id.moment_btn_message:
-                message.setSelected(true);
+
+                startActivity(new Intent(getActivity(), MessageActivity.class));
                 break;
             case R.id.moment_btn_follow:
-                follow.setSelected(true);
+
                 startActivity(new Intent(getActivity(), FollowActivity.class));
                 break;
             case R.id.right_text:
@@ -152,10 +154,5 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    //取消选择
-    private void cancelSelect() {
-        dynamic.setSelected(false);
-        message.setSelected(false);
-        follow.setSelected(false);
-    }
+
 }
