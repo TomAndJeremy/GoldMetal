@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.juttec.goldmetal.activity.CreateAccountApply">
+
+    <com.juttec.goldmetal.customview.HeadLayout
+        style="@style/HeadBarStytle"
+        app:headtitle="开户申请"
+        app:leftimg="@mipmap/nav_btn_backa_arrow"></com.juttec.goldmetal.customview.HeadLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="选择开户品种"
+        android:textSize="20sp" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/login_input_border"
+>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:button="@drawable/radiobutton_selector"
+            android:text="天通银、铜铝镍" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/input_border"
+            android:button="@null" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:button="@drawable/radiobutton_selector"
+            android:text="广交所" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/input_border"
+            android:button="@null" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:button="@drawable/radiobutton_selector"
+            android:text="北油所汽油" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/input_border"
+            android:button="@null" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:button="@drawable/radiobutton_selector"
+            android:text="其它品种" />
+    </RadioGroup>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/btn_feedback_selector"
+        android:text="下一步"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+</LinearLayout>

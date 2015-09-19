@@ -27,17 +27,18 @@
         android:textSize="@dimen/dialog_msg_size" />
 
     <RadioGroup
-        android:orientation="horizontal"
-        android:paddingRight="30dp"
-        android:paddingLeft="30dp"
+        android:id="@+id/dialog_radiogroup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp">
 
         <RadioButton
-            android:layout_weight="1"
             android:id="@+id/radiobutton_beyond"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:button="@drawable/checkbox"
             android:text="大于"
             android:textColor="@color/white" />

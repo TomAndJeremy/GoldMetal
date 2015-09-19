@@ -78,6 +78,8 @@
         </activity>
         <activity android:name=".activity.MessageDetailActivity" >
         </activity>
+        <activity android:name=".activity.CreateAccountApply" >
+        </activity>
     </application>
 
 </manifest>

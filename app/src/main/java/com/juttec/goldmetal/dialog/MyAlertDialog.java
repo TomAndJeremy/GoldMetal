@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
@@ -31,6 +33,10 @@ public class MyAlertDialog {
 	private Button btn_pos;
 	private Button btn_single;
 	private Display display;
+	private RadioGroup radioGroup;
+	private RadioButton beyond,low;
+
+
 	private boolean showTitle = false;
 	private boolean showMsg = false;
 	private boolean showEditText = false;
@@ -38,6 +44,8 @@ public class MyAlertDialog {
 	private boolean showPosBtn = false;
 	private boolean showNegBtn = false;
 	private boolean showSingleBtn = false;
+	private boolean showRadiaGroup =false;
+
 
 	public MyAlertDialog(Context context) {
 		this.context = context;
@@ -62,6 +70,9 @@ public class MyAlertDialog {
 		dialog_Group = (LinearLayout) view.findViewById(R.id.dialog_Group);
 		dialog_Group.setVisibility(View.GONE);
 		dialog_marBottom = view.findViewById(R.id.dialog_marBottom);
+
+		radioGroup= (RadioGroup) view.findViewById(R.id.dialog_radiogroup);
+		radioGroup.setVisibility(View.GONE);
 
 		ll_btn_yes_no = (LinearLayout) view.findViewById(R.id.ll_btn);
 		ll_btn_yes_no.setVisibility(View.GONE);
@@ -245,6 +256,11 @@ public class MyAlertDialog {
 		if ( showSingleBtn) {
 			btn_single.setVisibility(View.VISIBLE);
 		}
+	}
+
+
+	public  void setRadioGroupVisiable(){
+		radioGroup.setVisibility(View.VISIBLE);
 	}
 
 	public void show() {
