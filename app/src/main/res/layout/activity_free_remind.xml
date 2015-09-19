@@ -5,50 +5,138 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/more_rela_normal"
     tools:context="com.juttec.goldmetal.activity.FreeRemindActivity">
 
     <com.juttec.goldmetal.customview.HeadLayout
         style="@style/HeadBarStytle"
-        app:leftimg="@mipmap/nav_btn_backa_arrow"></com.juttec.goldmetal.customview.HeadLayout>
+        app:leftimg="@mipmap/nav_btn_backa_arrow"
+        app:headtitle="@string/head_title_freeremaind">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="@dimen/activity_horizontal_margin">
+    </com.juttec.goldmetal.customview.HeadLayout>
+
+    <RelativeLayout
+        style="@style/relativeLayout_style">
 
         <TextView
+            style="@style/rl_text_style"
+            android:text="@string/floating_remind"/>
+
+
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switch_remind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/floating_remind"
-            android:textSize="@dimen/base_text" />
+            android:layout_toLeftOf="@+id/iv_instruction_remind"
+            android:layout_marginRight="@dimen/free_img_divide"
+            />
+
+        <ImageView
+        android:id="@+id/iv_instruction_remind"
+        style="@style/share_image_style"
+        android:src="@mipmap/content_market_remind_icon_i"
+        android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+    <View  style="@style/divide_line_style"/>
+
+
+
+    <RelativeLayout
+        style="@style/relativeLayout_style">
+
+        <TextView
+            style="@style/rl_text_style"
+            android:text="@string/base_price"/>
+
+        <EditText
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_toLeftOf="@+id/iv_base_price"
+            android:layout_marginRight="@dimen/free_img_divide"
+            android:background="@drawable/edit_free_remind"
+            android:gravity="center"
+            android:text="17.41"
+            />
+
+        <ImageView
+            android:id="@+id/iv_base_price"
+            style="@style/share_image_style"
+            android:src="@mipmap/content_market_remind_icon_i"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+    <View  style="@style/divide_line_style"/>
+
+
+
+    <RelativeLayout
+        style="@style/relativeLayout_style">
+
+        <TextView
+            style="@style/rl_text_style"
+            android:text="@string/floating_value"/>
+
+        <EditText
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_toLeftOf="@+id/iv_floating_value"
+            android:layout_marginRight="@dimen/free_img_divide"
+            android:background="@drawable/edit_free_remind"
+            android:gravity="center"
+            android:text="0.1"
+            />
+
+        <ImageView
+            android:id="@+id/iv_floating_value"
+            style="@style/share_image_style"
+            android:src="@mipmap/content_market_remind_icon_i"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+    <View  style="@style/divide_line_style"/>
+
+
+
+    <RelativeLayout
+        style="@style/relativeLayout_style">
+
+        <TextView
+            style="@style/rl_text_style"
+            android:text="@string/remind_value"/>
+
+    </RelativeLayout>
+    <View  style="@style/divide_line_style"/>
 
 
 
 
+    <RelativeLayout
+        style="@style/relativeLayout_style">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:src="@mipmap/content_market_remind_icon_i" />
+        <TextView
+            style="@style/rl_text_style"
+            android:text="@string/point_remind"/>
 
-    </LinearLayout>
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_toLeftOf="@+id/iv_point_remind"
+            android:layout_marginRight="@dimen/free_img_divide"
+            android:background="@drawable/btn_feedback_selector"
+            android:gravity="center"
+            android:text="添加"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"></LinearLayout>
+        <ImageView
+            android:id="@+id/iv_point_remind"
+            style="@style/share_image_style"
+            android:src="@mipmap/content_market_remind_icon_i"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+    <View  style="@style/divide_line_style"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"></LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"></LinearLayout>
+
+
 </LinearLayout>

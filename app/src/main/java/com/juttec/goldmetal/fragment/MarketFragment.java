@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.AccountActivity;
+import com.juttec.goldmetal.activity.ChartActivity;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 
 
@@ -19,6 +21,9 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     private String mParam1;
 
     private ImageView iv_search;//搜索
+
+    private LinearLayout ll_chart;
+
 
 
     public static MarketFragment newInstance(String param1) {
@@ -66,6 +71,9 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         rightImg.setOnClickListener(this);
 
         iv_search.setOnClickListener(this);
+
+        ll_chart= (LinearLayout) view.findViewById(R.id.ll_chart);
+        ll_chart.setOnClickListener(this);
     }
 
     @Override
@@ -85,8 +93,13 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.right_img:
                 startActivity(new Intent(getActivity(), AccountActivity.class));
+            case R.id.ll_chart:
+                Intent intent = new Intent(getActivity(), ChartActivity.class);
+                startActivity(intent);
                 break;
         }
 
     }
+
+
 }

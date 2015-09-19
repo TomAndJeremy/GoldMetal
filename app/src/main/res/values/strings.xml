@@ -134,7 +134,6 @@
     <string name="hint_pwd_confirm">密码确认</string>
     <!-- account-->
     <string name="account">账号</string>
-
     <string name="refresh">刷新</string>
     <string name="nickname">昵称  </string>
     <string name="name">姓名  </string>
@@ -148,10 +147,10 @@
     <string name="price_reduction">价格换算</string>
 
     <!-- Chartactivity-->
+    <string name="head_title_chart">现货黄金-1分钟</string>
     <string name="chart_period">周期</string>
     <string name="chart_index">指标</string>
     <string name="chart_high">最高</string>
-
     <string name="chart_today">今天</string>
     <string name="chart_low">最低</string>
     <string name="chart_yestoday">昨天</string>
@@ -161,14 +160,20 @@
     <string name="chart_msg_remind">短息提醒</string>
     <string name="chart_real_trading">实盘交易</string>
 
-    <!-- FreeRemindActivity-->
 
+
+
+    <!-- FreeRemindActivity-->
+    <string name="head_title_freeremaind">现货白银免费提醒</string>
     <string name="floating_remind">浮动提醒</string>
     <string name="base_price">基准价</string>
     <string name="floating_value">浮动值</string>
     <string name="remind_value">提醒值</string>
     <string name="point_remind">点位提醒</string>
     <string name="add">添加</string>
+
+
+
     <!-- PublishTopicActivity-->
     <string name="publish_topic_title">发表话题</string>
     <string name="publish">发表</string>

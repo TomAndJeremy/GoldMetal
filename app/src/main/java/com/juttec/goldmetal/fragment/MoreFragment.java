@@ -12,6 +12,7 @@ import com.juttec.goldmetal.activity.AboutActivity;
 import com.juttec.goldmetal.activity.FeedbackActivity;
 import com.juttec.goldmetal.activity.SettingActivity;
 import com.juttec.goldmetal.activity.ShareActivity;
+import com.juttec.goldmetal.dialog.MyAlertDialog;
 
 /**
  * 更多界面
@@ -105,11 +106,22 @@ public class MoreFragment extends BaseFragment implements View.OnClickListener{
 
                 break;
             case R.id.rl_update:
+                //检查版本更新
+                final MyAlertDialog dialog = new MyAlertDialog(getActivity());
+                dialog.builder().setTitle("提示")
+                        .setMsg("您的软件为最新版本")
+                        .setSingleButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        }).show();
 
                 break;
             case R.id.rl_instructions:
 
                 break;
+
             case R.id.rl_share:
                 intent = new Intent(getActivity(), ShareActivity.class);
                 getActivity().startActivity(intent);

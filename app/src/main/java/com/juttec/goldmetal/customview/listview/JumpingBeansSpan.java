@@ -107,7 +107,8 @@ import java.lang.ref.WeakReference;
         }
     }
 
-    /*package*/ void teardown() {
+    /*package*/
+    void teardown() {
         if (jumpAnimator != null) {
             jumpAnimator.cancel();
             jumpAnimator.removeAllListeners();

@@ -25,13 +25,21 @@
                     android:text="@string/setting_screen_light"/>
 
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="30dp"
-                    android:id="@+id/iv_screen_light"
-                    style="@style/share_image_style"
-                    android:src="@mipmap/content_market_remind_btn_on"
-                    android:layout_alignParentRight="true"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:id="@+id/iv_screen_light"-->
+                    <!--style="@style/share_image_style"-->
+                    <!--android:src="@mipmap/content_market_remind_btn_on"-->
+                    <!--android:layout_alignParentRight="true"/>-->
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/switch_screen_light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    >
+
+                </android.support.v7.widget.SwitchCompat>
 
 
             </RelativeLayout>
@@ -75,13 +83,19 @@
                     style="@style/rl_text_style"
                     android:text="@string/setting_display_refresh"/>
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="30dp"
-                    android:id="@+id/iv_display_refresh"
-                    style="@style/share_image_style"
-                    android:src="@mipmap/content_market_remind_btn_on"
-                    android:layout_alignParentRight="true"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:id="@+id/iv_display_refresh"-->
+                    <!--style="@style/share_image_style"-->
+                    <!--android:src="@mipmap/content_market_remind_btn_on"-->
+                    <!--android:layout_alignParentRight="true"/>-->
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/switch_display_refresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                   />
 
 
             </RelativeLayout>

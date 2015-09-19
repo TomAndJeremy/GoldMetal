@@ -48,6 +48,14 @@ public class LoadingFooter {
 		}, delay);
 	}
 
+
+
+	public void stopFooterAnim(){
+		if (jumpingBeans != null) {
+			jumpingBeans.stopJumping();
+		}
+	}
+
 	
 	
 	public void setState(State status) {

@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.juttec.goldmetal.activity.ChartActivity">
 
     <com.juttec.goldmetal.customview.HeadLayout
+        android:id="@+id/head_layout"
         style="@style/HeadBarStytle"
         app:lefttext="@string/chart_period"
-        app:righttext="@string/chart_index"></com.juttec.goldmetal.customview.HeadLayout>
+        app:righttext="@string/chart_index"
+        app:headtitle="@string/head_title_chart">
+    </com.juttec.goldmetal.customview.HeadLayout>
 
 
     <!--<android.support.v4.app.FragmentTabHost-->
@@ -38,6 +42,45 @@
     <!--</LinearLayout>-->
 
     <!--</android.support.v4.app.FragmentTabHost>-->
-    
 
-</RelativeLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+       android:layout_weight="1">
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+         android:orientation="horizontal"
+        android:padding="5dp"
+        android:background="@color/colorPrimary">
+
+        <Button
+            android:id="@+id/btn_time"
+            style="@style/ChartButtonStyle"
+            android:text="@string/chrat_time"/>
+        <Button
+            android:id="@+id/btn_k_line"
+            style="@style/ChartButtonStyle"
+            android:text="@string/chart_K_line"/>
+        <Button
+            android:id="@+id/btn_free_remind"
+            style="@style/ChartButtonStyle"
+            android:text="@string/chart_free_remind"/>
+        <Button
+            android:id="@+id/btn_msg_remind"
+            style="@style/ChartButtonStyle"
+            android:text="@string/chart_msg_remind"/>
+        <Button
+            android:id="@+id/btn_real_trading"
+            style="@style/ChartButtonStyle"
+            android:text="@string/chart_real_trading"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

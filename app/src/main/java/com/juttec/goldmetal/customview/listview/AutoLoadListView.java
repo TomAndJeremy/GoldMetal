@@ -80,4 +80,9 @@ public class AutoLoadListView extends ListView implements
 		public void onLoadNext();
 	}
 
+
+	public void stopFooterAnimition(){
+		mLoadingFooter.stopFooterAnim();
+	}
+
 }

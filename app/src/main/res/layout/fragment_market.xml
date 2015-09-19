@@ -76,10 +76,18 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_weight="1"></android.support.v7.widget.RecyclerView>-->
+    <LinearLayout
+        android:id="@+id/ll_chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"></android.support.v7.widget.RecyclerView>
+        android:background="@color/colorPrimary"
+        android:layout_weight="1">
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -93,12 +101,12 @@
         <Button
             style="@style/MarketFragment_Bottom_Button"
             android:background="@drawable/market_button_blue"
-            android:text="@string/market_button_red" />
+            android:text="@string/market_button_blue" />
 
         <Button
             style="@style/MarketFragment_Bottom_Button"
             android:background="@drawable/market_button_green"
-            android:text="@string/market_button_red" />
+            android:text="@string/market_button_green" />
 
         <Button
             style="@style/MarketFragment_Bottom_Button"

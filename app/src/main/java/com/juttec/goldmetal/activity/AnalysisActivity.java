@@ -150,4 +150,12 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
 
         handler.sendEmptyMessageDelayed(MSG_REFRESH, 3000);
     }
+
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        listView.stopFooterAnimition();
+    }
 }

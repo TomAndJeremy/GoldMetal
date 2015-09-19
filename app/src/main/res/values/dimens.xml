@@ -41,7 +41,11 @@
     <!-- accountActivity-->
     <dimen name="base_text">19sp</dimen>
 
-    <!-- FreeRemind-->
+
+
+    <!-- FreeRemindActivity中-->
+    <!-- 右边图片之间的  间距大小-->
+    <dimen name="free_img_divide">20dp</dimen>
 
 
 

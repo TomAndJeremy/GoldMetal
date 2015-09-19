@@ -5,6 +5,9 @@ import android.os.Bundle;
 
 import com.juttec.goldmetal.R;
 
+/**
+ * 现货白银免费提醒
+ */
 public class FreeRemindActivity extends AppCompatActivity {
 
     @Override

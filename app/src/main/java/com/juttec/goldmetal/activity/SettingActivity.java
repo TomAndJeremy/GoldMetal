@@ -3,6 +3,7 @@ package com.juttec.goldmetal.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -16,8 +17,8 @@ import com.juttec.goldmetal.customview.HeadLayout;
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
 
     private RelativeLayout rl_setting_parameter;//指标参数设置
-    private ImageView iv_screen_light;//设置屏幕常亮
-    private ImageView iv_display_refresh;//是否显示刷新时间
+    private SwitchCompat iv_screen_light;//设置屏幕常亮
+    private SwitchCompat iv_display_refresh;//是否显示刷新时间
     private ImageView iv_refresh_time_reduce;//刷新行情时间间隔  减号
     private ImageView iv_refresh_time_plus;//刷新行情时间间隔  加号
 
@@ -49,11 +50,11 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         rl_setting_parameter.setOnClickListener(this);
 
 
-        iv_screen_light = (ImageView)findViewById(R.id.iv_screen_light);
-        iv_screen_light.setOnClickListener(this);
+        iv_screen_light = (SwitchCompat)findViewById(R.id.switch_screen_light);
+//        iv_screen_light.setOnClickListener(this);
 
-        iv_display_refresh = (ImageView)findViewById(R.id.iv_display_refresh);
-        iv_display_refresh.setOnClickListener(this);
+        iv_display_refresh = (SwitchCompat)findViewById(R.id.switch_display_refresh);
+//        iv_display_refresh.setOnClickListener(this);
 
         iv_refresh_time_reduce = (ImageView)findViewById(R.id.iv_refresh_time_reduce);
         iv_refresh_time_reduce.setOnClickListener(this);
@@ -67,18 +68,18 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.iv_screen_light:
-
-                break;
+//            case R.id.iv_screen_light:
+//
+//                break;
             case R.id.iv_refresh_time_reduce:
 
                 break;
             case R.id.iv_refresh_time_plus:
 
                 break;
-            case R.id.iv_display_refresh:
-
-                break;
+//            case R.id.iv_display_refresh:
+//
+//                break;
             case R.id.setting_parameter:
                 //跳转到指标参数设置界面
                 Intent intent = new Intent(SettingActivity.this,ParameterSettingActivity.class);
