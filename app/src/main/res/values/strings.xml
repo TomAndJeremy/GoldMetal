@@ -3,7 +3,6 @@
     <string name="action_settings">Settings</string>
 
 
-
     <!--fragment   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -->
 
     <!-- Fragment中 标题栏中的  标题-->
@@ -11,7 +10,6 @@
     <string name="head_title_news">资讯</string>
     <string name="head_title_server">服务</string>
     <string name="head_title_more">更多</string>
-
 
 
     <!--MarketFragment-->
@@ -60,9 +58,6 @@
     <string name="more_setting">系统设置</string>
 
 
-
-
-
     <!--activity    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -->
 
     <!-- ShareActivity中-->
@@ -74,14 +69,12 @@
     <string name="share_qq_zone">分享到QQ空间</string>
 
 
-
     <!-- SettingActivity中-->
     <string name="head_title_setting">系统设置</string>
     <string name="setting_screen_light">是否设置屏幕常亮</string>
     <string name="setting_display_refresh">是否显示刷新时间</string>
     <string name="setting_refresh_time">刷新行情时间间隔(5秒)</string>
     <string name="setting_parameter">指标参数设置</string>
-
 
 
     <!-- ParameterSettingActivity中-->
@@ -93,8 +86,6 @@
     <string name="parameter_sma">SMA指标</string>
     <string name="parameter_ema">EMA指标</string>
     <string name="parameter_env">ENV指标</string>
-
-
 
 
     <!-- AboutActivity中-->
@@ -111,14 +102,12 @@
     <string name="head_title_analysis">深度解析</string>
 
 
-
     <!--LoginActivity-->
     <string name="login">登录</string>
     <string name="hint_name">请输入用户名</string>
     <string name="hint_password">请输入密码</string>
     <string name="remember_pwd">记住密码</string>
     <string name="forget_pwd">忘记密码?</string>
-
 
 
     <!--FindBackActivity-->
@@ -131,12 +120,10 @@
     <string name="title_activity_register">RegisterActivity</string>
 
 
-
     <!-- registerActivity-->
     <string name="register">注册</string>
     <string name="phone_register">手机注册</string>
     <string name="register_confirm_pwd">请确认密码</string>
-
 
 
     <!--Contact to us-->
@@ -186,7 +173,8 @@
     <string name="publish_topic_title">发表话题</string>
     <string name="publish">发表</string>
 
-
+    <!--FollowActivity-->
+    <string name="follow">关注</string>
 
 
 

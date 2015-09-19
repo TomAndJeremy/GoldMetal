@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.juttec.goldmetal.customview.HeadLayout
+        android:id="@+id/head_layout"
+        style="@style/HeadBarStytle"
+
+        app:headtitle="@string/follow"
+        app:leftimg="@mipmap/nav_btn_backa_arrow"
+        app:righttext="@string/publish_msg"></com.juttec.goldmetal.customview.HeadLayout>
+
+    <RelativeLayout
+        android:id="@+id/meg_detail_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/head_layout"
+        android:layout_marginTop="5dp"
+        android:padding="5dp">
+
+        <com.juttec.goldmetal.customview.CircleImageView
+            android:id="@+id/msg_detail_head_portrait"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_launcher"
+            app:civ_fill_color="#B5B5B6" />
+
+        <TextView
+            android:id="@+id/msg_detail_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/msg_detail_head_portrait"
+            android:text="张三"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/msg_detail_user_name"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/msg_detail_head_portrait"
+            android:text="今天14：35"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/msg_detail_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/meg_detail_info"
+        android:layout_margin="5dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/msg_detail_content"
+        android:layout_margin="5dp"
+        android:background="@mipmap/content_moment_btn_comment_normal" />
+
+    <LinearLayout
+        android:id="@+id/fragment_moment_comments"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/feedback_linear_gray"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@drawable/edit_feedback"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="7dp">
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="回复张三" />
+
+            <TextView
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/feedback_linear_gray" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@mipmap/content_moment_icon_expression" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="80dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/edit_feedback"
+            android:text="发送"
+            android:textColor="#A5A5A5"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+</RelativeLayout>

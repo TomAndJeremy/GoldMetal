@@ -2,10 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.juttec.goldmetal" >
 
-
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".application.MyApplication"
@@ -47,11 +45,9 @@
         <activity
             android:name=".activity.FindBcakPWDActivity"
             android:label="FindBcakPWDActivity" />
-
         <activity
             android:name=".activity.MainActivity"
-            android:label="MainActivity"/>
-
+            android:label="MainActivity" />
         <activity
             android:name=".activity.PriceReductionActivity"
             android:label="PriceReductionActivity" />
@@ -71,11 +67,16 @@
         <activity android:name=".activity.FreeRemindActivity" >
         </activity>
         <activity android:name=".activity.PublishTopicActivity" />
-
         <activity
             android:name=".activity.AnalysisActivity"
             android:label="AnalysisActivity"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name=".activity.FollowActivity" >
+        </activity>
+        <activity android:name=".activity.MessageActivity" >
+        </activity>
+        <activity android:name=".activity.MessageDetailActivity" >
         </activity>
     </application>
 

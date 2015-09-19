@@ -23,6 +23,30 @@
 
             android:src="@mipmap/ic_launcher"
             app:civ_fill_color="#ffffff" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/btn_pressed"
+            android:text="取消关注"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/btn_feedback_selector"
+            android:text="+关注"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
     </RelativeLayout>
 
 

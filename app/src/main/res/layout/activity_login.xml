@@ -83,8 +83,8 @@
     </RelativeLayout>
 
     <Button
+
         style="@style/BigButtonStyle"
-        android:layout_width="match_parent"
         android:layout_margin="20dp"
         android:text="@string/login"
         android:textSize="@dimen/login_button_text"

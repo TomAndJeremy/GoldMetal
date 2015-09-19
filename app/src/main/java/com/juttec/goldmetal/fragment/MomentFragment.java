@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.activity.FollowActivity;
 import com.juttec.goldmetal.activity.PublishTopicActivity;
 import com.juttec.goldmetal.adapter.MomentRecyclerViewAdapter;
 import com.juttec.goldmetal.adapter.RecycleViewWithHeadAdapter;
@@ -143,6 +144,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.moment_btn_follow:
                 follow.setSelected(true);
+                startActivity(new Intent(getActivity(), FollowActivity.class));
                 break;
             case R.id.right_text:
                 startActivity(new Intent(getActivity(), PublishTopicActivity.class));
