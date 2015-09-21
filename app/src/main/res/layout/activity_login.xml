@@ -8,7 +8,9 @@
     <com.juttec.goldmetal.customview.HeadLayout
         style="@style/HeadBarStytle"
         app:headtitle="@string/login"
-        app:leftimg="@mipmap/nav_btn_backa_arrow">
+        app:leftimg="@mipmap/nav_btn_backa_arrow"
+        app:righttext="注册"
+        android:id="@+id/head_layout">
 
     </com.juttec.goldmetal.customview.HeadLayout>
 
