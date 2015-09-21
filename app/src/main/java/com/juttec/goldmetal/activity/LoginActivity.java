@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Button btLogin = (Button) findViewById(R.id.login_btn);
         btLogin.setOnClickListener(this);
 
-        Button btFergotPWD = (Button) findViewById(R.id.login_btn);
+        TextView btFergotPWD = (TextView) findViewById(R.id.login_tv_fergotpwd);
         btFergotPWD.setOnClickListener(this);
 
 
@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(LoginActivity.this, FindBcakPWDActivity.class));
                 break;
             case R.id.right_text:
+                startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
                 break;
         }
     }
