@@ -8,9 +8,9 @@
     <com.juttec.goldmetal.customview.HeadLayout
         style="@style/HeadBarStytle"
         app:headtitle="@string/login"
-        app:leftimg="@mipmap/nav_btn_backa_arrow"
         app:righttext="注册"
         android:id="@+id/head_layout">
+       >
 
     </com.juttec.goldmetal.customview.HeadLayout>
 
@@ -32,6 +32,7 @@
                 android:src="@mipmap/content_account_icon_user" />
 
             <EditText
+                android:id="@+id/et_name"
                 style="@style/EditTextStyle"
                 android:hint="@string/hint_name" />
 
@@ -54,8 +55,10 @@
                 android:src="@mipmap/content_account_icon_password" />
 
             <EditText
+                android:id="@+id/et_pwd"
                 style="@style/EditTextStyle"
-                android:hint="@string/hint_password" />
+                android:hint="@string/hint_password"
+                android:password="true"/>
 
 
         </LinearLayout>
@@ -70,6 +73,7 @@
         android:layout_marginRight="40dp">
 
         <CheckBox
+            android:id="@+id/cb_remember"
             style="@style/CheckBoxStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

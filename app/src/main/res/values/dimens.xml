@@ -39,7 +39,7 @@
     <!-- title of RegisterActivity-->
     <dimen name="register_title">25sp</dimen>
     <!-- accountActivity-->
-    <dimen name="base_text">19sp</dimen>
+    <dimen name="base_text">16sp</dimen>
 
 
 

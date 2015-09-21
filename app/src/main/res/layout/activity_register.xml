@@ -70,7 +70,7 @@
 
         <EditText
             style="@style/EditTextStyle"
-            android:hint="@string/hint_phone" />
+            android:hint="@string/hint_identify_code" />
     </LinearLayout>
 
     <LinearLayout

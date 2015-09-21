@@ -43,7 +43,9 @@
                 style="@style/InputImg"
                 android:text="@string/ID" />
 
-            <TextView style="@style/EditTextStyle" />
+            <TextView
+                android:id="@+id/tv_ID"
+                style="@style/EditTextStyle" />
 
 
         </LinearLayout>
@@ -156,6 +158,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tv_change_pwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/input_to_board"
@@ -166,6 +169,7 @@
         android:textSize="@dimen/base_text"></TextView>
 
     <Button
+        android:id="@+id/btn_exit"
         style="@style/BigButtonStyle"
         android:layout_width="match_parent"
         android:layout_margin="20dp"
