@@ -44,7 +44,7 @@
             android:id="@+id/btn_send"
             android:layout_width="80dp"
             android:layout_height="45dp"
-            android:background="@drawable/btn_feedback_selector"
+            android:background="@drawable/btn_selector"
             android:text="提交"
             android:layout_marginLeft="15dp"
             android:textColor="#fff"

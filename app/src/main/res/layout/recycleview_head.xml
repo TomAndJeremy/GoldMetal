@@ -43,7 +43,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginBottom="15dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/btn_feedback_selector"
+            android:background="@drawable/btn_selector"
             android:text="+关注"
             android:textColor="@color/white"
             android:textSize="20sp" />
