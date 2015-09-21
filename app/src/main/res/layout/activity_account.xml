@@ -64,11 +64,13 @@
                 android:text="@string/nickname" />
 
             <TextView
+                android:id="@+id/account_tv_nickname"
                 style="@style/EditTextStyle"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1" />
 
             <Button
+                android:id="@+id/account_change_nickname"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:background="@mipmap/content_account_btn_change" />
@@ -87,11 +89,13 @@
                 android:text="@string/name" />
 
             <TextView
+                android:id="@+id/account_tv_name"
                 style="@style/EditTextStyle"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1" />
 
             <Button
+                android:id="@+id/account_change_name"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:background="@mipmap/content_account_btn_change" />
@@ -110,11 +114,13 @@
                 android:text="@string/phone" />
 
             <TextView
+                android:id="@+id/account_tv_phone"
                 style="@style/EditTextStyle"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1" />
 
             <Button
+                android:id="@+id/account_change_phone"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:background="@mipmap/content_account_btn_change" />
@@ -133,11 +139,13 @@
                 android:text="@string/QQ" />
 
             <TextView
+                android:id="@+id/account_tv_qq"
                 style="@style/EditTextStyle"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1" />
 
             <Button
+                android:id="@+id/account_change_qq"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:background="@mipmap/content_account_btn_change" />
