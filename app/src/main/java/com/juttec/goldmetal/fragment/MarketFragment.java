@@ -90,12 +90,15 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                         }).show();
 
                 break;
+
             case R.id.right_img:
                 startActivity(new Intent(getActivity(), AccountActivity.class));
                 break;
+
             case R.id.left_img:
                 startActivity(new Intent(getActivity(), Announcementactivity.class));
                 break;
+
             case R.id.ll_chart:
                 Intent intent = new Intent(getActivity(), ChartActivity.class);
                 startActivity(intent);
