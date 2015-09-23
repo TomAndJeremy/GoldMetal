@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.FollowActivity;
 import com.juttec.goldmetal.activity.MessageActivity;
+import com.juttec.goldmetal.activity.MomentPersonalActivity;
 import com.juttec.goldmetal.activity.PublishTopicActivity;
 import com.juttec.goldmetal.adapter.MomentRecyclerViewAdapter;
 import com.juttec.goldmetal.adapter.RecycleViewWithHeadAdapter;
@@ -59,9 +60,19 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_moment, container, false);
 
+        initView(view);
+        setRecyclerView(view);
+
+
+        return view;
+    }
+
+    private void initView(View view) {
+        // 头部
         RelativeLayout head = (RelativeLayout) view.findViewById(R.id.head_layout);
         TextView rightText = (TextView) head.findViewById(R.id.right_text);
         rightText.setOnClickListener(this);
+
 
         //下拉刷新
         final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
@@ -69,7 +80,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // TODO: 2015/9/14  
+                // TODO: 2015/9/14
                 refreshLayout.setRefreshing(true);
                 refreshLayout.postDelayed(new Runnable() {
                     @Override
@@ -84,13 +95,21 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
 
-        /*初始化Recyclerview*/
 
+    }
+
+    private void setRecyclerView(View view) {
+        //recyclerview 头部
         View myHead = View.inflate(getActivity(), R.layout.recycleview_head, null);//头布局
+
+
+        myHead.findViewById(R.id.moment_btn_cancel).setVisibility(View.GONE);
+        myHead.findViewById(R.id.moment_btn_follow).setVisibility(View.GONE);
+
         //init tabs
         initTabs(myHead);
 
-
+        /*初始化Recyclerview*/
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.moment_recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -101,15 +120,15 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         for (int i = 0; i < dataset.length; i++) {
             dataset[i] = "item" + i;
         }
-        // 创建Adapter，并指定数据集
 
+
+        // 创建Adapter，并指定数据集
         MomentRecyclerViewAdapter adapter = new MomentRecyclerViewAdapter(dataset, getActivity());
 
         adapter.setOnItemClickListener(new MomentRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onClick(View v, int posion) {
-                Snackbar.make(v, "this is " + posion, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(getActivity(), MomentPersonalActivity.class));
             }
         });
 
@@ -120,13 +139,12 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
         // 设置Adapter
         recyclerView.setAdapter(myAdapter);
-        return view;
     }
 
     private void initTabs(View view) {
-        dynamic = (TextView) view.findViewById(R.id.moment_btn_dynamic);
-        message = (TextView) view.findViewById(R.id.moment_btn_message);
-        follow = (TextView) view.findViewById(R.id.moment_btn_follow);
+        dynamic = (TextView) view.findViewById(R.id.moment_tv_dynamic);
+        message = (TextView) view.findViewById(R.id.moment_tv_message);
+        follow = (TextView) view.findViewById(R.id.moment_tv_follow);
         dynamic.setSelected(true);
         dynamic.setOnClickListener(this);
         message.setOnClickListener(this);
@@ -137,14 +155,14 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.moment_btn_dynamic:
+            case R.id.moment_tv_dynamic:
                 dynamic.setSelected(true);
                 break;
-            case R.id.moment_btn_message:
+            case R.id.moment_tv_message:
 
                 startActivity(new Intent(getActivity(), MessageActivity.class));
                 break;
-            case R.id.moment_btn_follow:
+            case R.id.moment_tv_follow:
 
                 startActivity(new Intent(getActivity(), FollowActivity.class));
                 break;

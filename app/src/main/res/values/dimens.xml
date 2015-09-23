@@ -6,6 +6,9 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
+    
+    <!-- emoji键盘高度-->
+    <dimen name="keyboard_height">260dp</dimen>
 
 
     <dimen name="head_title_size">20sp</dimen>

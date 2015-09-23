@@ -25,6 +25,7 @@
             app:civ_fill_color="#ffffff" />
 
         <Button
+            android:id="@+id/moment_btn_cancel"
             android:layout_width="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
@@ -37,6 +38,7 @@
             android:layout_height="wrap_content" />
 
         <Button
+            android:id="@+id/moment_btn_follow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -51,6 +53,7 @@
 
 
     <LinearLayout
+        android:id="@+id/moment_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#F8F8F8"
@@ -59,7 +62,7 @@
 
         <TextView
 
-            android:id="@+id/moment_btn_dynamic"
+            android:id="@+id/moment_tv_dynamic"
             style="@style/MomentFragment_Tabs_text"
             android:text="@string/moment_tab_dynamic" />
 
@@ -69,7 +72,7 @@
             android:background="#DDDDDD"></TextView>
 
         <TextView
-            android:id="@+id/moment_btn_message"
+            android:id="@+id/moment_tv_message"
             style="@style/MomentFragment_Tabs_text"
             android:text="@string/moment_tab_message" />
 
@@ -79,7 +82,7 @@
             android:background="#DDDDDD"></TextView>
 
         <TextView
-            android:id="@+id/moment_btn_follow"
+            android:id="@+id/moment_tv_follow"
             style="@style/MomentFragment_Tabs_text"
             android:text="@string/moment_tab_follow" />
 

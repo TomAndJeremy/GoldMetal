@@ -21,9 +21,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         setContentView(R.layout.activity_main);
         init();
 
-        //让tablayout响应，使第一个tab变色
-        viewPager.setCurrentItem(1);
-        viewPager.setCurrentItem(0);
+        viewPager.setCurrentItem(2);
 
 
     }
