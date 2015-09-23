@@ -15,15 +15,30 @@ import com.juttec.goldmetal.activity.PublishTopicActivity;
 public class SnackbarUtil {
 
 
-    public static Snackbar snackbar;
+
+    public static Snackbar Short(Context context, String msg,String action,View.OnClickListener onClickListener) {
+        return Snackbar.make(((Activity) context).getCurrentFocus(), msg, Snackbar.LENGTH_SHORT);
+
+
+    }
+
+
+    public static Snackbar Long(Context context, String msg) {
+        return   Snackbar.make(((Activity) context).getCurrentFocus(), msg, Snackbar.LENGTH_LONG);
+
+
+    }
 
     public static void showShort(Context context, String msg) {
-        Snackbar.make(((Activity) context).getCurrentFocus(), msg, Snackbar.LENGTH_SHORT);
-        snackbar.show();
+        Snackbar.make(((Activity) context).getCurrentFocus(), msg, Snackbar.LENGTH_SHORT).show();
+
+
     }
 
 
     public static void showLong(Context context, String msg) {
         Snackbar.make(((Activity) context).getCurrentFocus(), msg, Snackbar.LENGTH_LONG).show();
+
+
     }
 }
