@@ -1,5 +1,7 @@
 package com.juttec.goldmetal.activity;
 
+import android.app.Application;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,7 +12,14 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.utils.SnackbarUtil;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     EditText identifyCode;
     EditText password;
     EditText pwdConfig;
+    MyApplication app= (MyApplication)this.getApplication();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +60,19 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.register_bt_identifying_code:
                 if (phoneVerification()) {
+                    RequestParams params = new RequestParams();
+                    params.addBodyParameter("userMobile",phone.getText().toString().trim());
+                    new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getSendMessageUrl(), new RequestCallBack<String>(){
+                        @Override
+                        public void onSuccess(ResponseInfo<String> responseInfo) {
 
+                        }
+
+                        @Override
+                        public void onFailure(HttpException error, String msg) {
+
+                        }
+                    });
                 }
                 break;
             case register_bt_ok:

@@ -15,76 +15,76 @@ public class MyApplication extends Application {
     private static final String BASEURL = "http://localhost:4444/App_Areas/";
 
 
-    public String getSendMessageUrl() {
+    public  String getSendMessageUrl() {
         return BASEURL + "App_One/SendMessage";
     }
 
-    public String getUserRegisterUrl() {
+    public  String getUserRegisterUrl() {
         return BASEURL + "App_User/UserRegister";
     }
 
-    public String getUserLoginUrl() {
+    public  String getUserLoginUrl() {
         return BASEURL + "App_User/UserLogin";
     }
 
-    public String getForgetPasswordUrl() {
+    public  String getForgetPasswordUrl() {
         return BASEURL + "App_User/ForgetPassword";
     }
 
-    public String getEditUserInforUrl() {
+    public  String getEditUserInforUrl() {
         return BASEURL + "App_User/EditUserInfor";
     }
 
-    public String getContactUsUrl() {
+    public  String getContactUsUrl() {
         return BASEURL + "App_User/ContactUs";
     }
 
-    public String getUploadUserPhotoUrl() {
+    public  String getUploadUserPhotoUrl() {
         return BASEURL + "App_User/UploadUserPhoto";
     }
 
-    public String getGetUserPhotoUrl() {
+    public  String getGetUserPhotoUrl() {
         return BASEURL + "App_User/GetUserPhoto";
     }
 
-    public String getGetDynamicUrl() {
+    public  String getGetDynamicUrl() {
         return BASEURL + "App_One/GetDynamic";
     }
 
-    public String PostDynamicUrl() {
+    public  String PostDynamicUrl() {
         return BASEURL + "App_One/PostDynamic";
     }
 
 
-    public String getUploadPhotoUrl() {
+    public  String getUploadPhotoUrl() {
         return BASEURL + "App_One/GetDynamic";
     }
 
-    public String getAddOrCancelAttentionUrl() {
+    public  String getAddOrCancelAttentionUrl() {
         return BASEURL + "App_One/GetDynamic";
     }
 
-    public String getAddOrCancelSupportUrl() {
+    public  String getAddOrCancelSupportUrl() {
         return BASEURL + "App_One/GetDynamic";
     }
 
-    public String getCommentUrl() {
+    public  String getCommentUrl() {
         return BASEURL + "App_One/Comment";
     }
 
-    public String getReplyUrl() {
+    public  String getReplyUrl() {
         return BASEURL + "App_One/Reply";
     }
 
-    public String getGetMyMessageUrl() {
+    public  String getGetMyMessageUrl() {
         return BASEURL + "App_One/GetMyMessage";
     }
 
-    public String getDelMessageUrl() {
+    public  String getDelMessageUrl() {
         return BASEURL + "App_One/DelMessage";
     }
 
-    public String getGetMsgDetailsUrl() {
+    public  String getGetMsgDetailsUrl() {
         return BASEURL + "App_One/GetMsgDetails";
     }
 
