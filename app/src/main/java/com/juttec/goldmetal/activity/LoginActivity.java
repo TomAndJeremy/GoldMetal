@@ -11,6 +11,8 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.igexin.sdk.PushManager;
 import com.juttec.goldmetal.R;
 
 /**
@@ -35,6 +37,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        PushManager.getInstance().initialize(this.getApplicationContext());
 
         initView();
 
