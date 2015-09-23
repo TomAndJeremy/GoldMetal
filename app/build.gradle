@@ -25,4 +25,5 @@ dependencies {
     compile 'com.android.support:design:22.2.1'
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile files('src/main/libs/universal-image-loader-1.9.4.jar')
+    compile 'com.jiechic.library:xUtils:2.6.14'
 }

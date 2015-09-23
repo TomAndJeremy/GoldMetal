@@ -86,8 +86,8 @@
         <EditText
             android:id="@+id/register_et_pwd_config"
             style="@style/EditTextStyle"
-            android:drawableLeft="@mipmap/content_account_icon_password"
             android:background="@null"
+            android:drawableLeft="@mipmap/content_account_icon_password"
             android:hint="@string/register_confirm_pwd" />
 
 

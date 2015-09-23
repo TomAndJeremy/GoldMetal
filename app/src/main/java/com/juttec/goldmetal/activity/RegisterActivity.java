@@ -49,6 +49,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.register_bt_identifying_code:
+                if (phoneVerification()) {
+
+                }
                 break;
             case register_bt_ok:
                 break;
