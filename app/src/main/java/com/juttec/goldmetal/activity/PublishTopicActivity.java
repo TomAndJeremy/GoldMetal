@@ -8,7 +8,6 @@ import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Picture;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -20,7 +19,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.Spanned;
-import android.util.Log;
+import android.text.TextUtils;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,6 +28,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -36,47 +37,106 @@ import android.widget.TextView;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.EmoticonsGridAdapter.KeyClickListener;
 import com.juttec.goldmetal.adapter.EmoticonsPagerAdapter;
+import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.utils.GetContentUrl;
+import com.juttec.goldmetal.utils.ImgUtil;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.SnackbarUtil;
+import com.juttec.goldmetal.utils.ToastUtil;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
-public class PublishTopicActivity extends AppCompatActivity implements
-        KeyClickListener, View.OnClickListener {
+/**
+ * 发布消息  界面
+ */
+
+public class PublishTopicActivity extends AppCompatActivity implements KeyClickListener, View.OnClickListener {
+
 
 
     public final static int REQUEST_CODE_CAMERA = 111;
     public final static int REQUEST_CODE_ALBUM = 222;
 
 
-    private static final int EMOJI_NUM = 54;
+    private static final int EMOJI_NUM = 54;//表情数目
+
     private View popUpView;
     private LinearLayout emojiconsCover;
     private PopupWindow popupWindow;
 
-    private int keyboardHeight;
-    private EditText content;
+
+    private int keyboardHeight;//键盘高度
+
+
+
+    private EditText mContent;//发表的内容
 
     private RelativeLayout parentLayout;
 
-    private boolean isKeyBoardVisible;
+    private Button mBtnPush;//发表按钮
+
+    private ImageView iv_photo1,iv_photo2,iv_photo3;//上传的图片
+
+    private List<String> photoList = new ArrayList<String>();//存放上传图片后返回的路径
+
+    private String path;//照相后图片的路径
+    // 存放图片的路径 的集合
+    private  Map<Integer, String> maps_photopath = new HashMap<Integer, String>();
+
+    private int count = 0;//图片上传到了 第几张
+
+
+    private boolean isKeyBoardVisible;//键盘是否显示或隐藏
 
     private Bitmap[] emoticons;
+
+
+    private MyApplication app;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_topic);
+        app = (MyApplication) getApplication();
+        LogUtil.d("onCreate------------");
+
         initView();
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LogUtil.d("onStop------------");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LogUtil.d("onDestroy------------");
+    }
+
+
 
     private void initView() {
         parentLayout = (RelativeLayout) this.findViewById(R.id.rl_pta_parent);
@@ -84,12 +144,12 @@ public class PublishTopicActivity extends AppCompatActivity implements
         popUpView = getLayoutInflater().inflate(R.layout.emoticons_popup, null);
 
 
-        content = (EditText) this.findViewById(R.id.publis_topic_et);
-        content.setOnClickListener(this);
+        mContent = (EditText) this.findViewById(R.id.publis_topic_et);
+        mContent.setOnClickListener(this);
 
 
-        final Button push = (Button) findViewById(R.id.publis_topic_bt_push);
-        push.setOnClickListener(this);
+        mBtnPush = (Button) findViewById(R.id.publis_topic_bt_push);
+        mBtnPush.setOnClickListener(this);
 
 
         ImageButton selectPic = (ImageButton) this.findViewById(R.id.publis_topic_bt_pic);
@@ -102,6 +162,8 @@ public class PublishTopicActivity extends AppCompatActivity implements
 
         ImageButton btEmoji = (ImageButton) this.findViewById(R.id.publis_topic_bt_emoji);
         btEmoji.setOnClickListener(this);
+
+        iv_photo1 = (ImageView) findViewById(R.id.iv_photo1);
 
         readEmojiIcons();
         enablePopUpView();
@@ -171,7 +233,7 @@ public class PublishTopicActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 KeyEvent event = new KeyEvent(0, 0, 0, KeyEvent.KEYCODE_DEL, 0, 0, 0, 0, KeyEvent.KEYCODE_ENDCALL);
-                content.dispatchKeyEvent(event);
+                mContent.dispatchKeyEvent(event);
             }
         });
 
@@ -185,10 +247,14 @@ public class PublishTopicActivity extends AppCompatActivity implements
 
     }
 
+
+
+
+
     private void readEmojiIcons() {
         emoticons = new Bitmap[EMOJI_NUM];
-        for (short i = 0; i < EMOJI_NUM; i++) {
-            emoticons[i] = getImage((i) + ".png");
+        for (short i = 1; i <= EMOJI_NUM; i++) {
+            emoticons[i-1] = getImage((i) + ".png");
         }
     }
 
@@ -208,6 +274,8 @@ public class PublishTopicActivity extends AppCompatActivity implements
         return temp;
     }
 
+
+
     private void changeKeyboardHeight(int height) {
         if (height > 100) {
             keyboardHeight = height;
@@ -224,7 +292,7 @@ public class PublishTopicActivity extends AppCompatActivity implements
         Html.ImageGetter imageGetter = new Html.ImageGetter() {
             public Drawable getDrawable(String source) {
                 StringTokenizer st = new StringTokenizer(index, ".");
-                Drawable d = new BitmapDrawable(getResources(), emoticons[Integer.parseInt(st.nextToken()) - 1]);
+                Drawable d = new BitmapDrawable(getResources(), emoticons[Integer.parseInt(st.nextToken())-1]);
                 d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
                 return d;
             }
@@ -232,8 +300,8 @@ public class PublishTopicActivity extends AppCompatActivity implements
 
         Spanned cs = Html.fromHtml("<img src ='" + index + "'/>", imageGetter, null);
 
-        int cursorPosition = content.getSelectionStart();
-        content.getText().insert(cursorPosition, cs);
+        int cursorPosition = mContent.getSelectionStart();
+        mContent.getText().insert(cursorPosition, cs);
 
 
     }
@@ -267,16 +335,37 @@ public class PublishTopicActivity extends AppCompatActivity implements
         return unicode.toString();
     }
 
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.publis_topic_et:
                 popupWindow.dismiss();
                 break;
+
+
             case R.id.publis_topic_bt_push:
+                //发表话题
+                String content = mContent.getText().toString();
+                if(TextUtils.isEmpty(content)||"".equals(content)){
+                    ToastUtil.showShort(PublishTopicActivity.this,"发表的内容不能为空");
+                    return;
+                }
+
+                LogUtil.d("发表的内容为："+mContent.getText().toString());
+
+
+                for(int j=0;j<maps_photopath.size();j++){
+
+                    upLoadPhoto(maps_photopath.get(j+1));
+                }
+
 
 
                 break;
+
+
             case R.id.publis_topic_bt_pic:
 
                 final Dialog dialog = new Dialog(PublishTopicActivity.this, R.style.AlertDialogStyle);
@@ -346,6 +435,7 @@ public class PublishTopicActivity extends AppCompatActivity implements
 
     }
 
+
     // 相机拍摄照片时:使用系统当前日期加以调整作为照片的名称
     public String getPhotoFileName() {
         Date date = new Date(System.currentTimeMillis());
@@ -391,12 +481,141 @@ public class PublishTopicActivity extends AppCompatActivity implements
                         filePathColumns, null, null, null);
                 c.moveToFirst();
                 int columnIndex = c.getColumnIndex(filePathColumns[0]);
-
+                String picturePath= c.getString(columnIndex);
+                maps_photopath.put(1,picturePath);
+                LogUtil.d("选取相册中图片的路径：" + picturePath);
                 c.close();
+                setImg();
                 break;
-
         }
 
     }
+
+
+    //设置图片
+    private void setImg() {
+        Bitmap bitmap = null;// 根据路径 获取图片
+        if(maps_photopath.size()>0){
+            Set<Integer> mapSet =  maps_photopath.keySet();	//获取所有的key值 为set的集合
+            Iterator<Integer> itor =  mapSet.iterator();//获取key的Iterator便利
+            while(itor.hasNext()){//存在下一个值
+                int key = itor.next();//当前key值
+                if(key==1){
+                    bitmap =ImgUtil.getBitmap( maps_photopath.get(1), 200, 200);
+                    iv_photo1.setImageBitmap(bitmap);
+
+                }else if(key==2){
+
+                }
+            }
+        }
+    }
+
+
+
+
+    //上传图片接口
+    private void upLoadPhoto(String path){
+
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("dyPhotoFile",getBitmapString(path));
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.send(HttpRequest.HttpMethod.POST, app.getUploadPhotoUrl(), params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                LogUtil.d("上传图片接口返回结果:" + responseInfo.result.toString());
+                JSONObject object = null;
+                try {
+                    object = new JSONObject(responseInfo.result.toString());
+                    if ("1".equals(object.getString("status"))) {
+                        photoList.add(object.getString("message1"));
+                        count++;
+                        if(count==maps_photopath.size()){
+                            //调用发表动态接口
+                            postDynamic();
+                        }
+
+                    } else {
+                        photoList.clear();
+                        ToastUtil.showShort(PublishTopicActivity.this, "上传图片失败");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                ToastUtil.showShort(PublishTopicActivity.this, "请检查网络是否正常连接");
+            }
+        });
+
+    }
+
+
+
+    //发表动态接口
+    private void postDynamic(){
+
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("userId",app.getUserInfoBean().getUserId());
+        params.addBodyParameter("userName", app.getUserInfoBean().getUserNickName());
+        params.addBodyParameter("dyContent", mContent.getText().toString());
+        for(int i=0;i<photoList.size();i++){
+            if(i==0) {
+                params.addBodyParameter("dyPhotoOne", photoList.get(0));
+            }else if(i==1){
+                params.addBodyParameter("dyPhotoTwo", photoList.get(1));
+            }else if(i==2){
+                params.addBodyParameter("dyPhotoThree", photoList.get(2));
+            }
+        }
+
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.send(HttpRequest.HttpMethod.POST, app.PostDynamicUrl(), params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                LogUtil.d(responseInfo.result.toString());
+                JSONObject object = null;
+                try {
+                    object = new JSONObject(responseInfo.result.toString());
+                    String status = object.getString("status");
+                    String promptInfor = object.getString("promptInfor");
+                    if ("1".equals(status)) {
+
+                        finish();
+                    } else {
+
+                    }
+
+                    ToastUtil.showShort(PublishTopicActivity.this, promptInfor);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                ToastUtil.showShort(PublishTopicActivity.this, "请检查网络是否正常连接");
+            }
+        });
+
+    }
+
+
+
+
+    // 根据路径 取图片 将图片变成字符串
+    private String getBitmapString(String p) {
+        Bitmap bitmap = ImgUtil.getBitmap(p, 200, 200);
+        // 根据路径 获取图片
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] appicon = baos.toByteArray();
+        return Base64.encodeToString(appicon, Base64.DEFAULT);
+    }
+
 
 }

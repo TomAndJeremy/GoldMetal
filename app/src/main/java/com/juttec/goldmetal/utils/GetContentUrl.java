@@ -2,13 +2,14 @@ package com.juttec.goldmetal.utils;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 
 public class GetContentUrl {
-	public static Uri geturi(android.content.Intent intent,Context context) {
+	public static Uri geturi(Intent intent,Context context) {
 
 		Uri uri = intent.getData();
 

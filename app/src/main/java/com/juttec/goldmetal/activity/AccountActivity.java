@@ -172,7 +172,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
 
 
-    private void editUserInfo(int type,final TextView tv,String result){
+    private void editUserInfo(final int type,final TextView tv,final String result){
 
        // userNickName  userName userMobile  userQQ
         RequestParams params = new RequestParams();
@@ -198,7 +198,15 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                             String promptInfor = object.getString("promptInfor");
                             if("1".equals(status)){
 
-                                tv.setText(dialog.getResult());
+                                tv.setText(result);
+
+                                if(type==NICKNAME){
+                                    userInfoBean.setUserNickName(result);
+                                }else if(type==NAME){
+                                    userInfoBean.setUserName(result);
+                                }else if(type==QQ){
+                                    userInfoBean.setUserQQ(result);
+                                }
                             }else{
 
                             }

@@ -1,30 +1,26 @@
 package com.juttec.goldmetal.adapter;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
-import com.juttec.goldmetal.utils.LogUtil;
+
+import java.io.InputStream;
+import java.util.ArrayList;
 
 public class EmoticonsGridAdapter extends BaseAdapter {
 
     private ArrayList<String> paths;
     private int pageNumber;
-    Context mContext;
+    private Context mContext;
 
     KeyClickListener mListener;
 
@@ -49,8 +45,8 @@ public class EmoticonsGridAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        final String path
-                = paths.get(position);
+        final String path = paths.get(position);
+
         holder.imageView.setImageBitmap(getImage(path));
 
         convertView.setOnClickListener(new OnClickListener() {
