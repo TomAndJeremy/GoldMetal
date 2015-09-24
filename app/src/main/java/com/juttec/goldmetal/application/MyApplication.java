@@ -16,7 +16,15 @@ public class MyApplication extends Application {
 
 
 
+    private String CID;//用于  推送的  CID
 
+    public String getCID() {
+        return CID;
+    }
+
+    public void setCID(String CID) {
+        this.CID = CID;
+    }
 
 
 

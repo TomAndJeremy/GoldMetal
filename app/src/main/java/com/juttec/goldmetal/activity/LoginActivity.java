@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.igexin.sdk.PushManager;
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.application.MyApplication;
 
 /**
  * Created by Jeremy on 2015/9/15.
@@ -31,11 +32,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private TextView tvRegister;//注册
 
+    private MyApplication app ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        app = (MyApplication) getApplication();
 
         //初始化个推服务
         PushManager.getInstance().initialize(this.getApplicationContext());

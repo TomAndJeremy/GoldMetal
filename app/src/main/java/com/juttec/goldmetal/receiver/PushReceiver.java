@@ -7,9 +7,13 @@ import android.os.Bundle;
 import android.util.Log;
 import com.igexin.sdk.PushConsts;
 import com.igexin.sdk.PushManager;
+import com.juttec.goldmetal.application.MyApplication;
+import com.juttec.goldmetal.utils.LogUtil;
 
 /**
  * Created by Administrator on 2015/9/23.
+ *
+ * 个推  透传的  自定义广播接收者
  */
 public class PushReceiver extends BroadcastReceiver {
 
@@ -21,6 +25,8 @@ public class PushReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         Log.d("GetuiSdkDemo", "onReceive() action=" + bundle.getInt("action"));
+
+        MyApplication app = (MyApplication) context.getApplicationContext();
 
         switch (bundle.getInt(PushConsts.CMD_ACTION)) {
             case PushConsts.GET_MSG_DATA:
@@ -46,6 +52,11 @@ public class PushReceiver extends BroadcastReceiver {
                 // 获取ClientID(CID)
                 // 第三方应用需要将CID上传到第三方服务器，并且将当前用户帐号和CID进行关联，以便日后通过用户帐号查找CID进行消息推送
                 String cid = bundle.getString("clientid");
+                LogUtil.d("获取ClientID(CID):" + cid);
+                if(cid!=null){
+                    app.setCID(cid);
+                }
+
                 break;
 
             case PushConsts.THIRDPART_FEEDBACK:

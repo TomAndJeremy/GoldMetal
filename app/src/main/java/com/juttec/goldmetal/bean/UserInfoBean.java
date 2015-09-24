@@ -13,7 +13,6 @@ public class UserInfoBean {
     private String userNickName;//用户昵称
     private String userQQ;//用户QQ
     private String userPhoto;//用户头像(地址)
-    private String userCid;//用户 个推需要 的  Cid
 
 
     public String getMobile() {
@@ -64,13 +63,6 @@ public class UserInfoBean {
         this.userPhoto = userPhoto;
     }
 
-    public String getUserCid() {
-        return userCid;
-    }
-
-    public void setUserCid(String userCid) {
-        this.userCid = userCid;
-    }
 
     public String getUserId() {
         return userId;
