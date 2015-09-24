@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //初始化个推服务
         PushManager.getInstance().initialize(this.getApplicationContext());
 
         initView();

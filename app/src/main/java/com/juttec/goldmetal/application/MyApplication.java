@@ -15,6 +15,36 @@ public class MyApplication extends Application {
     private static final String BASEURL = "http://localhost:4444/App_Areas/";
 
 
+
+
+
+
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        initImageLoader(getApplicationContext());
+    }
+
+
+    //初始化ImageLoader
+    void initImageLoader(Context context) {
+
+        ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
+        config.threadPriority(Thread.NORM_PRIORITY - 2);
+        config.denyCacheImageMultipleSizesInMemory();
+        config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
+        config.diskCacheSize(50 * 1024 * 1024); // 50 MiB
+        config.tasksProcessingOrder(QueueProcessingType.LIFO);
+        config.writeDebugLogs(); // Remove for release app
+
+        // Initialize ImageLoader with configuration.
+        ImageLoader.getInstance().init(config.build());
+
+    }
+
+
+    //接口访问地址
     public  String getSendMessageUrl() {
         return BASEURL + "App_One/SendMessage";
     }
@@ -55,7 +85,6 @@ public class MyApplication extends Application {
         return BASEURL + "App_One/PostDynamic";
     }
 
-
     public  String getUploadPhotoUrl() {
         return BASEURL + "App_One/GetDynamic";
     }
@@ -87,30 +116,4 @@ public class MyApplication extends Application {
     public  String getGetMsgDetailsUrl() {
         return BASEURL + "App_One/GetMsgDetails";
     }
-
-
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        initImageLoader(getApplicationContext());
-    }
-
-
-    void initImageLoader(Context context) {
-
-        ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
-        config.threadPriority(Thread.NORM_PRIORITY - 2);
-        config.denyCacheImageMultipleSizesInMemory();
-        config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
-        config.diskCacheSize(50 * 1024 * 1024); // 50 MiB
-        config.tasksProcessingOrder(QueueProcessingType.LIFO);
-        config.writeDebugLogs(); // Remove for release app
-
-        // Initialize ImageLoader with configuration.
-        ImageLoader.getInstance().init(config.build());
-
-    }
-
-
 }
