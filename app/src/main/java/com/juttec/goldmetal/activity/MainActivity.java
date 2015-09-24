@@ -9,16 +9,19 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.MyFragmentPagerAdapter;
+import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.fragment.BaseFragment;
 
 public class MainActivity extends AppCompatActivity implements BaseFragment.OnFragmentInteractionListener {
     ViewPager viewPager;
     TabLayout tabLayout;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         init();
 
         viewPager.setCurrentItem(2);

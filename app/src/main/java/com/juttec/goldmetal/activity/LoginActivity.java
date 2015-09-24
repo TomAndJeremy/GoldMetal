@@ -18,6 +18,7 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.UserInfoBean;
 import com.juttec.goldmetal.utils.LogUtil;
+import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -202,7 +203,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     @Override
                     public void onFailure(HttpException error, String msg) {
-                        ToastUtil.showShort(LoginActivity.this, "请检查网络是否正常连接");
+                        NetWorkUtils.showMsg(LoginActivity.this);
+
                     }
                 });
 

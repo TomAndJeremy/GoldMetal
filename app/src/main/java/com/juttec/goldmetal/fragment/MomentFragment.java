@@ -3,27 +3,43 @@ package com.juttec.goldmetal.fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.FollowActivity;
+import com.juttec.goldmetal.activity.MainActivity;
 import com.juttec.goldmetal.activity.MessageActivity;
 import com.juttec.goldmetal.activity.MomentPersonalActivity;
 import com.juttec.goldmetal.activity.PublishTopicActivity;
 import com.juttec.goldmetal.adapter.MomentRecyclerViewAdapter;
 import com.juttec.goldmetal.adapter.RecycleViewWithHeadAdapter;
+import com.juttec.goldmetal.application.MyApplication;
+import com.juttec.goldmetal.bean.DynamicEntityList;
+import com.juttec.goldmetal.bean.DynamicMsgBean;
+import com.juttec.goldmetal.utils.LogUtil;
+import com.juttec.goldmetal.utils.NetWorkUtils;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 public class MomentFragment extends BaseFragment implements View.OnClickListener {
@@ -32,11 +48,20 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     // TODO: Rename and change types of parameters
     private String mParam1;
-
+    MyApplication app;
     //tabs
     TextView dynamic, message, follow;
 
+    ArrayList<DynamicEntityList> entityList;
 
+    RecyclerView recyclerView;
+
+    MomentRecyclerViewAdapter adapter;
+    RecycleViewWithHeadAdapter myAdapter;
+
+    View myHead;
+
+    Gson gson;
 
     public static MomentFragment newInstance(String param1) {
         MomentFragment fragment = new MomentFragment();
@@ -56,6 +81,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
         }
+        app = (MyApplication) getActivity().getApplication();
+
     }
 
     @Override
@@ -65,8 +92,12 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_moment, container, false);
 
         initView(view);
+
         setRecyclerView(view);
 
+
+        gson = new Gson();
+        getInfo(1, MyApplication.DYNAMIC_TYPE_ALL);
 
         return view;
     }
@@ -98,51 +129,26 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         });
 
 
-
-
     }
 
     private void setRecyclerView(View view) {
         //recyclerview 头部
-        View myHead = View.inflate(getActivity(), R.layout.recycleview_head, null);//头布局
-
-
+        myHead = View.inflate(getActivity(), R.layout.recycleview_head, null);//头布局
         myHead.findViewById(R.id.moment_btn_cancel).setVisibility(View.GONE);
         myHead.findViewById(R.id.moment_btn_follow).setVisibility(View.GONE);
+
 
         //init tabs
         initTabs(myHead);
 
+
         /*初始化Recyclerview*/
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.moment_recyclerview);
+        recyclerView = (RecyclerView) view.findViewById(R.id.moment_recyclerview);
+        recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
-
-        String[] dataset = new String[20];
-        for (int i = 0; i < dataset.length; i++) {
-            dataset[i] = "item" + i;
-        }
-
-
-        // 创建Adapter，并指定数据集
-        MomentRecyclerViewAdapter adapter = new MomentRecyclerViewAdapter(dataset, getActivity());
-
-        adapter.setOnItemClickListener(new MomentRecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(View v, int posion) {
-                startActivity(new Intent(getActivity(), MomentPersonalActivity.class));
-            }
-        });
-
-        // 添加头部
-        RecycleViewWithHeadAdapter myAdapter = new RecycleViewWithHeadAdapter<>(adapter);
-        myAdapter.addHeader(myHead);
-
-
-        // 设置Adapter
-        recyclerView.setAdapter(myAdapter);
     }
 
     private void initTabs(View view) {
@@ -175,6 +181,51 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                 break;
         }
     }
+
+    /**
+     * @param page 页数
+     * @param type 类型 all：所有 attention：关注 personal：个人
+     */
+    private void getInfo(int page, String type) {
+        RequestParams params = new RequestParams();
+
+        params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
+        params.addBodyParameter("pageIndex", page + "");
+        params.addBodyParameter("dyType", type);
+        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetDynamicUrl(), params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+
+                DynamicMsgBean dynamicMsgBean = gson.fromJson(responseInfo.result.toString(), DynamicMsgBean.class);
+
+
+                entityList = dynamicMsgBean.getEntityList();
+
+
+                adapter = new MomentRecyclerViewAdapter(entityList, getActivity(),app);
+                adapter.setOnItemClickListener(new MomentRecyclerViewAdapter.OnItemClickListener() {
+                    @Override
+                    public void onClick(View v, int posion) {
+                        startActivity(new Intent(getActivity(), MomentPersonalActivity.class));
+                    }
+                });
+
+                // 添加头部
+                myAdapter = new RecycleViewWithHeadAdapter<>(adapter);
+                myAdapter.addHeader(myHead);
+                // 设置Adapter
+                recyclerView.setAdapter(myAdapter);
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                NetWorkUtils.showMsg(getActivity());
+
+            }
+        });
+
+    }
+
 
 
 }

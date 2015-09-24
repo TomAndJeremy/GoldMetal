@@ -6,6 +6,7 @@ package com.juttec.goldmetal.bean;
 public class DySupportInfoBean {
     private String id; //点赞编号ID
     private String userId; //点赞人ID
+    private String userName;// 点赞人姓名
 
     public void setId(String id) {
         this.id = id;
@@ -32,5 +33,5 @@ public class DySupportInfoBean {
         return userName;
     }
 
-    private String userName;// 点赞人姓名
+
 }

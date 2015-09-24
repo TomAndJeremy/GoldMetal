@@ -32,6 +32,7 @@
             android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/dynamic_item_user_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/dynamic_item_user_name"
@@ -49,18 +50,43 @@
         android:layout_margin="5dp" />
 
     <LinearLayout
+        android:id="@+id/item_imgs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/item_img_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/item_img_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/item_img_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_gravity="right">
+        android:layout_gravity="right"
+        android:layout_margin="5dp">
 
         <CheckBox
+            android:id="@+id/dynamic_item_thumb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/dynamic_item_content"
             android:layout_margin="5dp"
             android:layout_toLeftOf="@+id/dynamic_item_reply"
-            android:button="@drawable/thumb_selector" />
+            android:button="@drawable/thumb_selector"
+            android:checked="false" />
 
         <ImageButton
             android:id="@+id/dynamic_item_reply"
@@ -73,6 +99,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/item_suport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -81,7 +108,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/content_moment_icon_praise" />
+
+        <TextView
+            android:id="@+id/item_suport_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="dfdf"
+            android:textColor="#303488" />
+
+        <LinearLayout
+            android:id="@+id/item_suport_other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"></LinearLayout>
+
+        <TextView
+            android:id="@+id/item_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="觉得很赞" />
+
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"></LinearLayout>

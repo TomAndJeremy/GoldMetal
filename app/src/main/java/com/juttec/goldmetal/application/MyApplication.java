@@ -18,6 +18,9 @@ public class MyApplication extends Application {
     private static final String ImgBASEURL = "http://192.168.1.35:8155";
 
 
+    public static final String DYNAMIC_TYPE_ALL = "all";
+    public static final String DYNAMIC_TYPE_ATTENTION = "attention";
+    public static final String DYNAMIC_TYPE_PERSONAL = "personal";
 
 
 

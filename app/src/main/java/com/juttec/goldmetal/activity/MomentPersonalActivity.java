@@ -81,28 +81,28 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
 
 
         // 创建Adapter，并指定数据集
-        MomentRecyclerViewAdapter adapter = new MomentRecyclerViewAdapter(dataset, this);
+      //  MomentRecyclerViewAdapter adapter = new MomentRecyclerViewAdapter(, this);
 
-        adapter.setOnItemClickListener(new MomentRecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(View v, int posion) {
-                Snackbar.make(v, "this is " + posion, Snackbar.LENGTH_LONG)
-                        .setAction("Action", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ToastUtil.showLong(getApplicationContext(),"111111111111111");
-                            }
-                        }).show();
-            }
-        });
+//        adapter.setOnItemClickListener(new MomentRecyclerViewAdapter.OnItemClickListener() {
+//            @Override
+//            public void onClick(View v, int posion) {
+//                Snackbar.make(v, "this is " + posion, Snackbar.LENGTH_LONG)
+//                        .setAction("Action", new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                ToastUtil.showLong(getApplicationContext(),"111111111111111");
+//                            }
+//                        }).show();
+//            }
+//        });
 
         // 添加头部
-        RecycleViewWithHeadAdapter myAdapter = new RecycleViewWithHeadAdapter<>(adapter);
-        myAdapter.addHeader(myHead);
-
-
-        // 设置Adapter
-        recyclerView.setAdapter(myAdapter);
+//        RecycleViewWithHeadAdapter myAdapter = new RecycleViewWithHeadAdapter<>(adapter);
+//        myAdapter.addHeader(myHead);
+//
+//
+//        // 设置Adapter
+//        recyclerView.setAdapter(myAdapter);
     }
 
     @Override
