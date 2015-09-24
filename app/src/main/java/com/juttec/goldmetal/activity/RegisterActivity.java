@@ -1,14 +1,9 @@
 package com.juttec.goldmetal.activity;
 
-import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +13,7 @@ import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.SnackbarUtil;
+import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
@@ -31,23 +27,22 @@ import org.json.JSONObject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.juttec.goldmetal.R.id.back;
 import static com.juttec.goldmetal.R.id.register_bt_ok;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
-    EditText phone;
-    EditText identifyCode;
-    EditText password;
-    EditText pwdConfig;
+   private  EditText phone;
+   private  EditText identifyCode;
+    private EditText password;
+   private  EditText pwdConfig;
 
-    Button getCode;
+   private  Button getCode;
 
-    TimeCount timeCount;
+    private TimeCount timeCount;
 
-    MyApplication app;
+    private MyApplication app;
 
-    String phone_back;
-    String code_back;
+    private String phone_back;
+    private String code_back;
 
 
     @Override
@@ -68,6 +63,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         pwdConfig = (EditText) this.findViewById(R.id.register_et_pwd_config);
 
         getCode = (Button) this.findViewById(R.id.register_bt_identifying_code);
+
         Button register = (Button) this.findViewById(register_bt_ok);
 
 
@@ -82,12 +78,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.register_bt_identifying_code:
                 if (phoneVerification()) {
+                    timeCount.start();
                     RequestParams params = new RequestParams();
                     params.addBodyParameter("userMobile", phone.getText().toString().trim());
-
-                    if (app == null) {
-                        LogUtil.e("1111111111111111111111111111");
-                    }
 
                     new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getSendMessageUrl(), new RequestCallBack<String>() {
                         @Override
@@ -97,17 +90,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 JSONObject jsonObject = new JSONObject(responseInfo.result.toString());
                                 String status = jsonObject.getString("status");
                                 String promptInfor = jsonObject.getString("promptInfor");
-                                SnackbarUtil.showShort(getApplicationContext(), promptInfor);
+
 
                                 if ("1".equals(status)) {
-                                    timeCount.start();
+                                    SnackbarUtil.showShort(getApplicationContext(), "验证码已发送，请注意查收");
                                     phone_back = jsonObject.getString("message1");
                                     code_back = jsonObject.getString("message2");
+                                }else{
+                                    SnackbarUtil.showShort(getApplicationContext(), promptInfor);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }finally {
-                                // TODO: 2015/9/24
                             }
 
                         }
@@ -115,7 +109,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         @Override
                         public void onFailure(HttpException error, String msg) {
                             NetWorkUtils.showMsg(RegisterActivity.this);
-
                         }
                     });
                 }
@@ -128,16 +121,19 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getUserRegisterUrl(), params, new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
+                            LogUtil.d(responseInfo.result.toString());
+
                             JSONObject jsonObject = null;
                             try {
                                 jsonObject = new JSONObject(responseInfo.result.toString());
                                 String status = jsonObject.getString("status");
                                 String promptInfor = jsonObject.getString("promptInfor");
-                                SnackbarUtil.showShort(getApplicationContext(), promptInfor);
+                               // SnackbarUtil.showShort(getApplicationContext(), promptInfor);
 
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 intent.putExtra("phone", phone.getText().toString().trim());
                                 if ("1".equals(status)) {
+                                    ToastUtil.showShort(RegisterActivity.this,"注册成功");
                                     startActivity(intent);
                                 }
 

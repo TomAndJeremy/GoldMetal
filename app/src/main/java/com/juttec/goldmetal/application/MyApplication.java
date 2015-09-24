@@ -4,6 +4,7 @@ package com.juttec.goldmetal.application;
 import android.app.Application;
 import android.content.Context;
 
+import com.juttec.goldmetal.bean.UserInfoBean;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -12,11 +13,16 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 public class MyApplication extends Application {
 
     public static final String IMAGECACHE = "/imageCache/";// 图片缓存目录
-    private static final String BASEURL = "http://localhost:4444/App_Areas/";
+    private static final String BASEURL = "http://192.168.1.35:8155/App_Areas/";
+
+
+
 
 
 
     private String CID;//用于  推送的  CID
+    private UserInfoBean userInfoBean;//用户实体类
+
 
     public String getCID() {
         return CID;
@@ -25,6 +31,17 @@ public class MyApplication extends Application {
     public void setCID(String CID) {
         this.CID = CID;
     }
+
+    public UserInfoBean getUserInfoBean() {
+        return userInfoBean;
+    }
+
+    public void setUserInfoBean(UserInfoBean userInfoBean) {
+        this.userInfoBean = userInfoBean;
+    }
+
+
+
 
 
 
@@ -54,7 +71,7 @@ public class MyApplication extends Application {
 
     //接口访问地址
     public  String getSendMessageUrl() {
-        return BASEURL + "App_One/SendMessage";
+        return BASEURL + "App_Contact/SendMessage";
     }
 
     public  String getUserRegisterUrl() {
@@ -86,42 +103,42 @@ public class MyApplication extends Application {
     }
 
     public  String getGetDynamicUrl() {
-        return BASEURL + "App_One/GetDynamic";
+        return BASEURL + "App_Contact/GetDynamic";
     }
 
     public  String PostDynamicUrl() {
-        return BASEURL + "App_One/PostDynamic";
+        return BASEURL + "App_Contact/PostDynamic";
     }
 
     public  String getUploadPhotoUrl() {
-        return BASEURL + "App_One/GetDynamic";
+        return BASEURL + "App_Contact/GetDynamic";
     }
 
     public  String getAddOrCancelAttentionUrl() {
-        return BASEURL + "App_One/GetDynamic";
+        return BASEURL + "App_Contact/GetDynamic";
     }
 
     public  String getAddOrCancelSupportUrl() {
-        return BASEURL + "App_One/GetDynamic";
+        return BASEURL + "App_Contact/GetDynamic";
     }
 
     public  String getCommentUrl() {
-        return BASEURL + "App_One/Comment";
+        return BASEURL + "App_Contact/Comment";
     }
 
     public  String getReplyUrl() {
-        return BASEURL + "App_One/Reply";
+        return BASEURL + "App_Contact/Reply";
     }
 
     public  String getGetMyMessageUrl() {
-        return BASEURL + "App_One/GetMyMessage";
+        return BASEURL + "App_Contact/GetMyMessage";
     }
 
     public  String getDelMessageUrl() {
-        return BASEURL + "App_One/DelMessage";
+        return BASEURL + "App_Contact/DelMessage";
     }
 
     public  String getGetMsgDetailsUrl() {
-        return BASEURL + "App_One/GetMsgDetails";
+        return BASEURL + "App_Contact/GetMsgDetails";
     }
 }
