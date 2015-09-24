@@ -166,4 +166,14 @@ public class NetWorkUtils {
                 .getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getDeviceId();
     }
+
+
+    public static void showMsg(Context context){
+        if (NET_CNNT_BAIDU_OK == getNetState(context)) {
+            SnackbarUtil.showShort(context, "请检查网络连接");
+        } else {
+            SnackbarUtil.showShort(context, "服务器异常");
+        }
+
+    }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.juttec.goldmetal.activity.PublishTopicActivity;
@@ -15,8 +16,8 @@ import com.juttec.goldmetal.activity.PublishTopicActivity;
 public class SnackbarUtil {
 
 
-
-    public static Snackbar Short(Context context, String msg,String action,View.OnClickListener onClickListener) {
+    public static Snackbar Short(Context context, String msg, String action, View.OnClickListener onClickListener) {
+        hideInput(context, ((Activity) context).getCurrentFocus());
         return Snackbar.make(((Activity) context).getCurrentFocus(), msg, Snackbar.LENGTH_SHORT);
 
 
@@ -24,12 +25,14 @@ public class SnackbarUtil {
 
 
     public static Snackbar Long(Context context, String msg) {
-        return   Snackbar.make(((Activity) context).getCurrentFocus(), msg, Snackbar.LENGTH_LONG);
+        hideInput(context, ((Activity) context).getCurrentFocus());
+        return Snackbar.make(((Activity) context).getCurrentFocus(), msg, Snackbar.LENGTH_LONG);
 
 
     }
 
     public static void showShort(Context context, String msg) {
+        hideInput(context, ((Activity) context).getCurrentFocus());
         Snackbar.make(((Activity) context).getCurrentFocus(), msg, Snackbar.LENGTH_SHORT).show();
 
 
@@ -37,8 +40,15 @@ public class SnackbarUtil {
 
 
     public static void showLong(Context context, String msg) {
+        hideInput(context, ((Activity) context).getCurrentFocus());
         Snackbar.make(((Activity) context).getCurrentFocus(), msg, Snackbar.LENGTH_LONG).show();
 
 
+    }
+
+    private static void hideInput(Context context, View view) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

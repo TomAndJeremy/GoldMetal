@@ -45,7 +45,7 @@
 
             <TextView
                 android:id="@+id/tv_ID"
-                style="@style/EditTextStyle" />
+                style="@style/TextViewStyle" />
 
 
         </LinearLayout>
@@ -67,7 +67,7 @@
 
             <TextView
                 android:id="@+id/account_tv_nickname"
-                style="@style/EditTextStyle"
+                style="@style/TextViewStyle"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1" />
 
@@ -92,7 +92,7 @@
 
             <TextView
                 android:id="@+id/account_tv_name"
-                style="@style/EditTextStyle"
+                style="@style/TextViewStyle"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1" />
 
@@ -117,7 +117,7 @@
 
             <TextView
                 android:id="@+id/account_tv_phone"
-                style="@style/EditTextStyle"
+                style="@style/TextViewStyle"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1" />
 
@@ -142,7 +142,7 @@
 
             <TextView
                 android:id="@+id/account_tv_qq"
-                style="@style/EditTextStyle"
+                style="@style/TextViewStyle"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1" />
 

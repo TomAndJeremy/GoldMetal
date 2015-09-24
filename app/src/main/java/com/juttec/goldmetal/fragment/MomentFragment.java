@@ -22,6 +22,9 @@ import com.juttec.goldmetal.activity.PublishTopicActivity;
 import com.juttec.goldmetal.adapter.MomentRecyclerViewAdapter;
 import com.juttec.goldmetal.adapter.RecycleViewWithHeadAdapter;
 
+import java.util.List;
+import java.util.Map;
+
 
 public class MomentFragment extends BaseFragment implements View.OnClickListener {
 
@@ -32,6 +35,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     //tabs
     TextView dynamic, message, follow;
+
 
 
     public static MomentFragment newInstance(String param1) {

@@ -143,7 +143,13 @@
         <item name="android:drawablePadding">10dp</item>
         <item name="android:padding">10dp</item>
     </style>
-
+    <style name="TextViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@null</item>
+        <item name="android:textSize">@dimen/base_text</item>
+        <item name="android:padding">10dp</item>
+    </style>
 
     <!-- 自定义 diaolog的style-->
     <style name="AlertDialogStyle" parent="@android:style/Theme.Dialog">

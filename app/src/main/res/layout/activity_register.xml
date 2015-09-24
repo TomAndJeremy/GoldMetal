@@ -74,7 +74,8 @@
             style="@style/EditTextStyle"
             android:background="@null"
             android:drawableLeft="@mipmap/content_account_icon_password"
-            android:hint="@string/hint_password" />
+            android:hint="@string/hint_password"
+            android:inputType="textPassword" />
 
 
         <TextView
@@ -88,7 +89,8 @@
             style="@style/EditTextStyle"
             android:background="@null"
             android:drawableLeft="@mipmap/content_account_icon_password"
-            android:hint="@string/register_confirm_pwd" />
+            android:hint="@string/register_confirm_pwd"
+            android:inputType="textPassword" />
 
 
     </LinearLayout>
