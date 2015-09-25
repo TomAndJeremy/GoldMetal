@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.FollowActivity;
-import com.juttec.goldmetal.activity.MainActivity;
 import com.juttec.goldmetal.activity.MessageActivity;
 import com.juttec.goldmetal.activity.MomentPersonalActivity;
 import com.juttec.goldmetal.activity.PublishTopicActivity;
@@ -26,7 +24,6 @@ import com.juttec.goldmetal.adapter.RecycleViewWithHeadAdapter;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.DynamicEntityList;
 import com.juttec.goldmetal.bean.DynamicMsgBean;
-import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -35,11 +32,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MomentFragment extends BaseFragment implements View.OnClickListener {
@@ -130,6 +123,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
     }
+
 
     private void setRecyclerView(View view) {
         //recyclerview 头部

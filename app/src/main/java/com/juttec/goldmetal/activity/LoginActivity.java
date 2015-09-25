@@ -70,6 +70,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         initView();
 
+        if((Boolean) SharedPreferencesUtil.getParam(this,"remember",false)&&!"".equals(mPwd.getText().toString())){
+            login();
+        }
 
     }
 
@@ -97,6 +100,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mPwd = (EditText) findViewById(R.id.et_pwd);//密码
         if((Boolean) SharedPreferencesUtil.getParam(this,"remember",false)){
             mPwd.setText((String) SharedPreferencesUtil.getParam(this,"pwd",""));
+
+
         }
 
 
@@ -171,64 +176,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     return;
                 }
 
-
-                dialog.builder().setMessage("正在努力登录~").show();
-                SharedPreferencesUtil.setParam(this, "username", mUserName.getText().toString());
-                if(cb_remember.isChecked()){
-                    SharedPreferencesUtil.setParam(this,"pwd",mPwd.getText().toString());
-                }
-
-                RequestParams params = new RequestParams();
-                params.addBodyParameter("userMobile", mUserName.getText().toString());
-                params.addBodyParameter("password",mPwd.getText().toString());
-                params.addBodyParameter("cId", app.getCID());
-
-                HttpUtils httpUtils = new HttpUtils();
-                httpUtils.send(HttpRequest.HttpMethod.POST, app.getUserLoginUrl(), params, new RequestCallBack<String>() {
-                    @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        dialog.dismiss();
-                        LogUtil.d(responseInfo.result.toString());
-
-                        JSONObject object = null;
-                        try {
-                            object = new JSONObject(responseInfo.result.toString());
-                            String status = object.getString("status");
-                            String promptInfor = object.getString("promptInfor");
-                            if ("1".equals(status)) {
-                                JSONObject userObject = object.getJSONObject("entityList");
-                                UserInfoBean userInfoBean = new UserInfoBean();
-                                userInfoBean.setUserId(userObject.getString("id"));
-                                userInfoBean.setMobile(userObject.getString("userMobile"));
-                                userInfoBean.setGoldMetalId(userObject.getString("goldMetalId"));
-                                userInfoBean.setUserName(userObject.getString("userName"));
-                                userInfoBean.setUserNickName(userObject.getString("userNickName"));
-                                userInfoBean.setUserQQ(userObject.getString("userQQ"));
-                                userInfoBean.setUserPhoto(userObject.getString("userPhoto"));
-
-                                app.setUserInfoBean(userInfoBean);
-
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                ToastUtil.showShort(LoginActivity.this,"登录成功");
-                                finish();
-                            }else{
-                                ToastUtil.showShort(LoginActivity.this,promptInfor);
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(HttpException error, String msg) {
-                        dialog.dismiss();
-                        NetWorkUtils.showMsg(LoginActivity.this);
-
-                    }
-                });
+                login();
 
                 break;
 
@@ -260,6 +208,68 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             SharedPreferencesUtil.setParam(this,"remember",false);
             SharedPreferencesUtil.setParam(this,"pwd","");
         }
+    }
+
+
+    //登录接口
+    private  void login(){
+        dialog.builder().setMessage("正在努力登录~").show();
+        SharedPreferencesUtil.setParam(this, "username", mUserName.getText().toString());
+        if(cb_remember.isChecked()){
+            SharedPreferencesUtil.setParam(this,"pwd",mPwd.getText().toString());
+        }
+
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("userMobile", mUserName.getText().toString());
+        params.addBodyParameter("password",mPwd.getText().toString());
+        params.addBodyParameter("cId", app.getCID());
+
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.send(HttpRequest.HttpMethod.POST, app.getUserLoginUrl(), params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                LogUtil.d(responseInfo.result.toString());
+
+                JSONObject object = null;
+                try {
+                    object = new JSONObject(responseInfo.result.toString());
+                    String status = object.getString("status");
+                    String promptInfor = object.getString("promptInfor");
+                    if ("1".equals(status)) {
+                        JSONObject userObject = object.getJSONObject("entityList");
+                        UserInfoBean userInfoBean = new UserInfoBean();
+                        userInfoBean.setUserId(userObject.getString("id"));
+                        userInfoBean.setMobile(userObject.getString("userMobile"));
+                        userInfoBean.setGoldMetalId(userObject.getString("goldMetalId"));
+                        userInfoBean.setUserName(userObject.getString("userName"));
+                        userInfoBean.setUserNickName(userObject.getString("userNickName"));
+                        userInfoBean.setUserQQ(userObject.getString("userQQ"));
+                        userInfoBean.setUserPhoto(userObject.getString("userPhoto"));
+
+                        app.setUserInfoBean(userInfoBean);
+
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        ToastUtil.showShort(LoginActivity.this,"登录成功");
+                        finish();
+                    }else{
+                        ToastUtil.showShort(LoginActivity.this,promptInfor);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                NetWorkUtils.showMsg(LoginActivity.this);
+
+            }
+        });
     }
 
 

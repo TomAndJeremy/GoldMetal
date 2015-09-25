@@ -33,7 +33,7 @@ public class AdHeader {
 
 	private Context mContext;
 
-	private DisplayImageOptions options ;
+	private DisplayImageOptions options;
 
 
 
