@@ -2,7 +2,6 @@ package com.juttec.goldmetal.activity;
 
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.database.Cursor;
@@ -13,7 +12,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +37,7 @@ import com.juttec.goldmetal.adapter.EmoticonsGridAdapter.KeyClickListener;
 import com.juttec.goldmetal.adapter.EmoticonsPagerAdapter;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
+import com.juttec.goldmetal.utils.FileUtil;
 import com.juttec.goldmetal.utils.GetContentUrl;
 import com.juttec.goldmetal.utils.ImgUtil;
 import com.juttec.goldmetal.utils.LogUtil;
@@ -56,9 +55,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -464,7 +461,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
      */
     private void mobileTakePic(int request) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File file = new File(getAlbumStorageDir(getApplicationContext(), "Picture"), getPhotoFileName());
+        File file = new File(FileUtil.getAlbumStorageDir(getApplicationContext(), "Picture"), FileUtil.getPhotoFileName());
         path = file.getAbsolutePath();
         intent.putExtra(MediaStore.Images.Media.ORIENTATION, 0);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
@@ -473,25 +470,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     }
 
 
-    // 相机拍摄照片时:使用系统当前日期加以调整作为照片的名称
-    public String getPhotoFileName() {
-        Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        return dateFormat.format(date) + ".jpg";
-    }
 
-    public File getAlbumStorageDir(Context context, String albumName) {
-// Get the directory for the app's private pictures directory.
-        File file = new File(context.getExternalFilesDir(
-                Environment.DIRECTORY_PICTURES), albumName);
-        if (!file.exists()) {
-            if (!file.mkdirs()) {
-                LogUtil.d("Directory not created");
-            }
-        }
-
-        return file;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
