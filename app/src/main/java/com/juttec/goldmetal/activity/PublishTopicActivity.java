@@ -337,6 +337,9 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
 
 
+
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

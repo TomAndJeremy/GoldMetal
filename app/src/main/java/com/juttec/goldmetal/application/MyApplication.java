@@ -13,9 +13,9 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 public class MyApplication extends Application {
 
     public static final String IMAGECACHE = "/imageCache/";// 图片缓存目录
-    private static final String BASEURL = "http://192.168.1.35:8155/App_Areas/";
+    private static final String BASEURL = "http://192.168.1.35:8899/App_Areas/";
 
-    private static final String ImgBASEURL = "http://192.168.1.35:8155";
+    private static final String ImgBASEURL = "http://192.168.1.35:8899";
 
 
     public static final String DYNAMIC_TYPE_ALL = "all";
