@@ -564,7 +564,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         RequestParams params = new RequestParams();
         params.addBodyParameter("userId",app.getUserInfoBean().getUserId());
         params.addBodyParameter("userName", app.getUserInfoBean().getUserNickName());
-        params.addBodyParameter("dyContent", mContent.getText().toString());
+        params.addBodyParameter("dyContent", string2Unicode(mContent.getText().toString()));
         for(int i=0;i<photoList.size();i++){
             if(i==0) {
                 params.addBodyParameter("dyPhotoOne", photoList.get(0));
