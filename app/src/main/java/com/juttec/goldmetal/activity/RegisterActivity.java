@@ -10,8 +10,10 @@ import android.widget.EditText;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
+import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
+import com.juttec.goldmetal.utils.SharedPreferencesUtil;
 import com.juttec.goldmetal.utils.SnackbarUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -44,12 +46,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private String phone_back;
     private String code_back;
 
+    private MyProgressDialog dialog;//正在加载的  进度框
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         app = (MyApplication) getApplication();
+        dialog = new MyProgressDialog(this);
         initView();
     }
 
@@ -115,12 +120,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case register_bt_ok:
                 if (infoVerification()) {
+                    dialog.builder().setMessage("正在注册~").show();
                     RequestParams params = new RequestParams();
                     params.addBodyParameter("userMobile", phone.getText().toString().trim());
                     params.addBodyParameter("password", password.getText().toString().trim());
                     new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getUserRegisterUrl(), params, new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
+                            dialog.dismiss();
                             LogUtil.d(responseInfo.result.toString());
 
                             JSONObject jsonObject = null;
@@ -131,10 +138,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                // SnackbarUtil.showShort(getApplicationContext(), promptInfor);
 
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                intent.putExtra("phone", phone.getText().toString().trim());
+//                                intent.putExtra("phone", phone.getText().toString().trim());
+                                SharedPreferencesUtil.setParam(RegisterActivity.this, "username", phone.getText().toString().trim());
                                 if ("1".equals(status)) {
                                     ToastUtil.showShort(RegisterActivity.this,"注册成功");
                                     startActivity(intent);
+                                    finish();
                                 }
 
                             } catch (JSONException e) {
@@ -145,6 +154,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                         @Override
                         public void onFailure(HttpException error, String msg) {
+                            dialog.dismiss();
                             NetWorkUtils.showMsg(RegisterActivity.this);
                         }
                     });

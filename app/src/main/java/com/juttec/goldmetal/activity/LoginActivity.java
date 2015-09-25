@@ -17,8 +17,10 @@ import com.igexin.sdk.PushManager;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.UserInfoBean;
+import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
+import com.juttec.goldmetal.utils.SharedPreferencesUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -51,17 +53,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private MyApplication app ;
 
+    private MyProgressDialog dialog;//加载时的 进度框
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         app = (MyApplication) getApplication();
+        dialog = new MyProgressDialog(this);
 
         //初始化个推服务
         PushManager.getInstance().initialize(this.getApplicationContext());
 
         initView();
+
 
     }
 
@@ -78,18 +86,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         tvRegister.setOnClickListener(this);
 
         mUserName = (EditText) findViewById(R.id.et_name);
-        mUserName.setOnClickListener(this);
+        mUserName.setText((String) SharedPreferencesUtil.getParam(this,"username",""));
 
-        Intent intent = getIntent();
-        if(intent.getStringExtra("phone")!=null){
-            mUserName.setText(intent.getStringExtra("phone"));
-        }
+
+//        Intent intent = getIntent();
+//        if(intent.getStringExtra("phone")!=null){
+//            mUserName.setText(intent.getStringExtra("phone"));
+//        }
 
         mPwd = (EditText) findViewById(R.id.et_pwd);//密码
-        mPwd.setOnClickListener(this);
+        if((Boolean) SharedPreferencesUtil.getParam(this,"remember",false)){
+            mPwd.setText((String) SharedPreferencesUtil.getParam(this,"pwd",""));
+        }
+
 
         cb_remember = (CheckBox) findViewById(R.id.cb_remember);
         cb_remember.setOnCheckedChangeListener(this);
+        cb_remember.setChecked((Boolean) SharedPreferencesUtil.getParam(this,"remember",false));
+
 
 
         tv_forget = (TextView) findViewById(R.id.login_tv_fergotpwd);
@@ -158,6 +172,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
 
 
+                dialog.builder().setMessage("正在努力登录~").show();
+                SharedPreferencesUtil.setParam(this, "username", mUserName.getText().toString());
+                if(cb_remember.isChecked()){
+                    SharedPreferencesUtil.setParam(this,"pwd",mPwd.getText().toString());
+                }
+
                 RequestParams params = new RequestParams();
                 params.addBodyParameter("userMobile", mUserName.getText().toString());
                 params.addBodyParameter("password",mPwd.getText().toString());
@@ -167,6 +187,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 httpUtils.send(HttpRequest.HttpMethod.POST, app.getUserLoginUrl(), params, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
+                        dialog.dismiss();
                         LogUtil.d(responseInfo.result.toString());
 
                         JSONObject object = null;
@@ -203,6 +224,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     @Override
                     public void onFailure(HttpException error, String msg) {
+                        dialog.dismiss();
                         NetWorkUtils.showMsg(LoginActivity.this);
 
                     }
@@ -232,6 +254,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+        if(isChecked){
+            SharedPreferencesUtil.setParam(this,"remember",true);
+        }else{
+            SharedPreferencesUtil.setParam(this,"remember",false);
+            SharedPreferencesUtil.setParam(this,"pwd","");
+        }
     }
 
 

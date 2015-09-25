@@ -13,6 +13,8 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.UserInfoBean;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
+import com.juttec.goldmetal.dialog.MyProgressDialog;
+import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -52,7 +54,9 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private String result;//修改后的结果
 
     private MyApplication app;
-    private UserInfoBean userInfoBean;
+    private UserInfoBean userInfoBean;//用户信息实体类
+
+    private MyProgressDialog dialog_progress;//正在加载 进度框
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
 
         dialog = new MyAlertDialog(AccountActivity.this);
+        dialog_progress = new MyProgressDialog(this);
+
         initView();
 
         initData();
@@ -173,6 +179,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
 
     private void editUserInfo(final int type,final TextView tv,final String result){
+        dialog_progress.builder().setMessage("请稍等~").show();
 
        // userNickName  userName userMobile  userQQ
         RequestParams params = new RequestParams();
@@ -190,6 +197,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         httpUtils.send(HttpRequest.HttpMethod.POST, app.getEditUserInforUrl(), params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog_progress.dismiss();
 
                 JSONObject object = null;
                         try {
@@ -220,7 +228,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onFailure(HttpException error, String msg) {
-
+                dialog_progress.dismiss();
+                NetWorkUtils.showMsg(AccountActivity.this);
             }
         });
 
