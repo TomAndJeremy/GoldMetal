@@ -19,6 +19,7 @@
         android:padding="7dp">
 
         <EditText
+            android:id="@+id/comment_et_reply"
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="1"
@@ -31,6 +32,7 @@
             android:background="@color/feedback_linear_gray" />
 
         <ImageButton
+            android:id="@+id/comment_ib_emoji"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"

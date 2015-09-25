@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:id="@+id/recyclerview_item">
 
     <RelativeLayout
         android:id="@+id/meg_detail_info"
@@ -132,6 +134,8 @@
     </LinearLayout>
 
     <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/item_comment_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"></LinearLayout>
 </LinearLayout>

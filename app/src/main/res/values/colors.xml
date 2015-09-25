@@ -4,9 +4,19 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="red">#ff0000</color>
+
+
+
+
+
+
+
     <!-- 按钮的蓝色-->
     <color name="button_bule">#207ADB</color>
 
+
+    <!-- 蓝色的字-->
+    <color name="blue_text">#2161AA</color>
 
 
     <!-- ChartActivity中按钮的颜色-->

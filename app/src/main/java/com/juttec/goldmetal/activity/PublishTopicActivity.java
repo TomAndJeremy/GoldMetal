@@ -478,7 +478,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-        // 当选择拍照时调用
+            // 当选择拍照时调用
             case REQUEST_CODE_CAMERA:
 
                 if (resultCode == RESULT_OK) {

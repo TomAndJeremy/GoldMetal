@@ -1,5 +1,6 @@
 package com.juttec.goldmetal.fragment;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,6 +16,11 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +67,13 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     // TODO: Rename and change types of parameters
     private String mParam1;
     MyApplication app;
+
+
+
+    View view;
+
+    int i ;//标记点击的位置
+
     //tabs
     TextView dynamic, message, follow;
 
@@ -84,10 +97,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     private final static int REQUEST_CODE_CAMERA = 333;//照相的返回码
     private final static int REQUEST_CODE_ALBUM = 444;//相册的返回码
-
-
-
-
 
 
     public static MomentFragment newInstance(String param1) {
@@ -117,7 +126,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_moment, container, false);
+        view = inflater.inflate(R.layout.fragment_moment, container, false);
 
         initView(view);
 
@@ -168,10 +177,9 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
         mHeadPhoto = (CircleImageView) myHead.findViewById(R.id.iv_head_photo);
         mHeadPhoto.setOnClickListener(this);
-        if(!"null".equals(app.getUserInfoBean().getUserPhoto())){
-            ImageLoader.getInstance().displayImage(app.getImgBaseUrl()+app.getUserInfoBean().getUserPhoto(),mHeadPhoto);
+        if (!"null".equals(app.getUserInfoBean().getUserPhoto())) {
+            ImageLoader.getInstance().displayImage(app.getImgBaseUrl() + app.getUserInfoBean().getUserPhoto(), mHeadPhoto);
         }
-
 
 
         //init tabs
@@ -254,7 +262,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     }
 
 
-
     /**
      * 手机拍照 参数:对应的请求码
      */
@@ -270,14 +277,14 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode,Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
             // 当选择拍照时调用
             case REQUEST_CODE_CAMERA:
 
-                if (resultCode == getActivity().RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK) {
                     LogUtil.d("拍照图片的路径：" + path);
 
                     //上传头像
@@ -290,12 +297,12 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
             // 从手机相册返回
             case REQUEST_CODE_ALBUM:
                 Uri selectedImage = GetContentUrl.geturi(data, getActivity());
-                String[] filePathColumns = { MediaStore.Images.Media.DATA };
+                String[] filePathColumns = {MediaStore.Images.Media.DATA};
                 Cursor c = getActivity().getContentResolver().query(selectedImage,
                         filePathColumns, null, null, null);
                 c.moveToFirst();
                 int columnIndex = c.getColumnIndex(filePathColumns[0]);
-                path= c.getString(columnIndex);
+                path = c.getString(columnIndex);
                 LogUtil.d("选取相册中图片的路径：" + path);
                 c.close();
                 //上传头像
@@ -306,10 +313,9 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     }
 
 
-
     //设置头像
-    private void setImg(){
-        if(path!=null){
+    private void setImg() {
+        if (path != null) {
             mHeadPhoto.setImageBitmap(ImgUtil.getBitmap(path, 200, 200));
         }
     }
@@ -326,12 +332,12 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
     //上传用户头像  的接口
-    private void uploadUserPhoto(){
+    private void uploadUserPhoto() {
 
         dialog_progress.builder().setMessage("努力上传中~").show();
         RequestParams params = new RequestParams();
-        params.addBodyParameter("userPhotoFile",getBitmapString(path));
-        params.addBodyParameter("userId",app.getUserInfoBean().getUserId());
+        params.addBodyParameter("userPhotoFile", getBitmapString(path));
+        params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
 
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.send(HttpRequest.HttpMethod.POST, app.getUploadUserPhotoUrl(), params, new RequestCallBack<String>() {
@@ -365,11 +371,10 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     }
 
 
-
     //获取用户头像的  接口
-    private void getUserPhoto(){
+    private void getUserPhoto() {
         RequestParams params = new RequestParams();
-        params.addBodyParameter("userId",app.getUserInfoBean().getUserId());
+        params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
 
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.send(HttpRequest.HttpMethod.POST, app.getGetUserPhotoUrl(), params, new RequestCallBack<String>() {
@@ -401,7 +406,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     }
 
 
-
     /**
      * @param page 页数
      * @param type 类型 all：所有 attention：关注 personal：个人
@@ -413,39 +417,74 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         params.addBodyParameter("pageIndex", page + "");
         params.addBodyParameter("dyType", type);
         new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetDynamicUrl(), params, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-
-                DynamicMsgBean dynamicMsgBean = gson.fromJson(responseInfo.result.toString(), DynamicMsgBean.class);
-
-
-                entityList = dynamicMsgBean.getEntityList();
-
-
-                adapter = new MomentRecyclerViewAdapter(entityList, getActivity(),app);
-                adapter.setOnItemClickListener(new MomentRecyclerViewAdapter.OnItemClickListener() {
                     @Override
-                    public void onClick(View v, int posion) {
-                        startActivity(new Intent(getActivity(), MomentPersonalActivity.class));
+                    public void onSuccess(ResponseInfo<String> responseInfo) {
+
+                        DynamicMsgBean dynamicMsgBean = gson.fromJson(responseInfo.result.toString(), DynamicMsgBean.class);
+
+
+                        entityList = dynamicMsgBean.getEntityList();
+
+
+                        adapter = new MomentRecyclerViewAdapter(entityList, getActivity(), app);
+                        adapter.setOnMyClickListener(new MomentRecyclerViewAdapter.OnMyClickListener() {
+                                                         @Override
+                                                         public void onClick(View v, int posion, final LinearLayout vr) {
+
+
+                                                             switch (v.getId()) {
+                                                                 case R.id.recyclerview_item:
+                                                                     startActivity(new Intent(getActivity(), MomentPersonalActivity.class));
+                                                                     break;
+                                                                 case R.id.dynamic_item_reply:
+                                                                     final View replyContent = view.findViewById(R.id.fragment_moment_comments);
+                                                                     if (replyContent.isShown()) {
+                                                                         if (i == posion) {
+                                                                             replyContent.setVisibility(View.GONE);
+                                                                         }
+                                                                     } else {
+                                                                         i = posion;
+                                                                         replyContent.setVisibility(View.VISIBLE);
+                                                                         final EditText editText = (EditText) replyContent.findViewById(R.id.comment_et_reply);
+                                                                         ImageButton imageButton = (ImageButton) replyContent.findViewById(R.id.comment_ib_emoji);
+                                                                         Button button = (Button) replyContent.findViewById(R.id.btn_send);
+
+
+                                                                         button.setOnClickListener(new View.OnClickListener() {
+                                                                             @Override
+                                                                             public void onClick(View v) {
+                                                                                 adapter.addCommentView(vr, app.getUserInfoBean().getUserNickName(), editText.getText());
+                                                                                 editText.setText("");
+                                                                                 replyContent.setVisibility(View.GONE);
+                                                                             }
+                                                                         });
+
+                                                                     }
+
+                                                                     break;
+                                                             }
+                                                         }
+                                                     }
+
+                        );
+
+                        // 添加头部
+                        myAdapter = new RecycleViewWithHeadAdapter<>(adapter);
+                        myAdapter.addHeader(myHead);
+                        // 设置Adapter
+                        recyclerView.setAdapter(myAdapter);
                     }
-                });
 
-                // 添加头部
-                myAdapter = new RecycleViewWithHeadAdapter<>(adapter);
-                myAdapter.addHeader(myHead);
-                // 设置Adapter
-                recyclerView.setAdapter(myAdapter);
-            }
+                    @Override
+                    public void onFailure(HttpException error, String msg) {
+                        NetWorkUtils.showMsg(getActivity());
 
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                NetWorkUtils.showMsg(getActivity());
+                    }
+                }
 
-            }
-        });
+        );
 
     }
-
 
 
 }
