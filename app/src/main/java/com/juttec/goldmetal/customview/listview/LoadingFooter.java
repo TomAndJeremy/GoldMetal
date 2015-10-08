@@ -67,7 +67,7 @@ public class LoadingFooter {
 		switch (status) {
 		case Loading:
 			mLoadingFooter.setVisibility(View.VISIBLE);
-			mLoadingText.setText("Loading");
+			mLoadingText.setText("正在获取更多");
 			jumpingBeans = new JumpingBeans.Builder().appendJumpingDots(
 					mLoadingText).build();
 			break;
@@ -75,7 +75,7 @@ public class LoadingFooter {
 			if (jumpingBeans != null) {
 				jumpingBeans.stopJumping();
 			}
-			mLoadingText.setText("No More");
+			mLoadingText.setText("已显示全部内容");
 			mLoadingFooter.setVisibility(View.VISIBLE);
 			break;
 		default:

@@ -17,6 +17,7 @@ import com.juttec.goldmetal.adapter.MessageAdapter;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.MessageBean;
 import com.juttec.goldmetal.customview.listview.LoadMoreListView;
+import com.juttec.goldmetal.customview.listview.LoadingFooter;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
@@ -39,12 +40,14 @@ import java.util.List;
  * 交易圈   消息界面
  */
 
-public class MessageActivity extends AppCompatActivity implements View.OnClickListener ,SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class MessageActivity extends AppCompatActivity implements View.OnClickListener ,SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, LoadMoreListView.OnLoadNextListener {
 
     // 加载更多
     public static final int MSG_LOAD_MORE = 0;
     // 刷新
     public static final int MSG_REFRESH = 1;
+    // 第一次加载
+    public static final int MSG_LOAD_FIRST = 2;
 
 
     private SwipeRefreshLayout swipeLayout;
@@ -80,7 +83,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
 
         //调接口 获取 消息数据
-        getMessageData();
+        getMessageData(MSG_LOAD_FIRST);
     }
 
 
@@ -98,8 +101,12 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         mListView = (LoadMoreListView) findViewById(R.id.listview);
+        //短按事件的监听
         mListView.setOnItemClickListener(this);
+        //长按事件的监听
         mListView.setOnItemLongClickListener(this);
+        //加载更多的监听
+        mListView.setOnLoadNextListener(this);
 
 
         // 顶部刷新的样式
@@ -116,17 +123,47 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
 
     //填充数据
-    private void initData(){
-        mAdapter = new MessageAdapter(this,messageBeanList);
+    private void initData(int flag){
+        if(mAdapter == null){
+            mAdapter = new MessageAdapter(this,messageBeanList);
+            mListView.setAdapter(mAdapter);
+        }else{
 
-        mListView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+        }
+
+        if(flag == MSG_REFRESH){
+            //刷新
+            swipeLayout.setRefreshing(false);
+            mListView.smoothScrollToPosition(0);
+            mAdapter.notifyDataSetChanged();
+        }
+        mListView.setState(LoadingFooter.State.Idle);
+
     }
 
 
     //刷新的方法
     @Override
     public void onRefresh() {
+        pageIndex = 1;
+        getMessageData(MSG_REFRESH);
 
+    }
+
+
+    //加载更多
+    @Override
+    public void onLoadNext() {
+
+        if(pageIndex>=totalPage){
+            //没有更多数据了
+            mListView.setState(LoadingFooter.State.TheEnd);
+            return;
+        }
+        //页数+1
+        pageIndex++;
+        getMessageData(MSG_LOAD_MORE);
     }
 
 
@@ -155,9 +192,13 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
     /**
      * 调接口  获取消息数据
+     * flag:刷新    加载更多
      */
-    private void getMessageData(){
-        dialog.builder().setMessage("正在努力加载~").show();
+    private void getMessageData(final int flag){
+        if(flag==MSG_LOAD_FIRST){
+            dialog.builder().setMessage("正在努力加载~").show();
+        }
+
         RequestParams params = new RequestParams();
         params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
         params.addBodyParameter("pageIndex", pageIndex + "");
@@ -174,8 +215,17 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                     object = new JSONObject(responseInfo.result.toString());
                     String status = object.getString("status");
                     String promptInfor = object.getString("promptInfor");
+                    totalPage =  Integer.parseInt(object.getString("message1"));
+                    if(totalPage ==0){
+                        ToastUtil.showShort(MessageActivity.this,"您还没有任何消息");
+                        return;
+                    }
                     if ("1".equals(status)) {
                         JSONArray msgArray = object.getJSONArray("entityList");
+                        if(flag==MSG_REFRESH){
+                            //刷新
+                            messageBeanList.clear();
+                        }
                         for (int i = 0; i < msgArray.length(); i++) {
                             MessageBean messageBean = new MessageBean();
                             JSONObject obj = (JSONObject) msgArray.get(i);
@@ -199,12 +249,9 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                             messageBean.setMsgBriefContent(obj.getString("briefContent"));
 
                             messageBeanList.add(messageBean);
-
-                            //填充数据
-                            initData();
                         }
-
-
+                        //填充数据
+                        initData(flag);
                     } else {
                         ToastUtil.showShort(MessageActivity.this, promptInfor);
                     }
@@ -276,7 +323,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             public void onClick(View v) {
                 pw.dismiss();
 
-                deleteMessage(messageBeanList.get(position).getMsgId(),position);
+                deleteMessage(messageBeanList.get(position).getMsgId(), position);
             }
         });
 
@@ -310,6 +357,9 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
                         messageBeanList.remove(position);
                         mAdapter.notifyDataSetChanged();
+                        if(messageBeanList.size()==0){
+                            mListView.setState(LoadingFooter.State.Idle);
+                        }
 
                     }else{
                         ToastUtil.showShort(MessageActivity.this,promptInfor);
@@ -325,5 +375,6 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
+
 
 }
