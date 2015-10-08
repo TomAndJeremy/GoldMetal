@@ -438,6 +438,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                                                                      break;
                                                                  case R.id.dynamic_item_reply:
                                                                      final View replyContent = view.findViewById(R.id.fragment_moment_comments);
+                                                                     final EditText editText = (EditText) replyContent.findViewById(R.id.comment_et_reply);
+                                                                     editText.setHint("回复"+entityList.get(posion).getUserName());
                                                                      if (replyContent.isShown()) {
                                                                          if (i == posion) {
                                                                              replyContent.setVisibility(View.GONE);
@@ -445,7 +447,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                                                                      } else {
                                                                          i = posion;
                                                                          replyContent.setVisibility(View.VISIBLE);
-                                                                         final EditText editText = (EditText) replyContent.findViewById(R.id.comment_et_reply);
+
                                                                          ImageButton imageButton = (ImageButton) replyContent.findViewById(R.id.comment_ib_emoji);
                                                                          Button button = (Button) replyContent.findViewById(R.id.btn_send);
 

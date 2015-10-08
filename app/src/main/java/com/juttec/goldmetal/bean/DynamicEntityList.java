@@ -11,6 +11,7 @@ public class DynamicEntityList {
     private String userName;//用户昵称
     private String addTime; //发表时间
     private String dyContent; //动态内容
+    private String userPhoto;//用户头像
     private ArrayList<String> dyPhoto;//图片
     private ArrayList<DySupportInfoBean> dySupport;
     private ArrayList<DyCommentReplyBean> dyCommentReply;
@@ -41,6 +42,15 @@ public class DynamicEntityList {
 
     public void setDySupport(ArrayList<DySupportInfoBean> dySupport) {
         this.dySupport = dySupport;
+    }
+
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
+    }
+
+    public String getUserPhoto() {
+        return userPhoto;
+
     }
 
     public void setDyCommentReply(ArrayList<DyCommentReplyBean> dyCommentReply) {

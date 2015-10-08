@@ -343,7 +343,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         for (int i = 0; i < entityList.get(position).getDyPhoto().size(); i++) {
             ImageView imageView = new ImageView(context);
             imageView.setLayoutParams(lp);
-            ImageLoader.getInstance().displayImage(entityList.get(position).getDyPhoto().get(i), imageView);
+            ImageLoader.getInstance().displayImage(app.getImgBaseUrl()+entityList.get(position).getDyPhoto().get(i), imageView);
             viewRoot.addView(imageView);
         }
     }
