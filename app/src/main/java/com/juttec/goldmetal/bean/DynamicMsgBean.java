@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Jeremy on 2015/9/24.
+ *
  */
 public class DynamicMsgBean {
     private String status;

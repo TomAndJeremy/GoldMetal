@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Jeremy on 2015/9/24.
+ * 动态实体类
  */
 public class DynamicEntityList {
     private String id;  //动态ID

@@ -78,6 +78,7 @@ public class MyApplication extends Application {
 
     //接口访问地址
 
+    //图片的基地址
     public String  getImgBaseUrl(){
         return ImgBASEURL;
     }

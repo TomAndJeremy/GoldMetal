@@ -1,7 +1,9 @@
 package com.juttec.goldmetal.bean;
 
 /**
- * Created by Jeremy on 2015/9/24.
+ * Created by Jeremy on 2015/9/24.、
+ * <p/>
+ * 用户点赞实体类
  */
 public class DySupportInfoBean {
     private String id; //点赞编号ID

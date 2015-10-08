@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <com.juttec.goldmetal.customview.HeadLayout
@@ -10,7 +11,9 @@
         style="@style/HeadBarStytle"
         app:headtitle="消息"
         app:leftimg="@mipmap/nav_btn_backa_arrow"
-        app:righttext="@string/publish_msg"></com.juttec.goldmetal.customview.HeadLayout>
+        app:righttext="@string/publish_msg">
+
+    </com.juttec.goldmetal.customview.HeadLayout>
 
 
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,13 +21,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/moment_recyclerview"
+        <com.juttec.goldmetal.customview.listview.LoadMoreListView
+            android:id="@+id/listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:focusable="true">
+            android:divider="@color/divide_line"
+            android:dividerHeight="@dimen/divide_line_height"
+            >
+        </com.juttec.goldmetal.customview.listview.LoadMoreListView>
 
-        </android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 

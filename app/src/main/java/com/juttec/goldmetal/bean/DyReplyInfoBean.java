@@ -2,6 +2,8 @@ package com.juttec.goldmetal.bean;
 
 /**
  * Created by Jeremy on 2015/9/24.
+ *
+ * 回复的 实体类
  */
 public class DyReplyInfoBean {
     private String id;//回复编号ID

@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -59,12 +58,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * 交易圈fragment
+ */
+
 
 public class MomentFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String ARG_PARAM1 = "param1";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     MyApplication app;
 
@@ -350,6 +352,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                     object = new JSONObject(responseInfo.result.toString());
                     if ("1".equals(object.getString("status"))) {
                         setImg();
+                        //修改用户头像的路径
+                        app.getUserInfoBean().setUserPhoto(object.getString("message1"));
                         ToastUtil.showShort(getActivity(), "上传成功");
 
                     } else {

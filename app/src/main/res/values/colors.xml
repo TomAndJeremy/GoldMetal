@@ -104,6 +104,14 @@
     <color name="dialog_btn_press">#232323</color>
 
 
+    <!-- MessageActivity 界面里   时间和 消息内容的 染色  灰色-->
+    <color name="msg_content">#ACACAC</color>
+    <color name="msg_name">#292929</color><!--  昵称的颜色-->
+    <color name="msg_title">#3B86FD</color><!--  消息标题的颜色-->
+
+
+
+
 
 
 </resources>

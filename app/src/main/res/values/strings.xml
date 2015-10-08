@@ -182,5 +182,9 @@
     <string name="follow">关注</string>
 
 
+   <!--MessageDetailActivity-->
+    <string name="msg_title">消息详情</string>
+
+
 
 </resources>

@@ -4,6 +4,8 @@ import java.util.List;
 
 /**
  * Created by Jeremy on 2015/9/24.
+ *
+ * 评论的实体类
  */
 public class DyCommentReplyBean {
     private String id; //评论编号ID

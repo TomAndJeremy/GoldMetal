@@ -58,4 +58,11 @@
     <dimen name="dialog_button_size">16sp</dimen>
 
 
+    <!-- 字体大小 -->
+    <dimen name="small_size">14sp</dimen>
+    <dimen name="normal_size">16sp</dimen>
+    <dimen name="large_size">18sp</dimen>
+    <dimen name="xlarge_size">20sp</dimen>
+
+
 </resources>
