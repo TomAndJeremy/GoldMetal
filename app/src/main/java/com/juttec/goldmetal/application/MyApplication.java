@@ -142,12 +142,12 @@ public class MyApplication extends Application {
 
     //添加 或 取消关注 接口
     public  String getAddOrCancelAttentionUrl() {
-        return BASEURL + "App_Contact/GetDynamic";
+        return BASEURL + "App_Contact/AddOrCancelAttention";
     }
 
     //点赞或者取消赞 的 接口
     public  String getAddOrCancelSupportUrl() {
-        return BASEURL + "App_Contact/GetDynamic";
+        return BASEURL + "App_Contact//AddOrCancelSupport";
     }
 
     //评论接口

@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:id="@+id/meg_detail_info"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/head_layout"
         android:layout_marginTop="5dp"
@@ -136,6 +136,6 @@
     <LinearLayout
         android:orientation="vertical"
         android:id="@+id/item_comment_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"></LinearLayout>
 </LinearLayout>

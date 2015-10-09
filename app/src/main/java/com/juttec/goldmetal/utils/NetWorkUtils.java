@@ -168,11 +168,19 @@ public class NetWorkUtils {
     }
 
 
-    public static void showMsg(Context context){
+  /*  public static void showMsg(Context context){
         if (NET_CNNT_BAIDU_OK == getNetState(context)) {
             SnackbarUtil.showShort(context, "请检查网络连接");
         } else {
             SnackbarUtil.showShort(context, "服务器异常");
+        }
+
+    }*/
+    public static void showMsg(Context context){
+        if (NET_CNNT_BAIDU_OK == getNetState(context)) {
+            ToastUtil.showShort(context, "请检查网络连接");
+        } else {
+            ToastUtil.showShort(context, "服务器异常");
         }
 
     }

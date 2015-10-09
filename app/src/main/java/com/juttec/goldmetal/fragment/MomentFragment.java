@@ -1,6 +1,7 @@
 package com.juttec.goldmetal.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,9 +14,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -71,10 +76,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     MyApplication app;
 
 
-
     View view;
-
-    int i ;//标记点击的位置
 
     //tabs
     TextView dynamic, message, follow;
@@ -431,9 +433,12 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
                         adapter = new MomentRecyclerViewAdapter(entityList, getActivity(), app);
+
+
+                        //回调事件
                         adapter.setOnMyClickListener(new MomentRecyclerViewAdapter.OnMyClickListener() {
                                                          @Override
-                                                         public void onClick(View v, int posion, final LinearLayout vr) {
+                                                         public void onClick(View v, int posion, final String rpliedName, final LinearLayout viewRoot) {
 
 
                                                              switch (v.getId()) {
@@ -441,33 +446,52 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                                                                      startActivity(new Intent(getActivity(), MomentPersonalActivity.class));
                                                                      break;
                                                                  case R.id.dynamic_item_reply:
-                                                                     final View replyContent = view.findViewById(R.id.fragment_moment_comments);
-                                                                     final EditText editText = (EditText) replyContent.findViewById(R.id.comment_et_reply);
-                                                                     editText.setHint("回复"+entityList.get(posion).getUserName());
-                                                                     if (replyContent.isShown()) {
-                                                                         if (i == posion) {
-                                                                             replyContent.setVisibility(View.GONE);
-                                                                         }
-                                                                     } else {
-                                                                         i = posion;
-                                                                         replyContent.setVisibility(View.VISIBLE);
+                                                                     final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+                                                                     dialog.setCanceledOnTouchOutside(true);
+                                                                     Window window = dialog.getWindow();
+                                                                     window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+                                                                     dialog.show();
+                                                                     /************ 设置dialog宽度 *****************/
+                                                                     WindowManager.LayoutParams lp = window.getAttributes();
+                                                                     DisplayMetrics outMetrics = new DisplayMetrics();
+                                                                     (getActivity()).getWindowManager().getDefaultDisplay()
+                                                                             .getMetrics(outMetrics);
+                                                                     lp.x = 200;
+                                                                     lp.y = -307;
+                                                                     // lp.height = outMetrics.heightPixels;
+                                                                     lp.width = (outMetrics.widthPixels);
+                                                                     dialog.onWindowAttributesChanged(lp);
 
-                                                                         ImageButton imageButton = (ImageButton) replyContent.findViewById(R.id.comment_ib_emoji);
-                                                                         Button button = (Button) replyContent.findViewById(R.id.btn_send);
+                                                                     dialog.getWindow().setContentView(R.layout.commonality_comments);
+
+
+                                                                     final EditText editText = (EditText) dialog.getWindow().findViewById(R.id.comment_et_reply);
+                                                                     editText.setHint("回复" + entityList.get(posion).getUserName());
+
+
+                                                                         dialog.show();
+
+                                                                         ImageButton imageButton = (ImageButton) dialog.getWindow().findViewById(R.id.comment_ib_emoji);
+                                                                         Button button = (Button) dialog.getWindow().findViewById(R.id.btn_send);
 
 
                                                                          button.setOnClickListener(new View.OnClickListener() {
                                                                              @Override
                                                                              public void onClick(View v) {
-                                                                                 adapter.addCommentView(vr, app.getUserInfoBean().getUserNickName(), editText.getText());
+                                                                                 if (!"".equals(editText.getText().toString()) || editText.getText() == null)
+                                                                                     adapter.addReplyView(viewRoot, app.getUserInfoBean().getUserNickName(), rpliedName, editText.getText());
+
+                                                                                 else
+                                                                                     ToastUtil.showShort(getActivity(), "回复内容不能为空");
                                                                                  editText.setText("");
-                                                                                 replyContent.setVisibility(View.GONE);
+                                                                                 dialog.dismiss();
                                                                              }
                                                                          });
 
-                                                                     }
+
 
                                                                      break;
+
                                                              }
                                                          }
                                                      }
