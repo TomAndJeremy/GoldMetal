@@ -3,10 +3,12 @@ package com.juttec.goldmetal.fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,7 +17,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -446,48 +451,49 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                                                                      startActivity(new Intent(getActivity(), MomentPersonalActivity.class));
                                                                      break;
                                                                  case R.id.dynamic_item_reply:
-                                                                     final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
-                                                                     dialog.setCanceledOnTouchOutside(true);
-                                                                     Window window = dialog.getWindow();
-                                                                     window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
-                                                                     dialog.show();
-                                                                     /************ 设置dialog宽度 *****************/
-                                                                     WindowManager.LayoutParams lp = window.getAttributes();
-                                                                     DisplayMetrics outMetrics = new DisplayMetrics();
-                                                                     (getActivity()).getWindowManager().getDefaultDisplay()
-                                                                             .getMetrics(outMetrics);
-                                                                     lp.x = 200;
-                                                                     lp.y = -307;
-                                                                     // lp.height = outMetrics.heightPixels;
-                                                                     lp.width = (outMetrics.widthPixels);
-                                                                     dialog.onWindowAttributesChanged(lp);
 
-                                                                     dialog.getWindow().setContentView(R.layout.commonality_comments);
+                                                                     LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                                                     View contentview = inflater.inflate(R.layout.commonality_comments, null);
+                                                                     contentview.setFocusable(true); // 这个很重要
+                                                                     contentview.setFocusableInTouchMode(true);
+                                                                     final PopupWindow popupWindow = new PopupWindow(contentview, LinearLayout.LayoutParams.MATCH_PARENT,250);
+                                                                     popupWindow.setFocusable(true);
+                                                                     popupWindow.setOutsideTouchable(false);
+                                                                     popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+                                                                     popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
+                                                                     popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                                                                     contentview.setOnKeyListener(new View.OnKeyListener() {
+                                                                         @Override
+                                                                         public boolean onKey(View v, int keyCode, KeyEvent event) {
+                                                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                                                 popupWindow.dismiss();
 
-
-                                                                     final EditText editText = (EditText) dialog.getWindow().findViewById(R.id.comment_et_reply);
+                                                                                 return true;
+                                                                             }
+                                                                             return false;
+                                                                         }
+                                                                     });
+                                                                     popupWindow.showAtLocation(view, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                                                                     final EditText editText = (EditText) contentview.findViewById(R.id.comment_et_reply);
                                                                      editText.setHint("回复" + entityList.get(posion).getUserName());
 
 
-                                                                         dialog.show();
-
-                                                                         ImageButton imageButton = (ImageButton) dialog.getWindow().findViewById(R.id.comment_ib_emoji);
-                                                                         Button button = (Button) dialog.getWindow().findViewById(R.id.btn_send);
+                                                                     ImageButton imageButton = (ImageButton) contentview.findViewById(R.id.comment_ib_emoji);
+                                                                     Button button = (Button) contentview.findViewById(R.id.btn_send);
 
 
-                                                                         button.setOnClickListener(new View.OnClickListener() {
-                                                                             @Override
-                                                                             public void onClick(View v) {
-                                                                                 if (!"".equals(editText.getText().toString()) || editText.getText() == null)
-                                                                                     adapter.addReplyView(viewRoot, app.getUserInfoBean().getUserNickName(), rpliedName, editText.getText());
+                                                                     button.setOnClickListener(new View.OnClickListener() {
+                                                                         @Override
+                                                                         public void onClick(View v) {
+                                                                             if (!"".equals(editText.getText().toString()) || editText.getText() == null)
+                                                                                 adapter.addReplyView(viewRoot, app.getUserInfoBean().getUserNickName(), rpliedName, editText.getText());
 
-                                                                                 else
-                                                                                     ToastUtil.showShort(getActivity(), "回复内容不能为空");
-                                                                                 editText.setText("");
-                                                                                 dialog.dismiss();
-                                                                             }
-                                                                         });
+                                                                             else
+                                                                                 ToastUtil.showShort(getActivity(), "回复内容不能为空");
+                                                                             editText.setText("");
 
+                                                                         }
+                                                                     });
 
 
                                                                      break;

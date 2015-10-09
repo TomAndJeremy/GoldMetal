@@ -70,6 +70,8 @@
             android:name=".activity.FindBcakPWDActivity"
             android:label="FindBcakPWDActivity" />
         <activity
+
+            android:windowSoftInputMode="adjustResize"
             android:name=".activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="MainActivity" />

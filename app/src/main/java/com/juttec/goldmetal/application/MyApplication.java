@@ -147,7 +147,7 @@ public class MyApplication extends Application {
 
     //点赞或者取消赞 的 接口
     public  String getAddOrCancelSupportUrl() {
-        return BASEURL + "App_Contact//AddOrCancelSupport";
+        return BASEURL + "App_Contact/AddOrCancelSupport";
     }
 
     //评论接口

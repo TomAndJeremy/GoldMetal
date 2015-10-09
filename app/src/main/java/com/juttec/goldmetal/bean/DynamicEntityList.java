@@ -13,7 +13,7 @@ public class DynamicEntityList {
     private String addTime; //发表时间
     private String dyContent; //动态内容
     private String userPhoto;//用户头像
-    private ArrayList<String> dyPhoto;//图片
+    private ArrayList<Img> dyPhoto;//图片
     private ArrayList<DySupportInfoBean> dySupport;
     private ArrayList<DyCommentReplyBean> dyCommentReply;
 
@@ -37,7 +37,7 @@ public class DynamicEntityList {
         this.dyContent = dyContent;
     }
 
-    public void setDyPhoto(ArrayList<String> dyPhoto) {
+    public void setDyPhoto(ArrayList<Img> dyPhoto) {
         this.dyPhoto = dyPhoto;
     }
 
@@ -79,7 +79,7 @@ public class DynamicEntityList {
         return dyContent;
     }
 
-    public ArrayList<String> getDyPhoto() {
+    public ArrayList<Img> getDyPhoto() {
         return dyPhoto;
     }
 
@@ -103,6 +103,20 @@ public class DynamicEntityList {
                 ", dySupport=" + dySupport +
                 ", dyCommentReply=" + dyCommentReply +
                 '}';
+    }
+
+
+    private static class Img{
+        String dyPhoto;
+
+        public void setDyPhoto(String dyPhoto) {
+            this.dyPhoto = dyPhoto;
+        }
+
+        public String getDyPhoto() {
+
+            return dyPhoto;
+        }
     }
 }
 

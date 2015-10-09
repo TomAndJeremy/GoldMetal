@@ -58,7 +58,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     public MomentRecyclerViewAdapter(ArrayList<DynamicEntityList> entityList, Context context, MyApplication app) {
         super();
         this.entityList = entityList;
-        LogUtil.e(entityList.get(0).toString());
+
         this.context = context;
         this.app = app;
     }
@@ -131,7 +131,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 LogUtil.e(entityList.get(position).getId()+"  "+app.getUserInfoBean().getUserId()+" "+app.getUserInfoBean().getUserNickName());
                 if (isChecked) {
                     params.addBodyParameter("status", "0");//点赞
-                    new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelAttentionUrl(),params, new RequestCallBack<String>() {
+                    new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelSupportUrl(),params, new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
 
