@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
+    android:layout_marginTop="8dp"
+    android:background="@color/white"
     android:id="@+id/recyclerview_item">
 
     <RelativeLayout
@@ -31,7 +33,8 @@
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@+id/dynamic_item_head_portrait"
             android:text="张三"
-            android:textSize="20sp" />
+            android:textColor="@color/msg_name"
+            android:textSize="@dimen/large_size" />
 
         <TextView
             android:id="@+id/dynamic_item_user_time"
@@ -41,7 +44,8 @@
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@+id/dynamic_item_head_portrait"
             android:text="今天14：35"
-            android:textSize="16sp" />
+            android:textColor="@color/msg_content"
+            android:textSize="@dimen/small_size" />
     </RelativeLayout>
 
     <TextView
@@ -49,7 +53,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/meg_detail_info"
-        android:layout_margin="5dp" />
+        android:layout_margin="5dp"
+        android:textColor="@color/msg_name"
+        android:textSize="@dimen/normal_size"/>
 
 
 
