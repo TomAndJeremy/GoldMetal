@@ -1,15 +1,14 @@
 package com.juttec.goldmetal.adapter;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -19,13 +18,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.activity.ImagePagerActivity;
 import com.juttec.goldmetal.activity.MomentPersonalActivity;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.DynamicEntityList;
+import com.juttec.goldmetal.bean.PhotoBean;
 import com.juttec.goldmetal.customview.CircleImageView;
+import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
-import com.juttec.goldmetal.utils.SnackbarUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -34,7 +35,6 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -89,8 +89,31 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         holder.time.setText(entityList.get(position).getAddTime());//时间
         holder.content.setText(unicode2String(entityList.get(position).getDyContent()));//正文
 
-        //addImagesView(holder.images, position);
 
+        ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL+entityList.get(position).getUserPhoto(),  holder.headPortrait);
+//        addImagesView(holder.images, position);
+
+        //图片的集合
+        final ArrayList<PhotoBean> photoBeanList = entityList.get(position).getDyPhoto();
+        if (photoBeanList == null || photoBeanList.size() == 0) { // 没有图片资源就隐藏GridView
+            holder.gridView.setVisibility(View.GONE);
+        } else {
+            holder.gridView.setAdapter(new NoScrollGridAdapter(context, photoBeanList));
+        }
+
+        // 点击回帖九宫格，查看大图
+        holder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // TODO Auto-generated method stub
+                ArrayList<String> imageUrls = new ArrayList<String>();
+                for(int i=0;i<photoBeanList.size();i++){
+                    imageUrls.add(photoBeanList.get(i).getDyPhoto());
+                }
+                imageBrower(position, imageUrls);
+            }
+        });
 
         //清楚上次的显示内容
         holder.clean();
@@ -227,16 +250,12 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         LinearLayout suport;//点赞的父布局
         LinearLayout suportOrther;//放置其他人的点赞
         LinearLayout comment;//回复父布局
-        LinearLayout images;//图片父布局
 
         RelativeLayout relativeLayout;//用户名，头像，点击跳转到该用户主页
 
 
-        //图片
-        ImageView imageView1;
-        ImageView imageView2;
-        ImageView imageView3;
-
+        //展示图片的 GridView
+        NoScrollGridView gridView;
 
         public ViewHolder(View view) {
             super(view);
@@ -248,12 +267,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             thumb = (CheckBox) view.findViewById(R.id.dynamic_item_thumb);
             replyIMB = (ImageButton) view.findViewById(R.id.dynamic_item_reply);
 
-            imageView1 = (ImageView) view.findViewById(R.id.item_img_1);
-            imageView2 = (ImageView) view.findViewById(R.id.item_img_1);
-            imageView3 = (ImageView) view.findViewById(R.id.item_img_1);
-
-
-            images = (LinearLayout) view.findViewById(R.id.item_imgs);
+            gridView = (NoScrollGridView) view.findViewById(R.id.gridview);
 
             suport = (LinearLayout) view.findViewById(R.id.item_suport);
             suportMe = (TextView) view.findViewById(R.id.item_suport_me);
@@ -270,9 +284,6 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 suportOrther.removeAllViews();
             if (comment.getChildCount() > 0)
                 comment.removeAllViews();
-            if (images.getChildCount() > 0)
-                images.removeAllViews();
-
         }
     }
 
@@ -445,6 +456,21 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             viewRoot.addView(imageView);
         }
     }
+
+
+
+    /**
+     * 打开图片查看器
+     *
+     */
+    protected void imageBrower(int position, ArrayList<String> urls2) {
+        Intent intent = new Intent(context, ImagePagerActivity.class);
+        // 图片url,为了演示这里使用常量，一般从数据库中或网络中获取
+        intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, urls2);
+        intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, position);
+        context.startActivity(intent);
+    }
+
 
 
     //item点击事件回调

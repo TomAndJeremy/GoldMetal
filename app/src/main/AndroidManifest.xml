@@ -99,6 +99,10 @@
             android:name=".activity.AnalysisActivity"
             android:label="AnalysisActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.ImagePagerActivity"
+            android:label="ImagePagerActivity"
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.FollowActivity"></activity>
         <activity android:name=".activity.MessageActivity"></activity>
         <activity android:name=".activity.MessageDetailActivity"></activity>

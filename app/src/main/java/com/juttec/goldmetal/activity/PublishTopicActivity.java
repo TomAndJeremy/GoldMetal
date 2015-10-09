@@ -557,6 +557,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
                         }
 
                     } else {
+                        dialog_progress.dismiss();
                         photoList.clear();
                         ToastUtil.showShort(PublishTopicActivity.this, "上传图片失败");
                     }
@@ -568,6 +569,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
             @Override
             public void onFailure(HttpException error, String msg) {
+                dialog_progress.dismiss();
                 ToastUtil.showShort(PublishTopicActivity.this, "请检查网络是否正常连接");
             }
         });

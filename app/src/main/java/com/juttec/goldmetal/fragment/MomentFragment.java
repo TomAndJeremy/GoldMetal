@@ -1,7 +1,6 @@
 package com.juttec.goldmetal.fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,14 +15,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -78,13 +74,13 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     private static final String ARG_PARAM1 = "param1";
 
     private String mParam1;
-    MyApplication app;
+    private MyApplication app;
 
 
     View view;
 
     //tabs
-    TextView dynamic, message, follow;
+    private TextView dynamic, message, follow;
 
     ArrayList<DynamicEntityList> entityList;
 
@@ -430,6 +426,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetDynamicUrl(), params, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
+                        LogUtil.d("全部动态：---------------"+responseInfo.result.toString());
 
                         DynamicMsgBean dynamicMsgBean = gson.fromJson(responseInfo.result.toString(), DynamicMsgBean.class);
 

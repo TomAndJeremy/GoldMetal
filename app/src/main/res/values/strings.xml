@@ -186,5 +186,9 @@
     <string name="msg_title">消息详情</string>
 
 
+    <!--MessageDetailActivity-->
+    <string name="viewpager_indicator">%1$d/%2$d</string>
+
+
 
 </resources>
