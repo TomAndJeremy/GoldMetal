@@ -1,7 +1,9 @@
 package com.juttec.goldmetal.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,13 +16,19 @@ import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.util.Base64;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -63,6 +71,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 交易圈fragment
@@ -77,10 +86,13 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     private MyApplication app;
 
 
+    private boolean isLoadingMore;
     View view;
+    private int i = 1;
 
     //tabs
     private TextView dynamic, message, follow;
+
 
     ArrayList<DynamicEntityList> entityList;
 
@@ -102,7 +114,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     private final static int REQUEST_CODE_CAMERA = 333;//照相的返回码
     private final static int REQUEST_CODE_ALBUM = 444;//相册的返回码
-
+    SwipeRefreshLayout refreshLayout;
 
     public static MomentFragment newInstance(String param1) {
         MomentFragment fragment = new MomentFragment();
@@ -124,7 +136,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         }
         app = (MyApplication) getActivity().getApplication();
         dialog_progress = new MyProgressDialog(getActivity());
-
+        entityList = new ArrayList<DynamicEntityList>();
     }
 
     @Override
@@ -139,7 +151,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
         gson = new Gson();
-        getInfo(1, MyApplication.DYNAMIC_TYPE_ALL);
+        getInfo(i, MyApplication.DYNAMIC_TYPE_ALL);
 
         return view;
     }
@@ -152,20 +164,15 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
         //下拉刷新
-        final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
+        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         refreshLayout.setColorSchemeColors(Color.BLUE, Color.RED, Color.GREEN);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // TODO: 2015/9/14
                 refreshLayout.setRefreshing(true);
-                refreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                    }
-                }, 2000);
-                Toast.makeText(getActivity(), "121312", Toast.LENGTH_LONG).show();
+                i = 1;
+                getInfo(i, MyApplication.DYNAMIC_TYPE_ALL);
 
             }
         });
@@ -194,9 +201,47 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         /*初始化Recyclerview*/
         recyclerView = (RecyclerView) view.findViewById(R.id.moment_recyclerview);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+
+
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                int totalItemCount = layoutManager.getItemCount();
+                //lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载，各位自由选择
+                // dy>0 表示向下滑动
+                if (lastVisibleItem >= totalItemCount - 1 && dy > 0) {
+                    if (!isLoadingMore) {
+
+                        getInfo(i, MyApplication.DYNAMIC_TYPE_ALL);
+                        isLoadingMore = true;
+                    }
+                }
+            }
+        });
+//        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//              int  visibleItemCount = layoutManager.getChildCount();
+//               int totalItemCount = layoutManager.getItemCount();
+//               int pastItems = layoutManager.findFirstVisibleItemPosition();
+//
+//                if (!isLoadingMore) {
+//
+//                    if ((pastItems + visibleItemCount) >= totalItemCount) {
+//
+//                        isLoadingMore = true;
+//                        // load something new and set adapter notifyDatasetChanged
+//                        // 记得在 load something 完了以后把 onLoading 赋值为 false
+//                    }
+//                }
+//            }
+//        });
 
     }
 
@@ -423,101 +468,163 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
         params.addBodyParameter("pageIndex", page + "");
         params.addBodyParameter("dyType", type);
+
+        refreshLayout.setRefreshing(true);
+
         new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetDynamicUrl(), params, new RequestCallBack<String>() {
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
-                        LogUtil.d("全部动态：---------------"+responseInfo.result.toString());
+
+
+                        refreshLayout.setRefreshing(false);
+
 
                         DynamicMsgBean dynamicMsgBean = gson.fromJson(responseInfo.result.toString(), DynamicMsgBean.class);
 
 
-                        entityList = dynamicMsgBean.getEntityList();
+                        if (i == 1) {
+                            entityList.clear();
+                        }
+                        List<DynamicEntityList> dynamicEntityLists = dynamicMsgBean.getEntityList();
+                        entityList.addAll(dynamicEntityLists);
+                        i++;
+                        if (adapter == null) {
+                            adapter = new MomentRecyclerViewAdapter(entityList, getActivity(), app);
+                            //添加回调事件
 
+                            // 添加头部
+                            myAdapter = new RecycleViewWithHeadAdapter<>(adapter);
+                            myAdapter.addHeader(myHead);
+                            // 设置Adapter
+                            recyclerView.setAdapter(myAdapter);
+                        } else {
 
-                        adapter = new MomentRecyclerViewAdapter(entityList, getActivity(), app);
+                            adapter.notifyDataSetChanged();
+                            myAdapter.notifyDataSetChanged();
 
+                        }
+                        isLoadingMore = false;
+                        callBack();
 
-                        //回调事件
-                        adapter.setOnMyClickListener(new MomentRecyclerViewAdapter.OnMyClickListener() {
-                                                         @Override
-                                                         public void onClick(View v, int posion, final String rpliedName, final LinearLayout viewRoot) {
-
-
-                                                             switch (v.getId()) {
-                                                                 case R.id.recyclerview_item:
-                                                                     startActivity(new Intent(getActivity(), MomentPersonalActivity.class));
-                                                                     break;
-                                                                 case R.id.dynamic_item_reply:
-
-                                                                     LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                                                     View contentview = inflater.inflate(R.layout.commonality_comments, null);
-                                                                     contentview.setFocusable(true); // 这个很重要
-                                                                     contentview.setFocusableInTouchMode(true);
-                                                                     final PopupWindow popupWindow = new PopupWindow(contentview, LinearLayout.LayoutParams.MATCH_PARENT,250);
-                                                                     popupWindow.setFocusable(true);
-                                                                     popupWindow.setOutsideTouchable(false);
-                                                                     popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
-                                                                     popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
-                                                                     popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                                                                     contentview.setOnKeyListener(new View.OnKeyListener() {
-                                                                         @Override
-                                                                         public boolean onKey(View v, int keyCode, KeyEvent event) {
-                                                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                                                 popupWindow.dismiss();
-
-                                                                                 return true;
-                                                                             }
-                                                                             return false;
-                                                                         }
-                                                                     });
-                                                                     popupWindow.showAtLocation(view, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-                                                                     final EditText editText = (EditText) contentview.findViewById(R.id.comment_et_reply);
-                                                                     editText.setHint("回复" + entityList.get(posion).getUserName());
-
-
-                                                                     ImageButton imageButton = (ImageButton) contentview.findViewById(R.id.comment_ib_emoji);
-                                                                     Button button = (Button) contentview.findViewById(R.id.btn_send);
-
-
-                                                                     button.setOnClickListener(new View.OnClickListener() {
-                                                                         @Override
-                                                                         public void onClick(View v) {
-                                                                             if (!"".equals(editText.getText().toString()) || editText.getText() == null)
-                                                                                 adapter.addReplyView(viewRoot, app.getUserInfoBean().getUserNickName(), rpliedName, editText.getText());
-
-                                                                             else
-                                                                                 ToastUtil.showShort(getActivity(), "回复内容不能为空");
-                                                                             editText.setText("");
-
-                                                                         }
-                                                                     });
-
-
-                                                                     break;
-
-                                                             }
-                                                         }
-                                                     }
-
-                        );
-
-                        // 添加头部
-                        myAdapter = new RecycleViewWithHeadAdapter<>(adapter);
-                        myAdapter.addHeader(myHead);
-                        // 设置Adapter
-                        recyclerView.setAdapter(myAdapter);
                     }
 
                     @Override
                     public void onFailure(HttpException error, String msg) {
+                        refreshLayout.setRefreshing(false);
+                        refreshLayout.setRefreshing(false);
                         NetWorkUtils.showMsg(getActivity());
 
                     }
+
+
                 }
 
         );
 
     }
 
+    private void callBack() {
+        //回调事件
+        adapter.setOnMyClickListener(new MomentRecyclerViewAdapter.OnMyClickListener() {
+                                         @Override
+                                         public void onClick(View v, final int posion, final String rpliedName, final LinearLayout viewRoot) {
 
+
+                                             switch (v.getId()) {
+                                                 case R.id.recyclerview_item:
+                                                     startActivity(new Intent(getActivity(), MomentPersonalActivity.class));
+                                                     break;
+                                                 case R.id.dynamic_item_reply:
+
+                                                     LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                                     final View contentview = inflater.inflate(R.layout.commonality_comments, null);
+                                                     contentview.setFocusable(true); // 这个很重要
+                                                     contentview.setFocusableInTouchMode(true);
+                                                     final PopupWindow popupWindow = new PopupWindow(contentview, LinearLayout.LayoutParams.MATCH_PARENT, 250);
+                                                     popupWindow.setFocusable(true);
+                                                     popupWindow.setOutsideTouchable(false);
+                                                     popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+                                                     popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
+                                                     popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                                                     contentview.setOnKeyListener(new View.OnKeyListener() {
+                                                         @Override
+                                                         public boolean onKey(View v, int keyCode, KeyEvent event) {
+                                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                                 popupWindow.dismiss();
+
+                                                                 return true;
+                                                             }
+                                                             return false;
+                                                         }
+                                                     });
+                                                     popupWindow.showAtLocation(view, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                                                     final EditText editText = (EditText) contentview.findViewById(R.id.comment_et_reply);
+
+                                                     editText.setFocusable(true);
+                                                     editText.setFocusableInTouchMode(true);
+                                                     editText.requestFocus();
+                                                     InputMethodManager inputMethodManager =
+                                                             (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                                     inputMethodManager.toggleSoftInputFromWindow(editText.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);
+
+
+                                                     editText.setHint("回复" + entityList.get(posion).getUserName());
+
+
+                                                     ImageButton imageButton = (ImageButton) contentview.findViewById(R.id.comment_ib_emoji);
+                                                     Button button = (Button) contentview.findViewById(R.id.btn_send);
+
+
+                                                     button.setOnClickListener(new View.OnClickListener() {
+                                                         @Override
+                                                         public void onClick(View v) {
+                                                             if (!"".equals(editText.getText().toString()) || editText.getText() == null) {
+                                                                 RequestParams param = new RequestParams();
+                                                                 param.addBodyParameter("dyId", entityList.get(posion).getId());
+                                                                 param.addBodyParameter("discussantId", app.getUserInfoBean().getUserId());
+                                                                 param.addBodyParameter("discussantName", app.getUserInfoBean().getUserNickName());
+                                                                 param.addBodyParameter("commentContent", editText.getText().toString());
+
+                                                                 final Editable editable = editText.getText();
+                                                                 new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getCommentUrl(), param, new RequestCallBack<String>() {
+
+                                                                     @Override
+                                                                     public void onSuccess(ResponseInfo<String> responseInfo) {
+                                                                         try {
+                                                                             JSONObject object = new JSONObject(responseInfo.result.toString());
+
+                                                                             ToastUtil.showShort(getActivity(), object.getString("promptInfor"));
+                                                                             if ("1".equals(object.getString("status"))) {
+                                                                                 adapter.addReplyView(viewRoot, app.getUserInfoBean().getUserNickName(), null, editable);
+                                                                                 popupWindow.dismiss();
+                                                                             }
+
+                                                                         } catch (JSONException e) {
+                                                                             e.printStackTrace();
+                                                                         }
+
+                                                                     }
+
+                                                                     @Override
+                                                                     public void onFailure(HttpException error, String msg) {
+                                                                         NetWorkUtils.showMsg(getActivity());
+                                                                     }
+                                                                 });
+                                                             } else
+                                                                 ToastUtil.showShort(getActivity(), "回复内容不能为空");
+                                                             editText.setText("");
+
+                                                         }
+                                                     });
+
+
+                                                     break;
+
+                                             }
+                                         }
+                                     }
+
+        );
+
+    }
 }

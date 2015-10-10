@@ -77,14 +77,14 @@
         android:layout_gravity="right"
         android:layout_margin="5dp">
 
-        <CheckBox
+        <ImageButton
             android:id="@+id/dynamic_item_thumb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/dynamic_item_content"
             android:layout_margin="5dp"
             android:layout_toLeftOf="@+id/dynamic_item_reply"
-            android:button="@drawable/thumb_selector"
+            android:background="@drawable/thumb_selector"
             android:checked="false" />
 
         <ImageButton

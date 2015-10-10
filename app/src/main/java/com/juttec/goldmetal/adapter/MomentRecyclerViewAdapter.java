@@ -81,6 +81,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             @Override
             public void onClick(View v) {
                 mOnMyClickListener.onClick(v, position, entityList.get(position).getUserName(), holder.comment);
+                LogUtil.e("11111111111111111111111111111");
             }
         });
 
@@ -90,17 +91,17 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         holder.content.setText(unicode2String(entityList.get(position).getDyContent()));//正文
 
 
-        ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL+entityList.get(position).getUserPhoto(),  holder.headPortrait);
+        ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + entityList.get(position).getUserPhoto(), holder.headPortrait);
 //        addImagesView(holder.images, position);
 
         //图片的集合
         final ArrayList<PhotoBean> photoBeanList = entityList.get(position).getDyPhoto();
-        if (photoBeanList == null || photoBeanList.size() == 0) { // 没有图片资源就隐藏GridView
-            holder.gridView.setVisibility(View.GONE);
-        } else {
-            holder.gridView.setAdapter(new NoScrollGridAdapter(context, photoBeanList));
-        }
-
+//        if (photoBeanList == null || photoBeanList.size() == 0) { // 没有图片资源就隐藏GridView
+//            holder.gridView.setVisibility(View.GONE);
+//        } else {
+//            holder.gridView.setAdapter(new NoScrollGridAdapter(context, photoBeanList));
+//        }
+        holder.gridView.setAdapter(new NoScrollGridAdapter(context, photoBeanList));
         // 点击回帖九宫格，查看大图
         holder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -108,7 +109,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // TODO Auto-generated method stub
                 ArrayList<String> imageUrls = new ArrayList<String>();
-                for(int i=0;i<photoBeanList.size();i++){
+                for (int i = 0; i < photoBeanList.size(); i++) {
                     imageUrls.add(photoBeanList.get(i).getDyPhoto());
                 }
                 imageBrower(position, imageUrls);
@@ -133,7 +134,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             holder.suportMe.setText("我");
         }
 
-        if (holder.thumb.isChecked()) {//如果我点赞了设为可见，否则不可见
+        if (holder.thumb.isSelected()) {//如果我点赞了设为可见，否则不可见
             holder.suportMe.setVisibility(View.VISIBLE);
 
         } else {
@@ -142,56 +143,25 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
 
         //点赞的点击事件
-        holder.thumb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.thumb.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
                 RequestParams params = new RequestParams();
                 params.addBodyParameter("dyId", entityList.get(position).getId());
                 params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
                 params.addBodyParameter("userName", app.getUserInfoBean().getUserNickName());
 
 
-                LogUtil.e(entityList.get(position).getId()+"  "+app.getUserInfoBean().getUserId()+" "+app.getUserInfoBean().getUserNickName());
-                if (isChecked) {
-                    params.addBodyParameter("status", "0");//点赞
-                    new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelSupportUrl(),params, new RequestCallBack<String>() {
-                        @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
-
-                            try {
-                                JSONObject object = new JSONObject(responseInfo.result.toString());
-                                if ("1".equals(object.getString("status"))) {
-                                    holder.suport.setVisibility(View.VISIBLE);
-                                    holder.suportMe.setVisibility(View.VISIBLE);
-                                } else if ("0".equals(object.getString("status"))) {
-                                    ToastUtil.showShort(context, object.getString("promptInfor"));
-                                    LogUtil.e("promptInfor  "+object.getString("promptInfor"));
-
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-
-                        @Override
-                        public void onFailure(HttpException error, String msg) {
-                            NetWorkUtils.showMsg(context);
-                        }
-                    });
-
-                } else {
-
-
+                if (holder.thumb.isSelected()) {
                     params.addBodyParameter("status", "1");//取消赞
-                    new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelAttentionUrl(),params, new RequestCallBack<String>() {
+                    new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelSupportUrl(), params, new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
-
+                            holder.thumb.setSelected(false);
                             try {
                                 JSONObject object = new JSONObject(responseInfo.result.toString());
                                 if ("1".equals(object.getString("status"))) {
-                                    //我取消咱之后重新设置其他人的name
+                                    //我取消赞之后重新设置其他人的name
                                     holder.suportMe.setVisibility(View.GONE);
                                     holder.suportOrther.removeAllViews();
                                     if (entityList.get(position).getDySupport().size() > 0) {//如果人数不为0
@@ -214,6 +184,35 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                             NetWorkUtils.showMsg(context);
                         }
                     });
+                } else {
+                    params.addBodyParameter("status", "0");//点赞
+                    new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelSupportUrl(), params, new RequestCallBack<String>() {
+                        @Override
+                        public void onSuccess(ResponseInfo<String> responseInfo) {
+
+                            try {
+                                JSONObject object = new JSONObject(responseInfo.result.toString());
+                                if ("1".equals(object.getString("status"))) {
+                                    holder.suport.setVisibility(View.VISIBLE);
+                                    holder.suportMe.setVisibility(View.VISIBLE);
+                                } else if ("0".equals(object.getString("status"))) {
+                                    ToastUtil.showShort(context, object.getString("promptInfor"));
+                                    LogUtil.e("promptInfor  " + object.getString("promptInfor"));
+
+                                }
+                                holder.thumb.setSelected(true);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(HttpException error, String msg) {
+                            NetWorkUtils.showMsg(context);
+                        }
+                    });
+
                 }
             }
         });
@@ -244,7 +243,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         TextView content;//内容
         TextView suportMe;//点赞（我）
 
-        CheckBox thumb;//点赞按钮
+        ImageButton thumb;//点赞按钮
         ImageButton replyIMB;//回复按钮
 
         LinearLayout suport;//点赞的父布局
@@ -264,7 +263,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             time = (TextView) view.findViewById(R.id.dynamic_item_user_time);
             headPortrait = (CircleImageView) view.findViewById(R.id.dynamic_item_head_portrait);
             content = (TextView) view.findViewById(R.id.dynamic_item_content);
-            thumb = (CheckBox) view.findViewById(R.id.dynamic_item_thumb);
+            thumb = (ImageButton) view.findViewById(R.id.dynamic_item_thumb);
             replyIMB = (ImageButton) view.findViewById(R.id.dynamic_item_reply);
 
             gridView = (NoScrollGridView) view.findViewById(R.id.gridview);
@@ -308,17 +307,17 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     }
 
 
-    private ArrayList<String> getsuportName(int position, CheckBox checkBox) {
+    private ArrayList<String> getsuportName(int position, ImageButton thumb) {
         ArrayList<String> surposeName = new ArrayList<String>();
         for (int i = 0; i < entityList.get(position).getDySupport().size(); i++) {
+            if (!surposeName.contains(entityList.get(position).getDySupport().get(i).getUserName()))
+                surposeName.add(entityList.get(position).getDySupport().get(i).getUserName());
 
             //判断返回的点赞名单中是否有自己
-            if (entityList.get(position).getDySupport().get(i).getUserName().equals(app.getUserInfoBean().getUserNickName())) {
-                checkBox.setChecked(true);
-                entityList.get(position).getDySupport().remove(i);
+            if (surposeName.contains(app.getUserInfoBean().getUserNickName())) {
+                thumb.setSelected(true);
+                surposeName.remove(app.getUserInfoBean().getUserNickName());
 
-            } else {
-                surposeName.add(entityList.get(position).getDySupport().get(i).getUserName());
             }
 
 
@@ -364,8 +363,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         TextView tvRepliedName = (TextView) commentMsg.findViewById(R.id.comment_name);//被恢复昵称，可为空
         TextView tvReplyContent = (TextView) commentMsg.findViewById(R.id.comment_content);//回复内容
 
-        tvReplyName.setText(replyName);
-        tvRepliedName.setText(repliedName + ":");
+
         tvReplyContent.setText(content);
 
 
@@ -373,7 +371,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         if (repliedName != null) {
             hint.setVisibility(View.VISIBLE);
             tvRepliedName.setVisibility(View.VISIBLE);
+
+            tvRepliedName.setText(repliedName + ":");
         } else {
+            tvReplyName.setText(replyName + ":");
             hint.setVisibility(View.GONE);
             tvRepliedName.setVisibility(View.GONE);
         }
@@ -458,10 +459,8 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     }
 
 
-
     /**
      * 打开图片查看器
-     *
      */
     protected void imageBrower(int position, ArrayList<String> urls2) {
         Intent intent = new Intent(context, ImagePagerActivity.class);
@@ -472,8 +471,6 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     }
 
 
-
-    //item点击事件回调
     public void setOnMyClickListener(OnMyClickListener mOnMyClickListener) {
         this.mOnMyClickListener = mOnMyClickListener;
     }
