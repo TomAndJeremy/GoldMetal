@@ -175,7 +175,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }else{
                     return;
                 }
-
+                SharedPreferencesUtil.setParam(this,"CID",app.getCID());
                 login();
 
                 break;
@@ -216,13 +216,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         dialog.builder().setMessage("正在努力登录~").show();
         SharedPreferencesUtil.setParam(this, "username", mUserName.getText().toString());
         if(cb_remember.isChecked()){
-            SharedPreferencesUtil.setParam(this,"pwd",mPwd.getText().toString());
+            SharedPreferencesUtil.setParam(this, "pwd", mPwd.getText().toString());
+        }
+        if("".equals((String)SharedPreferencesUtil.getParam(LoginActivity.this, "CID", ""))){
+            ToastUtil.showShort(this,"请检查网络状态是否良好");
+            dialog.dismiss();
+            return;
         }
 
         RequestParams params = new RequestParams();
+
         params.addBodyParameter("userMobile", mUserName.getText().toString());
         params.addBodyParameter("password",mPwd.getText().toString());
-        params.addBodyParameter("cId", app.getCID());
+        params.addBodyParameter("cId", (String)SharedPreferencesUtil.getParam(LoginActivity.this, "CID", ""));
 
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.send(HttpRequest.HttpMethod.POST, app.getUserLoginUrl(), params, new RequestCallBack<String>() {

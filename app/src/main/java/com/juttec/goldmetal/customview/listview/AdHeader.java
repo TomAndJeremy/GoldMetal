@@ -17,6 +17,11 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 展示广告的ViewPager头部
+ * AutoLoadListView的头部
+ */
+
 public class AdHeader {
 
 

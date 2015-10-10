@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -222,7 +220,12 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnMyClickListener.onClick(v, position, null, null);
+//                mOnMyClickListener.onClick(v, position, null, null);
+                Intent intent= new Intent(context,MomentPersonalActivity.class);
+                intent.putExtra("userId",entityList.get(position).getUserId());
+                intent.putExtra("userName",entityList.get(position).getUserName());
+                context.startActivity(intent);
+
             }
         });
 

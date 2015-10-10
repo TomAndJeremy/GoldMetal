@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ivImage"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:padding="10dp"
+        android:background="@mipmap/content_moment_bg"
+        android:scaleType="centerCrop"
+        >
+
+        <com.juttec.goldmetal.customview.CircleImageView
+            android:id="@+id/iv_head_photo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/content_moment_pho_others"
+            app:civ_fill_color="#ffffff" />
+
+
+
+        <Button
+            android:id="@+id/btn_focus_or"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/btn_focus_or"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+
+
