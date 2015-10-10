@@ -84,7 +84,8 @@
             android:layout_below="@+id/dynamic_item_content"
             android:layout_margin="5dp"
             android:layout_toLeftOf="@+id/dynamic_item_reply"
-            android:background="@drawable/thumb_selector"
+            android:src="@drawable/thumb_selector"
+            android:background="@null"
             android:checked="false" />
 
         <ImageButton

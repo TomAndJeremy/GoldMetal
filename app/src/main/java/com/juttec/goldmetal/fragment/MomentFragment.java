@@ -106,6 +106,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     Gson gson;
 
 
+
     private CircleImageView mHeadPhoto;//头像
 
     private MyProgressDialog dialog_progress;//正在加载的进度框
@@ -137,6 +138,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         app = (MyApplication) getActivity().getApplication();
         dialog_progress = new MyProgressDialog(getActivity());
         entityList = new ArrayList<DynamicEntityList>();
+
     }
 
     @Override
@@ -151,7 +153,15 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
         gson = new Gson();
-        getInfo(i, MyApplication.DYNAMIC_TYPE_ALL);
+        refreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+
+                refreshLayout.setRefreshing(true);
+                getInfo(i, MyApplication.DYNAMIC_TYPE_ALL);
+            }
+        });
+
 
         return view;
     }
@@ -223,25 +233,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                 }
             }
         });
-//        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//              int  visibleItemCount = layoutManager.getChildCount();
-//               int totalItemCount = layoutManager.getItemCount();
-//               int pastItems = layoutManager.findFirstVisibleItemPosition();
-//
-//                if (!isLoadingMore) {
-//
-//                    if ((pastItems + visibleItemCount) >= totalItemCount) {
-//
-//                        isLoadingMore = true;
-//                        // load something new and set adapter notifyDatasetChanged
-//                        // 记得在 load something 完了以后把 onLoading 赋值为 false
-//                    }
-//                }
-//            }
-//        });
 
     }
 

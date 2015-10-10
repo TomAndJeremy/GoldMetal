@@ -23,7 +23,6 @@ import com.juttec.goldmetal.bean.DynamicEntityList;
 import com.juttec.goldmetal.bean.PhotoBean;
 import com.juttec.goldmetal.customview.CircleImageView;
 import com.juttec.goldmetal.customview.NoScrollGridView;
-import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -38,6 +37,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Jeremy on 2015/9/14.
@@ -45,6 +46,7 @@ import java.util.ArrayList;
 public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecyclerViewAdapter.ViewHolder> {
 
     private OnMyClickListener mOnMyClickListener;
+
 
     // 数据集
     ArrayList<DynamicEntityList> entityList;
@@ -75,14 +77,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
 
         //点击回复按钮的事件回调
-        holder.replyIMB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnMyClickListener.onClick(v, position, entityList.get(position).getUserName(), holder.comment);
-                LogUtil.e("11111111111111111111111111111");
-            }
-        });
-
+        clickToComment(holder.replyIMB, position, null, holder.comment);
 
         holder.name.setText(entityList.get(position).getUserName());//设置用户名
         holder.time.setText(entityList.get(position).getAddTime());//时间
@@ -114,16 +109,16 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             }
         });
 
-        //清楚上次的显示内容
+        //清除上次的动态添加的内容内容
         holder.clean();
 
 
         addCommentView(holder.comment, position);//添加评论
 
-        final ArrayList<String> supotNames = getsuportName(position, holder.thumb);//得到点赞的人名
+        final ArrayList<Map<String, String>> supotNames = getsuportGuy(position, holder.thumb);//得到点赞的人名
 
 
-        if (entityList.get(position).getDySupport().size() > 0) {//如果有人点赞
+        if (supotNames.size() > 0) {//如果有人点赞
             holder.suport.setVisibility(View.VISIBLE);
             holder.suportMe.setText("我、");
             addSuportView(holder.suportOrther, supotNames);//添加点赞的name
@@ -151,11 +146,12 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
 
                 if (holder.thumb.isSelected()) {
+                    holder.thumb.setClickable(false);
                     params.addBodyParameter("status", "1");//取消赞
                     new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelSupportUrl(), params, new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
-                            holder.thumb.setSelected(false);
+
                             try {
                                 JSONObject object = new JSONObject(responseInfo.result.toString());
                                 if ("1".equals(object.getString("status"))) {
@@ -167,6 +163,8 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                                     } else {
                                         holder.suport.setVisibility(View.GONE);
                                     }
+                                    holder.thumb.setSelected(false);
+
 
                                 } else if ("0".equals(object.getString("status"))) {
                                     ToastUtil.showShort(context, object.getString("promptInfor"));
@@ -174,12 +172,13 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
+                            holder.thumb.setClickable(true);
                         }
 
                         @Override
                         public void onFailure(HttpException error, String msg) {
                             NetWorkUtils.showMsg(context);
+                            holder.thumb.setClickable(true);
                         }
                     });
                 } else {
@@ -193,12 +192,14 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                                 if ("1".equals(object.getString("status"))) {
                                     holder.suport.setVisibility(View.VISIBLE);
                                     holder.suportMe.setVisibility(View.VISIBLE);
+                                    holder.thumb.setSelected(true);
                                 } else if ("0".equals(object.getString("status"))) {
                                     ToastUtil.showShort(context, object.getString("promptInfor"));
-                                    LogUtil.e("promptInfor  " + object.getString("promptInfor"));
+
 
                                 }
-                                holder.thumb.setSelected(true);
+
+                                holder.thumb.setClickable(true);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -208,11 +209,14 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                         @Override
                         public void onFailure(HttpException error, String msg) {
                             NetWorkUtils.showMsg(context);
+                            holder.thumb.setClickable(true);
                         }
                     });
 
                 }
             }
+
+
         });
 
 
@@ -291,7 +295,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
 
     //添加点赞的人名
-    private void addSuportView(LinearLayout viewRoot, ArrayList<String> s) {
+    private void addSuportView(LinearLayout viewRoot, ArrayList<Map<String, String>> s) {
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -299,34 +303,39 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             TextView tv = new TextView(context);
             tv.setTextColor(Color.rgb(48, 52, 136));
             tv.setLayoutParams(lp);
+
+            String name = s.get(i).get("name");
+            String id = s.get(i).get("id");
             if (i == s.size() - 1)
-                tv.setText(s.get(i));//最后一个不加“、”号
+                tv.setText(name);//最后一个不加“、”号
             else
-                tv.setText(s.get(i) + "、");
+                tv.setText(s.get(i).get("name") + "、");
             viewRoot.addView(tv);
             viewRoot.setVisibility(View.VISIBLE);
+            clickName(tv, id, name);
         }
 
     }
 
 
-    private ArrayList<String> getsuportName(int position, ImageButton thumb) {
-        ArrayList<String> surposeName = new ArrayList<String>();
+    //得到点赞的人
+    private ArrayList<Map<String, String>> getsuportGuy(int position, ImageButton thumb) {
+        ArrayList<Map<String, String>> surposes = new ArrayList<Map<String, String>>();
+
         for (int i = 0; i < entityList.get(position).getDySupport().size(); i++) {
-            if (!surposeName.contains(entityList.get(position).getDySupport().get(i).getUserName()))
-                surposeName.add(entityList.get(position).getDySupport().get(i).getUserName());
-
+            Map<String, String> map = new HashMap<String, String>();
+            String name = entityList.get(position).getDySupport().get(i).getUserName();
             //判断返回的点赞名单中是否有自己
-            if (surposeName.contains(app.getUserInfoBean().getUserNickName())) {
+            if (name.equals(app.getUserInfoBean().getUserNickName())) {
                 thumb.setSelected(true);
-                surposeName.remove(app.getUserInfoBean().getUserNickName());
-
+                continue;
             }
-
-
+            map.put("name", name);
+            map.put("id", entityList.get(position).getDySupport().get(i).getUserId());
+            surposes.add(map);
         }
 
-        return surposeName;
+        return surposes;
     }
 
     /**
@@ -389,7 +398,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     //添加评论布局
     private void addCommentView(LinearLayout viewRoot, final int position) {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
 
         for (int i = 0; i < entityList.get(position).getDyCommentReply().size(); i++) {
@@ -401,17 +410,17 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             final TextView tvCommentName = (TextView) commentMsg.findViewById(R.id.comment_name);
             TextView tvCommentContent = (TextView) commentMsg.findViewById(R.id.comment_content);
 
-            tvCommentName.setText(entityList.get(position).getDyCommentReply().get(i).getDiscussantName() + ":");
-            tvCommentContent.setText(entityList.get(position).getDyCommentReply().get(i).getCommentContent());
+            String commentName = entityList.get(position).getDyCommentReply().get(i).getDiscussantName() + ":";//
+            String commentContent = entityList.get(position).getDyCommentReply().get(i).getCommentContent();
+
+            tvCommentName.setText(commentName);
+            tvCommentContent.setText(commentContent);
 
 
-            tvCommentName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, MomentPersonalActivity.class);
-                    context.startActivity(intent);
-                }
-            });
+            //点击昵称跳转到用户个人界面
+            clickName(tvCommentName, entityList.get(position).getDyCommentReply().get(i).getDiscussantId(), commentName);
+
+
             viewRoot.addView(commentMsg);
 
 
@@ -419,12 +428,9 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             final LinearLayout replyRoot = new LinearLayout(context);
             replyRoot.setOrientation(LinearLayout.VERTICAL);
 
-            tvCommentContent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // addReplyView(replyRoot, app.getUserInfoBean().getUserNickName(), tvCommentName.getText().toString(), );
-                }
-            });
+            //点击评论，回复该评论
+            clickToComment(commentMsg, position, tvCommentName.getText().toString(), replyRoot);
+
 
             for (int j = 0; j < size; j++) {
 
@@ -486,6 +492,31 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
          * @param vr          父布局
          */
         void onClick(View v, int posion, String repliedName, LinearLayout vr);
+    }
+
+
+    //点击姓名跳转
+    private void clickName(View v, final String userID, final String userName) {
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, MomentPersonalActivity.class);
+                intent.putExtra("userId", userID);
+                intent.putExtra("userName", userName);
+                context.startActivity(intent);
+            }
+        });
+    }
+
+    //点击评论
+    private void clickToComment(View v, final int position, String repliedName, final LinearLayout viewRoot) {
+
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnMyClickListener.onClick(v, position, entityList.get(position).getUserName(), viewRoot);
+            }
+        });
     }
 
 
