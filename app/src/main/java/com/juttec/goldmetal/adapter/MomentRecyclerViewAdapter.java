@@ -246,10 +246,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                mOnMyClickListener.onClick(v, position, null, null);
-                Intent intent = new Intent(context, MomentPersonalActivity.class);
-                intent.putExtra("userId", entityList.get(position).getUserId());
-                intent.putExtra("userName", entityList.get(position).getUserName());
+
+                Intent intent= new Intent(context,MomentPersonalActivity.class);
+                intent.putExtra("userId",entityList.get(position).getUserId());
+                intent.putExtra("userName",entityList.get(position).getUserName());
                 context.startActivity(intent);
 
             }

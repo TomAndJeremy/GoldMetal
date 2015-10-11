@@ -65,4 +65,7 @@
     <dimen name="xlarge_size">20sp</dimen>
 
 
+    <dimen name="divider_height">8dp</dimen>
+
+
 </resources>

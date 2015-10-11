@@ -10,7 +10,9 @@
         style="@style/HeadBarStytle"
         app:headtitle="@string/follow"
         app:leftimg="@mipmap/nav_btn_backa_arrow"
-        app:righttext="@string/publish_msg"></com.juttec.goldmetal.customview.HeadLayout>
+        app:righttext="@string/publish_msg">
+
+    </com.juttec.goldmetal.customview.HeadLayout>
 
 
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,13 +20,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/moment_recyclerview"
+        <com.juttec.goldmetal.customview.listview.LoadMoreListView
+            android:id="@+id/listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:focusable="true">
+            android:divider="@color/gray"
+            android:dividerHeight="@dimen/divider_height"
+            >
+        </com.juttec.goldmetal.customview.listview.LoadMoreListView>
 
-        </android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 

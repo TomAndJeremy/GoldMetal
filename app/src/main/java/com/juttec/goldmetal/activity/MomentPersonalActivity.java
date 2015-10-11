@@ -150,7 +150,7 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
     //数据加载完毕后 填充数据
     private void initData(){
         if(mAdapter==null){
-            mAdapter  = new PersonDynamicAdapter(this,entityList);
+            mAdapter  = new PersonDynamicAdapter(this,entityList,userId);
             mListView.setAdapter(mAdapter);
         }else{
             mAdapter.notifyDataSetChanged();

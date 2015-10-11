@@ -22,7 +22,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:src="@mipmap/ic_launcher"
+            android:src="@mipmap/content_moment_pho_others"
             app:civ_fill_color="#B5B5B6" />
 
         <TextView
@@ -130,6 +130,16 @@
             android:text="觉得很赞" />
 
     </LinearLayout>
+
+
+    <com.juttec.goldmetal.customview.listview.NoScrollListView
+        android:id="@+id/comment_listview"
+        android:layout_marginTop="3dp"
+        android:divider="@null"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.juttec.goldmetal.customview.listview.NoScrollListView>
 
     <LinearLayout
         android:orientation="vertical"
