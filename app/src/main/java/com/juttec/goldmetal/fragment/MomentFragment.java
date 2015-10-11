@@ -1,9 +1,7 @@
 package com.juttec.goldmetal.fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,15 +16,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.util.Base64;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -36,13 +30,11 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.FollowActivity;
 import com.juttec.goldmetal.activity.MessageActivity;
-import com.juttec.goldmetal.activity.MomentPersonalActivity;
 import com.juttec.goldmetal.activity.PublishTopicActivity;
 import com.juttec.goldmetal.adapter.MomentRecyclerViewAdapter;
 import com.juttec.goldmetal.adapter.RecycleViewWithHeadAdapter;
@@ -104,7 +96,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     View myHead;
 
     Gson gson;
-
 
 
     private CircleImageView mHeadPhoto;//头像
@@ -518,104 +509,150 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         //回调事件
         adapter.setOnMyClickListener(new MomentRecyclerViewAdapter.OnMyClickListener() {
                                          @Override
-                                         public void onClick(View v, final int posion, final String rpliedName, final LinearLayout viewRoot) {
+                                         public void onClick(View v, final int position, final String dyId, final String commentId, final String userId, final String userName, final String repliedId, final String repliedName, final LinearLayout viewRoot) {
+
+                                             String name, id;
 
 
-                                             switch (v.getId()) {
-                                                 case R.id.recyclerview_item:
-                                                     startActivity(new Intent(getActivity(), MomentPersonalActivity.class));
-                                                     break;
-                                                 case R.id.dynamic_item_reply:
+                                             LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                             final View contentview = inflater.inflate(R.layout.commonality_comments, null);
+                                             contentview.setFocusable(true); // 这个很重要
+                                             contentview.setFocusableInTouchMode(true);
+                                             final PopupWindow popupWindow = new PopupWindow(contentview, LinearLayout.LayoutParams.MATCH_PARENT, 250);
+                                             popupWindow.setFocusable(true);
+                                             popupWindow.setOutsideTouchable(false);
+                                             popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+                                             popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
+                                             popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                                             contentview.setOnKeyListener(new View.OnKeyListener() {
+                                                 @Override
+                                                 public boolean onKey(View v, int keyCode, KeyEvent event) {
+                                                     if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                         popupWindow.dismiss();
 
-                                                     LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                                     final View contentview = inflater.inflate(R.layout.commonality_comments, null);
-                                                     contentview.setFocusable(true); // 这个很重要
-                                                     contentview.setFocusableInTouchMode(true);
-                                                     final PopupWindow popupWindow = new PopupWindow(contentview, LinearLayout.LayoutParams.MATCH_PARENT, 250);
-                                                     popupWindow.setFocusable(true);
-                                                     popupWindow.setOutsideTouchable(false);
-                                                     popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
-                                                     popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
-                                                     popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                                                     contentview.setOnKeyListener(new View.OnKeyListener() {
-                                                         @Override
-                                                         public boolean onKey(View v, int keyCode, KeyEvent event) {
-                                                             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                                 popupWindow.dismiss();
+                                                         return true;
+                                                     }
+                                                     return false;
+                                                 }
+                                             });
+                                             popupWindow.showAtLocation(view, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                                             final EditText editText = (EditText) contentview.findViewById(R.id.comment_et_reply);
 
-                                                                 return true;
-                                                             }
-                                                             return false;
-                                                         }
-                                                     });
-                                                     popupWindow.showAtLocation(view, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-                                                     final EditText editText = (EditText) contentview.findViewById(R.id.comment_et_reply);
-
-                                                     editText.setFocusable(true);
-                                                     editText.setFocusableInTouchMode(true);
-                                                     editText.requestFocus();
-                                                     InputMethodManager inputMethodManager =
-                                                             (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                                     inputMethodManager.toggleSoftInputFromWindow(editText.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);
+                                             editText.setFocusable(true);
+                                             editText.setFocusableInTouchMode(true);
+                                             editText.requestFocus();
+                                             InputMethodManager inputMethodManager =
+                                                     (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                             inputMethodManager.toggleSoftInputFromWindow(editText.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);
 
 
-                                                     editText.setHint("回复" + entityList.get(posion).getUserName());
-
-
-                                                     ImageButton imageButton = (ImageButton) contentview.findViewById(R.id.comment_ib_emoji);
-                                                     Button button = (Button) contentview.findViewById(R.id.btn_send);
-
-
-                                                     button.setOnClickListener(new View.OnClickListener() {
-                                                         @Override
-                                                         public void onClick(View v) {
-                                                             if (!"".equals(editText.getText().toString()) || editText.getText() == null) {
-                                                                 RequestParams param = new RequestParams();
-                                                                 param.addBodyParameter("dyId", entityList.get(posion).getId());
-                                                                 param.addBodyParameter("discussantId", app.getUserInfoBean().getUserId());
-                                                                 param.addBodyParameter("discussantName", app.getUserInfoBean().getUserNickName());
-                                                                 param.addBodyParameter("commentContent", editText.getText().toString());
-
-                                                                 final Editable editable = editText.getText();
-                                                                 new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getCommentUrl(), param, new RequestCallBack<String>() {
-
-                                                                     @Override
-                                                                     public void onSuccess(ResponseInfo<String> responseInfo) {
-                                                                         try {
-                                                                             JSONObject object = new JSONObject(responseInfo.result.toString());
-
-                                                                             ToastUtil.showShort(getActivity(), object.getString("promptInfor"));
-                                                                             if ("1".equals(object.getString("status"))) {
-                                                                                 adapter.addReplyView(viewRoot, app.getUserInfoBean().getUserNickName(), null, editable);
-                                                                                 popupWindow.dismiss();
-                                                                             }
-
-                                                                         } catch (JSONException e) {
-                                                                             e.printStackTrace();
-                                                                         }
-
-                                                                     }
-
-                                                                     @Override
-                                                                     public void onFailure(HttpException error, String msg) {
-                                                                         NetWorkUtils.showMsg(getActivity());
-                                                                     }
-                                                                 });
-                                                             } else
-                                                                 ToastUtil.showShort(getActivity(), "回复内容不能为空");
-                                                             editText.setText("");
-
-                                                         }
-                                                     });
-
-
-                                                     break;
-
+                                             if (repliedName == null) {
+                                                 editText.setHint("回复" + entityList.get(position).getUserName());
+                                             } else {
+                                                 editText.setHint("回复" + repliedName);
                                              }
+
+
+                                             ImageButton imageButton = (ImageButton) contentview.findViewById(R.id.comment_ib_emoji);
+                                             Button button = (Button) contentview.findViewById(R.id.btn_send);
+
+
+                                             button.setOnClickListener(new View.OnClickListener() {
+                                                 @Override
+                                                 public void onClick(View v) {
+                                                     if (!"".equals(editText.getText().toString()) || editText.getText() == null) {
+                                                         if (v.getId() == R.id.dynamic_item_content) {
+                                                             comment(position,popupWindow, viewRoot, dyId, userId, userName, editText,repliedId);
+                                                         } else {
+                                                             reply(position,popupWindow, dyId, commentId, userId, userName, repliedId, repliedName,editText, viewRoot);
+                                                         }
+                                                     } else
+                                                         ToastUtil.showShort(getActivity(), "回复内容不能为空");
+                                                     editText.setText("");
+
+                                                 }
+                                             });
+
+
                                          }
                                      }
 
         );
 
+    }
+
+
+    private void comment(final int position,final PopupWindow popupWindow, final LinearLayout viewRoot, String dyId, String discussantId, String discussantName, EditText editText, final String repliedId) {
+
+        RequestParams param = new RequestParams();
+        param.addBodyParameter("dyId", dyId);
+        param.addBodyParameter("discussantId", discussantId);
+        param.addBodyParameter("discussantName", discussantName);
+        param.addBodyParameter("commentContent", editText.getText().toString());
+
+        final Editable editable = editText.getText();
+        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getCommentUrl(), param, new RequestCallBack<String>() {
+
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                try {
+                    JSONObject object = new JSONObject(responseInfo.result.toString());
+
+                    ToastUtil.showShort(getActivity(), object.getString("promptInfor"));
+                    if ("1".equals(object.getString("status"))) {
+                        adapter.addReplyView(position,viewRoot, app.getUserInfoBean().getUserNickName(), null, editable,object.getString("message1"),null);
+                        popupWindow.dismiss();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                NetWorkUtils.showMsg(getActivity());
+            }
+        });
+
+
+    }
+
+    private void reply(final int position,final PopupWindow popupWindow, final String dyId, final String commentId, final String userId, final String userName, final String repliedId, final String repliedName, EditText editText, final LinearLayout viewRoot) {
+        RequestParams param = new RequestParams();
+        param.addBodyParameter("dyId", dyId);
+        param.addBodyParameter("commentId", commentId);
+        param.addBodyParameter("userId", userId);
+        param.addBodyParameter("userName", userName);
+        param.addBodyParameter("repliedId", repliedId);
+        param.addBodyParameter("repliedName", repliedName);
+        param.addBodyParameter("replyContent", editText.getText().toString());
+
+        final Editable editable = editText.getText();
+        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getReplyUrl(), param, new RequestCallBack<String>() {
+
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                try {
+                    JSONObject object = new JSONObject(responseInfo.result.toString());
+
+                    ToastUtil.showShort(getActivity(), object.getString("promptInfor"));
+                    if ("1".equals(object.getString("status"))) {
+                        adapter.addReplyView(position, viewRoot, app.getUserInfoBean().getUserNickName(), repliedName, editable, commentId, repliedId);
+                        popupWindow.dismiss();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                NetWorkUtils.showMsg(getActivity());
+            }
+        });
     }
 }
