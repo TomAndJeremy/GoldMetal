@@ -13,6 +13,21 @@ public class DyReplyInfoBean {
     private String repliedName;//被回复人姓名
     private String replyContent;//回复内容
 
+
+
+    public DyReplyInfoBean(){
+
+    }
+
+    public DyReplyInfoBean(String userId,String userName,String repliedId,String repliedName,String replyContent){
+        this.userId = userId;
+        this.userName = userName;
+        this.repliedId = repliedId;
+        this.repliedName = repliedName;
+        this.replyContent = replyContent;
+    }
+
+
     public void setId(String id) {
         this.id = id;
     }

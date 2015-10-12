@@ -14,6 +14,20 @@ public class DyCommentReplyBean {
     private String commentContent;//评论内容
     private List<DyReplyInfoBean> dyReply;
 
+
+    public DyCommentReplyBean(){
+
+    }
+
+    public DyCommentReplyBean(String discussantId,String discussantName,String commentContent,List<DyReplyInfoBean> dyReply){
+
+        this.discussantId =discussantId;
+        this.discussantName = discussantName;
+        this.commentContent = commentContent;
+        this.dyReply = dyReply;
+
+    }
+
     public void setId(String id) {
         this.id = id;
     }

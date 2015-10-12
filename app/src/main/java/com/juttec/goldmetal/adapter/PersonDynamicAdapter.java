@@ -1,5 +1,6 @@
 package com.juttec.goldmetal.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -16,12 +17,27 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.ImagePagerActivity;
 import com.juttec.goldmetal.activity.MomentPersonalActivity;
 import com.juttec.goldmetal.application.MyApplication;
+import com.juttec.goldmetal.bean.DyCommentReplyBean;
+import com.juttec.goldmetal.bean.DyReplyInfoBean;
 import com.juttec.goldmetal.bean.DynamicEntityList;
 import com.juttec.goldmetal.bean.PhotoBean;
 import com.juttec.goldmetal.customview.CircleImageView;
 import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.customview.listview.NoScrollListView;
+import com.juttec.goldmetal.dialog.MyProgressDialog;
+import com.juttec.goldmetal.dialog.ReplyPopupWindow;
+import com.juttec.goldmetal.utils.NetWorkUtils;
+import com.juttec.goldmetal.utils.ToastUtil;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +56,14 @@ public class PersonDynamicAdapter extends BaseAdapter{
 
     private LayoutInflater mInflater;
 
-    private MyApplication app;
 
     private String currentUserId;//个人主页 会用到   个人主页用户的id
+
+    private ReplyPopupWindow popupWindow;
+
+    private MyApplication app;
+
+    private MyProgressDialog dialog;//加载时的 进度框
 
 
     public PersonDynamicAdapter(Context context, List<DynamicEntityList> list){
@@ -50,6 +71,8 @@ public class PersonDynamicAdapter extends BaseAdapter{
         mContext = context;
         mLists = list;
         mInflater = LayoutInflater.from(context);
+        popupWindow = new ReplyPopupWindow(context);
+        dialog = new MyProgressDialog(context);
     }
 
     public PersonDynamicAdapter(Context context, List<DynamicEntityList> list,String userid){
@@ -58,7 +81,11 @@ public class PersonDynamicAdapter extends BaseAdapter{
         mLists = list;
         mInflater = LayoutInflater.from(context);
         currentUserId = userid;
+        popupWindow = new ReplyPopupWindow(context);
+        dialog = new MyProgressDialog(context);
     }
+
+
 
     @Override
     public int getCount() {
@@ -116,8 +143,16 @@ public class PersonDynamicAdapter extends BaseAdapter{
         holder.replyIMB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                popupWindow.create().show(((Activity)mContext).getCurrentFocus());
+                popupWindow.setHint(0,mLists.get(position).getUserName());
+                //发送按钮的点击事件
+                popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
+                    @Override
+                    public void onClickSend(String content) {
+                        //评论接口
+                        comment(position, mLists.get(position).getId(),content);
+                    }
+                });
             }
         });
 
@@ -125,10 +160,10 @@ public class PersonDynamicAdapter extends BaseAdapter{
         //填充评论回复列表
         if(currentUserId!=null){
             //判断是否在个人主页   若在个人主页
-            holder.commentListView.setAdapter(new CommentAdapter(mContext,dynamicEntityList.getDyCommentReply(),currentUserId));
+            holder.commentListView.setAdapter(new CommentAdapter(mContext,dynamicEntityList.getDyCommentReply(),mLists.get(position).getId(),currentUserId));
         }else{
-
-            holder.commentListView.setAdapter(new CommentAdapter(mContext,dynamicEntityList.getDyCommentReply()));
+            //关注界面
+            holder.commentListView.setAdapter(new CommentAdapter(mContext,dynamicEntityList.getDyCommentReply(),mLists.get(position).getId()));
         }
 
 
@@ -229,6 +264,57 @@ public class PersonDynamicAdapter extends BaseAdapter{
         }
         return string.toString();
     }
+
+
+    /**
+     * 评论接口
+     * @param position
+     * @param dyId  动态编号
+     * content  评论内容
+     */
+    private void comment(final int position, String dyId, final String content) {
+
+        dialog.builder().setMessage("正在提交~").show();
+        RequestParams param = new RequestParams();
+        param.addBodyParameter("dyId", dyId);
+        param.addBodyParameter("discussantId", app.getUserInfoBean().getUserId());
+        param.addBodyParameter("discussantName", app.getUserInfoBean().getUserNickName());
+        param.addBodyParameter("commentContent", content);
+
+        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getCommentUrl(), param, new RequestCallBack<String>() {
+
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                try {
+                    JSONObject object = new JSONObject(responseInfo.result.toString());
+
+                    ToastUtil.showShort(mContext, object.getString("promptInfor"));
+                    if ("1".equals(object.getString("status"))) {
+                        popupWindow.dismiss();
+                        DyCommentReplyBean dyCommentReplyBean = new DyCommentReplyBean(
+                                app.getUserInfoBean().getUserId(),
+                                app.getUserInfoBean().getUserNickName(),
+                                content,
+                                new ArrayList<DyReplyInfoBean>()
+                        );
+                        mLists.get(position).getDyCommentReply().add(dyCommentReplyBean);
+                        notifyDataSetChanged();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                NetWorkUtils.showMsg(mContext);
+            }
+        });
+    }
+
 
 }
 
