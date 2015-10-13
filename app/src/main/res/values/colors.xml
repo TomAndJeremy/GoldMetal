@@ -7,11 +7,6 @@
     <color name="gray">#E1E1E1</color>
 
 
-
-
-
-
-
     <!-- 按钮的蓝色-->
     <color name="button_bule">#207ADB</color>
 
@@ -23,8 +18,6 @@
     <!-- ChartActivity中按钮的颜色-->
     <color name="btn_chart_normal">#333333</color>
     <color name="btn_chart_press">#B0B0B0</color>
-
-
 
 
     <!--底部与顶部的颜色-->
@@ -50,8 +43,6 @@
     <color name="moment_blue">#268DFF</color>
 
 
-
-
     <!-- 资讯、 服务 、更多 Fragment中  RelativeLayout 点击时的背景颜色-->
     <color name="more_rela_pressed">#A3A3A3</color>
     <!-- 资讯、 服务 、更多 Fragment的背景颜色   以及Fragment 中  RelativeLayout 正常时的背景颜色-->
@@ -62,9 +53,6 @@
 
     <!-- 资讯、 服务 、更多 Fragment中  分割线的背景颜色-->
     <color name="divide_line">#DADADA</color>
-
-
-
 
 
     <!--FeedbackActivity-->
@@ -86,13 +74,11 @@
     <color name="border_edit">#CCCCCC</color>
 
 
-
     <!-- price reduction-->
     <color name="price_red">#FB4E48</color>
     <color name="price_background">#2C2C2C</color>
     <color name="etcorner_solid">#424041</color>
     <color name="gridview_background">#262626</color>
-
 
 
     <!-- 自定义dialog-->
@@ -107,12 +93,12 @@
 
     <!-- MessageActivity 界面里   时间和 消息内容的 染色  灰色-->
     <color name="msg_content">#ACACAC</color>
-    <color name="msg_name">#292929</color><!--  昵称的颜色-->
-    <color name="msg_title">#3B86FD</color><!--  消息标题的颜色-->
+    <color name="msg_name">#292929</color>
+    <!--  昵称的颜色-->
+    <color name="msg_title">#3B86FD</color>
+    <!--  消息标题的颜色-->
 
 
-
-
-
-
+    <!--MomentFragment-->
+    <color name="comment_bg_pressed">#7D7D7D</color>
 </resources>

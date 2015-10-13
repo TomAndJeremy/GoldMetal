@@ -72,7 +72,8 @@ public class ReplyPopupWindow {
         mEditText.setFocusable(true);
         mEditText.setFocusableInTouchMode(true);
         mEditText.requestFocus();
-
+        InputMethodManager imm = (InputMethodManager) mEditText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
         InputMethodManager inputMethodManager =
                 (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInputFromWindow(mEditText.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);

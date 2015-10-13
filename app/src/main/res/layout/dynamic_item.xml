@@ -130,6 +130,7 @@
         android:id="@+id/comment_listview"
         android:layout_marginTop="5dp"
         android:divider="@null"
+        android:listSelector="@drawable/comment_click_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

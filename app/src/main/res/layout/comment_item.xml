@@ -46,6 +46,7 @@
     <com.juttec.goldmetal.customview.listview.NoScrollListView
         android:id="@+id/reply_listview"
         android:divider="@null"
+        android:listSelector="@drawable/comment_click_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

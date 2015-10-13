@@ -1,18 +1,16 @@
 package com.juttec.goldmetal.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,7 +26,6 @@ import com.juttec.goldmetal.bean.PhotoBean;
 import com.juttec.goldmetal.customview.CircleImageView;
 import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
-import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -50,7 +47,6 @@ import java.util.Map;
  * Created by Jeremy on 2015/9/14.
  */
 public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecyclerViewAdapter.ViewHolder> {
-
 
 
     private ReplyPopupWindow popupWindow;
@@ -137,32 +133,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
         addCommentView(holder.comment, position);//添加评论
 
-
-//        final ArrayList<Map<String, String>> supotNames = getsuportGuy(position, holder.thumb);//得到点赞的人名
-//
-//        for (int i = 0; i < supotNames.size(); i++) {
-//            LogUtil.e("sss  +" + position + entityList.get(position).getDySupport().get(i).getUserName());
-//        }
-//
-//        if (supotNames.size() > 0) {//如果有人点赞
-//            holder.suport.setVisibility(View.VISIBLE);
-//            holder.suportMe.setText("我、");
-//            addSuportView(holder.suportOrther, supotNames);//添加点赞的name
-//        } else {
-//            holder.suport.setVisibility(View.GONE);
-//            holder.suportMe.setText("我");
-//        }
-//
-//        if (holder.thumb.isSelected()) {//如果我点赞了设为可见，否则不可见
-//            holder.suportMe.setVisibility(View.VISIBLE);
-//            LogUtil.e("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
-//
-//        } else {
-//            holder.suportMe.setVisibility(View.GONE);
-//        }
-
-
-        addSuportView(holder.supportName,getsuportGuy(position,holder));
+        addSuportView(holder.supportName, getsuportGuy(position, holder));
 
         //点赞的点击事件
         holder.thumb.setOnClickListener(new View.OnClickListener() {
@@ -184,23 +155,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                             try {
                                 JSONObject object = new JSONObject(responseInfo.result.toString());
                                 if ("1".equals(object.getString("status"))) {
-                                    //我取消赞之后重新设置其他人的name
-                                   /* holder.suportMe.setVisibility(View.GONE);
-                                    holder.suportOrther.removeAllViews();
-                                    for (int i = 0; i < entityList.get(position).getDySupport().size(); i++) {
 
-                                        if (entityList.get(position).getDySupport().get(i).getUserId().equals(app.getUserInfoBean().getUserId())) {
-                                            entityList.get(position).getDySupport().remove(i);
-                                            break;
-                                        }
-
-                                    }
-
-                                    if (entityList.get(position).getDySupport().size() > 0) {//如果人数不为0
-                                        //addSuportView(holder.suportOrther, supotNames);
-                                    } else {
-                                        holder.suport.setVisibility(View.GONE);
-                                    }*/
 
                                     for (int i = 0; i < entityList.get(position).getDySupport().size(); i++) {
 
@@ -353,15 +308,12 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     }
 
 
-
-
-
     //得到点赞的人
     private ArrayList<Map<String, String>> getsuportGuy(int position, ViewHolder viewHolder) {
         ArrayList<Map<String, String>> surposes = new ArrayList<Map<String, String>>();
 
         int n = entityList.get(position).getDySupport().size();
-        for (int i = 0; i <n ; i++) {
+        for (int i = 0; i < n; i++) {
             Map<String, String> map = new HashMap<String, String>();
             String name = entityList.get(position).getDySupport().get(i).getUserName();
             //判断返回的点赞名单中是否有自己
@@ -376,11 +328,12 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
         if (n > 0) {
             viewHolder.support.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             viewHolder.support.setVisibility(View.GONE);
         }
         return surposes;
     }
+
     //添加点赞的人名
     private void addSuportView(LinearLayout viewRoot, ArrayList<Map<String, String>> s) {
 
@@ -403,6 +356,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         }
 
     }
+
     /**
      * unicode 转字符串
      */
@@ -493,12 +447,12 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 clickName(tvRepliedName, entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedId(), entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName());
 
 
-
                 final int finalJ = j;
-                replyMsg.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!app.getUserInfoBean().getUserId().equals(entityList.get(position).getDyCommentReply().get(finalI).getDyReply().get(finalJ).getUserId())) {
+                if (!app.getUserInfoBean().getUserId().equals(entityList.get(position).getDyCommentReply().get(finalI).getDyReply().get(finalJ).getUserId())) {
+                    replyMsg.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
                             popupWindow.create().show(v);
                             popupWindow.setHint(1, entityList.get(position).getDyCommentReply().get(finalI).getDyReply().get(finalJ).getUserName());
 
@@ -510,8 +464,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                             });
                         }
 
-                    }
-                });
+
+                    });
+
+                }
 
             }
             viewRoot.addView(replyRoot);
@@ -530,9 +486,6 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, position);
         context.startActivity(intent);
     }
-
-
-
 
 
     //点击姓名跳转
@@ -660,8 +613,5 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             }
         });
     }
-
-
-
 }
 

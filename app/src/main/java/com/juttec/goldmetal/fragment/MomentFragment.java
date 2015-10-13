@@ -93,7 +93,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     RecyclerView recyclerView;
 
     MomentRecyclerViewAdapter adapter;
-    RecycleViewWithHeadAdapter myAdapter;
+    public RecycleViewWithHeadAdapter myAdapter;
 
     View myHead;
 
@@ -496,7 +496,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
                         isLoadingMore = false;
                         //添加回调事件
-                       // callBack();
+                        // callBack();
 
                     }
 
@@ -514,190 +514,9 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     }
 
-   /* private void callBack() {
-        //回调事件
-        adapter.setOnMyClickListener(new MomentRecyclerViewAdapter.OnMyClickListener() {
-                                         @Override
-                                         public void onClick(View v, final int position, final String dyId, final String commentId, final String userId, final String userName, final String repliedId, final String repliedName, final LinearLayout viewRoot) {
-
-                                             String name, id;
-
-
-                                             LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                             final View contentview = inflater.inflate(R.layout.commonality_comments, null);
-                                             contentview.setFocusable(true); // 这个很重要
-                                             contentview.setFocusableInTouchMode(true);
-                                             final PopupWindow popupWindow = new PopupWindow(contentview, LinearLayout.LayoutParams.MATCH_PARENT, 250);
-                                             popupWindow.setFocusable(true);
-                                             popupWindow.setOutsideTouchable(false);
-                                             popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
-                                             popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
-                                             popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                                             contentview.setOnKeyListener(new View.OnKeyListener() {
-                                                 @Override
-                                                 public boolean onKey(View v, int keyCode, KeyEvent event) {
-                                                     if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                         popupWindow.dismiss();
-
-                                                         return true;
-                                                     }
-                                                     return false;
-                                                 }
-                                             });
-                                             popupWindow.showAtLocation(view, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-                                             final EditText editText = (EditText) contentview.findViewById(R.id.comment_et_reply);
-
-                                             editText.setFocusable(true);
-                                             editText.setFocusableInTouchMode(true);
-                                             editText.requestFocus();
-                                             InputMethodManager inputMethodManager =
-                                                     (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                             inputMethodManager.toggleSoftInputFromWindow(editText.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);
-
-
-                                             if (repliedName == null) {
-                                                 editText.setHint("回复" + entityList.get(position).getUserName());
-                                             } else {
-                                                 editText.setHint("回复" + repliedName);
-                                             }
-
-
-                                             ImageButton imageButton = (ImageButton) contentview.findViewById(R.id.comment_ib_emoji);
-                                             Button button = (Button) contentview.findViewById(R.id.btn_send);
-
-
-                                             button.setOnClickListener(new View.OnClickListener() {
-                                                 @Override
-                                                 public void onClick(View v) {
-                                                     if (!"".equals(editText.getText().toString()) || editText.getText() == null) {
-                                                         if (v.getId() == R.id.dynamic_item_reply) {
-
-
-                                                             comment(position, popupWindow, viewRoot, dyId, userId, userName, editText);
-                                                         } else {
-
-                                                             reply(position, popupWindow, dyId, commentId, userId, userName, repliedId, repliedName, editText, viewRoot);
-                                                         }
-                                                     } else
-                                                         ToastUtil.showShort(getActivity(), "回复内容不能为空");
-                                                     editText.setText("");
-
-                                                 }
-                                             });
-
-
-                                         }
-                                     }
-
-        );
-
-    }*/
-
-
-    private void comment(final int position, final PopupWindow popupWindow, final LinearLayout viewRoot, String dyId, String discussantId, String discussantName, EditText editText) {
-
-        RequestParams param = new RequestParams();
-        param.addBodyParameter("dyId", dyId);
-        param.addBodyParameter("discussantId", discussantId);
-        param.addBodyParameter("discussantName", discussantName);
-        param.addBodyParameter("commentContent", editText.getText().toString());
-
-        final Editable editable = editText.getText();
-        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getCommentUrl(), param, new RequestCallBack<String>() {
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                try {
-                    JSONObject object = new JSONObject(responseInfo.result.toString());
-
-                    ToastUtil.showShort(getActivity(), object.getString("promptInfor"));
-                    if ("1".equals(object.getString("status"))) {
-
-                        DyCommentReplyBean dyCommentReplyBean = new DyCommentReplyBean();
-                        dyCommentReplyBean.setId(object.getString("message1"));
-                        dyCommentReplyBean.setDiscussantId(app.getUserInfoBean().getUserId());
-                        dyCommentReplyBean.setDiscussantName(app.getUserInfoBean().getUserName());
-                        dyCommentReplyBean.setCommentContent(editable.toString());
-
-                        entityList.get(position).getDyCommentReply().add(dyCommentReplyBean);
-
-                        adapter.notifyDataSetChanged();
-
-                       // adapter.addReplyView(position, viewRoot, app.getUserInfoBean().getUserNickName(), null, editable, dyCommentReplyBean);
-                        popupWindow.dismiss();
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                NetWorkUtils.showMsg(getActivity());
-            }
-        });
-
-
-    }
-
-    private void reply(final int position, final PopupWindow popupWindow, final String dyId, final String commentId, final String userId, final String userName, final String repliedId, final String repliedName, EditText editText, final LinearLayout viewRoot) {
-        RequestParams param = new RequestParams();
-        param.addBodyParameter("dyId", dyId);
-        param.addBodyParameter("commentId", commentId);
-        param.addBodyParameter("userId", userId);
-        param.addBodyParameter("userName", userName);
-        param.addBodyParameter("repliedId", repliedId);
-        param.addBodyParameter("repliedName", repliedName);
-        param.addBodyParameter("replyContent", editText.getText().toString());
-
-        final Editable editable = editText.getText();
-        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getReplyUrl(), param, new RequestCallBack<String>() {
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                try {
-                    JSONObject object = new JSONObject(responseInfo.result.toString());
-
-                    ToastUtil.showShort(getActivity(), object.getString("promptInfor"));
-                    int k = 0;
-                    if ("1".equals(object.getString("status"))) {
-                        for (; k < entityList.get(position).getDyCommentReply().size(); k++) {
-                            String commId = entityList.get(position).getDyCommentReply().get(i).getId();
-                            if (commentId.equals(commId)) {
-
-                                break;
-                            }
-                        }
-                        DyCommentReplyBean dyCommentReplyBean = entityList.get(position).getDyCommentReply().get(k);
-                        DyReplyInfoBean dyReplyInfoBean = new DyReplyInfoBean();
-
-                        dyReplyInfoBean.setUserId(app.getUserInfoBean().getUserId());
-                        dyReplyInfoBean.setUserName(app.getUserInfoBean().getUserNickName());
-                        dyReplyInfoBean.setRepliedId(repliedId);
-                        dyReplyInfoBean.setRepliedName(repliedName);
-                        dyReplyInfoBean.setReplyContent(editable.toString());
-
-                        dyCommentReplyBean.getDyReply().add(dyReplyInfoBean);
-
-                        adapter.notifyDataSetChanged();
-
-
-                       // adapter.addReplyView(position, viewRoot, app.getUserInfoBean().getUserNickName(), repliedName, editable, dyCommentReplyBean);
-                        popupWindow.dismiss();
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                NetWorkUtils.showMsg(getActivity());
-            }
-        });
+    @Override
+    public void onButtonPressed(Uri uri) {
+        super.onButtonPressed(uri);
+        LogUtil.e("uri  " + uri);
     }
 }

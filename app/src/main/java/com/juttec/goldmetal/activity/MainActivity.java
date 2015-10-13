@@ -11,11 +11,13 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.MyFragmentPagerAdapter;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.fragment.BaseFragment;
+import com.juttec.goldmetal.fragment.MomentFragment;
 
 public class MainActivity extends AppCompatActivity implements BaseFragment.OnFragmentInteractionListener {
     ViewPager viewPager;
     TabLayout tabLayout;
-
+    //初始化adapter
+    MyFragmentPagerAdapter myFragmentPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +31,23 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (viewPager == null) {
+           MomentFragment momentFragment= (MomentFragment) myFragmentPagerAdapter.getItem(2);
+            if (momentFragment != null) {
+                if (momentFragment.myAdapter != null) {
+                    momentFragment.myAdapter.notifyDataSetChanged();
+                }
+            }
+
+        }
+    }
+
     /*
-    初始化
-     */
+        初始化
+         */
     private void init() {
 
         //找到控件
@@ -43,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
 
 
         //初始化adapter
-        MyFragmentPagerAdapter myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), this);
+        myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(myFragmentPagerAdapter);
 
         //tablayout与viewpager关联
@@ -61,4 +77,5 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
     public void onFragmentInteraction(Uri uri) {
 
     }
+
 }
