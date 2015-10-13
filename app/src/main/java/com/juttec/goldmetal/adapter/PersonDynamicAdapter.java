@@ -85,6 +85,11 @@ public class PersonDynamicAdapter extends BaseAdapter{
         dialog = new MyProgressDialog(context);
     }
 
+    private PersonDynamicAdapter create(){
+
+        return this;
+    }
+
 
 
     @Override
@@ -160,10 +165,10 @@ public class PersonDynamicAdapter extends BaseAdapter{
         //填充评论回复列表
         if(currentUserId!=null){
             //判断是否在个人主页   若在个人主页
-            holder.commentListView.setAdapter(new CommentAdapter(mContext,dynamicEntityList.getDyCommentReply(),mLists.get(position).getId(),currentUserId));
+            holder.commentListView.setAdapter(new CommentAdapter(mContext,create(),dynamicEntityList.getDyCommentReply(),mLists.get(position).getId(),currentUserId));
         }else{
             //关注界面
-            holder.commentListView.setAdapter(new CommentAdapter(mContext,dynamicEntityList.getDyCommentReply(),mLists.get(position).getId()));
+            holder.commentListView.setAdapter(new CommentAdapter(mContext,create(),dynamicEntityList.getDyCommentReply(),mLists.get(position).getId()));
         }
 
 

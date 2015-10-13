@@ -1,6 +1,7 @@
 package com.juttec.goldmetal.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -161,6 +162,13 @@ public class FollowActivity extends Activity implements View.OnClickListener, Sw
     //点击事件
     @Override
     public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.right_text:
+                //发布消息的点击事件
+                startActivity(new Intent(FollowActivity.this, PublishTopicActivity.class));
+                break;
+
+        }
 
     }
 

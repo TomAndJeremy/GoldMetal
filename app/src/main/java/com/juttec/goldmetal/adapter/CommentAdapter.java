@@ -60,24 +60,28 @@ public class CommentAdapter extends BaseAdapter{
 
     private ReplyAdapter replyAdapter;
 
+    private PersonDynamicAdapter adapter;
+
 
     //关注界面  的构造方法
-    public CommentAdapter(Context context, List<DyCommentReplyBean> list,String dyId){
+    public CommentAdapter(Context context,PersonDynamicAdapter adapter, List<DyCommentReplyBean> list,String dyId){
         app = (MyApplication) context.getApplicationContext();
         mContext = context;
         mLists = list;
         this.dyId = dyId;
+        this.adapter = adapter;
         mInflater = LayoutInflater.from(context);
         popupWindow = new ReplyPopupWindow(context);
         dialog = new MyProgressDialog(context);
     }
 
     //个人主页 的构造方法
-    public CommentAdapter(Context context, List<DyCommentReplyBean> list,String dyId,String userid){
+    public CommentAdapter(Context context,PersonDynamicAdapter adapter, List<DyCommentReplyBean> list,String dyId,String userid){
         app = (MyApplication) context.getApplicationContext();
         mContext = context;
         mLists = list;
         this.dyId = dyId;
+        this.adapter = adapter;
         mInflater = LayoutInflater.from(context);
         currentUserId = userid;
         popupWindow = new ReplyPopupWindow(context);
@@ -268,7 +272,7 @@ public class CommentAdapter extends BaseAdapter{
                         );
 
                         mLists.get(position).getDyReply().add(dyReplyInfoBean);
-                        replyAdapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                     }
 
                 } catch (JSONException e) {
