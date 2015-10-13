@@ -10,6 +10,15 @@ public class DySupportInfoBean {
     private String userId; //点赞人ID
     private String userName;// 点赞人姓名
 
+    public DySupportInfoBean(){
+
+    }
+
+    public DySupportInfoBean(String userId,String userName){
+        this.userId = userId;
+        this.userName = userName;
+    }
+
     public void setId(String id) {
         this.id = id;
     }

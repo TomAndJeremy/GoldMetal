@@ -71,7 +71,7 @@ public class MessageDetailActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_message_detail);
         app = (MyApplication) getApplication();
         dialog = new MyProgressDialog(this);
-        popupWindow = new ReplyPopupWindow(this);
+        popupWindow = new ReplyPopupWindow(MessageDetailActivity.this);
 
         mLists = new ArrayList<DyReplyInfoBean>();
         //初始化控件

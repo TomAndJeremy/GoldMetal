@@ -3,6 +3,7 @@ package com.juttec.goldmetal.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.juttec.goldmetal.activity.MomentPersonalActivity;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.DyCommentReplyBean;
 import com.juttec.goldmetal.bean.DyReplyInfoBean;
+import com.juttec.goldmetal.bean.DySupportInfoBean;
 import com.juttec.goldmetal.bean.DynamicEntityList;
 import com.juttec.goldmetal.bean.PhotoBean;
 import com.juttec.goldmetal.customview.CircleImageView;
@@ -26,6 +28,7 @@ import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.customview.listview.NoScrollListView;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
+import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -64,6 +67,8 @@ public class PersonDynamicAdapter extends BaseAdapter{
     private MyApplication app;
 
     private MyProgressDialog dialog;//加载时的 进度框
+
+//    private boolean isSupported = false;//自己是否点赞  默认为false
 
 
     public PersonDynamicAdapter(Context context, List<DynamicEntityList> list){
@@ -111,7 +116,7 @@ public class PersonDynamicAdapter extends BaseAdapter{
     public View getView(final int position, View convertView, ViewGroup parent) {
         DynamicEntityList dynamicEntityList;
 
-        ViewHolder holder;
+        final ViewHolder holder;
         if(convertView == null){
             convertView = mInflater.inflate(R.layout.dynamic_item,null);
             holder = new ViewHolder();
@@ -120,14 +125,14 @@ public class PersonDynamicAdapter extends BaseAdapter{
             holder.headPortrait = (CircleImageView) convertView.findViewById(R.id.dynamic_item_head_portrait);
             holder.content = (TextView) convertView.findViewById(R.id.dynamic_item_content);
 
+            holder.thumb = (ImageButton) convertView.findViewById(R.id.dynamic_item_thumb);
             holder.replyIMB = (ImageButton) convertView.findViewById(R.id.dynamic_item_reply);
 
             holder.gridView = (NoScrollGridView) convertView.findViewById(R.id.gridview);
             holder.commentListView = (NoScrollListView) convertView.findViewById(R.id.comment_listview);
 
             holder.suport = (LinearLayout) convertView.findViewById(R.id.item_support);
-//            holder.suportMe = (TextView) convertView.findViewById(R.id.item_suport_me);
-//            holder.suportOrther = (LinearLayout) convertView.findViewById(R.id.item_suport_other);
+            holder.supportName = (LinearLayout) convertView.findViewById(R.id.item_support_name);
 
             holder.comment = (LinearLayout) convertView.findViewById(R.id.item_comment_content);
             holder.relativeLayout = (RelativeLayout) convertView.findViewById(R.id.meg_detail_info);
@@ -142,7 +147,35 @@ public class PersonDynamicAdapter extends BaseAdapter{
         holder.time.setText(dynamicEntityList.getAddTime());//时间
         holder.content.setText(unicode2String(dynamicEntityList.getDyContent()));//正文
         //设置头像
-        ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL+dynamicEntityList.getUserPhoto(),  holder.headPortrait);
+        ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + dynamicEntityList.getUserPhoto(), holder.headPortrait);
+
+
+
+
+        //展示点赞的数据
+        if(dynamicEntityList.getDySupport().size()>0){
+            holder.suport.setVisibility(View.VISIBLE);
+            holder.supportName.removeAllViews();
+            holder.thumb.setSelected(false);
+            addSuportView(holder.thumb, holder.supportName, mLists.get(position).getDySupport());
+        }else{
+            holder.suport.setVisibility(View.GONE);
+            holder.thumb.setSelected(false);
+        }
+
+
+        //点赞按钮的点击事件
+        holder.thumb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //点赞或  取消赞 接口
+                supportOrCancle(position,mLists.get(position).getId(),holder.thumb,holder.supportName);
+            }
+        });
+
+
+
+
 
         //评论按钮的点击事件  对发动态的人进行评论
         holder.replyIMB.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +193,8 @@ public class PersonDynamicAdapter extends BaseAdapter{
                 });
             }
         });
+
+
 
 
         //填充评论回复列表
@@ -233,13 +268,14 @@ public class PersonDynamicAdapter extends BaseAdapter{
         CircleImageView headPortrait;//头像
         TextView content;//内容
 
-        TextView suportMe;//点赞（我）
 
 
+
+        ImageButton thumb;//点赞按钮
         ImageButton replyIMB;//回复按钮
 
         LinearLayout suport;//点赞的父布局
-        LinearLayout suportOrther;//放置其他人的点赞
+        LinearLayout supportName;//放置其他人的点赞
         LinearLayout comment;//回复父布局
 
 
@@ -252,6 +288,59 @@ public class PersonDynamicAdapter extends BaseAdapter{
         NoScrollListView commentListView;
     }
 
+
+
+
+    //展示点赞的人名
+    private void addSuportView(ImageButton thumb,LinearLayout viewRoot, List<DySupportInfoBean> supportInfoBeans) {
+        LogUtil.d("---------------------展示点赞的人名"+supportInfoBeans.toString());
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        for (int i = 0; i < supportInfoBeans.size(); i++) {
+            TextView tv = new TextView(mContext);
+            tv.setTextColor(Color.rgb(48, 52, 136));
+            tv.setLayoutParams(lp);
+
+            String name = supportInfoBeans.get(i).getUserName();
+            String id = supportInfoBeans.get(i).getUserId();
+
+            //如果点赞人中包含自己  将点赞按钮设置为已点赞
+            if(id.equals(app.getUserInfoBean().getUserId())){
+                thumb.setSelected(true);
+            }
+
+            if (i == supportInfoBeans.size() - 1){
+                tv.setText(name);//最后一个不加“、”号
+            } else{
+                tv.setText(name + "、");
+            }
+
+            viewRoot.addView(tv);
+            viewRoot.setVisibility(View.VISIBLE);
+
+            //判断是否在个人主页  并且是否点击的本人  若是本人则不跳转
+            if(currentUserId!=null&&id.equals(app.getUserInfoBean().getUserId())){
+            }else {
+                clickName(tv, id, name);
+            }
+        }
+    }
+
+
+    //点击点赞人 名字 跳转至个人主页  ：如果当前在个人主页  点击自己不跳转
+    private void clickName(View v, final String userID, final String userName) {
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(mContext, MomentPersonalActivity.class);
+                intent.putExtra("userId", userID);
+                intent.putExtra("userName", userName);
+                mContext.startActivity(intent);
+            }
+        });
+    }
 
 
     /**
@@ -318,6 +407,63 @@ public class PersonDynamicAdapter extends BaseAdapter{
                 NetWorkUtils.showMsg(mContext);
             }
         });
+    }
+
+
+
+    private void supportOrCancle(final int position,String dyId, final ImageButton thumb, final LinearLayout viewRoot){
+        dialog.builder().setMessage("").show();
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("dyId", dyId);
+        params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
+        params.addBodyParameter("userName", app.getUserInfoBean().getUserNickName());
+        params.addBodyParameter("status", thumb.isSelected()?"1":"0");//如果已点赞 则取消赞   如果没点赞 则点赞
+
+        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelSupportUrl(), params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                try {
+                    JSONObject object = new JSONObject(responseInfo.result.toString());
+                    if ("1".equals(object.getString("status"))) {
+                        //将点赞状态取反
+                        thumb.setSelected(!(thumb.isSelected()));
+                        if(thumb.isSelected()){
+                            //点赞了
+                            DySupportInfoBean dySupportInfoBean = new DySupportInfoBean(
+                                    app.getUserInfoBean().getUserId(),
+                                    app.getUserInfoBean().getUserNickName()
+                            );
+                            mLists.get(position).getDySupport().add(dySupportInfoBean);
+
+                        }else{
+                            //取消赞了
+                            mLists.get(position).getDySupport();
+                            for (int i=0;i< mLists.get(position).getDySupport().size();i++){
+                                if(app.getUserInfoBean().getUserId().equals(mLists.get(position).getDySupport().get(i).getUserId())){
+                                    mLists.get(position).getDySupport().remove(i);
+                                }
+                            }
+
+                        }
+
+                        notifyDataSetChanged();
+
+
+                    } else if ("0".equals(object.getString("status"))) {
+                        ToastUtil.showShort(mContext, object.getString("promptInfor"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                NetWorkUtils.showMsg(mContext);
+                }
+            });
     }
 
 

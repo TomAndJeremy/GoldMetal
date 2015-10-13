@@ -1,6 +1,5 @@
 package com.juttec.goldmetal.dialog;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
@@ -102,7 +101,7 @@ public class ReplyPopupWindow {
 
     //popupwindowde 的显示
     public void show(View view){
-        popupWindow.showAtLocation(((Activity)mContext).getCurrentFocus(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        popupWindow.showAtLocation(view, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
     }
 
     //popupwindowde 的消失
