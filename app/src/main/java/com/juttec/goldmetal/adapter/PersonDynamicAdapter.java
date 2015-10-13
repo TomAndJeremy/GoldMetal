@@ -297,7 +297,8 @@ public class PersonDynamicAdapter extends BaseAdapter{
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        for (int i = 0; i < supportInfoBeans.size(); i++) {
+
+        for (int i = 0; i < (supportInfoBeans.size()>10?10:supportInfoBeans.size()); i++) {
             TextView tv = new TextView(mContext);
             tv.setTextColor(Color.rgb(48, 52, 136));
             tv.setLayoutParams(lp);
@@ -311,7 +312,12 @@ public class PersonDynamicAdapter extends BaseAdapter{
             }
 
             if (i == supportInfoBeans.size() - 1){
-                tv.setText(name);//最后一个不加“、”号
+                if(supportInfoBeans.size()>10){
+                    tv.setText(name+"等"+supportInfoBeans.size()+"人");
+                }else{
+                    tv.setText(name);//最后一个不加“、”号
+                }
+
             } else{
                 tv.setText(name + "、");
             }
@@ -320,7 +326,7 @@ public class PersonDynamicAdapter extends BaseAdapter{
             viewRoot.setVisibility(View.VISIBLE);
 
             //判断是否在个人主页  并且是否点击的本人  若是本人则不跳转
-            if(currentUserId!=null&&id.equals(app.getUserInfoBean().getUserId())){
+            if(currentUserId!=null&&id.equals(currentUserId)){
             }else {
                 clickName(tv, id, name);
             }

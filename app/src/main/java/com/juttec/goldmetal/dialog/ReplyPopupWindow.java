@@ -47,7 +47,7 @@ public class ReplyPopupWindow {
        View contentview = LayoutInflater.from(mContext).inflate(R.layout.commonality_comments, null);
         contentview.setFocusable(true); // 这个很重要
         contentview.setFocusableInTouchMode(true);
-        popupWindow = new PopupWindow(contentview, LinearLayout.LayoutParams.MATCH_PARENT, 250);
+        popupWindow = new PopupWindow(contentview, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(false);
         popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
