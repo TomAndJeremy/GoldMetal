@@ -125,9 +125,9 @@ public class PersonDynamicAdapter extends BaseAdapter{
             holder.gridView = (NoScrollGridView) convertView.findViewById(R.id.gridview);
             holder.commentListView = (NoScrollListView) convertView.findViewById(R.id.comment_listview);
 
-            holder.suport = (LinearLayout) convertView.findViewById(R.id.item_suport);
-            holder.suportMe = (TextView) convertView.findViewById(R.id.item_suport_me);
-            holder.suportOrther = (LinearLayout) convertView.findViewById(R.id.item_suport_other);
+            holder.suport = (LinearLayout) convertView.findViewById(R.id.item_support);
+//            holder.suportMe = (TextView) convertView.findViewById(R.id.item_suport_me);
+//            holder.suportOrther = (LinearLayout) convertView.findViewById(R.id.item_suport_other);
 
             holder.comment = (LinearLayout) convertView.findViewById(R.id.item_comment_content);
             holder.relativeLayout = (RelativeLayout) convertView.findViewById(R.id.meg_detail_info);

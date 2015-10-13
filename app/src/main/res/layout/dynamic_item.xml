@@ -99,29 +99,23 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/item_suport"
+        android:id="@+id/item_support"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/content_moment_icon_praise" />
 
-        <TextView
-            android:id="@+id/item_suport_me"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="dfdf"
-            android:textColor="#303488" />
 
         <LinearLayout
-            android:id="@+id/item_suport_other"
+            android:id="@+id/item_support_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone"></LinearLayout>
+            android:orientation="horizontal"></LinearLayout>
 
         <TextView
             android:id="@+id/item_hint"

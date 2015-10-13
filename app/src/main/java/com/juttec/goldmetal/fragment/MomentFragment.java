@@ -39,6 +39,8 @@ import com.juttec.goldmetal.activity.PublishTopicActivity;
 import com.juttec.goldmetal.adapter.MomentRecyclerViewAdapter;
 import com.juttec.goldmetal.adapter.RecycleViewWithHeadAdapter;
 import com.juttec.goldmetal.application.MyApplication;
+import com.juttec.goldmetal.bean.DyCommentReplyBean;
+import com.juttec.goldmetal.bean.DyReplyInfoBean;
 import com.juttec.goldmetal.bean.DynamicEntityList;
 import com.juttec.goldmetal.bean.DynamicMsgBean;
 import com.juttec.goldmetal.customview.CircleImageView;
@@ -138,20 +140,13 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_moment, container, false);
 
-        initView(view);
+        initView(view);//初始化控件
 
-        setRecyclerView(view);
+        setRecyclerView(view);//舒适化recycleview
 
 
         gson = new Gson();
-        refreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
 
-                refreshLayout.setRefreshing(true);
-                getInfo(i, MyApplication.DYNAMIC_TYPE_ALL);
-            }
-        });
 
 
         return view;
@@ -167,6 +162,16 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         //下拉刷新
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         refreshLayout.setColorSchemeColors(Color.BLUE, Color.RED, Color.GREEN);
+
+        refreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+
+                refreshLayout.setRefreshing(true);
+                getInfo(1, MyApplication.DYNAMIC_TYPE_ALL);
+            }
+        });//初次进入加载
+
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -441,6 +446,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
     /**
+     * 获取动态
      * @param page 页数
      * @param type 类型 all：所有 attention：关注 personal：个人
      */
@@ -461,22 +467,24 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                         refreshLayout.setRefreshing(false);
 
 
-                        DynamicMsgBean dynamicMsgBean = gson.fromJson(responseInfo.result.toString(), DynamicMsgBean.class);
+                        DynamicMsgBean dynamicMsgBean = gson.fromJson(responseInfo.result.toString(), DynamicMsgBean.class);//解析数据
 
 
                         if (i == 1) {
-                            entityList.clear();
+                            entityList.clear();//刷新时先清空集合
                         }
                         List<DynamicEntityList> dynamicEntityLists = dynamicMsgBean.getEntityList();
-                        entityList.addAll(dynamicEntityLists);
-                        i++;
+                        entityList.addAll(dynamicEntityLists);//向集合中添加数据
+                        i++;//每次加载后页数加一
                         if (adapter == null) {
                             adapter = new MomentRecyclerViewAdapter(entityList, getActivity(), app);
-                            //添加回调事件
+
 
                             // 添加头部
                             myAdapter = new RecycleViewWithHeadAdapter<>(adapter);
                             myAdapter.addHeader(myHead);
+                            adapter.setHeadAdapter(myAdapter);
+
                             // 设置Adapter
                             recyclerView.setAdapter(myAdapter);
                         } else {
@@ -485,14 +493,15 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                             myAdapter.notifyDataSetChanged();
 
                         }
+
                         isLoadingMore = false;
-                        callBack();
+                        //添加回调事件
+                       // callBack();
 
                     }
 
                     @Override
                     public void onFailure(HttpException error, String msg) {
-                        refreshLayout.setRefreshing(false);
                         refreshLayout.setRefreshing(false);
                         NetWorkUtils.showMsg(getActivity());
 
@@ -505,7 +514,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     }
 
-    private void callBack() {
+   /* private void callBack() {
         //回调事件
         adapter.setOnMyClickListener(new MomentRecyclerViewAdapter.OnMyClickListener() {
                                          @Override
@@ -561,10 +570,13 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                                                  @Override
                                                  public void onClick(View v) {
                                                      if (!"".equals(editText.getText().toString()) || editText.getText() == null) {
-                                                         if (v.getId() == R.id.dynamic_item_content) {
-                                                             comment(position,popupWindow, viewRoot, dyId, userId, userName, editText,repliedId);
+                                                         if (v.getId() == R.id.dynamic_item_reply) {
+
+
+                                                             comment(position, popupWindow, viewRoot, dyId, userId, userName, editText);
                                                          } else {
-                                                             reply(position,popupWindow, dyId, commentId, userId, userName, repliedId, repliedName,editText, viewRoot);
+
+                                                             reply(position, popupWindow, dyId, commentId, userId, userName, repliedId, repliedName, editText, viewRoot);
                                                          }
                                                      } else
                                                          ToastUtil.showShort(getActivity(), "回复内容不能为空");
@@ -579,10 +591,10 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
         );
 
-    }
+    }*/
 
 
-    private void comment(final int position,final PopupWindow popupWindow, final LinearLayout viewRoot, String dyId, String discussantId, String discussantName, EditText editText, final String repliedId) {
+    private void comment(final int position, final PopupWindow popupWindow, final LinearLayout viewRoot, String dyId, String discussantId, String discussantName, EditText editText) {
 
         RequestParams param = new RequestParams();
         param.addBodyParameter("dyId", dyId);
@@ -600,7 +612,18 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
                     ToastUtil.showShort(getActivity(), object.getString("promptInfor"));
                     if ("1".equals(object.getString("status"))) {
-                        adapter.addReplyView(position,viewRoot, app.getUserInfoBean().getUserNickName(), null, editable,object.getString("message1"),null);
+
+                        DyCommentReplyBean dyCommentReplyBean = new DyCommentReplyBean();
+                        dyCommentReplyBean.setId(object.getString("message1"));
+                        dyCommentReplyBean.setDiscussantId(app.getUserInfoBean().getUserId());
+                        dyCommentReplyBean.setDiscussantName(app.getUserInfoBean().getUserName());
+                        dyCommentReplyBean.setCommentContent(editable.toString());
+
+                        entityList.get(position).getDyCommentReply().add(dyCommentReplyBean);
+
+                        adapter.notifyDataSetChanged();
+
+                       // adapter.addReplyView(position, viewRoot, app.getUserInfoBean().getUserNickName(), null, editable, dyCommentReplyBean);
                         popupWindow.dismiss();
                     }
 
@@ -619,7 +642,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     }
 
-    private void reply(final int position,final PopupWindow popupWindow, final String dyId, final String commentId, final String userId, final String userName, final String repliedId, final String repliedName, EditText editText, final LinearLayout viewRoot) {
+    private void reply(final int position, final PopupWindow popupWindow, final String dyId, final String commentId, final String userId, final String userName, final String repliedId, final String repliedName, EditText editText, final LinearLayout viewRoot) {
         RequestParams param = new RequestParams();
         param.addBodyParameter("dyId", dyId);
         param.addBodyParameter("commentId", commentId);
@@ -638,8 +661,30 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                     JSONObject object = new JSONObject(responseInfo.result.toString());
 
                     ToastUtil.showShort(getActivity(), object.getString("promptInfor"));
+                    int k = 0;
                     if ("1".equals(object.getString("status"))) {
-                        adapter.addReplyView(position, viewRoot, app.getUserInfoBean().getUserNickName(), repliedName, editable, commentId, repliedId);
+                        for (; k < entityList.get(position).getDyCommentReply().size(); k++) {
+                            String commId = entityList.get(position).getDyCommentReply().get(i).getId();
+                            if (commentId.equals(commId)) {
+
+                                break;
+                            }
+                        }
+                        DyCommentReplyBean dyCommentReplyBean = entityList.get(position).getDyCommentReply().get(k);
+                        DyReplyInfoBean dyReplyInfoBean = new DyReplyInfoBean();
+
+                        dyReplyInfoBean.setUserId(app.getUserInfoBean().getUserId());
+                        dyReplyInfoBean.setUserName(app.getUserInfoBean().getUserNickName());
+                        dyReplyInfoBean.setRepliedId(repliedId);
+                        dyReplyInfoBean.setRepliedName(repliedName);
+                        dyReplyInfoBean.setReplyContent(editable.toString());
+
+                        dyCommentReplyBean.getDyReply().add(dyReplyInfoBean);
+
+                        adapter.notifyDataSetChanged();
+
+
+                       // adapter.addReplyView(position, viewRoot, app.getUserInfoBean().getUserNickName(), repliedName, editable, dyCommentReplyBean);
                         popupWindow.dismiss();
                     }
 
