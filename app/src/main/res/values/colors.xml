@@ -100,5 +100,5 @@
 
 
     <!--MomentFragment-->
-    <color name="comment_bg_pressed">#7D7D7D</color>
+    <color name="comment_bg_pressed">#eeeeee</color>
 </resources>
