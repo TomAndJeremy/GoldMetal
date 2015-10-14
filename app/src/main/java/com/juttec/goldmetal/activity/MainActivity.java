@@ -1,6 +1,5 @@
 package com.juttec.goldmetal.activity;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -9,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.MyFragmentPagerAdapter;
-import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.fragment.BaseFragment;
 import com.juttec.goldmetal.fragment.MomentFragment;
 

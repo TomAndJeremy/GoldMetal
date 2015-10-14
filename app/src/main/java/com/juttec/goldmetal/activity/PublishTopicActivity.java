@@ -492,17 +492,19 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
             // 从手机相册返回
             case REQUEST_CODE_ALBUM:
-                Uri selectedImage = GetContentUrl.geturi(data, getApplicationContext());
-                String[] filePathColumns = { MediaStore.Images.Media.DATA };
-                Cursor c = this.getContentResolver().query(selectedImage,
-                        filePathColumns, null, null, null);
-                c.moveToFirst();
-                int columnIndex = c.getColumnIndex(filePathColumns[0]);
-                String picturePath= c.getString(columnIndex);
-                picPathList.add(picturePath);
-                LogUtil.d("选取相册中图片的路径：" + picturePath);
-                c.close();
-                setImg();
+                if (resultCode == RESULT_OK) {
+                    Uri selectedImage = GetContentUrl.geturi(data, getApplicationContext());
+                    String[] filePathColumns = {MediaStore.Images.Media.DATA};
+                    Cursor c = this.getContentResolver().query(selectedImage,
+                            filePathColumns, null, null, null);
+                    c.moveToFirst();
+                    int columnIndex = c.getColumnIndex(filePathColumns[0]);
+                    String picturePath = c.getString(columnIndex);
+                    picPathList.add(picturePath);
+                    LogUtil.d("选取相册中图片的路径：" + picturePath);
+                    c.close();
+                    setImg();
+                }
                 break;
         }
 

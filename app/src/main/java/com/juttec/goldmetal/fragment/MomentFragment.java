@@ -2,32 +2,20 @@ package com.juttec.goldmetal.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.util.Base64;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -39,8 +27,6 @@ import com.juttec.goldmetal.activity.PublishTopicActivity;
 import com.juttec.goldmetal.adapter.MomentRecyclerViewAdapter;
 import com.juttec.goldmetal.adapter.RecycleViewWithHeadAdapter;
 import com.juttec.goldmetal.application.MyApplication;
-import com.juttec.goldmetal.bean.DyCommentReplyBean;
-import com.juttec.goldmetal.bean.DyReplyInfoBean;
 import com.juttec.goldmetal.bean.DynamicEntityList;
 import com.juttec.goldmetal.bean.DynamicMsgBean;
 import com.juttec.goldmetal.customview.CircleImageView;
@@ -333,17 +319,19 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
             // 从手机相册返回
             case REQUEST_CODE_ALBUM:
-                Uri selectedImage = GetContentUrl.geturi(data, getActivity());
-                String[] filePathColumns = {MediaStore.Images.Media.DATA};
-                Cursor c = getActivity().getContentResolver().query(selectedImage,
-                        filePathColumns, null, null, null);
-                c.moveToFirst();
-                int columnIndex = c.getColumnIndex(filePathColumns[0]);
-                path = c.getString(columnIndex);
-                LogUtil.d("选取相册中图片的路径：" + path);
-                c.close();
-                //上传头像
-                uploadUserPhoto();
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri selectedImage = GetContentUrl.geturi(data, getActivity());
+                    String[] filePathColumns = {MediaStore.Images.Media.DATA};
+                    Cursor c = getActivity().getContentResolver().query(selectedImage,
+                            filePathColumns, null, null, null);
+                    c.moveToFirst();
+                    int columnIndex = c.getColumnIndex(filePathColumns[0]);
+                    path = c.getString(columnIndex);
+                    LogUtil.d("选取相册中图片的路径：" + path);
+                    c.close();
+                    //上传头像
+                    uploadUserPhoto();
+                }
                 break;
         }
 
