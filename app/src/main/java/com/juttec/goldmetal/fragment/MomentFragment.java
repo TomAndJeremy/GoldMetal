@@ -3,6 +3,7 @@ package com.juttec.goldmetal.fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -29,6 +30,7 @@ import com.juttec.goldmetal.adapter.RecycleViewWithHeadAdapter;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.DynamicEntityList;
 import com.juttec.goldmetal.bean.DynamicMsgBean;
+import com.juttec.goldmetal.broadcastreceiver.MyBroadcastReceiver;
 import com.juttec.goldmetal.customview.CircleImageView;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.utils.FileUtil;
@@ -79,7 +81,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     RecyclerView recyclerView;
 
     MomentRecyclerViewAdapter adapter;
-    public RecycleViewWithHeadAdapter myAdapter;
+    RecycleViewWithHeadAdapter myAdapter;
 
     View myHead;
 
@@ -95,6 +97,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     private final static int REQUEST_CODE_CAMERA = 333;//照相的返回码
     private final static int REQUEST_CODE_ALBUM = 444;//相册的返回码
     SwipeRefreshLayout refreshLayout;
+    MyBroadcastReceiver myBroadcastReceiver;
 
     public static MomentFragment newInstance(String param1) {
         MomentFragment fragment = new MomentFragment();
@@ -118,6 +121,16 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         dialog_progress = new MyProgressDialog(getActivity());
         entityList = new ArrayList<DynamicEntityList>();
 
+
+        myBroadcastReceiver = new MyBroadcastReceiver(entityList, app);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.juttec.goldmetal.addsupport");
+        filter.addAction("com.juttec.goldmetal.cancelsupport");
+        filter.addAction("com.juttec.goldmetal.comment");
+        //将BroadcastReceiver对象注册到系统当中
+        getActivity().registerReceiver(myBroadcastReceiver, filter);
+
+
     }
 
     @Override
@@ -132,7 +145,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
         gson = new Gson();
-
 
 
         return view;
@@ -435,6 +447,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     /**
      * 获取动态
+     *
      * @param page 页数
      * @param type 类型 all：所有 attention：关注 personal：个人
      */
@@ -475,6 +488,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
                             // 设置Adapter
                             recyclerView.setAdapter(myAdapter);
+                            myBroadcastReceiver.setMyAdapter(myAdapter);
+
                         } else {
 
                             adapter.notifyDataSetChanged();
@@ -502,9 +517,5 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     }
 
-    @Override
-    public void onButtonPressed(Uri uri) {
-        super.onButtonPressed(uri);
-        LogUtil.e("uri  " + uri);
-    }
+
 }

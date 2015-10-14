@@ -107,7 +107,7 @@
         <activity android:name=".activity.FollowActivity"></activity>
         <activity android:name=".activity.MessageActivity"></activity>
         <activity android:name=".activity.MessageDetailActivity"></activity>
-        <activity android:name=".activity.CreateAccountApply"></activity>
+        <activity android:name=".activity.CreateAccount.SelectType"></activity>
         <activity android:name=".activity.Announcementactivity"></activity>
         <activity android:name=".activity.MomentPersonalActivity"></activity>
 

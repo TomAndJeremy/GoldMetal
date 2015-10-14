@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/price_background"
     android:orientation="vertical"
+    android:paddingBottom="60dp"
     tools:context="com.juttec.goldmetal.activity.PriceReductionActivity">
 
     <com.juttec.goldmetal.customview.HeadLayout
@@ -39,8 +40,10 @@
                     android:textColor="@color/price_red"
                     android:textSize="16sp" />
 
-                <TextView
+                <EditText
+                    android:id="@+id/et_dollar_ounce"
                     android:layout_width="88dp"
+                    android:inputType="numberDecimal"
                     android:layout_height="40dp"
                     android:background="@drawable/etcorner_shape"
                     android:gravity="center"
@@ -81,9 +84,11 @@
                     android:textColor="@color/price_red"
                     android:textSize="16sp" />
 
-                <TextView
+                <EditText
+                    android:id="@+id/et_rmb_kg"
                     android:layout_width="88dp"
                     android:layout_height="40dp"
+                    android:inputType="numberDecimal"
                     android:background="@drawable/etcorner_shape"
                     android:gravity="center"
                     android:text="3180"
@@ -117,11 +122,13 @@
                     android:textColor="@color/price_red"
                     android:textSize="16sp" />
 
-                <TextView
+                <EditText
+                    android:id="@+id/et_rmb_ounce"
                     android:layout_width="88dp"
                     android:layout_height="40dp"
                     android:background="@drawable/etcorner_shape"
                     android:gravity="center"
+                    android:inputType="numberDecimal"
                     android:text="98.92"
                     android:textColor="#ffffff"
                     android:textSize="16sp" />
@@ -129,22 +136,36 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="16dip"
-        android:layout_marginTop="10dip"
-        android:text="美元：人民币=1：6.1137"
-        android:textColor="@color/price_red"
-        android:textSize="14sp" />
+        android:layout_marginTop="10dip">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="美元：人民币=1："
+            android:textColor="@color/price_red"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6.1137"
+            android:textColor="@color/price_red"
+            android:textSize="14sp" />
+    </LinearLayout>
+
 
     <android.support.v7.widget.RecyclerView
-        android:layout_marginRight="@dimen/input_to_board"
-        android:layout_marginLeft="@dimen/input_to_board"
-        android:background="@drawable/gridview_corner"
-        android:layout_weight="1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/input_to_board"
+        android:layout_marginRight="@dimen/input_to_board"
+        android:layout_weight="1"
+        android:background="@drawable/gridview_corner"></android.support.v7.widget.RecyclerView>
 
     <TextView
         android:layout_width="wrap_content"
@@ -152,7 +173,7 @@
         android:layout_marginLeft="16dip"
         android:layout_marginTop="10dip"
         android:text="备注：括号内数值为对应平台与标准报价的溢价值"
-        android:textColor="#8E4546"
+        android:textColor="#797979"
         android:textSize="14sp" />
 
 </LinearLayout>

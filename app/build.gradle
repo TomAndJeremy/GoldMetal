@@ -4,6 +4,8 @@ android {
     compileSdkVersion 22
     buildToolsVersion "23.0.1"
 
+   
+
     defaultConfig {
         applicationId "com.juttec.goldmetal"
         minSdkVersion 15

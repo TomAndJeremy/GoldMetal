@@ -47,11 +47,11 @@ import java.util.List;
 
 /**
  * Created by Administrator on 2015/10/8.
- *
+ * <p/>
  * 个人主页界面的  adapter
  * 关注界面的adapter
  */
-public class PersonDynamicAdapter extends BaseAdapter{
+public class PersonDynamicAdapter extends BaseAdapter {
 
     private Context mContext;
 
@@ -71,7 +71,7 @@ public class PersonDynamicAdapter extends BaseAdapter{
 //    private boolean isSupported = false;//自己是否点赞  默认为false
 
 
-    public PersonDynamicAdapter(Context context, List<DynamicEntityList> list){
+    public PersonDynamicAdapter(Context context, List<DynamicEntityList> list) {
         app = (MyApplication) context.getApplicationContext();
         mContext = context;
         mLists = list;
@@ -80,7 +80,7 @@ public class PersonDynamicAdapter extends BaseAdapter{
         dialog = new MyProgressDialog(context);
     }
 
-    public PersonDynamicAdapter(Context context, List<DynamicEntityList> list,String userid){
+    public PersonDynamicAdapter(Context context, List<DynamicEntityList> list, String userid) {
         app = (MyApplication) context.getApplicationContext();
         mContext = context;
         mLists = list;
@@ -90,11 +90,10 @@ public class PersonDynamicAdapter extends BaseAdapter{
         dialog = new MyProgressDialog(context);
     }
 
-    private PersonDynamicAdapter create(){
+    private PersonDynamicAdapter create() {
 
         return this;
     }
-
 
 
     @Override
@@ -117,8 +116,8 @@ public class PersonDynamicAdapter extends BaseAdapter{
         DynamicEntityList dynamicEntityList;
 
         final ViewHolder holder;
-        if(convertView == null){
-            convertView = mInflater.inflate(R.layout.dynamic_item,null);
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.dynamic_item, null);
             holder = new ViewHolder();
             holder.name = (TextView) convertView.findViewById(R.id.dynamic_item_user_name);
             holder.time = (TextView) convertView.findViewById(R.id.dynamic_item_user_time);
@@ -138,7 +137,7 @@ public class PersonDynamicAdapter extends BaseAdapter{
             holder.relativeLayout = (RelativeLayout) convertView.findViewById(R.id.meg_detail_info);
 
             convertView.setTag(holder);
-        }else {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
@@ -150,15 +149,13 @@ public class PersonDynamicAdapter extends BaseAdapter{
         ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + dynamicEntityList.getUserPhoto(), holder.headPortrait);
 
 
-
-
         //展示点赞的数据
-        if(dynamicEntityList.getDySupport().size()>0){
+        if (dynamicEntityList.getDySupport().size() > 0) {
             holder.suport.setVisibility(View.VISIBLE);
             holder.supportName.removeAllViews();
             holder.thumb.setSelected(false);
             addSuportView(holder.thumb, holder.supportName, mLists.get(position).getDySupport());
-        }else{
+        } else {
             holder.suport.setVisibility(View.GONE);
             holder.thumb.setSelected(false);
         }
@@ -169,41 +166,36 @@ public class PersonDynamicAdapter extends BaseAdapter{
             @Override
             public void onClick(View v) {
                 //点赞或  取消赞 接口
-                supportOrCancle(position,mLists.get(position).getId(),holder.thumb,holder.supportName);
+                supportOrCancle(position, mLists.get(position).getId(), holder.thumb, holder.supportName);
             }
         });
-
-
-
 
 
         //评论按钮的点击事件  对发动态的人进行评论
         holder.replyIMB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupWindow.create().show(((Activity)mContext).getCurrentFocus());
-                popupWindow.setHint(0,mLists.get(position).getUserName());
+                popupWindow.create().show(((Activity) mContext).getCurrentFocus());
+                popupWindow.setHint(0, mLists.get(position).getUserName());
                 //发送按钮的点击事件
                 popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
                     @Override
                     public void onClickSend(String content) {
                         //评论接口
-                        comment(position, mLists.get(position).getId(),content);
+                        comment(position, mLists.get(position).getId(), content);
                     }
                 });
             }
         });
 
 
-
-
         //填充评论回复列表
-        if(currentUserId!=null){
+        if (currentUserId != null) {
             //判断是否在个人主页   若在个人主页
-            holder.commentListView.setAdapter(new CommentAdapter(mContext,create(),dynamicEntityList.getDyCommentReply(),mLists.get(position).getId(),currentUserId));
-        }else{
+            holder.commentListView.setAdapter(new CommentAdapter(mContext, create(), dynamicEntityList.getDyCommentReply(), mLists.get(position).getId(), currentUserId));
+        } else {
             //关注界面
-            holder.commentListView.setAdapter(new CommentAdapter(mContext,create(),dynamicEntityList.getDyCommentReply(),mLists.get(position).getId()));
+            holder.commentListView.setAdapter(new CommentAdapter(mContext, create(), dynamicEntityList.getDyCommentReply(), mLists.get(position).getId()));
         }
 
 
@@ -230,7 +222,7 @@ public class PersonDynamicAdapter extends BaseAdapter{
             @Override
             public void onClick(View v) {
                 //判断是否在个人主页  并且是否点击的本人  若是本人则不跳转
-                if(currentUserId!=null&&mLists.get(position).getUserId().equals(currentUserId)){
+                if (currentUserId != null && mLists.get(position).getUserId().equals(currentUserId)) {
                     return;
                 }
                 Intent intent = new Intent(mContext, MomentPersonalActivity.class);
@@ -242,13 +234,11 @@ public class PersonDynamicAdapter extends BaseAdapter{
         });
 
 
-
         return convertView;
     }
 
     /**
      * 打开图片查看器
-     *
      */
     protected void imageBrower(int position, ArrayList<String> urls2) {
         Intent intent = new Intent(mContext, ImagePagerActivity.class);
@@ -259,16 +249,11 @@ public class PersonDynamicAdapter extends BaseAdapter{
     }
 
 
-
-
-
-    static class ViewHolder{
+    static class ViewHolder {
         TextView name;//用户名
         TextView time;//时间
         CircleImageView headPortrait;//头像
         TextView content;//内容
-
-
 
 
         ImageButton thumb;//点赞按钮
@@ -289,16 +274,14 @@ public class PersonDynamicAdapter extends BaseAdapter{
     }
 
 
-
-
     //展示点赞的人名
-    private void addSuportView(ImageButton thumb,LinearLayout viewRoot, List<DySupportInfoBean> supportInfoBeans) {
-        LogUtil.d("---------------------展示点赞的人名"+supportInfoBeans.toString());
+    private void addSuportView(ImageButton thumb, LinearLayout viewRoot, List<DySupportInfoBean> supportInfoBeans) {
+        LogUtil.d("---------------------展示点赞的人名" + supportInfoBeans.toString());
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        for (int i = 0; i < (supportInfoBeans.size()>10?10:supportInfoBeans.size()); i++) {
+        for (int i = 0; i < (supportInfoBeans.size() > 10 ? 10 : supportInfoBeans.size()); i++) {
             TextView tv = new TextView(mContext);
             tv.setTextColor(Color.rgb(48, 52, 136));
             tv.setLayoutParams(lp);
@@ -307,18 +290,18 @@ public class PersonDynamicAdapter extends BaseAdapter{
             String id = supportInfoBeans.get(i).getUserId();
 
             //如果点赞人中包含自己  将点赞按钮设置为已点赞
-            if(id.equals(app.getUserInfoBean().getUserId())){
+            if (id.equals(app.getUserInfoBean().getUserId())) {
                 thumb.setSelected(true);
             }
 
-            if (i == supportInfoBeans.size() - 1){
-                if(supportInfoBeans.size()>10){
-                    tv.setText(name+"等"+supportInfoBeans.size()+"人");
-                }else{
+            if (i == supportInfoBeans.size() - 1) {
+                if (supportInfoBeans.size() > 10) {
+                    tv.setText(name + "等" + supportInfoBeans.size() + "人");
+                } else {
                     tv.setText(name);//最后一个不加“、”号
                 }
 
-            } else{
+            } else {
                 tv.setText(name + "、");
             }
 
@@ -326,8 +309,8 @@ public class PersonDynamicAdapter extends BaseAdapter{
             viewRoot.setVisibility(View.VISIBLE);
 
             //判断是否在个人主页  并且是否点击的本人  若是本人则不跳转
-            if(currentUserId!=null&&id.equals(currentUserId)){
-            }else {
+            if (currentUserId != null && id.equals(currentUserId)) {
+            } else {
                 clickName(tv, id, name);
             }
         }
@@ -368,11 +351,12 @@ public class PersonDynamicAdapter extends BaseAdapter{
 
     /**
      * 评论接口
+     *
      * @param position
-     * @param dyId  动态编号
-     * content  评论内容
+     * @param dyId     动态编号
+     *                 content  评论内容
      */
-    private void comment(final int position, String dyId, final String content) {
+    private void comment(final int position, final String dyId, final String content) {
 
         dialog.builder().setMessage("正在提交~").show();
         RequestParams param = new RequestParams();
@@ -398,6 +382,14 @@ public class PersonDynamicAdapter extends BaseAdapter{
                                 content,
                                 new ArrayList<DyReplyInfoBean>()
                         );
+
+                        Intent intent = new Intent();
+                        intent.setAction("com.juttec.goldmetal.comment");
+                        intent.putExtra("dyId", dyId);
+                        intent.putExtra("comment", dyCommentReplyBean);
+
+                        mContext.sendBroadcast(intent);
+
                         mLists.get(position).getDyCommentReply().add(dyCommentReplyBean);
                         notifyDataSetChanged();
                     }
@@ -416,38 +408,52 @@ public class PersonDynamicAdapter extends BaseAdapter{
     }
 
 
-
-    private void supportOrCancle(final int position,String dyId, final ImageButton thumb, final LinearLayout viewRoot){
+    private void supportOrCancle(final int position, String dyId, final ImageButton thumb, final LinearLayout viewRoot) {
         dialog.builder().setMessage("").show();
         RequestParams params = new RequestParams();
         params.addBodyParameter("dyId", dyId);
         params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
         params.addBodyParameter("userName", app.getUserInfoBean().getUserNickName());
-        params.addBodyParameter("status", thumb.isSelected()?"1":"0");//如果已点赞 则取消赞   如果没点赞 则点赞
+        params.addBodyParameter("status", thumb.isSelected() ? "1" : "0");//如果已点赞 则取消赞   如果没点赞 则点赞
 
         new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelSupportUrl(), params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 dialog.dismiss();
+                Intent intent = new Intent();
+
+                intent.putExtra("dyId", mLists.get(position).getId());
                 try {
                     JSONObject object = new JSONObject(responseInfo.result.toString());
                     if ("1".equals(object.getString("status"))) {
                         //将点赞状态取反
                         thumb.setSelected(!(thumb.isSelected()));
-                        if(thumb.isSelected()){
+                        if (thumb.isSelected()) {
                             //点赞了
                             DySupportInfoBean dySupportInfoBean = new DySupportInfoBean(
                                     app.getUserInfoBean().getUserId(),
                                     app.getUserInfoBean().getUserNickName()
                             );
-                            mLists.get(position).getDySupport().add(dySupportInfoBean);
+                            mLists.get(position).getDySupport().add(0,dySupportInfoBean);
 
-                        }else{
+                            intent.setAction("com.juttec.goldmetal.addsupport");
+
+                            intent.putExtra("support", dySupportInfoBean);
+                            mContext.sendBroadcast(intent);
+
+                        } else {
                             //取消赞了
                             mLists.get(position).getDySupport();
-                            for (int i=0;i< mLists.get(position).getDySupport().size();i++){
-                                if(app.getUserInfoBean().getUserId().equals(mLists.get(position).getDySupport().get(i).getUserId())){
+                            intent.setAction("com.juttec.goldmetal.cancelsupport");
+                            for (int i = 0; i < mLists.get(position).getDySupport().size(); i++) {
+                                if (app.getUserInfoBean().getUserId().equals(mLists.get(position).getDySupport().get(i).getUserId())) {
+
+                                    intent.putExtra("support", mLists.get(position).getDySupport().get(i));
+
                                     mLists.get(position).getDySupport().remove(i);
+
+
+                                    mContext.sendBroadcast(intent);
                                 }
                             }
 
@@ -468,8 +474,8 @@ public class PersonDynamicAdapter extends BaseAdapter{
             public void onFailure(HttpException error, String msg) {
                 dialog.dismiss();
                 NetWorkUtils.showMsg(mContext);
-                }
-            });
+            }
+        });
     }
 
 

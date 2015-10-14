@@ -29,20 +29,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
 
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        if (viewPager == null) {
-           MomentFragment momentFragment= (MomentFragment) myFragmentPagerAdapter.getItem(2);
-            if (momentFragment != null) {
-                if (momentFragment.myAdapter != null) {
-                    momentFragment.myAdapter.notifyDataSetChanged();
-                }
-            }
-
-        }
-    }
-
     /*
         初始化
          */
@@ -75,5 +61,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+
+
 
 }

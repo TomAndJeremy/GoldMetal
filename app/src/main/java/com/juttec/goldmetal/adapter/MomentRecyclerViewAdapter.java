@@ -1,8 +1,10 @@
 package com.juttec.goldmetal.adapter;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ import com.juttec.goldmetal.bean.PhotoBean;
 import com.juttec.goldmetal.customview.CircleImageView;
 import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
+import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -66,10 +69,15 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         this.context = context;
         this.app = app;
         popupWindow = new ReplyPopupWindow(context);
+
+
+
+
     }
 
     public void setHeadAdapter(RecycleViewWithHeadAdapter recycleViewWithHeadAdapter) {
         this.recycleViewWithHeadAdapter = recycleViewWithHeadAdapter;
+
     }
 
     @Override
@@ -613,5 +621,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             }
         });
     }
+
+
 }
 

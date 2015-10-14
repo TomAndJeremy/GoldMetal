@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -13,6 +14,7 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.AccountActivity;
 import com.juttec.goldmetal.activity.Announcementactivity;
 import com.juttec.goldmetal.activity.ChartActivity;
+import com.juttec.goldmetal.activity.CreateAccount.SelectType;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 
 
@@ -73,6 +75,16 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         iv_search.setOnClickListener(this);
         ll_chart= (LinearLayout) view.findViewById(R.id.ll_chart);
         ll_chart.setOnClickListener(this);
+
+        Button btCreateAccount = (Button) view.findViewById(R.id.fragment_market_bt_createaccount);
+        btCreateAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), SelectType.class));
+
+            }
+        });
+
     }
 
     @Override
@@ -106,4 +118,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         }
 
     }
+
+
+
 }

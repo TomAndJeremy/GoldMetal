@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.juttec.goldmetal.activity.CreateAccountApply">
+    tools:context="com.juttec.goldmetal.activity.CreateAccount.SelectType">
 
     <com.juttec.goldmetal.customview.HeadLayout
         style="@style/HeadBarStytle"

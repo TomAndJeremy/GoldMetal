@@ -1,5 +1,8 @@
 package com.juttec.goldmetal.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -7,7 +10,7 @@ import java.util.List;
  *
  * 评论的实体类
  */
-public class DyCommentReplyBean {
+public class DyCommentReplyBean implements Parcelable {
     private String id; //评论编号ID
     private String discussantId;//评论人ID
     private String discussantName;//评论人姓名
@@ -27,6 +30,26 @@ public class DyCommentReplyBean {
         this.dyReply = dyReply;
 
     }
+
+    protected DyCommentReplyBean(Parcel in) {
+        id = in.readString();
+        discussantId = in.readString();
+        discussantName = in.readString();
+        commentContent = in.readString();
+        dyReply = in.createTypedArrayList(DyReplyInfoBean.CREATOR);
+    }
+
+    public static final Creator<DyCommentReplyBean> CREATOR = new Creator<DyCommentReplyBean>() {
+        @Override
+        public DyCommentReplyBean createFromParcel(Parcel in) {
+            return new DyCommentReplyBean(in);
+        }
+
+        @Override
+        public DyCommentReplyBean[] newArray(int size) {
+            return new DyCommentReplyBean[size];
+        }
+    };
 
     public void setId(String id) {
         this.id = id;
@@ -67,5 +90,19 @@ public class DyCommentReplyBean {
 
     public List<DyReplyInfoBean> getDyReply() {
         return dyReply;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(discussantId);
+        dest.writeString(discussantName);
+        dest.writeString(commentContent);
+        dest.writeTypedList(dyReply);
     }
 }

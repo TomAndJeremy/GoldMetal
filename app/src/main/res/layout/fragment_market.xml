@@ -104,6 +104,7 @@
             android:text="@string/market_button_blue" />
 
         <Button
+            android:id="@+id/fragment_market_bt_createaccount"
             style="@style/MarketFragment_Bottom_Button"
             android:background="@drawable/market_button_green"
             android:text="@string/market_button_green" />

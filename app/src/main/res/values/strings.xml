@@ -128,6 +128,7 @@
 
     <!--Contact to us-->
     <string name="contact">联系我们</string>
+    <string name="about_us">关于我们：</string>
     <!-- cahnge password-->
     <string name="hint_change_pwd">修改密码</string>
     <string name="hint_old_pwd">旧密码</string>

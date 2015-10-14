@@ -23,81 +23,72 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="13dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
         <LinearLayout
+
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:paddingLeft="15dp">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/about_us"
+                android:textColor="@color/blue_text"
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="热情开朗，沟通能力强，对工作一丝不苟"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:paddingLeft="15dp">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/about_us"
+                android:textColor="@color/blue_text"
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="热情开朗，沟通能力强，对工作一丝不苟热情开朗，沟通能力强，对工作一丝不苟"
+                android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
 
-    <RelativeLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/contact_us_recyclerview"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
-        android:background="@color/contact_black"
-        android:gravity="center_vertical"
-        android:padding="25dp">
+        android:layout_weight="1"
+        android:focusable="true">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/content_account_icon_phone" />
+    </android.support.v7.widget.RecyclerView>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="15121166583"
-            android:textColor="@color/white"
-            android:textSize="25sp" />
-    </RelativeLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/contact_black"
-        android:padding="25dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/content_account_icon_qq" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="15121166583"
-            android:textColor="@color/white"
-            android:textSize="25sp" />
-    </RelativeLayout>
 
 </LinearLayout>
