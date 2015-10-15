@@ -20,6 +20,7 @@
         android:textSize="20sp" />
 
     <RadioGroup
+        android:id="@+id/id_radiogroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
@@ -71,6 +72,7 @@
     </RadioGroup>
 
     <Button
+        android:id="@+id/btn_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"

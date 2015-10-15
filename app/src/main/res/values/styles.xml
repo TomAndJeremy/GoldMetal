@@ -79,8 +79,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/rl_text_color</item>
-        <item name="android:gravity">center</item>
-
+        <item name="android:gravity">center|left</item>
+        <item name="android:drawableRight">@mipmap/content_news_org_icon_arrow_right</item>
         <item name="android:background">@drawable/more_rela_selector</item>
         <item name="android:textSize">@dimen/rl_text_size</item>
         <item name="android:layout_centerVertical">true</item>
@@ -89,16 +89,25 @@
         <item name="android:paddingLeft">@dimen/rl_padding_left</item>
         <item name="android:paddingRight">@dimen/rl_padding_right</item>
     </style>
-
-
-    <!-- 资讯、服务、更多Fragment 中 RelativeLayout里ImageView的样式-->
-    <style name="rl_image_style">
+<style name="rl_text_style_normal">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textColor">@color/rl_text_color</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/more_rela_selector</item>
+        <item name="android:textSize">@dimen/rl_text_size</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:src">@mipmap/content_news_org_icon_arrow_right</item>
     </style>
+
+
+    <!-- &lt;!&ndash; 资讯、服务、更多Fragment 中 RelativeLayout里ImageView的样式&ndash;&gt;
+     <style name="rl_image_style">
+         <item name="android:layout_width">wrap_content</item>
+         <item name="android:layout_height">wrap_content</item>
+         <item name="android:layout_gravity">center_vertical</item>
+         <item name="android:layout_centerVertical">true</item>
+         <item name="android:src">@mipmap/content_news_org_icon_arrow_right</item>
+     </style>-->
 
 
     <!-- 资讯、服务、更多Fragment 中 分割线的样式-->
@@ -149,6 +158,7 @@
         <item name="android:drawablePadding">10dp</item>
         <item name="android:padding">10dp</item>
     </style>
+
     <style name="EditTextStyle_Nobg">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -157,6 +167,7 @@
         <item name="android:drawablePadding">10dp</item>
         <item name="android:padding">10dp</item>
     </style>
+
     <style name="TextViewStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -193,8 +204,6 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-
 
 
     <style name="ChartButtonStyle">

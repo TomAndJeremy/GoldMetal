@@ -3,9 +3,11 @@ package com.juttec.goldmetal.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.PriceReductionActivity;
@@ -16,10 +18,10 @@ import com.juttec.goldmetal.activity.PriceReductionActivity;
 public class ServeFragment extends BaseFragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
 
-    private RelativeLayout rl_price_conversion;//价格换算
-    private RelativeLayout rl_trading_firm;//实盘交易
-    private RelativeLayout rl_trading_simulated;//模拟交易
-    private RelativeLayout rl_trading_rules;//交易规则
+    private TextView rl_price_conversion;//价格换算
+    private TextView rl_trading_firm;//实盘交易
+    private TextView rl_trading_simulated;//模拟交易
+    private TextView rl_trading_rules;//交易规则
 
     private String mParam1;
 
@@ -57,16 +59,16 @@ public class ServeFragment extends BaseFragment implements View.OnClickListener 
      * 初始化控件
      */
     private void initView(View view) {
-        rl_price_conversion = (RelativeLayout) view.findViewById(R.id.rl_price_conversion);
+        rl_price_conversion = (TextView) view.findViewById(R.id.tv_price_conversion);
         rl_price_conversion.setOnClickListener(this);
 
-        rl_trading_firm = (RelativeLayout) view.findViewById(R.id.rl_trading_firm);
+        rl_trading_firm = (TextView) view.findViewById(R.id.tv_trading_firm);
         rl_trading_firm.setOnClickListener(this);
 
-        rl_trading_simulated = (RelativeLayout) view.findViewById(R.id.rl_trading_simulated);
+        rl_trading_simulated = (TextView) view.findViewById(R.id.tv_trading_simulated);
         rl_trading_simulated.setOnClickListener(this);
 
-        rl_trading_rules = (RelativeLayout) view.findViewById(R.id.rl_trading_rules);
+        rl_trading_rules = (TextView) view.findViewById(R.id.tv_trading_rules);
         rl_trading_rules.setOnClickListener(this);
 
     }
@@ -76,16 +78,16 @@ public class ServeFragment extends BaseFragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
 
-            case R.id.rl_price_conversion:
+            case R.id.tv_price_conversion:
                 startActivity(new Intent(getActivity(), PriceReductionActivity.class));
                 break;
-            case R.id.rl_trading_firm:
+            case R.id.tv_trading_firm:
 
                 break;
-            case R.id.rl_trading_simulated:
+            case R.id.tv_trading_simulated:
 
                 break;
-            case R.id.rl_trading_rules:
+            case R.id.tv_trading_rules:
 
                 break;
         }

@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:headview="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/more_rela_normal"
@@ -11,8 +11,7 @@
     <com.juttec.goldmetal.customview.HeadLayout
         android:id="@+id/head_layout"
         style="@style/HeadBarStytle"
-        headview:headtitle="@string/head_title_server"
-        />
+        headview:headtitle="@string/head_title_server" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,66 +20,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
-
-            <RelativeLayout
-                android:id="@+id/rl_price_conversion"
-                style="@style/relativeLayout_style">
-
-                <TextView
-                    style="@style/rl_text_style"
-                    android:text="@string/server_price_conversion"/>
-                <ImageView
-                    android:layout_alignParentRight="true"
-                    style="@style/rl_image_style" />
-
-            </RelativeLayout>
-            <View  style="@style/divide_line_style"/>
-
-            <RelativeLayout
-                android:id="@+id/rl_trading_firm"
-                style="@style/relativeLayout_style">
-
-                <TextView
-                    style="@style/rl_text_style"
-                    android:text="@string/server_trading_firm"/>
-                <ImageView
-                    android:layout_alignParentRight="true"
-                    style="@style/rl_image_style" />
-
-            </RelativeLayout>
-            <View  style="@style/divide_line_style"/>
-
-            <RelativeLayout
-                android:id="@+id/rl_trading_simulated"
-                style="@style/relativeLayout_style">
-
-                <TextView
-                    style="@style/rl_text_style"
-                    android:text="@string/server_trading_simulated"/>
-                <ImageView
-                    android:layout_alignParentRight="true"
-                    style="@style/rl_image_style" />
-
-            </RelativeLayout>
-            <View  style="@style/divide_line_style"/>
+            android:divider="@drawable/divider_shape"
+            android:showDividers="beginning|end|middle"
+            android:orientation="vertical">
 
 
+            <TextView
+                android:id="@+id/tv_price_conversion"
+                style="@style/rl_text_style"
+                android:text="@string/server_price_conversion" />
 
-            <RelativeLayout
-                android:id="@+id/rl_trading_rules"
-                style="@style/relativeLayout_style">
+            <TextView
+                style="@style/rl_text_style"  android:id="@+id/tv_trading_firm"
+                android:text="@string/server_trading_firm" />
 
-                <TextView
-                    style="@style/rl_text_style"
-                    android:text="@string/server_trading_rules"/>
-                <ImageView
-                    android:layout_alignParentRight="true"
-                    style="@style/rl_image_style" />
+            <TextView
+                style="@style/rl_text_style"  android:id="@+id/tv_trading_simulated"
+                android:text="@string/server_trading_simulated" />
 
-            </RelativeLayout>
-            <View  style="@style/divide_line_style"/>
+            <TextView
+                style="@style/rl_text_style"  android:id="@+id/tv_trading_rules"
+                android:text="@string/server_trading_rules" />
+
 
         </LinearLayout>
     </ScrollView>

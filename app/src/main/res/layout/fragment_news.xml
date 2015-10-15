@@ -28,56 +28,49 @@
             <TextView
                 android:id="@+id/tv_headlines"
                 style="@style/rl_text_style"
-                android:drawableRight="@mipmap/content_news_org_icon_arrow_right"
-                android:gravity="left"
+
                 android:text="@string/news_headlines" />
 
 
             <TextView
                 android:id="@+id/tv_calendar"
                 style="@style/rl_text_style"
-                android:drawableRight="@mipmap/content_news_org_icon_arrow_right"
-                android:gravity="left"
+
                 android:text="@string/news_calendar" />
 
 
             <TextView
                 android:id="@+id/tv_broadcast"
                 style="@style/rl_text_style"
-                android:drawableRight="@mipmap/content_news_org_icon_arrow_right"
-                android:gravity="left"
+
                 android:text="@string/news_broadcast" />
 
 
             <TextView
                 android:id="@+id/tv_review"
                 style="@style/rl_text_style"
-                android:drawableRight="@mipmap/content_news_org_icon_arrow_right"
-                android:gravity="left"
+
                 android:text="@string/news_review" />
 
 
             <TextView
                 android:id="@+id/tv_analysis"
                 style="@style/rl_text_style"
-                android:drawableRight="@mipmap/content_news_org_icon_arrow_right"
-                android:gravity="left"
+
                 android:text="@string/news_analysis" />
 
 
             <TextView
                 android:id="@+id/tv_announcement"
                 style="@style/rl_text_style"
-                android:drawableRight="@mipmap/content_news_org_icon_arrow_right"
-                android:gravity="left"
+
                 android:text="@string/news_announcement" />
 
 
             <TextView
                 android:id="@+id/tv_institution"
                 style="@style/rl_text_style"
-                android:drawableRight="@mipmap/content_news_org_icon_arrow_right"
-                android:gravity="left"
+
                 android:text="@string/news_institution" />
 
 

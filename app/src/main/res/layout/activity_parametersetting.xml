@@ -25,108 +25,45 @@
             android:orientation="vertical"
             >
 
-            <RelativeLayout
-                android:id="@+id/rl_macd"
-                style="@style/relativeLayout_style">
+
 
                 <TextView
+                    android:id="@+id/rl_macd"
                     style="@style/rl_text_style"
                     android:text="@string/parameter_macd"/>
-                <ImageView
-                    android:layout_alignParentRight="true"
-                    style="@style/rl_image_style" />
-
-            </RelativeLayout>
-            <View  style="@style/divide_line_style"/>
-
-            <RelativeLayout
-                android:id="@+id/rl_boll"
-                style="@style/relativeLayout_style">
 
                 <TextView
+                    android:id="@+id/rl_boll"
                     style="@style/rl_text_style"
                     android:text="@string/parameter_boll"/>
-                <ImageView
-                    android:layout_alignParentRight="true"
-                    style="@style/rl_image_style" />
-
-            </RelativeLayout>
-            <View  style="@style/divide_line_style"/>
-
-            <RelativeLayout
-                android:id="@+id/rl_kdj"
-                style="@style/relativeLayout_style">
 
                 <TextView
+                    android:id="@+id/rl_kdj"
                     style="@style/rl_text_style"
                     android:text="@string/parameter_kdj"/>
-                <ImageView
-                    android:layout_alignParentRight="true"
-                    style="@style/rl_image_style" />
 
-            </RelativeLayout>
-            <View  style="@style/divide_line_style"/>
-
-
-
-            <RelativeLayout
-                android:id="@+id/rl_rsi"
-                style="@style/relativeLayout_style">
 
                 <TextView
+                    android:id="@+id/rl_rsi"
                     style="@style/rl_text_style"
                     android:text="@string/parameter_rsi"/>
-                <ImageView
-                    android:layout_alignParentRight="true"
-                    style="@style/rl_image_style" />
 
-            </RelativeLayout>
-            <View  style="@style/divide_line_style"/>
-
-
-            <RelativeLayout
-                android:id="@+id/rl_sma"
-                style="@style/relativeLayout_style">
 
                 <TextView
+                    android:id="@+id/rl_sma"
                     style="@style/rl_text_style"
                     android:text="@string/parameter_sma"/>
-                <ImageView
-                    android:layout_alignParentRight="true"
-                    style="@style/rl_image_style" />
-
-            </RelativeLayout>
-            <View  style="@style/divide_line_style"/>
-
-
-            <RelativeLayout
-                android:id="@+id/rl_ema"
-                style="@style/relativeLayout_style">
 
                 <TextView
+                    android:id="@+id/rl_ema"
                     style="@style/rl_text_style"
                     android:text="@string/parameter_ema"/>
-                <ImageView
-                    android:layout_alignParentRight="true"
-                    style="@style/rl_image_style" />
 
-            </RelativeLayout>
-            <View  style="@style/divide_line_style"/>
-
-
-            <RelativeLayout
-                android:id="@+id/rl_env"
-                style="@style/relativeLayout_style">
 
                 <TextView
+                    android:id="@+id/rl_env"
                     style="@style/rl_text_style"
                     android:text="@string/parameter_env"/>
-                <ImageView
-                    android:layout_alignParentRight="true"
-                    style="@style/rl_image_style" />
-
-            </RelativeLayout>
-            <View  style="@style/divide_line_style"/>
 
         </LinearLayout>
     </ScrollView>

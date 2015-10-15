@@ -3,9 +3,11 @@ package com.juttec.goldmetal.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.AboutActivity;
@@ -24,13 +26,13 @@ public class MoreFragment extends BaseFragment implements View.OnClickListener{
 
     private String mParam1;
 
-    private RelativeLayout rl_disclaimer;//免责声明
-    private RelativeLayout rl_feedback;//意见反馈
-    private RelativeLayout rl_about;//关于我们
-    private RelativeLayout rl_update;//检查更新
-    private RelativeLayout rl_instructions;//使用说明
-    private RelativeLayout rl_share;//分享app
-    private RelativeLayout rl_setting;//系统设置
+    private TextView rl_disclaimer;//免责声明
+    private TextView rl_feedback;//意见反馈
+    private TextView rl_about;//关于我们
+    private TextView rl_update;//检查更新
+    private TextView rl_instructions;//使用说明
+    private TextView rl_share;//分享app
+    private TextView rl_setting;//系统设置
 
     public static MoreFragment newInstance(String param1) {
         MoreFragment fragment = new MoreFragment();
@@ -65,25 +67,25 @@ public class MoreFragment extends BaseFragment implements View.OnClickListener{
      * 初始化控件
      */
     private void initView(View  view){
-        rl_disclaimer = (RelativeLayout)view.findViewById(R.id.rl_disclaimer);
+        rl_disclaimer = (TextView)view.findViewById(R.id.fragment_more_tv_disclaimer);
         rl_disclaimer.setOnClickListener(this);
 
-        rl_feedback= (RelativeLayout)view.findViewById(R.id.rl_feedback);
+        rl_feedback= (TextView)view.findViewById(R.id.fragment_more_tv_feedback);
         rl_feedback.setOnClickListener(this);
 
-        rl_about= (RelativeLayout)view.findViewById(R.id.rl_about);
+        rl_about= (TextView)view.findViewById(R.id.fragment_more_tv_about);
         rl_about.setOnClickListener(this);
 
-        rl_update= (RelativeLayout)view.findViewById(R.id.rl_update);
+        rl_update= (TextView)view.findViewById(R.id.fragment_more_tv_update);
         rl_update.setOnClickListener(this);
 
-        rl_instructions= (RelativeLayout)view.findViewById(R.id.rl_instructions);
+        rl_instructions= (TextView)view.findViewById(R.id.fragment_more_tv_instructions);
         rl_instructions.setOnClickListener(this);
 
-        rl_share= (RelativeLayout)view.findViewById(R.id.rl_share);
+        rl_share= (TextView)view.findViewById(R.id.fragment_more_tv_share);
         rl_share.setOnClickListener(this);
 
-        rl_setting= (RelativeLayout)view.findViewById(R.id.rl_setting);
+        rl_setting= (TextView)view.findViewById(R.id.fragment_more_tv_setting);
         rl_setting.setOnClickListener(this);
     }
 
@@ -127,23 +129,23 @@ public class MoreFragment extends BaseFragment implements View.OnClickListener{
 
         switch (v.getId()){
 
-            case R.id.rl_disclaimer:
+            case R.id.fragment_more_tv_disclaimer:
                 intent = new Intent(getActivity(), AboutActivity.class);
                 intent.putExtra("fromActivity","免责声明");
                 getActivity().startActivity(intent);
                 break;
-            case R.id.rl_feedback:
+            case R.id.fragment_more_tv_feedback:
                 intent = new Intent(getActivity(), FeedbackActivity.class);
                 getActivity().startActivity(intent);
 
                 break;
-            case R.id.rl_about:
+            case R.id.fragment_more_tv_about:
                 intent = new Intent(getActivity(), AboutActivity.class);
                 intent.putExtra("fromActivity","关于我们");
                 getActivity().startActivity(intent);
 
                 break;
-            case R.id.rl_update:
+            case R.id.fragment_more_tv_update:
                 //检查版本更新
                 final MyAlertDialog dialog = new MyAlertDialog(getActivity());
                 dialog.builder().setTitle("提示")
@@ -156,20 +158,20 @@ public class MoreFragment extends BaseFragment implements View.OnClickListener{
                         }).show();
 
                 break;
-            case R.id.rl_instructions:
+            case R.id.fragment_more_tv_instructions:
                 intent = new Intent(getActivity(), AboutActivity.class);
                 intent.putExtra("fromActivity","使用说明");
                 getActivity().startActivity(intent);
 
                 break;
 
-            case R.id.rl_share:
+            case R.id.fragment_more_tv_share:
                 showShare();
 //                intent = new Intent(getActivity(), ShareActivity.class);
 //                getActivity().startActivity(intent);
 
                 break;
-            case R.id.rl_setting:
+            case R.id.fragment_more_tv_setting:
                 intent = new Intent(getActivity(),  SettingActivity.class);
                 getActivity().startActivity(intent);
 
