@@ -122,10 +122,11 @@ public class PriceReductionActivity extends AppCompatActivity {
 
     class ROTextWatcher implements TextWatcher {
 
+
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            etDollarOunce.removeTextChangedListener(this);
-            etRmbKg.removeTextChangedListener(this);
+            etRmbKg.removeTextChangedListener(twRmbKg);
+            etDollarOunce.removeTextChangedListener(twDollarOunce);
         }
 
         @Override
@@ -135,24 +136,25 @@ public class PriceReductionActivity extends AppCompatActivity {
                 etDollarOunce.setText("");
                 return;
             }
+
             double priceDollarOunce;
             double priceRmbOunce;
             double priceRmbKg;
 
-            priceRmbOunce = Double.parseDouble(s.toString());
 
+            priceRmbOunce  = Double.parseDouble(s.toString());
             priceRmbKg = priceRmbOunce * KG_OUNCE;
             priceDollarOunce = priceRmbOunce / dollarRmb;
-
             LogUtil.e("priceDollarOunce  " + priceDollarOunce + "  ,priceRmbOunce  " + priceRmbOunce + ",priceRmbKg  " + priceRmbKg);
-            etDollarOunce.setText(decimalFormat.format(priceDollarOunce));
             etRmbKg.setText(decimalFormat.format(priceRmbKg));
+            etDollarOunce.setText(decimalFormat.format(priceDollarOunce));
+
         }
 
         @Override
         public void afterTextChanged(Editable s) {
-            etDollarOunce.addTextChangedListener(this);
-            etRmbKg.addTextChangedListener(this);
+            etRmbKg.addTextChangedListener(twRmbKg);
+            etDollarOunce.addTextChangedListener(twDollarOunce);
         }
     }
 }

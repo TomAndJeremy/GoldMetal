@@ -5,12 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
     tools:context="com.juttec.goldmetal.activity.CreateAccount.SelectType">
 
     <com.juttec.goldmetal.customview.HeadLayout
         style="@style/HeadBarStytle"
-        app:headtitle="@string/application_account"
+        app:headtitle="开户申请"
         app:leftimg="@mipmap/nav_btn_backa_arrow"></com.juttec.goldmetal.customview.HeadLayout>
 
     <TextView
@@ -21,12 +20,13 @@
         android:textSize="20sp" />
 
     <RadioGroup
-        android:id="@+id/id_radiogroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginBottom="10dp"
+        android:divider="@drawable/divider_shape"
+        android:showDividers="beginning|end|middle"
+
         android:background="@drawable/login_input_border"
 >
         <RadioButton
@@ -38,12 +38,7 @@
             android:text="天通银、铜铝镍"
             android:paddingLeft="8dp"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/input_border"
-            android:button="@null" />
-
+        
         <RadioButton
             android:id="@+id/radio2"
             android:layout_width="match_parent"
@@ -53,11 +48,7 @@
             android:text="广交所"
             android:paddingLeft="8dp"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/input_border"
-            android:button="@null" />
+        
 
         <RadioButton
             android:id="@+id/radio3"
@@ -68,12 +59,7 @@
             android:button="@drawable/radiobutton_selector"
             android:text="北油所汽油" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/input_border"
-            android:button="@null" />
-
+      
         <RadioButton
             android:id="@+id/radio4"
             android:layout_width="match_parent"
@@ -85,7 +71,6 @@
     </RadioGroup>
 
     <Button
-        android:id="@+id/btn_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"

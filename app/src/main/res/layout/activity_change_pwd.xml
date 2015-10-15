@@ -16,71 +16,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/input_to_board"
+        android:divider="@drawable/divider_shape"
+        android:showDividers="middle|end|beginning"
         android:background="@drawable/login_input_border"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center_vertical">
 
-            <ImageView
-                style="@style/InputImg"
-                android:src="@mipmap/content_account_icon_password" />
-
-            <EditText
-                android:id="@+id/login_et_name"
-                style="@style/EditTextStyle"
-                android:hint="@string/hint_old_pwd" />
+        <EditText
+            android:id="@+id/login_et_name"
+            style="@style/EditTextStyle_Nobg"
+            android:drawableLeft="@mipmap/content_account_icon_password"
+            android:hint="@string/hint_old_pwd" />
 
 
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/input_border" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center_vertical">
-
-            <ImageView
-                style="@style/InputImg"
-                android:src="@mipmap/content_account_icon_password" />
-
-            <EditText
-                style="@style/EditTextStyle"
-                android:hint="@string/hint_new_pwd" />
+        <EditText
+            style="@style/EditTextStyle_Nobg"
+            android:drawableLeft="@mipmap/content_account_icon_password"
+            android:hint="@string/hint_new_pwd" />
 
 
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/input_border" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center_vertical">
-
-            <ImageView
-                style="@style/InputImg"
-                android:src="@mipmap/content_account_icon_password" />
-
-            <EditText
-                android:id="@+id/login_et_pwd"
-                style="@style/EditTextStyle"
-                android:hint="@string/hint_pwd_confirm" />
-
-
-        </LinearLayout>
+        <EditText
+            android:id="@+id/login_et_pwd"
+            style="@style/EditTextStyle_Nobg"
+            android:drawableLeft="@mipmap/content_account_icon_password"
+            android:hint="@string/hint_pwd_confirm" />
 
 
     </LinearLayout>
