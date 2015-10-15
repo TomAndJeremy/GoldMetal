@@ -18,6 +18,8 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:divider="@drawable/divider_shape"
+            android:showDividers="beginning|end|middle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">

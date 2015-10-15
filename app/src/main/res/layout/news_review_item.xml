@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+    <TextView
+        android:id="@+id/news_review_item_title"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:text="希腊认为触发黄金避险需求  美联储及要成金市新焦点"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        android:id="@+id/news_review_item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2015-06-18 09:32:47"/>
+</LinearLayout>

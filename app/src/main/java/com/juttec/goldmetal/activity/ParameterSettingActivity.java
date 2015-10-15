@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.customview.HeadLayout;
@@ -15,13 +16,13 @@ import com.juttec.goldmetal.customview.HeadLayout;
 public class ParameterSettingActivity extends AppCompatActivity implements View.OnClickListener{
 
 
-    private RelativeLayout rl_macd;//MACD指标
-    private RelativeLayout rl_boll;//BOLL指标
-    private RelativeLayout rl_kdj;//KDJ指标
-    private RelativeLayout rl_rsi;//RSI指标
-    private RelativeLayout rl_sma;//SMA指标
-    private RelativeLayout rl_ema;//EMA指标
-    private RelativeLayout rl_env;//ENV指标
+    private TextView tv_macd;//MACD指标
+    private TextView tv_boll;//BOLL指标
+    private TextView tv_kdj;//KDJ指标
+    private TextView tv_rsi;//RSI指标
+    private TextView tv_sma;//SMA指标
+    private TextView tv_ema;//EMA指标
+    private TextView tv_env;//ENV指标
 
     //头部布局
     private HeadLayout mTopbar;
@@ -48,26 +49,26 @@ public class ParameterSettingActivity extends AppCompatActivity implements View.
         iv_back.setOnClickListener(this);
 
 
-        rl_macd = (RelativeLayout)findViewById(R.id.rl_macd);
-        rl_macd.setOnClickListener(this);
+        tv_macd = (TextView)findViewById(R.id.rl_macd);
+        tv_macd.setOnClickListener(this);
 
-        rl_boll = (RelativeLayout)findViewById(R.id.rl_boll);
-        rl_boll.setOnClickListener(this);
+        tv_boll = (TextView)findViewById(R.id.rl_boll);
+        tv_boll.setOnClickListener(this);
 
-        rl_kdj = (RelativeLayout)findViewById(R.id.rl_kdj);
-        rl_kdj.setOnClickListener(this);
+        tv_kdj = (TextView)findViewById(R.id.rl_kdj);
+        tv_kdj.setOnClickListener(this);
 
-        rl_rsi = (RelativeLayout)findViewById(R.id.rl_rsi);
-        rl_rsi.setOnClickListener(this);
+        tv_rsi = (TextView)findViewById(R.id.rl_rsi);
+        tv_rsi.setOnClickListener(this);
 
-        rl_sma = (RelativeLayout)findViewById(R.id.rl_sma);
-        rl_sma.setOnClickListener(this);
+        tv_sma = (TextView)findViewById(R.id.rl_sma);
+        tv_sma.setOnClickListener(this);
 
-        rl_ema = (RelativeLayout)findViewById(R.id.rl_ema);
-        rl_ema.setOnClickListener(this);
+        tv_ema = (TextView)findViewById(R.id.rl_ema);
+        tv_ema.setOnClickListener(this);
 
-        rl_env = (RelativeLayout)findViewById(R.id.rl_env);
-        rl_env.setOnClickListener(this);
+        tv_env = (TextView)findViewById(R.id.rl_env);
+        tv_env.setOnClickListener(this);
 
     }
 

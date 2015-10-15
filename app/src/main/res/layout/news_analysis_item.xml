@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/news_analysis_item_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="7dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/content_news_analysis_pic_news" />
+
+    <TextView
+        android:id="@+id/news_analysis_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/news_analysis_item_img"
+        android:singleLine="true"
+        android:text="希腊认为触发黄金避险需求  美联储及要成金市新焦点"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:id="@+id/news_analysis_item_summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/news_analysis_item_img"
+        android:singleLine="true"
+        android:text="希腊认为触发黄金避险需求  美联储及要成金市新焦点"
+        android:textColor="@color/secondary_text"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/news_analysis_item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/news_analysis_item_img"
+        android:text="2015-06-18 09:32:47"
+        android:textSize="16sp" />
+</RelativeLayout>
