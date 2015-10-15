@@ -182,4 +182,8 @@ public class MyApplication extends Application {
     public  String getGetMsgDetailsUrl() {
         return BASEURL + "App_Contact/GetMsgDetails";
     }
+    //获取机构评论
+    public  String getGetOrgReviewUrl() {
+        return BASEURL + "App_Consulting/GetOrgReview";
+    }
 }

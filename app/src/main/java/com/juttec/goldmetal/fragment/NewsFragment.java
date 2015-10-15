@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
-import com.juttec.goldmetal.activity.AnalysisActivity;
+import com.juttec.goldmetal.activity.news.AnalysisActivity;
+import com.juttec.goldmetal.activity.news.ReviewActivity;
 
 /**
  * 资讯界面
@@ -101,7 +101,8 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
 
                 break;
             case R.id.tv_review:
-
+                intent = new Intent(getActivity(), ReviewActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_analysis:
                 //深度解析

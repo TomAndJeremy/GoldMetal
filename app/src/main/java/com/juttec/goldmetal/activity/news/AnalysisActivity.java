@@ -1,4 +1,4 @@
-package com.juttec.goldmetal.activity;
+package com.juttec.goldmetal.activity.news;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,7 +53,7 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
                 default:
                     break;
             }
-        };
+        }
     };
 
 

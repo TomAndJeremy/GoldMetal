@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/more_rela_normal"
     android:orientation="vertical"
-    tools:context="com.juttec.goldmetal.activity.AnalysisActivity">
+    tools:context="com.juttec.goldmetal.activity.news.AnalysisActivity">
 
 
 

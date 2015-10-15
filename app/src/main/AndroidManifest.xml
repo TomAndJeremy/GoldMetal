@@ -101,7 +101,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.AnalysisActivity"
+            android:name=".activity.news.AnalysisActivity"
             android:label="AnalysisActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -140,6 +140,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MomentPersonalActivity"
+            android:screenOrientation="portrait" />
+ <activity
+            android:name=".activity.news.ReviewActivity"
             android:screenOrientation="portrait" />
 
         <!-- 个推SDK配置开始 -->
