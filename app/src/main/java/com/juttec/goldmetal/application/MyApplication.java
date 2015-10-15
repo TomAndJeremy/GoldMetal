@@ -64,6 +64,9 @@ public class MyApplication extends Application {
     }
 
 
+
+
+
     //初始化ImageLoader
     void initImageLoader(Context context) {
 

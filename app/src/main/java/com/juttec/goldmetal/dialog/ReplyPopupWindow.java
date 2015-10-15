@@ -2,7 +2,9 @@ package com.juttec.goldmetal.dialog;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -93,6 +95,31 @@ public class ReplyPopupWindow {
                     return;
                 }
                 mOnClickSendListener.onClickSend(content);
+            }
+        });
+
+
+
+        //edittext监听内容变化   更改发送按钮的背景
+        mEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String content = mEditText.getText().toString();
+                if(TextUtils.isEmpty(content)||"".equals(content)||content.trim().length()<=0){
+                    mSend.setSelected(false);
+                }else{
+                    mSend.setSelected(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 

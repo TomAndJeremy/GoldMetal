@@ -3,7 +3,9 @@ package com.juttec.goldmetal.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -89,7 +91,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         tvRegister.setOnClickListener(this);
 
         mUserName = (EditText) findViewById(R.id.et_name);
-        mUserName.setText((String) SharedPreferencesUtil.getParam(this,"username",""));
+        mPwd = (EditText) findViewById(R.id.et_pwd);//密码
+        btn_login = (Button) findViewById(R.id.login_btn);
+        btn_login.setOnClickListener(this);
+
+
+        mUserName.addTextChangedListener(textWatcher);
+        mPwd.addTextChangedListener(textWatcher);
+
+        mUserName.setText((String) SharedPreferencesUtil.getParam(this, "username", ""));
 
 
 //        Intent intent = getIntent();
@@ -97,27 +107,46 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //            mUserName.setText(intent.getStringExtra("phone"));
 //        }
 
-        mPwd = (EditText) findViewById(R.id.et_pwd);//密码
+
         if((Boolean) SharedPreferencesUtil.getParam(this,"remember",false)){
             mPwd.setText((String) SharedPreferencesUtil.getParam(this,"pwd",""));
-
-
         }
 
 
         cb_remember = (CheckBox) findViewById(R.id.cb_remember);
         cb_remember.setOnCheckedChangeListener(this);
-        cb_remember.setChecked((Boolean) SharedPreferencesUtil.getParam(this,"remember",false));
+        cb_remember.setChecked((Boolean) SharedPreferencesUtil.getParam(this, "remember", false));
 
 
 
         tv_forget = (TextView) findViewById(R.id.login_tv_fergotpwd);
         tv_forget.setOnClickListener(this);
-
-        btn_login = (Button) findViewById(R.id.login_btn);
-        btn_login.setOnClickListener(this);
     }
 
+
+    //edittext 的内容监听  更改登陆按钮的背景
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String nameContent = mUserName.getText().toString();
+            String pwdContent = mPwd.getText().toString();
+            if (TextUtils.isEmpty(nameContent) || "".equals(nameContent) || nameContent.trim().length() <= 0) {
+                btn_login.setSelected(false);
+            } else if(TextUtils.isEmpty(pwdContent) || "".equals(pwdContent) || pwdContent.trim().length() <= 0){
+                btn_login.setSelected(true);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
 
     //检查手机号是否符合规范
     private boolean checkMobile(String num){

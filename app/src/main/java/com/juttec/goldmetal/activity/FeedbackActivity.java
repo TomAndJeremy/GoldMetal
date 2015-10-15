@@ -2,6 +2,9 @@ package com.juttec.goldmetal.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,8 +44,33 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         iv_back = (ImageView) mTopbar.findViewById(R.id.left_img);
         iv_back.setOnClickListener(this);
 
+        edit_feedback = (EditText) findViewById(R.id.et_feedback);
         btn_send = (Button) findViewById(R.id.btn_send);
         btn_send.setOnClickListener(this);
+
+
+        //edittext监听内容变化   更改发送按钮的背景
+        edit_feedback.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String content = edit_feedback.getText().toString();
+                if (TextUtils.isEmpty(content) || "".equals(content) || content.trim().length() <= 0) {
+                    btn_send.setSelected(false);
+                } else {
+                    btn_send.setSelected(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
     }
 
@@ -53,6 +81,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             switch (v.getId()){
 
                 case R.id.btn_send:
+                    //发表按钮
 
                     break;
                 case R.id.left_img:

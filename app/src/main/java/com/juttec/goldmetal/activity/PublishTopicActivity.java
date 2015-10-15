@@ -15,9 +15,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -158,7 +160,31 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
 
         mBtnPush = (Button) findViewById(R.id.publis_topic_bt_push);
+
         mBtnPush.setOnClickListener(this);
+
+        //edittext监听内容变化   更改发送按钮的背景
+        mContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String content = mContent.getText().toString();
+                if (TextUtils.isEmpty(content) || "".equals(content) || content.trim().length() <= 0) {
+                    mBtnPush.setSelected(false);
+                } else {
+                    mBtnPush.setSelected(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
 
         ImageButton selectPic = (ImageButton) this.findViewById(R.id.publis_topic_bt_pic);
@@ -175,6 +201,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         iv_photo1 = (ImageView) findViewById(R.id.iv_photo1);
         iv_photo2 = (ImageView) findViewById(R.id.iv_photo2);
         iv_photo3 = (ImageView) findViewById(R.id.iv_photo3);
+
 
         readEmojiIcons();
         enablePopUpView();

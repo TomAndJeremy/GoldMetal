@@ -42,8 +42,8 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 
         mTopbar = (HeadLayout) findViewById(R.id.head_layout);
         mTitle = (TextView) mTopbar.findViewById(R.id.head_title);
-        tv_title= (TextView) mTopbar.findViewById(R.id.tv_title);
-        tv_content= (TextView) mTopbar.findViewById(R.id.tv_content);
+        tv_title= (TextView) findViewById(R.id.tv_title);
+        tv_content= (TextView) findViewById(R.id.tv_content);
 
         mTitle.setText(fromActivity);
         tv_title.setText(fromActivity);

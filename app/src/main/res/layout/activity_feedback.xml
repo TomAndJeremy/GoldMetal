@@ -25,30 +25,37 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:background="@color/feedback_linear_gray"
-        android:gravity="center">
+        android:gravity="center_vertical">
 
         <EditText
+            android:id="@+id/et_feedback"
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="请输入反馈信息"
             android:paddingLeft="8dp"
-            android:background="@drawable/edit_feedback"/>
+            android:padding="5dp"
+            android:minHeight="40dp"
+            android:maxLines="3"
+            android:background="@drawable/edit_feedback"
+            android:textSize="@dimen/small_size"/>
 
         <Button
             android:id="@+id/btn_send"
-            android:layout_width="80dp"
-            android:layout_height="45dp"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
             android:background="@drawable/btn_selector"
             android:text="提交"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="8dp"
             android:textColor="#fff"
-            android:textSize="18sp"
+            android:textSize="@dimen/normal_size"
             />
 
     </LinearLayout>
