@@ -4,13 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F8F8F8"
     android:orientation="vertical"
-    tools:context="com.juttec.goldmetal.activity.CreateAccount.SelectType">
+    >
 
     <com.juttec.goldmetal.customview.HeadLayout
         style="@style/HeadBarStytle"
         app:headtitle="开户申请"
-        app:leftimg="@mipmap/nav_btn_backa_arrow"></com.juttec.goldmetal.customview.HeadLayout>
+        app:leftimg="@mipmap/nav_btn_backa_arrow">
+
+    </com.juttec.goldmetal.customview.HeadLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -18,7 +30,8 @@
         android:layout_marginTop="10dp"
         android:paddingLeft="@dimen/input_to_board"
         android:text="请输入您的基本信息"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textColor="@color/black"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,6 +56,7 @@
                 android:text="开户类别：" />
 
             <TextView
+                android:id="@+id/tv_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="广交所"
@@ -75,12 +89,13 @@
                 style="@style/TextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="您的手机：" />
+                android:text="手机号码：" />
 
 
             <EditText
                 android:id="@+id/et_phone"
                 style="@style/EditTextStyle"
+                android:phoneNumber="true"
                 android:background="@null" />
         </LinearLayout>
 
@@ -92,39 +107,46 @@
         android:layout_height="wrap_content"
         android:paddingLeft="22dp"
         android:text="投资资金："
-        android:textSize="19sp" />
+        android:textSize="@dimen/normal_size" />
 
     <RadioGroup
+        android:id="@+id/id_radiogroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/login_input_border"
         android:divider="@drawable/divider_shape"
         android:showDividers="middle|beginning|end">
 
         <RadioButton
+            android:id="@+id/radio1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
+            android:layout_margin="8dp"
+            android:paddingLeft="8dp"
             android:button="@drawable/radiobutton_selector"
             android:text="10万以下" />
 
 
         <RadioButton
+            android:id="@+id/radio2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
+            android:layout_margin="8dp"
+            android:paddingLeft="8dp"
             android:button="@drawable/radiobutton_selector"
             android:text="10万-20万" />
 
 
         <RadioButton
+            android:id="@+id/radio3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
+            android:layout_margin="8dp"
+            android:paddingLeft="8dp"
             android:button="@drawable/radiobutton_selector"
             android:text="20万以上" />
 
@@ -134,27 +156,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="22dp"
+        android:layout_marginTop="10dp"
         android:text="备注信息："
-        android:layout_marginBottom="10dp"
-        android:textSize="19sp" />
+        android:textSize="@dimen/normal_size" />
 
     <EditText
-        style="@style/EditTextStyle"
+        android:id="@+id/et_remark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/login_input_border"
         android:layout_margin="@dimen/input_to_board"
+        android:padding="8dp"
         android:gravity="top"
         android:hint="QQ号码或者联系时间等信息，方便联系您"
-        android:minHeight="60dp">
+        android:maxHeight="60dp"
+        android:textSize="@dimen/normal_size"
+        android:minHeight="50dp">
 
     </EditText>
 
     <Button
+        android:id="@+id/btn_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
+
         android:background="@drawable/btn_selector"
         android:text="下一步"
         android:textColor="@color/white"
-        android:textSize="20sp" />
+        android:textSize="@dimen/xlarge_size" />
+
+
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

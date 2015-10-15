@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.juttec.goldmetal">
+    package="com.juttec.goldmetal" >
 
     <!-- 个推SDK权限配置开始 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,8 +12,8 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <!-- ibeancon 需要蓝牙权限 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -25,22 +25,22 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- 自定义权限 -->
     <uses-permission android:name="getui.permission.GetuiService.com.juttec.goldmetal" />
+
     <permission
         android:name="getui.permission.GetuiService.com.juttec.goldmetal"
-        android:protectionLevel="normal"></permission>
+        android:protectionLevel="normal" />
+
     <!-- 个推SDK权限配置结束 -->
-
-
     <application
         android:name=".application.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -72,10 +72,10 @@
             android:name=".activity.FindBcakPWDActivity"
             android:label="FindBcakPWDActivity" />
         <activity
-            android:windowSoftInputMode="stateAlwaysHidden"
             android:name=".activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="MainActivity" />
+            android:label="MainActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activity.PriceReductionActivity"
             android:label="PriceReductionActivity" />
@@ -90,8 +90,12 @@
             android:name=".activity.ParameterSettingActivity"
             android:label="ParameterSettingActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.ChartActivity"></activity>
-        <activity android:name=".activity.FreeRemindActivity"></activity>
+        <activity
+            android:name=".activity.ChartActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.FreeRemindActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PublishTopicActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -99,18 +103,44 @@
         <activity
             android:name=".activity.AnalysisActivity"
             android:label="AnalysisActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ImagePagerActivity"
             android:label="ImagePagerActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.FollowActivity"></activity>
-        <activity android:name=".activity.MessageActivity"></activity>
-        <activity android:name=".activity.MessageDetailActivity"></activity>
-        <activity android:name=".activity.CreateAccount.SelectType"></activity>
-        <activity android:name=".activity.Announcementactivity"></activity>
-        <activity android:name=".activity.MomentPersonalActivity"></activity>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CreateAccount.AccountNoticeActivity"
+            android:label="AccountNoticeActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activity.CreateAccount.SelectType"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CreateAccount.InputYourMessage"
+            android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.CreateAccount.AccountFinishActivity"
+            android:label="AccountFinishActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <activity
+            android:name=".activity.FollowActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MessageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MessageDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Announcementactivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MomentPersonalActivity"
+            android:screenOrientation="portrait" />
 
         <!-- 个推SDK配置开始 -->
         <!-- 配置的第三方参数属性 -->
@@ -125,8 +155,8 @@
             android:value="zS3ouX9pfz81dI8rKcVCN7" />
         <!-- 配置第三方Receiver -->
         <receiver
-            android:name="com.juttec.goldmetal.receiver.PushReceiver"
-            android:exported="false">
+            android:name=".receiver.PushReceiver"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.igexin.sdk.action.z0u0ujg1vC9dIDrgBGe73" />
             </intent-filter>
@@ -136,13 +166,13 @@
             android:name="com.igexin.sdk.PushService"
             android:exported="true"
             android:label="NotificationCenter"
-            android:process=":pushservice"></service>
+            android:process=":pushservice" />
         <service
             android:name="com.igexin.sdk.PushServiceUser"
             android:exported="true"
-            android:label="NotificationCenterUser"></service>
+            android:label="NotificationCenterUser" />
 
-        <receiver android:name="com.igexin.sdk.PushReceiver">
+        <receiver android:name="com.igexin.sdk.PushReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -156,7 +186,7 @@
         </receiver>
         <receiver
             android:name="com.igexin.sdk.PushManagerReceiver"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.igexin.sdk.action.pushmanager" />
             </intent-filter>
@@ -168,20 +198,24 @@
             android:exported="false"
             android:process=":pushservice"
             android:taskAffinity="com.igexin.sdk.PushActivityTask"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <service
             android:name="com.igexin.download.DownloadService"
             android:process=":pushservice" />
-        <receiver android:name="com.igexin.download.DownloadReceiver">
+
+        <receiver android:name="com.igexin.download.DownloadReceiver" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
         <provider
             android:name="com.igexin.download.DownloadProvider"
             android:authorities="downloads.com.juttec.goldmetal"
             android:exported="true"
             android:process=":pushservice" />
+
         <activity
             android:name="com.igexin.getuiext.activity.GetuiExtActivity"
             android:configChanges="orientation|keyboard|keyboardHidden"
@@ -190,63 +224,67 @@
             android:process=":pushservice"
             android:taskAffinity="android.task.myServicetask"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <receiver
             android:name="com.igexin.getuiext.service.PayloadReceiver"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.igexin.sdk.action.7fjUl2Z3LH6xYy7NQK4ni4" />
                 <action android:name="com.igexin.sdk.action.z0u0ujg1vC9dIDrgBGe73" />
             </intent-filter>
         </receiver>
+
         <service
             android:name="com.igexin.getuiext.service.GetuiExtService"
             android:process=":pushservice" />
         <!-- 个推SDK配置结束 -->
 
 
-
         <!-- 分享SDK配置start -->
-        <!--<activity-->
-            <!--android:name="cn.sharesdk.framework.ShareSDKUIShell"-->
-            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar"-->
-            <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:windowSoftInputMode="stateHidden|adjustResize" >-->
-            <!--<intent-filter>-->
-                <!--<data android:scheme="tencent1104907328" />-->
-                <!--<action android:name="android.intent.action.VIEW" />-->
-                <!--<category android:name="android.intent.category.BROWSABLE" />-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
+        <!-- <activity -->
+        <!-- android:name="cn.sharesdk.framework.ShareSDKUIShell" -->
+        <!-- android:theme="@android:style/Theme.Translucent.NoTitleBar" -->
+        <!-- android:configChanges="keyboardHidden|orientation|screenSize" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:windowSoftInputMode="stateHidden|adjustResize" > -->
+        <!-- <intent-filter> -->
+        <!-- <data android:scheme="tencent1104907328" /> -->
+        <!-- <action android:name="android.intent.action.VIEW" /> -->
+        <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
+        <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
 
         <activity
             android:name="com.mob.tools.MobUIShell"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" >
             <intent-filter>
                 <data android:scheme="tencent1104907328" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <!--微信分享回调 -->
+        <!-- 微信分享回调 -->
         <activity
             android:name=".wxapi.WXEntryActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- QQ客户端回调 -->
         <activity
             android:name="cn.sharesdk.tencent.qq.ResultReceiver"
             android:launchMode="singleTask"
-            android:noHistory="true">
+            android:noHistory="true" >
+
             <!--
             如果集成QQ分享，或者使用QQ客户端来进行QQ空间的分享，须要在此处添加一个对ACTION_VIEW
             事件的过滤器，其中的scheme是“tencent”前缀再开发者应用的加上appId。如果此过滤器不设置，
@@ -254,27 +292,29 @@
             -->
             <intent-filter android:priority="1000" >
                 <data android:scheme="tencent1104907328" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
 
-
         <!-- 调用新浪原生SDK，需要注册的activity -->
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false" >
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" >
         </activity>
 
         <!-- 调用新浪原生SDK，需要注册的回调activity -->
         <activity
             android:name="cn.sharesdk.sina.weibo.SinaActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

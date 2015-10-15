@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context="com.juttec.goldmetal.activity.CreateAccount.SelectType">
 
     <com.juttec.goldmetal.customview.HeadLayout
         style="@style/HeadBarStytle"
-        app:headtitle="开户申请"
+        app:headtitle="@string/application_account"
         app:leftimg="@mipmap/nav_btn_backa_arrow"></com.juttec.goldmetal.customview.HeadLayout>
 
     <TextView
@@ -20,60 +21,71 @@
         android:textSize="20sp" />
 
     <RadioGroup
+        android:id="@+id/id_radiogroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/login_input_border"
 >
         <RadioButton
+            android:id="@+id/radio1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
+            android:layout_margin="10dp"
             android:button="@drawable/radiobutton_selector"
-            android:text="天通银、铜铝镍" />
+            android:text="天通银、铜铝镍"
+            android:paddingLeft="8dp"/>
 
-        <RadioButton
+        <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/input_border"
             android:button="@null" />
 
         <RadioButton
+            android:id="@+id/radio2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
+            android:layout_margin="10dp"
             android:button="@drawable/radiobutton_selector"
-            android:text="广交所" />
+            android:text="广交所"
+            android:paddingLeft="8dp"/>
 
-        <RadioButton
+        <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/input_border"
             android:button="@null" />
 
         <RadioButton
+            android:id="@+id/radio3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
+            android:layout_margin="10dp"
+            android:paddingLeft="8dp"
             android:button="@drawable/radiobutton_selector"
             android:text="北油所汽油" />
 
-        <RadioButton
+        <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/input_border"
             android:button="@null" />
 
         <RadioButton
+            android:id="@+id/radio4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
+            android:layout_margin="10dp"
+            android:paddingLeft="8dp"
             android:button="@drawable/radiobutton_selector"
             android:text="其它品种" />
     </RadioGroup>
 
     <Button
+        android:id="@+id/btn_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"

@@ -101,4 +101,9 @@
 
     <!--MomentFragment-->
     <color name="comment_bg_pressed">#eeeeee</color>
+
+    <!--开户模块-->
+    <color name="account_notice_bg">#E6E6E6</color>
+
+
 </resources>

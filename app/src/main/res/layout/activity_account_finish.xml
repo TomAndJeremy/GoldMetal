@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    >
+
+    <com.juttec.goldmetal.customview.HeadLayout
+        style="@style/HeadBarStytle"
+        app:headtitle="@string/application_account"
+        >
+
+    </com.juttec.goldmetal.customview.HeadLayout>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="@dimen/input_to_board"
+                android:text="开户申请完成"
+                android:textSize="@dimen/xlarge_size"
+                android:textColor="@color/black"/>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
+                android:text="您的信息已经提交成功，服务人员将尽快联系您，请耐心等待，您也可以主动联系掌上贵金属！"
+                android:textSize="@dimen/normal_size" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="5dp"
+                android:text="官方电话：15121166583"
+                android:textSize="@dimen/normal_size" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="5dp"
+        android:text="官方服务QQ：2355700902"
+        android:textSize="@dimen/normal_size" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+
+
+            <Button
+                android:id="@+id/btn_complete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/btn_selector"
+                android:text="确定"
+                android:textColor="@color/white"
+                android:textSize="@dimen/xlarge_size" />
+
+</LinearLayout>

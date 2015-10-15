@@ -191,5 +191,13 @@
     <string name="viewpager_indicator">%1$d/%2$d</string>
 
 
+    <!--开户模块-->
+    <string name="application_account">开户申请</string>
+    <string name="account_notice">开户须知</string>
+
+
+
+
+
 
 </resources>

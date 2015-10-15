@@ -14,7 +14,7 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.AccountActivity;
 import com.juttec.goldmetal.activity.Announcementactivity;
 import com.juttec.goldmetal.activity.ChartActivity;
-import com.juttec.goldmetal.activity.CreateAccount.SelectType;
+import com.juttec.goldmetal.activity.CreateAccount.AccountNoticeActivity;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 
 
@@ -25,6 +25,8 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
     private ImageView iv_search;//搜索
     private LinearLayout ll_chart;
+
+    private Button btCreateAccount;//开户按钮
 
     public static MarketFragment newInstance(String param1) {
         MarketFragment fragment = new MarketFragment();
@@ -76,15 +78,8 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         ll_chart= (LinearLayout) view.findViewById(R.id.ll_chart);
         ll_chart.setOnClickListener(this);
 
-        Button btCreateAccount = (Button) view.findViewById(R.id.fragment_market_bt_createaccount);
-        btCreateAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), SelectType.class));
-
-            }
-        });
-
+        btCreateAccount = (Button) view.findViewById(R.id.fragment_market_bt_createaccount);
+        btCreateAccount.setOnClickListener(this) ;
     }
 
     @Override
@@ -114,6 +109,11 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
             case R.id.ll_chart:
                 Intent intent = new Intent(getActivity(), ChartActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.fragment_market_bt_createaccount:
+                //开户界面
+                startActivity(new Intent(getActivity(), AccountNoticeActivity.class));
                 break;
         }
 
