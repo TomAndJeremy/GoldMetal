@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.customview.HeadLayout;
@@ -16,7 +16,7 @@ import com.juttec.goldmetal.customview.HeadLayout;
  */
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private RelativeLayout rl_setting_parameter;//指标参数设置
+    private TextView rl_setting_parameter;//指标参数设置
     private SwitchCompat iv_screen_light;//设置屏幕常亮
     private SwitchCompat iv_display_refresh;//是否显示刷新时间
     private ImageView iv_refresh_time_reduce;//刷新行情时间间隔  减号
@@ -46,7 +46,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         iv_back = (ImageView) mTopbar.findViewById(R.id.left_img);
         iv_back.setOnClickListener(this);
 
-        rl_setting_parameter = (RelativeLayout)findViewById(R.id.setting_parameter);
+        rl_setting_parameter = (TextView)findViewById(R.id.setting_parameter);
         rl_setting_parameter.setOnClickListener(this);
 
 

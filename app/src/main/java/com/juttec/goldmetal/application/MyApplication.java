@@ -92,7 +92,7 @@ public class MyApplication extends Application {
     }
     //短信接口
     public  String getSendMessageUrl() {
-        return BASEURL + "App_Contact/SendMessage";
+        return BASEURL + "App_User/SendMessage";
     }
 
     //用户注册接口

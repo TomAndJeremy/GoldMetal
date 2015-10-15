@@ -125,9 +125,9 @@ public class ContactUsActivity extends AppCompatActivity {
             holder.textView.setText(maps.get(position).get("text"));
             if ("phone".equals(maps.get(position).get("img"))) {
 
-                holder.imageView.setImageDrawable(getDrawable(R.mipmap.content_account_icon_phone));
+                holder.imageView.setImageResource(R.mipmap.content_account_icon_phone);
             } else {
-                holder.imageView.setImageDrawable(getDrawable(R.mipmap.content_account_icon_qq));
+                holder.imageView.setImageResource(R.mipmap.content_account_icon_qq);
             }
 
         }

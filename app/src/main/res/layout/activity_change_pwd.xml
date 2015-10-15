@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F8F8F8"
     android:orientation="vertical"
 
     tools:context="com.juttec.goldmetal.activity.ChangePWDActivity">
@@ -23,29 +24,34 @@
 
 
         <EditText
-            android:id="@+id/login_et_name"
+            android:id="@+id/et_oldpwd"
             style="@style/EditTextStyle_Nobg"
             android:drawableLeft="@mipmap/content_account_icon_password"
-            android:hint="@string/hint_old_pwd" />
+            android:hint="@string/hint_old_pwd"
+            android:password="true"/>
 
 
         <EditText
+            android:id="@+id/et_newpwd"
             style="@style/EditTextStyle_Nobg"
             android:drawableLeft="@mipmap/content_account_icon_password"
-            android:hint="@string/hint_new_pwd" />
+            android:hint="@string/hint_new_pwd"
+            android:password="true"/>
 
 
         <EditText
-            android:id="@+id/login_et_pwd"
+            android:id="@+id/et_confirmpwd"
             style="@style/EditTextStyle_Nobg"
             android:drawableLeft="@mipmap/content_account_icon_password"
-            android:hint="@string/hint_pwd_confirm" />
+            android:hint="@string/hint_pwd_confirm"
+            android:password="true"/>
 
 
     </LinearLayout>
 
 
     <Button
+        android:id="@+id/btn_ok"
         style="@style/BigButtonStyle"
         android:layout_width="match_parent"
         android:layout_margin="20dp"

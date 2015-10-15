@@ -98,6 +98,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         tv_goldId = (TextView) findViewById(R.id.tv_ID);
 
         btn_exit = (Button) findViewById(R.id.btn_exit);
+        btn_exit.setSelected(true);
+        btn_exit.setOnClickListener(this);
 
 
         tv_nickname = (TextView) this.findViewById(R.id.account_tv_nickname);
@@ -149,7 +151,14 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.tv_change_pwd:
-                startActivity(new Intent(AccountActivity.this,ChangePWDActivity.class));
+                //修改密码
+                startActivity(new Intent(AccountActivity.this, ChangePWDActivity.class));
+                break;
+
+            case R.id.btn_exit:
+                //退出当前账号
+
+                startActivity(new Intent(AccountActivity.this,LoginActivity.class));
                 break;
         }
     }

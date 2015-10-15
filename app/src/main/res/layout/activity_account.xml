@@ -31,6 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/input_to_board"
         android:background="@drawable/login_input_border"
+        android:divider="@drawable/divider_shape"
+        android:showDividers="middle|end|beginning"
         android:orientation="vertical">
 
         <LinearLayout
@@ -50,10 +52,7 @@
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/input_border" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
