@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.bean.PhotoBean;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.utils.ImgUtil;
 import com.juttec.goldmetal.utils.LogUtil;
@@ -26,25 +27,25 @@ public class PhotoGridAdapter extends BaseAdapter {
     /**
      * 图片Url集合
      */
-    private List<String> imageUrls;
+    private List<PhotoBean> imageBeans;
 
     //弹出提示框
     private MyAlertDialog dialog ;
 
-    public PhotoGridAdapter(Context ctx, List<String> urls) {
+    public PhotoGridAdapter(Context ctx, List<PhotoBean> urls) {
         this.ctx = ctx;
-        this.imageUrls = urls;
+        this.imageBeans = urls;
         dialog = new MyAlertDialog(ctx);
     }
 
     @Override
     public int getCount() {
-        return imageUrls == null ? 0 : imageUrls.size();
+        return imageBeans == null ? 0 : imageBeans.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return imageUrls.get(position);
+        return imageBeans.get(position);
     }
 
     @Override
@@ -57,10 +58,27 @@ public class PhotoGridAdapter extends BaseAdapter {
         LogUtil.d("展示图片---------------------------");
 
         View view = View.inflate(ctx, R.layout.item_photo, null);
-        ImageView imageView = (ImageView) view.findViewById(R.id.iv_image);
-        ImageView iv_delete = (ImageView) view.findViewById(R.id.iv_delete);
+        final ImageView imageView = (ImageView) view.findViewById(R.id.iv_image);
+        final ImageView iv_delete = (ImageView) view.findViewById(R.id.iv_delete);
 
-        imageView.setImageBitmap(ImgUtil.getBitmap(imageUrls.get(position), 200, 200));
+        imageView.setImageBitmap(ImgUtil.getBitmap(imageBeans.get(position).getDyPhoto(), 200, 200));
+        if(imageBeans.get(position).isDelete()){
+            iv_delete.setVisibility(View.VISIBLE);
+        }else{
+            iv_delete.setVisibility(View.GONE);
+        }
+
+
+        imageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                for (int i= 0;i<imageBeans.size();i++){
+                    imageBeans.get(i).setIsDelete(true);
+                }
+                notifyDataSetChanged();
+                return true;
+            }
+        });
 
 
         //
@@ -75,7 +93,7 @@ public class PhotoGridAdapter extends BaseAdapter {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
-                                imageUrls.remove(position);
+                                imageBeans.remove(position);
 
                                 notifyDataSetChanged();
                             }

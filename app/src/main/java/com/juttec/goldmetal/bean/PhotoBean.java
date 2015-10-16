@@ -6,7 +6,10 @@ package com.juttec.goldmetal.bean;
  */
 public class PhotoBean {
 
-    String dyPhoto;
+
+    private String dyPhoto;//图片路径
+
+    private boolean isDelete;//是否显示删除 图标   true:显示  false：隐藏
 
     public void setDyPhoto(String dyPhoto) {
         this.dyPhoto = dyPhoto;
@@ -15,5 +18,13 @@ public class PhotoBean {
     public String getDyPhoto() {
 
         return dyPhoto;
+    }
+
+    public boolean isDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(boolean isDelete) {
+        this.isDelete = isDelete;
     }
 }

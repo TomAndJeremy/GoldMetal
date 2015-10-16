@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.activity.AccountActivity;
 import com.juttec.goldmetal.activity.FollowActivity;
 import com.juttec.goldmetal.activity.MessageActivity;
 import com.juttec.goldmetal.activity.PublishTopicActivity;
@@ -32,6 +33,7 @@ import com.juttec.goldmetal.bean.DynamicEntityList;
 import com.juttec.goldmetal.bean.DynamicMsgBean;
 import com.juttec.goldmetal.broadcastreceiver.MyBroadcastReceiver;
 import com.juttec.goldmetal.customview.CircleImageView;
+import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.utils.FileUtil;
 import com.juttec.goldmetal.utils.GetContentUrl;
@@ -99,6 +101,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     SwipeRefreshLayout refreshLayout;
     MyBroadcastReceiver myBroadcastReceiver;
 
+    private MyAlertDialog mDialog;//对话框
+
     public static MomentFragment newInstance(String param1) {
         MomentFragment fragment = new MomentFragment();
         Bundle args = new Bundle();
@@ -118,6 +122,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
             mParam1 = getArguments().getString(ARG_PARAM1);
         }
         app = (MyApplication) getActivity().getApplication();
+        mDialog = new MyAlertDialog(getActivity());
         dialog_progress = new MyProgressDialog(getActivity());
         entityList = new ArrayList<DynamicEntityList>();
 
@@ -248,52 +253,69 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                 dynamic.setSelected(true);
                 break;
             case R.id.moment_tv_message:
+                //消息界面  先判断用户信息是否完善
+                if(checkNameAndPhoto()){
+                    startActivity(new Intent(getActivity(), MessageActivity.class));
+                }
 
-                startActivity(new Intent(getActivity(), MessageActivity.class));
                 break;
             case R.id.moment_tv_follow:
+                //我的关注界面  先判断用户信息是否完善
+                if(checkNameAndPhoto()){
+                    startActivity(new Intent(getActivity(), FollowActivity.class));
+                }
 
-                startActivity(new Intent(getActivity(), FollowActivity.class));
                 break;
             case R.id.right_text:
-                startActivity(new Intent(getActivity(), PublishTopicActivity.class));
+                //发表动态  先判断用户信息是否完善
+                if(checkNameAndPhoto()){
+                    startActivity(new Intent(getActivity(), PublishTopicActivity.class));
+                }
+
                 break;
 
             case R.id.iv_head_photo:
-                //头像的点击事件
-                final Dialog dialog = new Dialog(getActivity(), R.style.AlertDialogStyle);
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.show();
-                dialog.getWindow().setContentView(R.layout.select_pic_dialog);
-
-                dialog.getWindow().findViewById(R.id.camera_shooting).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //拍照
-                        dialog.dismiss();
-                        mobileTakePic(REQUEST_CODE_CAMERA);
-                    }
-                });
-                dialog.getWindow().findViewById(R.id.photo_album).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //从相册选择
-                        dialog.dismiss();
-                        Intent picture = new Intent(Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(picture, REQUEST_CODE_ALBUM);
-                    }
-                });
-                dialog.getWindow().findViewById(R.id.btn_single).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-
-                    }
-                });
-
+                //设置头像
+                setHeadPhoto();
                 break;
         }
+    }
+
+
+    //设置头像  弹出从从相册选择或是相机拍摄
+    private void setHeadPhoto(){
+        //头像的点击事件
+        final Dialog dialog = new Dialog(getActivity(), R.style.AlertDialogStyle);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+        dialog.getWindow().setContentView(R.layout.select_pic_dialog);
+
+        dialog.getWindow().findViewById(R.id.camera_shooting).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //拍照
+                dialog.dismiss();
+                mobileTakePic(REQUEST_CODE_CAMERA);
+            }
+        });
+        dialog.getWindow().findViewById(R.id.photo_album).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //从相册选择
+                dialog.dismiss();
+                Intent picture = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(picture, REQUEST_CODE_ALBUM);
+            }
+        });
+        dialog.getWindow().findViewById(R.id.btn_single).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+
     }
 
 
@@ -366,6 +388,41 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         byte[] appicon = baos.toByteArray();
         return Base64.encodeToString(appicon, Base64.DEFAULT);
     }
+
+
+
+    //判断用户是否编辑了个人的昵称和头像
+    private boolean checkNameAndPhoto(){
+        if("".equals(app.getUserInfoBean().getUserNickName())){
+            //设置昵称
+            mDialog.builder()
+                    .setTitle("提示").setMsg("您还没有昵称，请至账号界面设置后再操作，谢谢！")
+                    .setSingleButton("前去设置", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(getActivity(), AccountActivity.class));
+                            mDialog.dismiss();
+                        }
+                    }).show();
+            return false;
+
+        }else if("null".equals(app.getUserInfoBean().getUserPhoto())){
+            //设置头像
+            mDialog.builder()
+                    .setTitle("提示").setMsg("您还没有个人头像，请当前界面设置后再操作，谢谢！")
+                    .setSingleButton("好的", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            setHeadPhoto();
+                            mDialog.dismiss();
+                        }
+                    }).show();
+            return false;
+        }
+        return true;
+    }
+
+
 
 
     //上传用户头像  的接口

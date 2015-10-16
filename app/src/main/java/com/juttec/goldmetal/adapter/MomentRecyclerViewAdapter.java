@@ -1,10 +1,7 @@
 package com.juttec.goldmetal.adapter;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.activity.AccountActivity;
 import com.juttec.goldmetal.activity.ImagePagerActivity;
 import com.juttec.goldmetal.activity.MomentPersonalActivity;
 import com.juttec.goldmetal.application.MyApplication;
@@ -27,8 +25,8 @@ import com.juttec.goldmetal.bean.DynamicEntityList;
 import com.juttec.goldmetal.bean.PhotoBean;
 import com.juttec.goldmetal.customview.CircleImageView;
 import com.juttec.goldmetal.customview.NoScrollGridView;
+import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
-import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -60,6 +58,8 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     MyApplication app;
     RecycleViewWithHeadAdapter recycleViewWithHeadAdapter;
 
+    private MyAlertDialog mDialog;//对话框
+
 
     //初始化
     public MomentRecyclerViewAdapter(ArrayList<DynamicEntityList> entityList, Context context, MyApplication app) {
@@ -69,10 +69,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         this.context = context;
         this.app = app;
         popupWindow = new ReplyPopupWindow(context);
-
-
-
-
+        mDialog = new MyAlertDialog(context);
     }
 
     public void setHeadAdapter(RecycleViewWithHeadAdapter recycleViewWithHeadAdapter) {
@@ -96,6 +93,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         holder.replyIMB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //检查个人信息是否完善
+                if(!checkNameAndPhoto()){
+                    return;
+                }
                 popupWindow.create().show(v);
                 popupWindow.setHint(0, entityList.get(position).getUserName());
                 popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
@@ -147,6 +148,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         holder.thumb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //检查个人信息是否完善
+                if(!checkNameAndPhoto()){
+                    return;
+                }
                 RequestParams params = new RequestParams();
                 params.addBodyParameter("dyId", entityList.get(position).getId());
                 params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
@@ -244,7 +249,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //检查个人信息是否完善
+                if(!checkNameAndPhoto()){
+                    return;
+                }
                 Intent intent = new Intent(context, MomentPersonalActivity.class);
                 intent.putExtra("userId", entityList.get(position).getUserId());
                 intent.putExtra("userName", entityList.get(position).getUserName());
@@ -420,6 +428,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 commentMsg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //检查个人信息是否完善
+                        if(!checkNameAndPhoto()){
+                            return;
+                        }
                         popupWindow.create().show(v);
                         popupWindow.setHint(1, entityList.get(position).getDyCommentReply().get(finalI).getDiscussantName());
                         popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
@@ -460,7 +472,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                     replyMsg.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            //检查个人信息是否完善
+                            if(!checkNameAndPhoto()){
+                                return;
+                            }
                             popupWindow.create().show(v);
                             popupWindow.setHint(1, entityList.get(position).getDyCommentReply().get(finalI).getDyReply().get(finalJ).getUserName());
 
@@ -484,6 +499,41 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     }
 
 
+
+    //判断用户是否编辑了个人的昵称和头像
+    private boolean checkNameAndPhoto(){
+        if("".equals(app.getUserInfoBean().getUserNickName())){
+            //设置昵称
+            mDialog.builder()
+                    .setTitle("提示").setMsg("您还没有昵称，请至账号界面设置后再操作，谢谢！")
+                    .setSingleButton("前去设置", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            context.startActivity(new Intent(context, AccountActivity.class));
+                            mDialog.dismiss();
+                        }
+                    }).show();
+            return false;
+
+        }else if("null".equals(app.getUserInfoBean().getUserPhoto())){
+            //设置头像
+            mDialog.builder()
+                    .setTitle("提示").setMsg("您还没有个人头像，请当前界面设置后再操作，谢谢！")
+                    .setSingleButton("好的", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mDialog.dismiss();
+                        }
+                    }).show();
+            return false;
+        }
+        return true;
+    }
+
+
+
+
+
     /**
      * 打开图片查看器
      */
@@ -501,6 +551,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //检查个人信息是否完善
+                if(!checkNameAndPhoto()){
+                    return;
+                }
                 Intent intent = new Intent(context, MomentPersonalActivity.class);
                 intent.putExtra("userId", userID);
                 intent.putExtra("userName", userName);

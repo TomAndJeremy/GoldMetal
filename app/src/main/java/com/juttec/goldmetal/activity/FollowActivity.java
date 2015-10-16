@@ -207,7 +207,7 @@ public class FollowActivity extends Activity implements View.OnClickListener, Sw
 
                         totalPage = Integer.parseInt(dynamicMsgBean.getMessage1());
                         if (totalPage == 0) {
-                            ToastUtil.showShort(FollowActivity.this, "没有任何动态");
+                            ToastUtil.showShort(FollowActivity.this, "没有任何动态，您可以去关注更多的人");
                             return;
                         }
 

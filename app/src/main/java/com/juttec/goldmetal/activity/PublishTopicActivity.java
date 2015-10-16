@@ -38,6 +38,7 @@ import com.juttec.goldmetal.adapter.EmoticonsGridAdapter.KeyClickListener;
 import com.juttec.goldmetal.adapter.EmoticonsPagerAdapter;
 import com.juttec.goldmetal.adapter.PhotoGridAdapter;
 import com.juttec.goldmetal.application.MyApplication;
+import com.juttec.goldmetal.bean.PhotoBean;
 import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.utils.FileUtil;
@@ -97,7 +98,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     private static String path;//照相后图片的路径
 
     // 存放拍照或从相册选择的图片的路径 的集合
-    private  List<String> picPathList = new ArrayList<String>();
+    private  List<PhotoBean> picPathList = new ArrayList<PhotoBean>();
 
     private NoScrollGridView mGridView;//展示图片的gridview
     private PhotoGridAdapter mAdapter;
@@ -417,7 +418,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
                     //如果有图片 先调上传图片的接口
                     for(int j=0;j<picPathList.size();j++){
 
-                        upLoadPhoto(picPathList.get(j));
+                        upLoadPhoto(picPathList.get(j).getDyPhoto());
                     }
                 }
 
@@ -513,7 +514,10 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
                 if (resultCode == RESULT_OK) {
                     LogUtil.d("拍照图片的路径：" + path);
-                    picPathList.add(path);
+                    PhotoBean photoBean = new PhotoBean();
+                    photoBean.setDyPhoto(path);
+                    photoBean.setIsDelete(false);
+                    picPathList.add(photoBean);
                     setImg();
                 } else {
 //                    SnackbarUtil.showLong(this, "亲，拍照失败");
@@ -530,7 +534,10 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
                     c.moveToFirst();
                     int columnIndex = c.getColumnIndex(filePathColumns[0]);
                     String picturePath = c.getString(columnIndex);
-                    picPathList.add(picturePath);
+                    PhotoBean photoBean = new PhotoBean();
+                    photoBean.setDyPhoto(picturePath);
+                    photoBean.setIsDelete(false);
+                    picPathList.add(photoBean);
                     LogUtil.d("选取相册中图片的路径：" + picturePath);
                     c.close();
                     setImg();
@@ -543,6 +550,10 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
     //设置图片
     private void setImg() {
+        //将删除图标 全部隐藏
+        for(int i=0;i<picPathList.size();i++){
+            picPathList.get(i).setIsDelete(false);
+        }
         mAdapter.notifyDataSetChanged();
     }
 

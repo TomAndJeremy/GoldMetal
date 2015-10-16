@@ -119,13 +119,11 @@
         <activity
             android:name=".activity.CreateAccount.InputYourMessage"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.CreateAccount.AccountFinishActivity"
             android:label="AccountFinishActivity"
             android:screenOrientation="portrait" >
         </activity>
-
         <activity
             android:name=".activity.FollowActivity"
             android:screenOrientation="portrait" />
@@ -141,9 +139,20 @@
         <activity
             android:name=".activity.MomentPersonalActivity"
             android:screenOrientation="portrait" />
- <activity
+        <activity
             android:name=".activity.news.ReviewActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.SplashActivity"
+            android:label="SplashActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+
+
+
+
 
         <!-- 个推SDK配置开始 -->
         <!-- 配置的第三方参数属性 -->

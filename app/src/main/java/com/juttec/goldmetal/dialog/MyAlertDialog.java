@@ -18,7 +18,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
-import com.juttec.goldmetal.utils.LogUtil;
 
 public class MyAlertDialog {
 
@@ -214,11 +213,11 @@ public class MyAlertDialog {
     public MyAlertDialog setSingleButton(String text,
                                          final OnClickListener listener) {
         showSingleBtn = true;
-        if ("".equals(text)) {
-            btn_neg.setText("确定");
-        } else {
-            btn_neg.setText(text);
-        }
+//        if ("".equals(text)) {
+//            btn_neg.setText("确定");
+//        } else {
+        btn_single.setText(text);
+//        }
         btn_single.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
