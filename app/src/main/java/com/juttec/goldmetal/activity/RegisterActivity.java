@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,22 +33,28 @@ import java.util.regex.Pattern;
 
 import static com.juttec.goldmetal.R.id.register_bt_ok;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
-   private  EditText phone;
-   private  EditText identifyCode;
-    private EditText password;
-   private  EditText pwdConfig;
+/**
+ * 注册界面
+ */
 
-   private  Button getCode;
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+   private  EditText phone;//手机号
+   private  EditText identifyCode;//验证码
+    private EditText password;//密码
+   private  EditText pwdConfig;//确认密码
+
+   private  Button getCode;//获取验证码
 
     private TimeCount timeCount;
 
     private MyApplication app;
 
-    private String phone_back;
-    private String code_back;
+    private String phone_back;//返回的手机号
+    private String code_back;//返回的验证码
 
     private MyProgressDialog dialog;//正在加载的  进度框
+
+    private int countDown = 60 * 1000;//倒计时的时间  默认为60秒
 
 
     @Override
@@ -55,12 +63,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_register);
         app = (MyApplication) getApplication();
         dialog = new MyProgressDialog(this);
+
         initView();
     }
 
     private void initView() {
 
-        timeCount = new TimeCount(60 * 1000, 1000);
+        timeCount = new TimeCount(countDown, 1000);
 
         phone = (EditText) this.findViewById(R.id.register_et_phone);
         identifyCode = (EditText) this.findViewById(R.id.register_et_identifying_code);
@@ -74,14 +83,30 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         getCode.setOnClickListener(this);
         register.setOnClickListener(this);
+
+        //手机号的监听事件   更改获取验证码按钮的背景
+        phone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String temp = phone.getText().toString().trim();
+                if (temp != null &&! "".equals(temp)&&temp.length()==11) {
+                    getCode.setSelected(true);
+                }
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
-
-
         switch (v.getId()) {
             case R.id.register_bt_identifying_code:
+                //获取验证码
                 if (phoneVerification()) {
                     timeCount.start();
                     RequestParams params = new RequestParams();
@@ -204,9 +229,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
      * 倒计时
      */
     class TimeCount extends CountDownTimer {
-
         private int leftTime;
-
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);// 参数依次为时长,和计时的时间间隔
         }

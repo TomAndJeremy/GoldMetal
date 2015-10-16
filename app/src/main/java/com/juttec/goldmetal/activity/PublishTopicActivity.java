@@ -28,7 +28,6 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -37,7 +36,9 @@ import android.widget.TextView;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.EmoticonsGridAdapter.KeyClickListener;
 import com.juttec.goldmetal.adapter.EmoticonsPagerAdapter;
+import com.juttec.goldmetal.adapter.PhotoGridAdapter;
 import com.juttec.goldmetal.application.MyApplication;
+import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.utils.FileUtil;
 import com.juttec.goldmetal.utils.GetContentUrl;
@@ -90,7 +91,6 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
     private Button mBtnPush;//发表按钮
 
-    private ImageView iv_photo1,iv_photo2,iv_photo3;//上传的图片
 
     private List<String> photoList = new ArrayList<String>();//存放   上传图片后返回的路径
 
@@ -98,6 +98,9 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
     // 存放拍照或从相册选择的图片的路径 的集合
     private  List<String> picPathList = new ArrayList<String>();
+
+    private NoScrollGridView mGridView;//展示图片的gridview
+    private PhotoGridAdapter mAdapter;
 
     private int count = 0;//图片上传到了 第几张
 
@@ -198,9 +201,9 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         ImageButton btEmoji = (ImageButton) this.findViewById(R.id.publis_topic_bt_emoji);
         btEmoji.setOnClickListener(this);
 
-        iv_photo1 = (ImageView) findViewById(R.id.iv_photo1);
-        iv_photo2 = (ImageView) findViewById(R.id.iv_photo2);
-        iv_photo3 = (ImageView) findViewById(R.id.iv_photo3);
+        mGridView = (NoScrollGridView) findViewById(R.id.gridview);
+        mAdapter = new PhotoGridAdapter(PublishTopicActivity.this,picPathList);
+        mGridView.setAdapter(mAdapter);
 
 
         readEmojiIcons();
@@ -540,25 +543,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
     //设置图片
     private void setImg() {
-        switch (picPathList.size()){
-            case 0:
-                break;
-
-            case 1:
-                iv_photo1.setImageBitmap(ImgUtil.getBitmap( picPathList.get(0), 200, 200));
-                break;
-            case 2:
-                iv_photo1.setImageBitmap(ImgUtil.getBitmap( picPathList.get(0), 200, 200));
-                iv_photo2.setImageBitmap(ImgUtil.getBitmap(picPathList.get(1), 200, 200));
-                break;
-
-            case 3:
-                iv_photo1.setImageBitmap(ImgUtil.getBitmap(picPathList.get(0), 200, 200));
-                iv_photo2.setImageBitmap(ImgUtil.getBitmap(picPathList.get(1), 200, 200));
-                iv_photo3.setImageBitmap(ImgUtil.getBitmap(picPathList.get(2), 200, 200));
-                break;
-        }
-
+        mAdapter.notifyDataSetChanged();
     }
 
 

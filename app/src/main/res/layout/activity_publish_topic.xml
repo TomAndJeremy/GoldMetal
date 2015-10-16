@@ -58,35 +58,20 @@
         android:textColor="@color/white"
         android:textSize="@dimen/base_text" />
 
-    <LinearLayout
+
+    <com.juttec.goldmetal.customview.NoScrollGridView
         android:layout_below="@+id/publis_topic_bt_push"
-        android:orientation="horizontal"
-        android:id="@+id/ll_photo"
-        android:layout_margin="8dp"
+        android:id="@+id/gridview"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        >
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:horizontalSpacing="5dp"
+        android:numColumns="3"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="5dp" />
 
-        <ImageView
-            android:id="@+id/iv_photo1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="5dp"/>
-        <ImageView
-            android:id="@+id/iv_photo2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="5dp"/>
-        <ImageView
-            android:id="@+id/iv_photo3"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="5dp"/>
 
-        </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
