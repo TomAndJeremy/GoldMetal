@@ -1,5 +1,6 @@
 package com.juttec.goldmetal.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -9,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.MyFragmentPagerAdapter;
 import com.juttec.goldmetal.fragment.BaseFragment;
-import com.juttec.goldmetal.fragment.MomentFragment;
 
 public class MainActivity extends AppCompatActivity implements BaseFragment.OnFragmentInteractionListener {
     ViewPager viewPager;
@@ -21,6 +21,12 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //退出当前账号
+        if(getIntent().getFlags()== Intent.FLAG_ACTIVITY_CLEAR_TOP&&getIntent().getStringExtra("from").equals("AccountActivity")){
+            startActivity(new Intent(this,LoginActivity.class));
+            finish();
+        }
 
         init();
 

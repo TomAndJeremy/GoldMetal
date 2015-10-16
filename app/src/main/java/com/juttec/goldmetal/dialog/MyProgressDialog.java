@@ -42,7 +42,7 @@ public class MyProgressDialog {
         dialog.setContentView(view);
 
         dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
 
         // 调整dialog背景大小
         ll_bg.setLayoutParams(new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,

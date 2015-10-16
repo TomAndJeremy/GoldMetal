@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dialog_bg"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <EditText
+            android:id="@+id/et_phone"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textSize="@dimen/base_text"
+            android:padding="10dp"
+            android:background="@drawable/bg_mydialog_edit"
+            android:layout_weight="1"
+            android:maxLength="11"
+            android:phoneNumber="true"
+            android:hint="@string/hint_phone"
+            android:inputType="phone" />
+
+
+        <Button
+            android:id="@+id/btn_code"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/btn_selector"
+            android:text="获取验证码"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+
+    <EditText
+        android:id="@+id/et_code"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textSize="@dimen/base_text"
+        android:padding="10dp"
+        android:maxLength="6"
+        android:phoneNumber="true"
+        android:layout_marginTop="10dp"
+        android:hint="@string/hint_identify_code"
+        android:background="@drawable/bg_mydialog_edit"/>
+
+
+
+</LinearLayout>

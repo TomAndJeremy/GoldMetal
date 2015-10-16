@@ -67,6 +67,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         app = (MyApplication) getApplication();
         dialog = new MyProgressDialog(this);
 
+
+
         //初始化个推服务
         PushManager.getInstance().initialize(this.getApplicationContext());
 
@@ -212,14 +214,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
             case R.id.login_tv_fergotpwd:
-                Intent intent_forget = new Intent(LoginActivity.this, FindBcakPWDActivity.class);
+                Intent intent_forget = new Intent(LoginActivity.this, RegisterActivity.class);
+                intent_forget.putExtra("ToActivity","ForgetPwdActivity");
                 startActivity(intent_forget);
                 break;
 
             case R.id.right_text:
+                //注册
                 Intent intent_register = new Intent(LoginActivity.this,RegisterActivity.class);
+                intent_register.putExtra("ToActivity","RegisterActivity");
                 startActivity(intent_register);
-                finish();
+
                 break;
         }
 

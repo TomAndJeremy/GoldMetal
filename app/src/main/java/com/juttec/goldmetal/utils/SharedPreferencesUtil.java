@@ -9,6 +9,12 @@ import android.content.SharedPreferences;
  * 用于存储某些信息的  工具类
  */
 public class SharedPreferencesUtil {
+    //username 用户名  String
+    //pwd 密码   String
+    //remember 是否记住密码  boolean
+
+
+
 
         /**
          * 保存在手机里面的文件名
@@ -77,6 +83,21 @@ public class SharedPreferencesUtil {
 
             return null;
         }
+
+
+
+
+    /**
+     * 根据key   清除存储的 某一个值
+     * @param context
+     * @param key
+     */
+    public static void clearParam(Context context , String key){
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.remove(key);
+        editor.commit();
+    }
 
 
 }

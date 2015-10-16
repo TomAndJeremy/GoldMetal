@@ -3,9 +3,13 @@ package com.juttec.goldmetal.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,6 +19,8 @@ import com.juttec.goldmetal.bean.UserInfoBean;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.utils.NetWorkUtils;
+import com.juttec.goldmetal.utils.SharedPreferencesUtil;
+import com.juttec.goldmetal.utils.SnackbarUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -25,6 +31,9 @@ import com.lidroid.xutils.http.client.HttpRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 用户基本信息界面
@@ -49,7 +58,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private Button btn_exit;//退出当前账号
     private TextView tv_change_pwd;//修改密码
 
-    private MyAlertDialog dialog;//对话框
+    private MyAlertDialog dialog,phoneDialog;//对话框
 
     private String result;//修改后的结果
 
@@ -68,6 +77,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
 
         dialog = new MyAlertDialog(AccountActivity.this);
+        phoneDialog = new MyAlertDialog(AccountActivity.this);
         dialog_progress = new MyProgressDialog(this);
 
         initView();
@@ -82,6 +92,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         head = (RelativeLayout) this.findViewById(R.id.head_layout);
 
         TextView lefttext = (TextView) head.findViewById(R.id.left_text);
+        //联系我们
         lefttext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,6 +155,56 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
             case R.id.account_change_phone:
 
+                View view  = LayoutInflater.from(this).inflate(R.layout.view_phone,null);
+                final EditText et_phone = (EditText) view.findViewById(R.id.et_phone);
+                EditText et_code = (EditText) view.findViewById(R.id.et_code);
+                final Button btn_code = (Button) view.findViewById(R.id.btn_code);
+
+                String phoneContent = et_phone.getText().toString();
+                String codeContent = et_code.getText().toString();
+
+                //手机号的监听事件   更改获取验证码按钮的背景
+                et_phone.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        String temp = et_phone.getText().toString().trim();
+                        if (temp != null &&! "".equals(temp)&&temp.length()==11) {
+                            btn_code.setSelected(true);
+                        }
+                    }
+                });
+
+
+                //获取验证码按钮 的 点击事件
+                btn_code.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(phoneVerification(et_phone.getText().toString().trim())){
+
+                        }
+
+                    }
+                });
+
+
+                phoneDialog.builder().setTitle("手机号修改")
+                        .setView(view)
+                        .setSingleButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+
+
+                                phoneDialog.dismiss();
+                            }
+                        }).show();
+
                 break;
 
             case R.id.account_change_qq:
@@ -157,11 +218,105 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
             case R.id.btn_exit:
                 //退出当前账号
-
-                startActivity(new Intent(AccountActivity.this,LoginActivity.class));
+                SharedPreferencesUtil.clearParam(AccountActivity.this, "pwd");
+                //先跳转到MainActivity 接收后判断 在跳转到LoginActivity
+                Intent intent = new Intent(AccountActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("from","AccountActivity");
+                startActivity(intent);
                 break;
         }
     }
+
+
+    //判断手机号 是否符合规范
+    private boolean phoneVerification(String temp) {
+        if (temp == null || "".equals(temp)) {
+            SnackbarUtil.showShort(this, "请先输入手机号");
+            return false;
+        }
+        Pattern pattern = Pattern.compile("^(1)\\d{10}$");
+        Matcher matcher = pattern.matcher(temp);
+        if (!matcher.find()) {
+            SnackbarUtil.showShort(this, "请检查手机号码是否正确");
+            return false;
+        }
+        return true;
+    }
+
+
+
+    /**
+     * 获取验证码 接口
+     */
+//    private void getCode(){
+//        if (phoneVerification()) {
+//            timeCount.start();
+//            RequestParams params = new RequestParams();
+//            params.addBodyParameter("userMobile", phone.getText().toString().trim());
+//            new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getSendMessageUrl(), params, new RequestCallBack<String>() {
+//                @Override
+//                public void onSuccess(ResponseInfo<String> responseInfo) {
+//
+//                    try {
+//                        JSONObject jsonObject = new JSONObject(responseInfo.result.toString());
+//                        LogUtil.d("获取验证码接口--------------" + responseInfo.result.toString());
+//                        String status = jsonObject.getString("status");
+//                        String promptInfor = jsonObject.getString("promptInfor");
+//
+//
+//                        if ("1".equals(status)) {
+//                            SnackbarUtil.showShort(RegisterActivity.this, "验证码已发送，请注意查收");
+//                            firstTime = System.currentTimeMillis();
+//
+//                            phone_back = jsonObject.getString("message1");
+//                            code_back = jsonObject.getString("message2");
+//                        } else {
+//                            getCode.setText("重新获取");
+//                            getCode.setClickable(true);
+//                            SnackbarUtil.showShort(getApplicationContext(), promptInfor);
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    } finally {
+//                    }
+//
+//                }
+//
+//                @Override
+//                public void onFailure(HttpException error, String msg) {
+//                    getCode.setText("重新获取");
+//                    getCode.setClickable(true);
+//                    NetWorkUtils.showMsg(RegisterActivity.this);
+//                }
+//            });
+//        }
+//    }
+
+
+
+//    /**
+//     * 倒计时
+//     */
+//    class TimeCount extends CountDownTimer {
+//        public TimeCount(long millisInFuture, long countDownInterval) {
+//            super(millisInFuture, countDownInterval);// 参数依次为时长,和计时的时间间隔
+//        }
+//
+//        @Override
+//        public void onFinish() {// 计时完毕时触发
+//            getCode.setText("重新获取");
+//            getCode.setClickable(true);
+//        }
+//
+//        @Override
+//        public void onTick(long millisUntilFinished) {// 计时过程显示
+//            getCode.setClickable(false);
+//            getCode.setText(millisUntilFinished / 1000 + "s");
+//        }
+//    }
+
+
 
 
     public  void showDialog(String title,String edittext, final TextView tv, final int type){
@@ -171,13 +326,17 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 .setSingleButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (type==QQ) {
+                            //设置EditText只能输数字
+                            dialog.setEditType();
+                        }
                         result = dialog.getResult();
                         if (result == null || TextUtils.isEmpty(result)) {
-                            ToastUtil.showShort(AccountActivity.this,"修改的内容不能为空");
+                            ToastUtil.showShort(AccountActivity.this, "修改的内容不能为空");
                         } else {
-                           // tv.setText(dialog.getResult());
+                            // tv.setText(dialog.getResult());
 
-                            editUserInfo(type,tv,result);
+                            editUserInfo(type, tv, result);
                         }
 
                         dialog.dismiss();
@@ -186,7 +345,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
+    /**
+     * 修改用户信息接口
+     * @param type
+     * @param tv
+     * @param result
+     */
     private void editUserInfo(final int type,final TextView tv,final String result){
         dialog_progress.builder().setMessage("请稍等~").show();
 
