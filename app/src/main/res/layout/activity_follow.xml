@@ -9,7 +9,7 @@
         android:id="@+id/head_layout"
         style="@style/HeadBarStytle"
         app:headtitle="@string/follow"
-        app:leftimg="@mipmap/nav_btn_backa_arrow"
+        app:leftimg="@mipmap/nav_btn_back_arrow"
         app:righttext="@string/publish_msg">
 
     </com.juttec.goldmetal.customview.HeadLayout>

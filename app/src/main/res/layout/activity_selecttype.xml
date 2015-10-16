@@ -10,7 +10,7 @@
     <com.juttec.goldmetal.customview.HeadLayout
         style="@style/HeadBarStytle"
         app:headtitle="开户申请"
-        app:leftimg="@mipmap/nav_btn_backa_arrow"></com.juttec.goldmetal.customview.HeadLayout>
+        app:leftimg="@mipmap/nav_btn_back_arrow"></com.juttec.goldmetal.customview.HeadLayout>
 
     <TextView
         android:layout_width="wrap_content"

@@ -12,7 +12,7 @@
     <com.juttec.goldmetal.customview.HeadLayout
         style="@style/HeadBarStytle"
         app:headtitle="@string/price_reduction"
-        app:leftimg="@mipmap/nav_btn_backa_arrow"></com.juttec.goldmetal.customview.HeadLayout>
+        app:leftimg="@mipmap/nav_btn_back_arrow"></com.juttec.goldmetal.customview.HeadLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

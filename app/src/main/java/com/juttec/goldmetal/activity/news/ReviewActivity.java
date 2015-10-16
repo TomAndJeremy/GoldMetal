@@ -1,18 +1,18 @@
 package com.juttec.goldmetal.activity.news;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
-import com.juttec.goldmetal.customview.listview.AutoLoadListView;
+import com.juttec.goldmetal.customview.HeadLayout;
 import com.juttec.goldmetal.customview.listview.LoadMoreListView;
 import com.juttec.goldmetal.customview.listview.LoadingFooter;
 import com.juttec.goldmetal.utils.LogUtil;
@@ -43,13 +43,16 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
     private MyApplication app;
     int pageIndex;
     List<Map<String, String>> maps;
-    MyAdapte myAdapte;
+    MyAdapter myAdapter;
 
     @Override
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_review);
+        setContentView(R.layout.general_listview_layout);
+
+        HeadLayout headLayout = (HeadLayout) findViewById(R.id.head_layout);
+        headLayout.setHeadTitle(getResources().getString(R.string.news_review));
 
         app = (MyApplication) getApplication();
         init();
@@ -58,7 +61,7 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
     private void init() {
 
         swipeLayout = (SwipeRefreshLayout) this
-                .findViewById(R.id.swipe_refresh);
+                .findViewById(R.id.refreshlayout);
         // 顶部刷新的样式
         swipeLayout.setColorSchemeResources(android.R.color.holo_red_light,
                 android.R.color.holo_green_light,
@@ -69,7 +72,18 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
         swipeLayout.setOnRefreshListener(this);
 
 
-        listView = (LoadMoreListView) this.findViewById(R.id.activity_review_listview);
+        listView = (LoadMoreListView) this.findViewById(R.id.listview);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), NewsDetail.class);
+                intent.putExtra("title", maps.get(position).get("title"));
+                intent.putExtra("time", maps.get(position).get("time"));
+                intent.putExtra("id", maps.get(position).get("id"));
+                intent.putExtra("type", "review");
+                startActivity(intent);
+            }
+        });
         listView.setOnLoadNextListener(new LoadMoreListView.OnLoadNextListener() {
             @Override
             public void onLoadNext() {
@@ -82,6 +96,8 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
         swipeLayout.post(new Runnable() {
             @Override
             public void run() {
+                swipeLayout.setRefreshing(true);
+
                 getData(pageIndex);
             }
         });
@@ -125,15 +141,16 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
                             map = new HashMap<String, String>();
                             map.put("title", object1.getString("title"));
                             map.put("time", object1.getString("addTime"));
+                            map.put("id", object1.getString("id"));
                             maps.add(map);
                         }
 
 
-                        if (myAdapte == null) {
-                            myAdapte = new MyAdapte(maps);
-                            listView.setAdapter(myAdapte);
+                        if (myAdapter == null) {
+                            myAdapter = new MyAdapter(maps);
+                            listView.setAdapter(myAdapter);
                         } else {
-                            myAdapte.notifyDataSetChanged();
+                            myAdapter.notifyDataSetChanged();
                         }
 
 
@@ -162,12 +179,12 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
     }
 
 
-    private class MyAdapte extends BaseAdapter {
+    private class MyAdapter extends BaseAdapter {
 
         List<Map<String, String>> maps;
 
 
-        public MyAdapte(List<Map<String, String>> maps) {
+        public MyAdapter(List<Map<String, String>> maps) {
             this.maps = maps;
         }
 
@@ -213,5 +230,10 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
             TextView tvTitle;
             TextView tvTime;
         }
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        listView.stopFooterAnimition();
     }
 }

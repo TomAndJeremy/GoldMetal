@@ -1,60 +1,55 @@
 package com.juttec.goldmetal.activity.news;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.customview.listview.AutoLoadListView;
 import com.juttec.goldmetal.customview.listview.LoadingFooter;
+import com.juttec.goldmetal.utils.LogUtil;
+import com.juttec.goldmetal.utils.NetWorkUtils;
+import com.juttec.goldmetal.utils.ToastUtil;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
 
 
-    // 加载更多
-    public static final int MSG_LOAD_MORE = 0;
-    // 刷新
-    public static final int MSG_REFRESH = 1;
 
 
 
     private SwipeRefreshLayout swipeLayout;
     private AutoLoadListView listView;
 
-    private  MyAdapter adapter;
+    MyApplication app;
+    int pageIndex = 1;
+    List<Map<String, String>> maps;
+    MyAdapter myAdapter;
 
-    private Handler handler = new Handler() {
-        public void handleMessage(android.os.Message msg) {
-            switch (msg.what) {
-                case MSG_LOAD_MORE:
 
-                    if (adapter.count < 60) {
-                        adapter.count += 3;
-                        adapter.notifyDataSetChanged();
-                        listView.setState(LoadingFooter.State.Idle);
-                    } else {
-                        listView.setState(LoadingFooter.State.TheEnd);
-                    }
-
-                    break;
-                case MSG_REFRESH:
-                    swipeLayout.setRefreshing(false);
-                    adapter.count = 3;
-                    listView.smoothScrollToPosition(0);
-
-                    adapter.notifyDataSetChanged();
-                    listView.setState(LoadingFooter.State.Idle);
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
 
 
@@ -63,6 +58,7 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analysis);
 
+        app = (MyApplication) getApplication();
 
 
         swipeLayout = (SwipeRefreshLayout) this
@@ -74,24 +70,117 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
                 android.R.color.holo_orange_light);
 
 
+        swipeLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                pageIndex = 1;
+                getData(pageIndex);
+
+            }
+        });
         swipeLayout.setOnRefreshListener(this);
 
-        listView = (AutoLoadListView) this.findViewById(R.id.listview);
 
-        adapter = new MyAdapter();
-        listView.setAdapter(adapter);
+
+        maps = new ArrayList<>();
+
+        listView = (AutoLoadListView) this.findViewById(R.id.listview);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int i = position - 1;
+                Intent intent = new Intent(getApplicationContext(), NewsDetail.class);
+                intent.putExtra("title", maps.get(i).get("title"));
+                intent.putExtra("time", maps.get(i).get("time"));
+                intent.putExtra("id", maps.get(i).get("id"));
+                intent.putExtra("type", "analysis");
+                startActivity(intent);
+            }
+        });
         listView.setOnLoadNextListener(new AutoLoadListView.OnLoadNextListener() {
 
             @Override
             public void onLoadNext() {
-                handler.sendEmptyMessageDelayed(MSG_LOAD_MORE, 3000);
+                swipeLayout.setRefreshing(true);
+
+                getData(pageIndex);
             }
         });
     }
 
 
 
+    public void getData(int i) {
 
+        RequestParams requestParams = new RequestParams();
+        requestParams.addBodyParameter("pageIndex", i + "");
+        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetDepthAnalysisUrl(), requestParams, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+
+                swipeLayout.setRefreshing(false);
+
+                LogUtil.e(responseInfo.result.toString());
+
+                Map<String, String> map;
+                try {
+                    JSONObject object = new JSONObject(responseInfo.result.toString());
+
+                    int pageNum = 1;
+                    if ("1".equals(object.getString("status"))) {
+
+                        JSONArray jsonArray = object.getJSONArray("entityList");
+
+
+                        if (pageIndex == 1) {
+                            maps.clear();
+                        }
+
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject object1 = jsonArray.getJSONObject(i);
+                            map = new HashMap<>();
+                            map.put("id", object1.getString("id"));
+                            map.put("title", object1.getString("title"));
+                            map.put("titlePhoto", object1.getString("titlePhoto"));
+                            map.put("briefDetails", object1.getString("briefDetails"));
+                            map.put("time", object1.getString("addTime"));
+                            maps.add(map);
+                        }
+
+
+                        if (myAdapter == null) {
+                            myAdapter = new MyAdapter(maps);
+
+                            listView.setAdapter(myAdapter);
+                        } else {
+                            myAdapter.notifyDataSetChanged();
+                        }
+
+
+                        if (pageIndex == pageNum) {
+                            listView.setState(LoadingFooter.State.TheEnd);
+                        }
+                        ++pageIndex;
+                    } else {
+                        ToastUtil.showShort(getApplicationContext(), object.getString("promptInfor"));
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+
+                swipeLayout.setRefreshing(false);
+                NetWorkUtils.showMsg(getApplicationContext());
+            }
+        });
+    }
 
 
     /**
@@ -99,11 +188,17 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
      */
     private class MyAdapter extends BaseAdapter {
 
-        public int count = 3;
+        List<Map<String, String>> maps;
+
+        public MyAdapter(List<Map<String, String>> maps) {
+            this.maps = maps;
+
+        }
 
         @Override
+
         public int getCount() {
-            return count;
+            return maps.size();
         }
 
         @Override
@@ -113,7 +208,7 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return position;
         }
 
         @Override
@@ -122,23 +217,34 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
             ViewHolder viewHolder;
 
             if (convertView == null) {
-                convertView = getLayoutInflater().inflate(R.layout.item,
+                convertView = getLayoutInflater().inflate(R.layout.news_analysis_item,
                         parent, false);
                 viewHolder = new ViewHolder();
-                viewHolder.tv = (TextView) convertView.findViewById(R.id.tv);
+                viewHolder.title=(TextView) convertView.findViewById(R.id.news_analysis_item_title);
+                viewHolder.summary = (TextView) convertView.findViewById(R.id.news_analysis_item_summary);
+                viewHolder.time = (TextView) convertView.findViewById(R.id.news_analysis_item_time);
+                viewHolder.img = (ImageView) convertView.findViewById(R.id.news_analysis_item_img);
+
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            viewHolder.tv.setText("I'm" + position);
+            viewHolder.title.setText(maps.get(position).get("title"));
+            viewHolder.summary.setText(maps.get(position).get("briefDetails"));
+            viewHolder.time.setText(maps.get(position).get("time"));
+            ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + maps.get(position).get("titlePhoto"), viewHolder.img);
+
             return convertView;
         }
 
     }
 
     private static class ViewHolder {
-        TextView tv;
+        TextView title;
+        TextView time;
+        TextView summary;
+        ImageView img;
     }
 
 
@@ -148,7 +254,9 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
     @Override
     public void onRefresh() {
 
-        handler.sendEmptyMessageDelayed(MSG_REFRESH, 3000);
+        pageIndex=1;
+        getData(pageIndex);
+
     }
 
 

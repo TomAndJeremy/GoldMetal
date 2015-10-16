@@ -1,33 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:headview="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/more_rela_normal"
     android:orientation="vertical"
-    tools:context="com.juttec.goldmetal.activity.AnalysisActivity">
-
+    tools:context="com.juttec.goldmetal.activity.AnnouncementActivity">
 
     <com.juttec.goldmetal.customview.HeadLayout
         android:id="@+id/head_layout"
+
         style="@style/HeadBarStytle"
-        headview:headtitle="@string/news_review"
-        headview:leftimg="@mipmap/nav_btn_back_arrow" />
+        app:headtitle="公告"
+        app:leftimg="@mipmap/nav_btn_back_arrow" />
 
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh"
+        android:id="@+id/refreshlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.juttec.goldmetal.customview.listview.LoadMoreListView
-            android:id="@+id/activity_review_listview"
+            android:id="@+id/listview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></com.juttec.goldmetal.customview.listview.LoadMoreListView>
-
+            android:layout_height="match_parent" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>
-

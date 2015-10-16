@@ -11,7 +11,7 @@
     <com.juttec.goldmetal.customview.HeadLayout
         style="@style/HeadBarStytle"
         app:headtitle="@string/head_title_freeremaind"
-        app:leftimg="@mipmap/nav_btn_backa_arrow">
+        app:leftimg="@mipmap/nav_btn_back_arrow">
 
     </com.juttec.goldmetal.customview.HeadLayout>
 

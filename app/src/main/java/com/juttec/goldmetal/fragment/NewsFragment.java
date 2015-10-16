@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.news.AnalysisActivity;
+import com.juttec.goldmetal.activity.news.ExchangeInforActivity;
 import com.juttec.goldmetal.activity.news.ReviewActivity;
 
 /**
@@ -110,7 +111,8 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.tv_announcement:
-
+                intent = new Intent(getActivity(), ExchangeInforActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_institution:
 

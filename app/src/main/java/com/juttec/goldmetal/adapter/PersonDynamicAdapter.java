@@ -409,7 +409,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
 
     private void supportOrCancle(final int position, String dyId, final ImageButton thumb, final LinearLayout viewRoot) {
-        dialog.builder().setMessage("").show();
+        //dialog.builder().setMessage("").show();
         RequestParams params = new RequestParams();
         params.addBodyParameter("dyId", dyId);
         params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
@@ -419,7 +419,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
         new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelSupportUrl(), params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                dialog.dismiss();
+                //dialog.dismiss();
                 Intent intent = new Intent();
 
                 intent.putExtra("dyId", mLists.get(position).getId());

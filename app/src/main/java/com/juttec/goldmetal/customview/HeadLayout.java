@@ -17,7 +17,7 @@ import com.juttec.goldmetal.R;
  */
 public class HeadLayout extends RelativeLayout {
 
-
+    TextView title;
 
     public HeadLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -26,10 +26,10 @@ public class HeadLayout extends RelativeLayout {
         LayoutInflater.from(context).inflate(R.layout.custom_head, this);
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.MyHeadView);
 
-        boolean back=array.getBoolean(R.styleable.MyHeadView_back,true);
+        boolean back = array.getBoolean(R.styleable.MyHeadView_back, true);
 
         String titleText = array.getString(R.styleable.MyHeadView_headtitle);
-        TextView title = (TextView) this.findViewById(R.id.head_title);
+        title = (TextView) this.findViewById(R.id.head_title);
         title.setText(titleText);
 
         String leftText = array.getString(R.styleable.MyHeadView_lefttext);
@@ -42,11 +42,11 @@ public class HeadLayout extends RelativeLayout {
         if (leftimg != 0) {
             ImageView leftImageView = (ImageView) this.findViewById(R.id.left_img);
             leftImageView.setImageResource(leftimg);
-            if (back){
+            if (back) {
                 leftImageView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((Activity)getContext()).finish();
+                        ((Activity) getContext()).finish();
                     }
                 });
 
@@ -70,7 +70,10 @@ public class HeadLayout extends RelativeLayout {
         array.recycle();
 
 
+    }
 
+    public void setHeadTitle(String sTitle) {
+        title.setText(sTitle);
     }
 
 

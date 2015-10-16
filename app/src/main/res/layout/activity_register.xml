@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:headtitle="@string/register"
-        app:leftimg="@mipmap/nav_btn_backa_arrow">
+        app:leftimg="@mipmap/nav_btn_back_arrow">
 
     </com.juttec.goldmetal.customview.HeadLayout>
 

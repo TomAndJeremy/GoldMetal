@@ -14,14 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.AccountActivity;
-import com.juttec.goldmetal.activity.Announcementactivity;
+import com.juttec.goldmetal.activity.AnnouncementActivity;
 import com.juttec.goldmetal.activity.ChartActivity;
 import com.juttec.goldmetal.activity.CreateAccount.AccountNoticeActivity;
-import com.juttec.goldmetal.activity.CreateAccount.SelectType;
 import com.juttec.goldmetal.adapter.MarketRecyclerAdapter;
 import com.juttec.goldmetal.bean.MarketFormInfo;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
@@ -116,7 +114,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                 break;
 
             case R.id.left_img:
-                startActivity(new Intent(getActivity(), Announcementactivity.class));
+                startActivity(new Intent(getActivity(), AnnouncementActivity.class));
                 break;
 
           

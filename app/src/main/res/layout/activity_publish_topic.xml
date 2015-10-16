@@ -12,7 +12,7 @@
         android:id="@+id/head_layout"
         style="@style/HeadBarStytle"
         app:headtitle="@string/publish_topic_title"
-        app:leftimg="@mipmap/nav_btn_backa_arrow">
+        app:leftimg="@mipmap/nav_btn_back_arrow">
 
     </com.juttec.goldmetal.customview.HeadLayout>
 

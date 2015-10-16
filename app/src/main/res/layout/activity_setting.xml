@@ -12,7 +12,7 @@
         android:id="@+id/head_layout"
         style="@style/HeadBarStytle"
         headview:headtitle="@string/head_title_setting"
-        headview:leftimg="@mipmap/nav_btn_backa_arrow" />
+        headview:leftimg="@mipmap/nav_btn_back_arrow" />
 
 
     <RelativeLayout style="@style/relativeLayout_style">

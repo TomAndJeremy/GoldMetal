@@ -95,7 +95,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.FreeRemindActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.PublishTopicActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -134,7 +135,7 @@
             android:name=".activity.MessageDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.Announcementactivity"
+            android:name=".activity.AnnouncementActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MomentPersonalActivity"
@@ -142,18 +143,19 @@
         <activity
             android:name=".activity.news.ReviewActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.SplashActivity"
             android:label="SplashActivity"
             android:screenOrientation="portrait" >
         </activity>
-
-
-
-
-
-
+        <activity
+            android:name=".activity.news.NewsDetail"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.news.ExchangeInforActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.news.ExchangeNoticeActivity" >
+        </activity>
         <!-- 个推SDK配置开始 -->
         <!-- 配置的第三方参数属性 -->
         <meta-data

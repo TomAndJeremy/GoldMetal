@@ -37,8 +37,11 @@
     <string name="news_broadcast">快讯直播</string>
     <string name="news_review">机构评论</string>
     <string name="news_analysis">深度解析</string>
-    <string name="news_announcement">交易公告</string>
+    <string name="news_announcement">交易所公告</string>
     <string name="news_institution">投资机构</string>
+    <string name="detail_news_review">机构评论详情</string>
+    <string name="detail_news_analysis">深度解析详情</string>
+    <string name="detail_news_institution">投资机构详情</string>
 
 
     <!-- ServerFragment-->

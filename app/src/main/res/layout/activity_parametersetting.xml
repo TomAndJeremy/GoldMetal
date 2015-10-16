@@ -12,7 +12,7 @@
         android:id="@+id/head_layout"
         style="@style/HeadBarStytle"
         headview:headtitle="@string/head_title_parametersetting"
-        headview:leftimg="@mipmap/nav_btn_backa_arrow"
+        headview:leftimg="@mipmap/nav_btn_back_arrow"
         />
 
     <ScrollView
@@ -23,6 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:divider="@drawable/divider_shape"
+            android:showDividers="beginning|end|middle"
             >
 
 

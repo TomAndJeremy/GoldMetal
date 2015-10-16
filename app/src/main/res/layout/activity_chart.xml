@@ -10,10 +10,9 @@
     <com.juttec.goldmetal.customview.HeadLayout
         android:id="@+id/head_layout"
         style="@style/HeadBarStytle"
+        app:headtitle="@string/head_title_chart"
         app:lefttext="@string/chart_period"
-        app:righttext="@string/chart_index"
-        app:headtitle="@string/head_title_chart">
-    </com.juttec.goldmetal.customview.HeadLayout>
+        app:righttext="@string/chart_index"></com.juttec.goldmetal.customview.HeadLayout>
 
 
     <!--<android.support.v4.app.FragmentTabHost-->
@@ -47,41 +46,167 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-       android:layout_weight="1">
+        android:layout_weight="1">
 
     </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
+                android:padding="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6sp"
+                    android:text="最高"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1167.84"
+                    android:textColor="@color/red"
+                    android:textSize="20sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6sp"
+                    android:text="今开"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1167.84"
+                    android:textColor="@color/red"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0.5dp"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
+                android:padding="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6sp"
+                    android:text="最低"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1167.84"
+                    android:textColor="#01F301"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6sp"
+                    android:text="作收"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1167.84"
+                    android:textColor="#01F301"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0.5dp"
+            android:background="@color/colorPrimaryDark"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1167.38"
+                android:textColor="@color/red"
+                android:textSize="23sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="5dp"
+                android:text="1167.38"
+                android:textColor="@color/red"
+                android:textSize="17sp" />
+        </RelativeLayout>
+
+    </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-         android:orientation="horizontal"
-        android:padding="5dp"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <Button
             android:id="@+id/btn_time"
             style="@style/ChartButtonStyle"
-            android:text="@string/chrat_time"/>
+            android:text="@string/chrat_time" />
+
         <Button
             android:id="@+id/btn_k_line"
             style="@style/ChartButtonStyle"
-            android:text="@string/chart_K_line"/>
+            android:text="@string/chart_K_line" />
+
         <Button
             android:id="@+id/btn_free_remind"
             style="@style/ChartButtonStyle"
-            android:text="@string/chart_free_remind"/>
+            android:text="@string/chart_free_remind" />
+
         <Button
             android:id="@+id/btn_msg_remind"
             style="@style/ChartButtonStyle"
-            android:text="@string/chart_msg_remind"/>
+            android:text="@string/chart_msg_remind" />
+
         <Button
             android:id="@+id/btn_real_trading"
             style="@style/ChartButtonStyle"
-            android:text="@string/chart_real_trading"/>
+            android:text="@string/chart_real_trading" />
 
     </LinearLayout>
-
 
 
 </LinearLayout>

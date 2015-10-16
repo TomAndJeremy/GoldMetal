@@ -11,7 +11,7 @@
         android:id="@+id/head_layout"
         style="@style/HeadBarStytle"
         headview:headtitle="@string/head_title_about"
-        headview:leftimg="@mipmap/nav_btn_backa_arrow"
+        headview:leftimg="@mipmap/nav_btn_back_arrow"
         />
 
 
