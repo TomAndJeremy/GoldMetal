@@ -2,6 +2,7 @@ package com.juttec.goldmetal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.UserInfoBean;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
+import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.SharedPreferencesUtil;
 import com.juttec.goldmetal.utils.SnackbarUtil;
@@ -52,6 +54,17 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private Button bt_nickname, bt_name, bt_phone, bt_qq;
 
     private TextView tv_nickname, tv_name, tv_phone, tv_qq;
+
+    private int countDown = 60 * 1000;//倒计时的时间  默认为60秒
+    private TimeCount timeCount;//用于倒计时
+    private EditText et_phone;//手机号
+    private EditText et_code ;//验证码
+    private Button btn_code ;//获取验证码按钮
+
+    private String phone_back;//返回的手机号
+    private String code_back;//返回的验证码
+
+
 
     private TextView tv_goldId;//掌金ID
 
@@ -154,11 +167,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.account_change_phone:
+                timeCount = new TimeCount(countDown, 1000);
 
                 View view  = LayoutInflater.from(this).inflate(R.layout.view_phone,null);
-                final EditText et_phone = (EditText) view.findViewById(R.id.et_phone);
-                EditText et_code = (EditText) view.findViewById(R.id.et_code);
-                final Button btn_code = (Button) view.findViewById(R.id.btn_code);
+                 et_phone = (EditText) view.findViewById(R.id.et_phone);
+                 et_code = (EditText) view.findViewById(R.id.et_code);
+                 btn_code = (Button) view.findViewById(R.id.btn_code);
 
                 String phoneContent = et_phone.getText().toString();
                 String codeContent = et_code.getText().toString();
@@ -166,15 +180,17 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 //手机号的监听事件   更改获取验证码按钮的背景
                 et_phone.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
 
                     @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
 
                     @Override
                     public void afterTextChanged(Editable s) {
                         String temp = et_phone.getText().toString().trim();
-                        if (temp != null &&! "".equals(temp)&&temp.length()==11) {
+                        if (temp != null && !"".equals(temp) && temp.length() == 11) {
                             btn_code.setSelected(true);
                         }
                     }
@@ -186,7 +202,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onClick(View v) {
                         if(phoneVerification(et_phone.getText().toString().trim())){
-
+                            //
+                            getCode();
                         }
 
                     }
@@ -194,14 +211,29 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
 
                 phoneDialog.builder().setTitle("手机号修改")
-                        .setView(view)
+                        .setView(view).setCancelableOnTouchOutside(false)
                         .setSingleButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                if(!phoneVerification(et_phone.getText().toString().trim())){
+                                    //
+                                    return;
+                                }
+                                if (checkCode(et_code.getText().toString().trim())) {
+                                    if (!et_phone.getText().toString().trim().equals(phone_back)) {
+                                        ToastUtil.showShort(AccountActivity.this, "验证码错误");
+                                        return;
+                                    } else {
+                                        phoneDialog.dismiss();
+                                        timeCount.cancel();
+                                        //修改手机号
+                                        editUserInfo(QQ, tv_qq, et_phone.getText().toString().trim());
 
+                                    }
+                                } else {
+                                    return;
+                                }
 
-
-                                phoneDialog.dismiss();
                             }
                         }).show();
 
@@ -229,17 +261,63 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
+
+    //监听返回键   取消倒计时
+    @Override
+    public void onBackPressed() {
+        LogUtil.d("-------------------------------");
+        super.onBackPressed();
+        if(phoneDialog!=null&&phoneDialog.isShowing()){
+            timeCount.cancel();
+            LogUtil.d("KEYCODE_BACK--------------");
+        }
+    }
+
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if(event.getKeyCode()==KeyEvent.KEYCODE_BACK){
+//            LogUtil.d("-------------------------------");
+//            if(phoneDialog!=null&&phoneDialog.isShowing()){
+//                timeCount.onTick(0);
+//                timeCount.cancel();
+//                timeCount.onFinish();
+//                LogUtil.d("KEYCODE_BACK--------------");
+//            }
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
+
+
+
     //判断手机号 是否符合规范
     private boolean phoneVerification(String temp) {
         if (temp == null || "".equals(temp)) {
-            SnackbarUtil.showShort(this, "请先输入手机号");
+            ToastUtil.showShort(AccountActivity.this, "请先输入手机号");
             return false;
         }
         Pattern pattern = Pattern.compile("^(1)\\d{10}$");
         Matcher matcher = pattern.matcher(temp);
         if (!matcher.find()) {
-            SnackbarUtil.showShort(this, "请检查手机号码是否正确");
+            ToastUtil.showShort(AccountActivity.this, "手机号码有误");
             return false;
+        }
+        return true;
+    }
+
+
+    //判断验证码是否正确
+    private boolean  checkCode( String code){
+        if (code == null || "".equals(code)) {
+            ToastUtil.showShort(this, "请输入验证码");
+            return false;
+        }else if(code_back==null) {
+            ToastUtil.showShort(this, "请获取验证码");
+            return false;
+        }else{
+            if(!code.equals(code_back)){
+                ToastUtil.showShort(this, "验证码错误");
+                return false;
+            }
         }
         return true;
     }
@@ -249,72 +327,73 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     /**
      * 获取验证码 接口
      */
-//    private void getCode(){
-//        if (phoneVerification()) {
-//            timeCount.start();
-//            RequestParams params = new RequestParams();
-//            params.addBodyParameter("userMobile", phone.getText().toString().trim());
-//            new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getSendMessageUrl(), params, new RequestCallBack<String>() {
-//                @Override
-//                public void onSuccess(ResponseInfo<String> responseInfo) {
-//
-//                    try {
-//                        JSONObject jsonObject = new JSONObject(responseInfo.result.toString());
-//                        LogUtil.d("获取验证码接口--------------" + responseInfo.result.toString());
-//                        String status = jsonObject.getString("status");
-//                        String promptInfor = jsonObject.getString("promptInfor");
-//
-//
-//                        if ("1".equals(status)) {
-//                            SnackbarUtil.showShort(RegisterActivity.this, "验证码已发送，请注意查收");
-//                            firstTime = System.currentTimeMillis();
-//
-//                            phone_back = jsonObject.getString("message1");
-//                            code_back = jsonObject.getString("message2");
-//                        } else {
-//                            getCode.setText("重新获取");
-//                            getCode.setClickable(true);
-//                            SnackbarUtil.showShort(getApplicationContext(), promptInfor);
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    } finally {
-//                    }
-//
-//                }
-//
-//                @Override
-//                public void onFailure(HttpException error, String msg) {
-//                    getCode.setText("重新获取");
-//                    getCode.setClickable(true);
-//                    NetWorkUtils.showMsg(RegisterActivity.this);
-//                }
-//            });
-//        }
-//    }
+    private void getCode(){
+        if (phoneVerification(et_phone.getText().toString().trim())) {
+            timeCount.start();
+            RequestParams params = new RequestParams();
+            params.addBodyParameter("userMobile", et_phone.getText().toString().trim());
+            new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getSendMessageUrl(), params, new RequestCallBack<String>() {
+                @Override
+                public void onSuccess(ResponseInfo<String> responseInfo) {
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseInfo.result.toString());
+                        LogUtil.d("获取验证码接口--------------" + responseInfo.result.toString());
+                        String status = jsonObject.getString("status");
+                        String promptInfor = jsonObject.getString("promptInfor");
+
+
+                        if ("1".equals(status)) {
+                            ToastUtil.showShort(AccountActivity.this, "验证码已发送，请注意查收");
+
+                            phone_back = jsonObject.getString("message1");
+                            code_back = jsonObject.getString("message2");
+                        } else {
+                            btn_code.setText("重新获取");
+                            btn_code.setClickable(true);
+                            SnackbarUtil.showShort(getApplicationContext(), promptInfor);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } finally {
+                    }
+
+                }
+
+                @Override
+                public void onFailure(HttpException error, String msg) {
+                    btn_code.setText("重新获取");
+                    btn_code.setClickable(true);
+                    NetWorkUtils.showMsg(AccountActivity.this);
+                }
+            });
+        }
+    }
 
 
 
-//    /**
-//     * 倒计时
-//     */
-//    class TimeCount extends CountDownTimer {
-//        public TimeCount(long millisInFuture, long countDownInterval) {
-//            super(millisInFuture, countDownInterval);// 参数依次为时长,和计时的时间间隔
-//        }
-//
-//        @Override
-//        public void onFinish() {// 计时完毕时触发
-//            getCode.setText("重新获取");
-//            getCode.setClickable(true);
-//        }
-//
-//        @Override
-//        public void onTick(long millisUntilFinished) {// 计时过程显示
-//            getCode.setClickable(false);
-//            getCode.setText(millisUntilFinished / 1000 + "s");
-//        }
-//    }
+    /**
+     * 倒计时
+     */
+    class TimeCount extends CountDownTimer {
+        public TimeCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);// 参数依次为时长,和计时的时间间隔
+        }
+
+        @Override
+        public void onFinish() {// 计时完毕时触发
+
+            btn_code.setText("重新获取");
+            btn_code.setSelected(true);
+            btn_code.setClickable(true);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {// 计时过程显示
+            btn_code.setClickable(false);
+            btn_code.setText(millisUntilFinished / 1000 + "s");
+        }
+    }
 
 
 

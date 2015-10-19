@@ -176,8 +176,10 @@ public class MyAlertDialog {
     }
 
 
-    public MyAlertDialog setCancelable(boolean cancel) {
-        dialog.setCancelable(cancel);
+
+    public MyAlertDialog setCancelableOnTouchOutside(boolean cancel) {
+//        dialog.setCancelable(cancel);
+        dialog.setCanceledOnTouchOutside(cancel);
         return this;
     }
 
@@ -230,7 +232,7 @@ public class MyAlertDialog {
             @Override
             public void onClick(View v) {
                 listener.onClick(v);
-                dialog.dismiss();
+//                dialog.dismiss();
             }
         });
         return this;
@@ -305,5 +307,12 @@ public class MyAlertDialog {
 
     public void dismiss() {
         dialog.dismiss();
+    }
+
+
+
+    //dialog 是否正在显示
+    public boolean isShowing(){
+        return dialog.isShowing();
     }
 }

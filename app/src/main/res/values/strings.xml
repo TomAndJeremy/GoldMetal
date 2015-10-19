@@ -76,7 +76,7 @@
     <string name="head_title_setting">系统设置</string>
     <string name="setting_screen_light">是否设置屏幕常亮</string>
     <string name="setting_display_refresh">是否显示刷新时间</string>
-    <string name="setting_refresh_time">刷新行情时间间隔(5秒)</string>
+    <string name="setting_refresh_time">刷新行情时间间隔(s)</string>
     <string name="setting_parameter">指标参数设置</string>
 
 

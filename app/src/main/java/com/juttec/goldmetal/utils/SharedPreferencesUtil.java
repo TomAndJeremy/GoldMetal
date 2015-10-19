@@ -13,6 +13,9 @@ public class SharedPreferencesUtil {
     //pwd 密码   String
     //remember 是否记住密码  boolean
 
+    //isScreenLight 是否设置屏幕常亮  boolean
+    //isShowRefreshTiem  是否显示刷新时间 boolean
+    //refreshTime  刷新时间  int
 
 
 

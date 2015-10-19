@@ -2,13 +2,9 @@ package com.juttec.goldmetal.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
-
-import com.juttec.goldmetal.activity.PublishTopicActivity;
 
 /**
  * Created by Jeremy on 2015/9/21.
@@ -49,6 +45,9 @@ public class SnackbarUtil {
     private static void hideInput(Context context, View view) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        if(inputMethodManager!=null){
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
     }
 }

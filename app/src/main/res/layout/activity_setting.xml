@@ -53,16 +53,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/iv_refresh_time_reduce"
-                style="@style/share_image_style"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 android:src="@mipmap/content_more_set_btn_time_reduce" />
+
+            <EditText
+                android:id="@+id/et_refresh_time"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:numeric="integer"
+                android:inputType="number"
+                android:maxLength="3"
+                android:text="5"/>
 
             <ImageView
                 android:id="@+id/iv_refresh_time_plus"
-                style="@style/share_image_style"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 android:layout_toRightOf="@+id/iv_refresh_time_reduce"
                 android:src="@mipmap/content_more_set_btn_time_plus" />
         </LinearLayout>
@@ -101,6 +116,8 @@
         android:id="@+id/setting_parameter"
         style="@style/rl_text_style"
         android:text="@string/setting_parameter" />
+
+    <View style="@style/divide_line_style" />
 
 
 </LinearLayout>
