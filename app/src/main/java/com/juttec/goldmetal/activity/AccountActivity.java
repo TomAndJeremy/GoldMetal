@@ -170,6 +170,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 phoneDialog = new MyAlertDialog(AccountActivity.this);
                 timeCount = new TimeCount(countDown, 1000);
 
+
+
                 View view  = LayoutInflater.from(this).inflate(R.layout.view_phone,null);
                  et_phone = (EditText) view.findViewById(R.id.et_phone);
                  et_code = (EditText) view.findViewById(R.id.et_code);
