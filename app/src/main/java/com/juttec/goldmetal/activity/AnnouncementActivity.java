@@ -46,6 +46,7 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
     MyAdapter myAdapter;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
