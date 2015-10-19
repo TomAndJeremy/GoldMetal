@@ -90,7 +90,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
 
         dialog = new MyAlertDialog(AccountActivity.this);
-        phoneDialog = new MyAlertDialog(AccountActivity.this);
+
         dialog_progress = new MyProgressDialog(this);
 
         initView();
@@ -167,6 +167,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.account_change_phone:
+                phoneDialog = new MyAlertDialog(AccountActivity.this);
                 timeCount = new TimeCount(countDown, 1000);
 
                 View view  = LayoutInflater.from(this).inflate(R.layout.view_phone,null);
