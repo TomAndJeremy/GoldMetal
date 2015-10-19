@@ -165,6 +165,8 @@ public class PersonDynamicAdapter extends BaseAdapter {
         holder.thumb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                holder.thumb.setClickable(false);
+
                 //点赞或  取消赞 接口
                 supportOrCancle(position, mLists.get(position).getId(), holder.thumb, holder.supportName);
             }
@@ -419,6 +421,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
         new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelSupportUrl(), params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+
                 //dialog.dismiss();
                 Intent intent = new Intent();
 
@@ -465,13 +468,21 @@ public class PersonDynamicAdapter extends BaseAdapter {
                     } else if ("0".equals(object.getString("status"))) {
                         ToastUtil.showShort(mContext, object.getString("promptInfor"));
                     }
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }finally {
+                    thumb.setClickable(true);
                 }
+
+
+
             }
 
             @Override
             public void onFailure(HttpException error, String msg) {
+                thumb.setClickable(true);
                 dialog.dismiss();
                 NetWorkUtils.showMsg(mContext);
             }

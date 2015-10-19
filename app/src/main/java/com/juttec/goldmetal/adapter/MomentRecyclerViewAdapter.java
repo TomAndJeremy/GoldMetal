@@ -142,12 +142,13 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
         addCommentView(holder.comment, position);//添加评论
 
-        addSuportView(holder.supportName, getsuportGuy(position, holder));
+        addSupportView(holder.supportName, getsuportGuy(position, holder));
 
         //点赞的点击事件
         holder.thumb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                holder.thumb.setClickable(false);
                 //检查个人信息是否完善
                 if(!checkNameAndPhoto()){
                     return;
@@ -156,10 +157,11 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 params.addBodyParameter("dyId", entityList.get(position).getId());
                 params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
                 params.addBodyParameter("userName", app.getUserInfoBean().getUserNickName());
+                params.addBodyParameter("status", holder.thumb.isSelected() ? "1" : "0");//如果已点赞 则取消赞   如果没点赞 则点赞
 
 
                 if (holder.thumb.isSelected()) {
-                    holder.thumb.setClickable(false);
+
                     params.addBodyParameter("status", "1");//取消赞
                     new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelSupportUrl(), params, new RequestCallBack<String>() {
                         @Override
@@ -188,8 +190,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                            }finally {
+                                holder.thumb.setClickable(true);
                             }
-                            holder.thumb.setClickable(true);
+
                         }
 
                         @Override
@@ -199,7 +203,6 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                         }
                     });
                 } else {
-                    params.addBodyParameter("status", "0");//点赞
                     new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelSupportUrl(), params, new RequestCallBack<String>() {
                         @Override
                         public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -224,9 +227,11 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
                                 }
 
-                                holder.thumb.setClickable(true);
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                            }finally {
+                                holder.thumb.setClickable(true);
                             }
 
                         }
@@ -351,11 +356,15 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     }
 
     //添加点赞的人名
-    private void addSuportView(LinearLayout viewRoot, ArrayList<Map<String, String>> s) {
+    private void addSupportView(LinearLayout viewRoot, ArrayList<Map<String, String>> s) {
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         for (int i = 0; i < s.size(); i++) {
+            if (i > 10) {
+
+                return;
+            }
             TextView tv = new TextView(context);
             tv.setTextColor(Color.rgb(48, 52, 136));
             tv.setLayoutParams(lp);
@@ -369,6 +378,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             viewRoot.addView(tv);
             viewRoot.setVisibility(View.VISIBLE);
             clickName(tv, id, name);
+
         }
 
     }

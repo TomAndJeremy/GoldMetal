@@ -222,5 +222,17 @@ public class MyApplication extends Application {
         return BASEURL + "App_Consulting/GetNoticeManage";
     }
 
+    //获取交易机构信息
+    public String getGetTradeOrgUrl() {
+
+        return BASEURL + "App_Consulting/GetTradeOrg";
+    }
+
+    //获取交易规则
+    public String getGetTradeRuleUrl() {
+
+        return BASEURL + "App_Consulting/GetTradeRule";
+    }
+
 
 }

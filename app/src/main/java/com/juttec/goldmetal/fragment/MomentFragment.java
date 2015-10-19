@@ -532,6 +532,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                             entityList.clear();//刷新时先清空集合
                         }
                         List<DynamicEntityList> dynamicEntityLists = dynamicMsgBean.getEntityList();
+
                         entityList.addAll(dynamicEntityLists);//向集合中添加数据
                         i++;//每次加载后页数加一
                         if (adapter == null) {

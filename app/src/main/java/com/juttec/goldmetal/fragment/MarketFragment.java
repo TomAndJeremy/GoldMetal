@@ -17,7 +17,6 @@ import android.widget.ImageView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.AccountActivity;
-import com.juttec.goldmetal.activity.AnnouncementActivity;
 import com.juttec.goldmetal.activity.ChartActivity;
 import com.juttec.goldmetal.activity.CreateAccount.AccountNoticeActivity;
 import com.juttec.goldmetal.adapter.MarketRecyclerAdapter;

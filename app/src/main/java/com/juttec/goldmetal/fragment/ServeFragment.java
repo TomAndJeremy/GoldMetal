@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.PriceReductionActivity;
+import com.juttec.goldmetal.activity.TradeOrgActivity;
 
 /**
  * 服务界面
@@ -88,7 +89,8 @@ public class ServeFragment extends BaseFragment implements View.OnClickListener 
 
                 break;
             case R.id.tv_trading_rules:
-
+                Intent intent = new Intent(getActivity(), TradeOrgActivity.class);
+                startActivity(intent);
                 break;
         }
     }
