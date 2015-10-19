@@ -102,6 +102,8 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
 
     }
 
+
+
     public void getData(int i) {
 
         RequestParams requestParams = new RequestParams();
