@@ -112,8 +112,7 @@
         <activity
             android:name=".activity.CreateAccount.AccountNoticeActivity"
             android:label="AccountNoticeActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CreateAccount.SelectType"
             android:screenOrientation="portrait" />
@@ -123,8 +122,7 @@
         <activity
             android:name=".activity.CreateAccount.AccountFinishActivity"
             android:label="AccountFinishActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.FollowActivity"
             android:screenOrientation="portrait" />
@@ -135,9 +133,6 @@
             android:name=".activity.MessageDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.AnnouncementActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.MomentPersonalActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -146,16 +141,14 @@
         <activity
             android:name=".activity.SplashActivity"
             android:label="SplashActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.news.NewsDetail"
+            android:name=".activity.news.NewsDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.news.ExchangeInforActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.news.ExchangeNoticeActivity" >
-        </activity>
+        <activity android:name=".activity.news.ExchangeNoticeActivity" />
         <!-- 个推SDK配置开始 -->
         <!-- 配置的第三方参数属性 -->
         <meta-data
@@ -319,8 +312,7 @@
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" >
-        </activity>
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- 调用新浪原生SDK，需要注册的回调activity -->
         <activity
@@ -334,7 +326,12 @@
         </activity>
         <!-- 分享SDK配置结束 -->
 
-
+        <activity android:name=".activity.news.InvestmentOrgActivity" >
+        </activity>
+        <activity android:name=".activity.TradeOrgActivity" >
+        </activity>
+        <activity android:name=".activity.TradeRuleActivity" >
+        </activity>
     </application>
 
 </manifest>

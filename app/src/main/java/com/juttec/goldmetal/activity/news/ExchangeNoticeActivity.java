@@ -113,7 +113,7 @@ public class ExchangeNoticeActivity extends AppCompatActivity implements SwipeRe
         RequestParams requestParams = new RequestParams();
         requestParams.addBodyParameter("pageIndex", i + "");
         requestParams.addBodyParameter("exchangeId", id);
-        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetOrgReviewUrl(), requestParams, new RequestCallBack<String>() {
+        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetExchangeNoticeUrl(), requestParams, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 

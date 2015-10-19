@@ -76,7 +76,7 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), NewsDetail.class);
+                Intent intent = new Intent(getApplicationContext(), NewsDetailActivity.class);
                 intent.putExtra("title", maps.get(position).get("title"));
                 intent.putExtra("time", maps.get(position).get("time"));
                 intent.putExtra("id", maps.get(position).get("id"));
