@@ -3,6 +3,7 @@ package com.juttec.goldmetal.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -315,4 +316,15 @@ public class MyAlertDialog {
     public boolean isShowing(){
         return dialog.isShowing();
     }
+
+
+
+    //设置   diaolog返回键的监听
+    public MyAlertDialog setDismissListener(DialogInterface.OnDismissListener listener){
+        dialog.setOnDismissListener(listener);
+        return this;
+    }
+
+
+
 }

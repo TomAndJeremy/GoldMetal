@@ -1,5 +1,6 @@
 package com.juttec.goldmetal.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -215,10 +216,11 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
                 phoneDialog.builder().setTitle("手机号修改")
                         .setView(view).setCancelableOnTouchOutside(false)
+                        .setDismissListener(keylistener)
                         .setSingleButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if(!phoneVerification(et_phone.getText().toString().trim())){
+                                if (!phoneVerification(et_phone.getText().toString().trim())) {
                                     //
                                     return;
                                 }
@@ -228,7 +230,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                                         return;
                                     } else {
                                         phoneDialog.dismiss();
-                                        timeCount.cancel();
                                         //修改手机号
                                         editUserInfo(QQ, tv_qq, et_phone.getText().toString().trim());
 
@@ -264,31 +265,15 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
-    //监听返回键   取消倒计时
-    @Override
-    public void onBackPressed() {
-        LogUtil.d("-------------------------------");
-        super.onBackPressed();
-        if(phoneDialog!=null&&phoneDialog.isShowing()){
+    //diaolog   隐藏的监听
+    DialogInterface.OnDismissListener keylistener = new DialogInterface.OnDismissListener(){
+        @Override
+        public void onDismiss(DialogInterface dialog) {
             timeCount.cancel();
-            LogUtil.d("KEYCODE_BACK--------------");
+            btn_code.setText("获取验证码");
+            btn_code.setClickable(true);
         }
-    }
-
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if(event.getKeyCode()==KeyEvent.KEYCODE_BACK){
-//            LogUtil.d("-------------------------------");
-//            if(phoneDialog!=null&&phoneDialog.isShowing()){
-//                timeCount.onTick(0);
-//                timeCount.cancel();
-//                timeCount.onFinish();
-//                LogUtil.d("KEYCODE_BACK--------------");
-//            }
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
+    } ;
 
 
 
@@ -352,6 +337,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                             phone_back = jsonObject.getString("message1");
                             code_back = jsonObject.getString("message2");
                         } else {
+                            timeCount.cancel();
                             btn_code.setText("重新获取");
                             btn_code.setClickable(true);
                             SnackbarUtil.showShort(getApplicationContext(), promptInfor);
@@ -365,6 +351,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
                 @Override
                 public void onFailure(HttpException error, String msg) {
+                    timeCount.cancel();
                     btn_code.setText("重新获取");
                     btn_code.setClickable(true);
                     NetWorkUtils.showMsg(AccountActivity.this);
@@ -460,7 +447,9 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                             String status = object.getString("status");
                             String promptInfor = object.getString("promptInfor");
                             if("1".equals(status)){
-
+                                timeCount.cancel();
+                                btn_code.setText("获取验证码");
+                                btn_code.setClickable(true);
                                 tv.setText(result);
 
                                 if(type==NICKNAME){

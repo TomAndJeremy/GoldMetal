@@ -11,7 +11,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.customview.HeadLayout;
+import com.juttec.goldmetal.dialog.MyProgressDialog;
+import com.juttec.goldmetal.utils.NetWorkUtils;
+import com.juttec.goldmetal.utils.ToastUtil;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class FeedbackActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -25,10 +38,17 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     private EditText edit_feedback;//输入反馈意见
 
 
+    private MyProgressDialog dialog_progress;//正在加载 进度框
+    private MyApplication app;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
+
+        app = (MyApplication) getApplication();
+        dialog_progress = new MyProgressDialog(this);
 
         initView();
     }
@@ -82,7 +102,12 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
 
                 case R.id.btn_send:
                     //发表按钮
-
+                    String content = edit_feedback.getText().toString();
+                    if (TextUtils.isEmpty(content) || "".equals(content) || content.trim().length() <= 0) {
+                        ToastUtil.showShort(FeedbackActivity.this,"反馈内容不能为空！");
+                    }else{
+                        submitAdvice(content);
+                    }
                     break;
                 case R.id.left_img:
                     //返回按钮
@@ -90,4 +115,46 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     break;
             }
     }
+
+
+
+    //提交反馈意见
+    private void submitAdvice(String content){
+        dialog_progress.builder().setMessage("正在提交信息~").show();
+        RequestParams params = new RequestParams();
+//        params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
+        params.addBodyParameter("feedbackInfor",content);
+
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.send(HttpRequest.HttpMethod.POST, app.getSubmitAdvice(), params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog_progress.dismiss();
+                JSONObject object = null;
+                try {
+                    object = new JSONObject(responseInfo.result.toString());
+                    String status = object.getString("status");
+                    String promptInfor = object.getString("promptInfor");
+                    if ("1".equals(status)) {
+                        finish();
+                    } else {
+                    }
+
+                    ToastUtil.showShort(FeedbackActivity.this, promptInfor);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog_progress.dismiss();
+                NetWorkUtils.showMsg(FeedbackActivity.this);
+            }
+        });
+
+    }
+
+
 }

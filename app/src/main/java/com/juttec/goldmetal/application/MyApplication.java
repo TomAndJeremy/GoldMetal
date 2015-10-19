@@ -235,4 +235,17 @@ public class MyApplication extends Application {
     }
 
 
+    //提交开户信息
+    public String getSubmitOpenAccountInfor() {
+
+        return BASEURL + "App_Consulting/SubmitOpenAccountInfor";
+    }
+
+    //提交反馈信息
+    public String getSubmitAdvice() {
+
+        return BASEURL + "App_User/SubmitAdvice";
+    }
+
+
 }

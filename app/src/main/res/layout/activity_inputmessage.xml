@@ -91,7 +91,8 @@
                 android:id="@+id/et_phone"
                 style="@style/EditTextStyle"
                 android:phoneNumber="true"
-                android:background="@null" />
+                android:background="@null"
+                android:maxLength="11"/>
         </LinearLayout>
 
 
