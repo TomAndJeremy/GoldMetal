@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/news_exchange_item_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="110dp"
+        android:layout_height="80dp"
         android:layout_centerVertical="true"
         android:layout_margin="7dp"
         android:scaleType="centerCrop"
@@ -18,7 +18,7 @@
         android:id="@+id/news_exchange_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/news_exchange_item_img"
         android:singleLine="true"
         android:text="希腊认为触发黄金避险需求  美联储及要成金市新焦点"
@@ -31,7 +31,7 @@
         android:id="@+id/news_exchange_item_infor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/news_exchange_item_name"
         android:layout_toRightOf="@+id/news_exchange_item_img"
         android:text="希腊认为触发黄金避险需求  美联储及要成金市新焦点"
         android:textColor="@color/secondary_text"

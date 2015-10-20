@@ -103,6 +103,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
 
                 break;
             case R.id.tv_review:
+                //评论机构
                 intent = new Intent(getActivity(), ReviewActivity.class);
                 startActivity(intent);
                 break;
@@ -112,10 +113,12 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.tv_announcement:
+                //交易所公告
                 intent = new Intent(getActivity(), ExchangeInforActivity.class);
                 startActivity(intent);
                 break;
             case R.id.tv_institution:
+                //投资机构
                 intent = new Intent(getActivity(), InvestmentOrgActivity.class);
                 startActivity(intent);
                 break;

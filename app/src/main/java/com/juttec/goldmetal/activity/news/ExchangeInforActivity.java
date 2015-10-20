@@ -38,6 +38,8 @@ import java.util.Map;
 
 /**
  * Created by Jeremy on 2015/10/16.
+ *
+ * 交易所公告 界面
  */
 public class ExchangeInforActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 

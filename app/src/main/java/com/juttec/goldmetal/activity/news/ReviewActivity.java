@@ -36,6 +36,7 @@ import java.util.Map;
 
 /**
  * Created by Jeremy on 2015/10/15.
+ * 评论机构界面
  */
 public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     LoadMoreListView listView;

@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 /**
  * Created by Jeremy on 2015/10/16.
+ * 机构评论详情 界面
  */
 public class NewsDetailActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
@@ -49,9 +50,9 @@ public class NewsDetailActivity extends AppCompatActivity {
         String type = intent.getStringExtra("type");
 
 
-        if ("review".equals(type)) {
-            headLayout.setHeadTitle(getResources().getString(R.string.detail_news_review));
+        if ("review".equals(type)) { headLayout.setHeadTitle(getResources().getString(R.string.detail_news_review));
             url = app.getGetOrgReviewDetailsUrl();
+
         } else if ("analysis".equals(type)) {
             headLayout.setHeadTitle(getResources().getString(R.string.detail_news_analysis));
             url = app.getGetDepthAnalysisDetailsUrl();

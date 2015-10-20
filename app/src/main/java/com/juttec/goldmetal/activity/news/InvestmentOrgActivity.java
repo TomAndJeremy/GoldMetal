@@ -36,6 +36,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 投资机构界面
+ */
+
 public class InvestmentOrgActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     LoadMoreListView listView;
     SwipeRefreshLayout swipeLayout;
