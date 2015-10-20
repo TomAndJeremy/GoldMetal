@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
-import com.juttec.goldmetal.customview.CBAlignTextView;
 import com.juttec.goldmetal.customview.HeadLayout;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
@@ -29,8 +28,8 @@ import org.json.JSONObject;
 public class NewsDetailActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     MyApplication app;
-    CBAlignTextView content;
-    TextView  tvTitle, tvTime;
+    TextView content;
+    TextView tvTitle, tvTime;
     String url;
 
     @Override
@@ -50,7 +49,8 @@ public class NewsDetailActivity extends AppCompatActivity {
         String type = intent.getStringExtra("type");
 
 
-        if ("review".equals(type)) { headLayout.setHeadTitle(getResources().getString(R.string.detail_news_review));
+        if ("review".equals(type)) {
+            headLayout.setHeadTitle(getResources().getString(R.string.detail_news_review));
             url = app.getGetOrgReviewDetailsUrl();
 
         } else if ("analysis".equals(type)) {
@@ -64,7 +64,7 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         tvTitle = (TextView) this.findViewById(R.id.new_detail_title);
         tvTime = (TextView) this.findViewById(R.id.new_detail_time);
-        content = (CBAlignTextView) this.findViewById(R.id.new_detail_content);
+        content = (TextView) this.findViewById(R.id.new_detail_content);
 
         tvTime.setText(time);
         tvTitle.setText(title);

@@ -32,7 +32,7 @@
         android:layout_height="1dp"
         android:layout_margin="10dp"
         android:background="@drawable/divider_shape" />
-    <com.juttec.goldmetal.customview.CBAlignTextView
+    <TextView
         android:textColor="@color/black"
         android:id="@+id/new_detail_content"
         android:layout_width="wrap_content"

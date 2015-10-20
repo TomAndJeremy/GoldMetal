@@ -22,7 +22,7 @@
         android:textColor="@color/secondary_dark"
         android:textSize="12sp" />
 
-    <com.juttec.goldmetal.customview.CBAlignTextView
+    <TextView
         android:id="@+id/announcement_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

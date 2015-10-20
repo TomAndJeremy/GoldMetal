@@ -1,8 +1,8 @@
 package com.juttec.goldmetal.activity;
 
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
-import com.juttec.goldmetal.customview.CBAlignTextView;
 import com.juttec.goldmetal.customview.listview.LoadMoreListView;
 import com.juttec.goldmetal.customview.listview.LoadingFooter;
 import com.juttec.goldmetal.utils.LogUtil;
@@ -208,7 +207,7 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
                 viewHolder = new ViewHolder();
                 viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.announcement_title);
                 viewHolder.tvTime = (TextView) convertView.findViewById(R.id.announcement_time);
-                viewHolder.tvContent = (CBAlignTextView) convertView.findViewById(R.id.announcement_content);
+                viewHolder.tvContent = (TextView) convertView.findViewById(R.id.announcement_content);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -225,7 +224,7 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
         private class ViewHolder {
             TextView tvTitle;
             TextView tvTime;
-            CBAlignTextView tvContent;
+            TextView tvContent;
         }
     }
     @Override
