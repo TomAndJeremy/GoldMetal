@@ -85,13 +85,16 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
                 startActivity(intent);
             }
         });
+
         listView.setOnLoadNextListener(new LoadMoreListView.OnLoadNextListener() {
             @Override
             public void onLoadNext() {
-                getData(pageIndex);
 
+                getData(pageIndex);
+                LogUtil.d("onLoadNext()----------");
             }
         });
+
         maps = new ArrayList<>();
         pageIndex = 1;
         swipeLayout.post(new Runnable() {
@@ -111,7 +114,7 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
 
         pageIndex = 1;
         getData(pageIndex);
-
+        LogUtil.d("onRefresh()----------");
     }
 
     public void getData(int i) {

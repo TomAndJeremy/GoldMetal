@@ -145,8 +145,9 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.market_search:
+        switch (v.getId()){
+            case  R.id.market_search:
+                //搜索个股
                 final MyAlertDialog dialog = new MyAlertDialog(getActivity());
                 dialog.builder()
                         .setTitle("搜索个股").setEditText("请输入个股代码")
@@ -160,10 +161,12 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                 break;
 
             case R.id.right_img:
+                //个人账户
                 startActivity(new Intent(getActivity(), AccountActivity.class));
                 break;
 
             case R.id.left_img:
+                //公告
                 startActivity(new Intent(getActivity(), AnnouncementActivity.class));
                 break;
 
@@ -173,6 +176,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                 startActivity(new Intent(getActivity(), AccountNoticeActivity.class));
                 break;
             case R.id.fragment_market_strategy:
+                //今日策略
                 Intent intent = new Intent(getActivity(), TodayStrategyActivity.class);
 
                 startActivity(intent);

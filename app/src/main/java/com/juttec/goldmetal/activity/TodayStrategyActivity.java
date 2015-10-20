@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
+import com.juttec.goldmetal.customview.HeadLayout;
 import com.juttec.goldmetal.customview.listview.LoadMoreListView;
 import com.juttec.goldmetal.customview.listview.LoadingFooter;
 import com.juttec.goldmetal.utils.LogUtil;
@@ -31,8 +32,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 今日策略 界面
+ */
+
 public class TodayStrategyActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
+    private String head_title = "今日策略";//标题栏
     LoadMoreListView listView;
     SwipeRefreshLayout swipeLayout;
     private MyApplication app;
@@ -53,6 +59,10 @@ public class TodayStrategyActivity extends AppCompatActivity implements SwipeRef
     }
 
     private void init() {
+        HeadLayout headLayout = (HeadLayout) findViewById(R.id.head_layout);
+        TextView tv_title = (TextView) headLayout.findViewById(R.id.head_title);
+        tv_title.setText(head_title);
+
 
         swipeLayout = (SwipeRefreshLayout) this
                 .findViewById(R.id.refreshlayout);

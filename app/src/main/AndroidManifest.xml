@@ -149,6 +149,23 @@
             android:name=".activity.news.ExchangeInforActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.news.ExchangeNoticeActivity" />
+        <activity
+            android:name=".activity.AnnouncementActivity"
+            android:screenOrientation="portrait" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <!-- 个推SDK配置开始 -->
         <!-- 配置的第三方参数属性 -->
         <meta-data

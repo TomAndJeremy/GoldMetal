@@ -215,12 +215,13 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                     object = new JSONObject(responseInfo.result.toString());
                     String status = object.getString("status");
                     String promptInfor = object.getString("promptInfor");
-                    totalPage =  Integer.parseInt(object.getString("message1"));
-                    if(totalPage ==0){
-                        ToastUtil.showShort(MessageActivity.this,"您还没有任何消息");
-                        return;
-                    }
+
                     if ("1".equals(status)) {
+                        totalPage =  Integer.parseInt(object.getString("message1"));
+                        if(totalPage ==0){
+                            ToastUtil.showShort(MessageActivity.this,"您还没有任何消息");
+                            return;
+                        }
                         JSONArray msgArray = object.getJSONArray("entityList");
                         if(flag==MSG_REFRESH){
                             //刷新

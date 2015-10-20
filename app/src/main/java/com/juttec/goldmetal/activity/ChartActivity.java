@@ -23,12 +23,12 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     private TextView tv_index;//指标
     private TextView tv_title;//标题
 
-    private Button btn_times,btn_Kline, btn_free_remind;//免费提醒
+    private Button btn_times,btn_Kline, btn_free_remind;//分时图，K线图，免费提醒
 
 
     private HeadLayout mHeadLayout;
-    MarketTimesFragment timesFragment;
-    MarketKChartsFragment kChartsFragment;
+    MarketTimesFragment timesFragment;//分时图
+    MarketKChartsFragment kChartsFragment;//K线图
 
 
     //周期
@@ -96,7 +96,6 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
         btn_free_remind = (Button) findViewById(R.id.btn_free_remind);
         btn_free_remind.setOnClickListener(this);
-
     }
 
 
@@ -117,6 +116,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
         switch (v.getId()) {
             case R.id.left_text:
+                //周期
 
                 builder = new AlertDialog.Builder(ChartActivity.this);
                 // builder.create().requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -132,6 +132,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.right_text:
+                //指标
                 builder = new AlertDialog.Builder(ChartActivity.this);
                 builder.setItems(indexs, new DialogInterface.OnClickListener() {
                     @Override
@@ -145,12 +146,14 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.btn_time:
+                //分时图
                 if (timesFragment == null) {
                     timesFragment = new MarketTimesFragment();
                 }
                 transaction.replace(R.id.fragment_container, timesFragment).commit();
                 break;
             case R.id.btn_k_line:
+                //K线图
                 if (kChartsFragment == null) {
                     kChartsFragment = new MarketKChartsFragment();
 
@@ -161,6 +164,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.btn_free_remind:
+                //免费提醒
                 Intent intent = new Intent(ChartActivity.this, FreeRemindActivity.class);
                 startActivity(intent);
                 break;

@@ -42,4 +42,5 @@ dependencies {
     compile files('src/main/libs/ShareSDK-Wechat-Moments-2.6.3.jar')
     compile files('src/main/libs/weibosdkcore.jar')
     compile 'com.alibaba:fastjson:1.2.7'
+
 }
