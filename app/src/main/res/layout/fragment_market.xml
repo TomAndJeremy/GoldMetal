@@ -15,6 +15,53 @@
         headview:rightimg="@mipmap/nav_btn_market_user" />
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#292929"
+        android:orientation="horizontal"
+        android:padding="6dp">
+
+        <TextView
+            android:id="@+id/fragment_market_strategy"
+            android:layout_weight="1"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="今日策略:过激研究所6月23日早间过激研究所6月过激研究所6月23日早间册罗23日早间册罗册罗过激研究所6月23日早间册罗过激研究所6月2过激研究所6月23日早间册罗"
+            android:textColor="@color/red" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/black" />
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="今日策略:"
+                android:textColor="@color/red" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="今日策略:"
+                android:textColor="@color/red" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

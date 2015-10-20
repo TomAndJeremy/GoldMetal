@@ -21,6 +21,7 @@
     <string name="market_button_blue">模拟交易</string>
     <string name="market_button_green">开户</string>
     <string name="market_button_red">实盘交易</string>
+    <string name="market_today_strategy">今日策略</string>
 
 
     <!--MomentFragment-->

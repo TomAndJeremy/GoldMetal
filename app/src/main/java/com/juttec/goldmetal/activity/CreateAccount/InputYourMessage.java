@@ -12,6 +12,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.utils.ToastUtil;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.utils.NetWorkUtils;
@@ -42,7 +43,6 @@ public class InputYourMessage extends AppCompatActivity {
     private Button btn_next;//下一步 按钮
 
     private String  money;//投资资金
-
     private MyProgressDialog dialog_progress;//正在加载 进度框
     private MyApplication app;
 
@@ -79,8 +79,7 @@ public class InputYourMessage extends AppCompatActivity {
             public void onClick(View v) {
                 if(checkInformation()){
                     //提交开户信息
-                    submitInfo();
-                }
+                    submitInfo(); }
             }
         });
     }
@@ -125,51 +124,45 @@ public class InputYourMessage extends AppCompatActivity {
         btn_next = (Button) findViewById(R.id.btn_next);
         btn_next.setSelected(true);
     }
-
-
-
     //提交开户信息接口
     private void submitInfo(){
-            dialog_progress.builder().setMessage("正在提交信息~").show();
-            RequestParams params = new RequestParams();
-            params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
-            params.addBodyParameter("openAccountType",tv_type.getText().toString());
-            params.addBodyParameter("openAccountName",et_name.getText().toString());
-            params.addBodyParameter("openAccountPhone",et_phone.getText().toString());
-            params.addBodyParameter("investmentFund",money);
-            params.addBodyParameter("remarks",et_remark.getText().toString());
-            HttpUtils httpUtils = new HttpUtils();
-            httpUtils.send(HttpRequest.HttpMethod.POST, app.getSubmitOpenAccountInfor(), params, new RequestCallBack<String>() {
-                @Override
-                public void onSuccess(ResponseInfo<String> responseInfo) {
-                    dialog_progress.dismiss();
-                    JSONObject object = null;
-                    try {
-                        object = new JSONObject(responseInfo.result.toString());
-                        String status = object.getString("status");
-                        String promptInfor = object.getString("promptInfor");
-                        if ("1".equals(status)) {
-                            startActivity(new Intent(InputYourMessage.this,AccountFinishActivity.class));
-                        } else {
-                        }
-
-                        ToastUtil.showShort(InputYourMessage.this, promptInfor);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        dialog_progress.builder().setMessage("正在提交信息~").show();
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
+        params.addBodyParameter("openAccountType",tv_type.getText().toString());
+        params.addBodyParameter("openAccountName",et_name.getText().toString());
+        params.addBodyParameter("openAccountPhone",et_phone.getText().toString());
+        params.addBodyParameter("investmentFund",money);
+        params.addBodyParameter("remarks",et_remark.getText().toString());
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.send(HttpRequest.HttpMethod.POST, app.getSubmitOpenAccountInfor(), params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog_progress.dismiss();
+                JSONObject object = null;
+                try {
+                    object = new JSONObject(responseInfo.result.toString());
+                    String status = object.getString("status");
+                    String promptInfor = object.getString("promptInfor");
+                    if ("1".equals(status)) {
+                        startActivity(new Intent(InputYourMessage.this,AccountFinishActivity.class));
+                    } else {
                     }
-                }
 
-                @Override
-                public void onFailure(HttpException error, String msg) {
-                    dialog_progress.dismiss();
-                    NetWorkUtils.showMsg(InputYourMessage.this);
+                    ToastUtil.showShort(InputYourMessage.this, promptInfor);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            });
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog_progress.dismiss();
+                NetWorkUtils.showMsg(InputYourMessage.this);
+            }
+        });
     }
-
-
-
 
 
 }

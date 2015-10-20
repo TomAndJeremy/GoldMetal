@@ -234,6 +234,12 @@ public class MyApplication extends Application {
         return BASEURL + "App_Consulting/GetTradeRule";
     }
 
+   //获取今日策略
+    public String getGetTodayStrategyUrl() {
+
+        return BASEURL + "App_Consulting/GetTodayStrategy";
+    }
+
 
     //提交开户信息
     public String getSubmitOpenAccountInfor() {

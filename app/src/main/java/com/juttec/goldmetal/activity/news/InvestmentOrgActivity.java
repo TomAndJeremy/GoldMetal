@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
@@ -54,6 +55,7 @@ public class InvestmentOrgActivity extends AppCompatActivity implements SwipeRef
 
         app = (MyApplication) getApplication();
         init();
+
 
     }
 

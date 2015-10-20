@@ -14,11 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.AccountActivity;
+import com.juttec.goldmetal.activity.AnnouncementActivity;
 import com.juttec.goldmetal.activity.ChartActivity;
 import com.juttec.goldmetal.activity.CreateAccount.AccountNoticeActivity;
+import com.juttec.goldmetal.activity.TodayStrategyActivity;
 import com.juttec.goldmetal.adapter.MarketRecyclerAdapter;
 import com.juttec.goldmetal.bean.MarketFormInfo;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
@@ -36,6 +39,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     private RecyclerView recyclerView;
     private List<MarketFormInfo> datas;
     private Button btCreateAccount;//开户按钮
+    private TextView strategy;
     
     public static MarketFragment newInstance(String param1) {
         MarketFragment fragment = new MarketFragment();
@@ -63,6 +67,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_market, container, false);
+
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.market_tablayout);
         tabLayout.addTab(tabLayout.newTab().setText("自选"));
         tabLayout.addTab(tabLayout.newTab().setText("现货"));
@@ -80,6 +85,10 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
         ImageView rightImg = (ImageView) view.findViewById(R.id.right_img);
         ImageView leftImg = (ImageView) view.findViewById(R.id.left_img);
+
+        strategy = (TextView) view.findViewById(R.id.fragment_market_strategy);
+        strategy.setOnClickListener(this);
+
         rightImg.setOnClickListener(this);
         leftImg.setOnClickListener(this);
         
@@ -121,6 +130,12 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                 //开户界面
                 startActivity(new Intent(getActivity(), AccountNoticeActivity.class));
                 break;
+            case R.id.fragment_market_strategy:
+                Intent intent = new Intent(getActivity(), TodayStrategyActivity.class);
+
+                startActivity(intent);
+                break;
+
         }
 
 

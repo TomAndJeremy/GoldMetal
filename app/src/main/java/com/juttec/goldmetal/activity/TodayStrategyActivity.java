@@ -1,18 +1,15 @@
-package com.juttec.goldmetal.activity.news;
+package com.juttec.goldmetal.activity;
 
-import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
-import com.juttec.goldmetal.customview.HeadLayout;
 import com.juttec.goldmetal.customview.listview.LoadMoreListView;
 import com.juttec.goldmetal.customview.listview.LoadingFooter;
 import com.juttec.goldmetal.utils.LogUtil;
@@ -34,7 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ExchangeNoticeActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class TodayStrategyActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+
     LoadMoreListView listView;
     SwipeRefreshLayout swipeLayout;
     private MyApplication app;
@@ -43,20 +41,12 @@ public class ExchangeNoticeActivity extends AppCompatActivity implements SwipeRe
     MyAdapter myAdapter;
     String id;
 
+
     @Override
-
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.general_listview_layout);
-
-        Intent intent = getIntent();
-        String headtitle = intent.getStringExtra("exchangeName") + "公告";
-
-        id = intent.getStringExtra("id");
-        HeadLayout headLayout = (HeadLayout) findViewById(R.id.head_layout);
-
-        headLayout.setHeadTitle(headtitle);
-
 
         app = (MyApplication) getApplication();
         init();
@@ -97,23 +87,13 @@ public class ExchangeNoticeActivity extends AppCompatActivity implements SwipeRe
             }
         });
 
-
-    }
-
-    @Override
-    public void onRefresh() {
-
-        pageIndex = 1;
-        getData(pageIndex);
-
     }
 
     public void getData(int i) {
 
         RequestParams requestParams = new RequestParams();
         requestParams.addBodyParameter("pageIndex", i + "");
-        requestParams.addBodyParameter("exchangeId", id);
-        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetExchangeNoticeUrl(), requestParams, new RequestCallBack<String>() {
+        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetTodayStrategyUrl(), requestParams, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 
@@ -135,9 +115,14 @@ public class ExchangeNoticeActivity extends AppCompatActivity implements SwipeRe
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject object1 = jsonArray.getJSONObject(i);
                             map = new HashMap<String, String>();
-                            map.put("details", object1.getString("details"));
-                            map.put("time", object1.getString("addTime"));
+
+
                             map.put("id", object1.getString("id"));
+                            map.put("title", object1.getString("title"));
+                            map.put("details", object1.getString("details"));
+                            String time = object1.getString("addTime");
+                          time=  time.replace(" ", "\n");
+                            map.put("time", time);
                             maps.add(map);
                         }
 
@@ -174,6 +159,13 @@ public class ExchangeNoticeActivity extends AppCompatActivity implements SwipeRe
         });
     }
 
+    @Override
+    public void onRefresh() {
+        pageIndex = 1;
+        getData(pageIndex);
+
+    }
+
 
     private class MyAdapter extends BaseAdapter {
 
@@ -205,12 +197,12 @@ public class ExchangeNoticeActivity extends AppCompatActivity implements SwipeRe
             ViewHolder viewHolder;
 
             if (convertView == null) {
-                convertView = getLayoutInflater().inflate(R.layout.exchange_notice_item,
+                convertView = getLayoutInflater().inflate(R.layout.today_strategy_item,
                         parent, false);
 
                 viewHolder = new ViewHolder();
-                viewHolder.tvContent = (TextView) convertView.findViewById(R.id.exchange_notice_item_content);
-                viewHolder.tvTime = (TextView) convertView.findViewById(R.id.exchange_notice_item_time);
+                viewHolder.tvContent = (TextView) convertView.findViewById(R.id.today_strategy_item_content);
+                viewHolder.tvTime = (TextView) convertView.findViewById(R.id.today_strategy_item_time);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
