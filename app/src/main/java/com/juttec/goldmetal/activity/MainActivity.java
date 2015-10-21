@@ -8,12 +8,14 @@ import android.os.PowerManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.MyFragmentPagerAdapter;
 import com.juttec.goldmetal.fragment.BaseFragment;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.SharedPreferencesUtil;
+import com.juttec.goldmetal.utils.ToastUtil;
 
 public class MainActivity extends AppCompatActivity implements BaseFragment.OnFragmentInteractionListener {
     ViewPager viewPager;
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
 
         viewPager.setCurrentItem(2);
     }
+
+
 
 
     @Override
@@ -117,5 +121,29 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
             mWakeLock = null;
         }
     }
+
+
+
+
+    //如果两次按键时间间隔大于2秒，则不退出
+    private long firstTime = 0;
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch(keyCode)
+        {
+            case KeyEvent.KEYCODE_BACK:
+                long secondTime = System.currentTimeMillis();
+                if (secondTime - firstTime > 2000) {
+                    ToastUtil.showShort(this, "再按一次退出程序");
+                    firstTime = secondTime;//更新firstTime
+                    return true;
+                } else {   //两次按键小于2秒时，退出应用
+                    System.exit(0);
+                }
+                break;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
 
 }
