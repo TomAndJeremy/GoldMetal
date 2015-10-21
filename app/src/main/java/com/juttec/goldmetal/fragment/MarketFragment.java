@@ -240,7 +240,8 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
             switch (msg.what) {
                 case NEWEST:
                     datas = marketFormInfo.getResult();
-                    if (datas.size() == 0) {
+                    if (datas.size() == 0)
+                    {
                         ToastUtil.showShort(getActivity(), "没有数据...");
                         //pd.dismiss();
                         break;
