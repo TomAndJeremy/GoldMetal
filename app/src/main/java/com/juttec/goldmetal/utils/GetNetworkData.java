@@ -6,8 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
-import com.juttec.goldmetal.bean.MarketFormInfo;
 import com.juttec.goldmetal.bean.MyEntity;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -58,8 +56,13 @@ public class GetNetworkData {
         }.start();
     }
 
-    public static void getKLineData(final String url, final MyEntity myEntity, final Context context,
-                                    final Handler handler, final ProgressDialog pd, final int flag) {
+
+
+
+
+
+    public static void getKLineData(  final String url, final MyEntity myEntity, final Context context,
+                                      final Handler handler ,final ProgressDialog pd ,final int flag) {
 
         new Thread() {
 
@@ -101,8 +104,9 @@ public class GetNetworkData {
         }.start();
     }
 
-    public static void getKLineData(final String url, final MyEntity myEntity, final Context context,
-                                    final Handler handler, final int flag) {
+
+    public static void getKLineData(  final String url, final MyEntity myEntity, final Context context,
+                                      final Handler handler ,final int flag) {
 
         new Thread() {
 
@@ -121,21 +125,17 @@ public class GetNetworkData {
                         } else {
                             str = "{\"result\":" + responseInfo.result.toString() + "}";
                         }
+
                         try {
 
-                            Gson gson = new Gson();
-                            MarketFormInfo marketFormInfo = gson.fromJson(str, MarketFormInfo.class);
-                            LogUtil.e("123  "+marketFormInfo.toString());
-                            myEntity.setObject(marketFormInfo);
-
-                           // myEntity.setObject(JSON.parseObject(str, myEntity.getObject().getClass()));
-                            LogUtil.e(responseInfo.result.toString());
-
+                            myEntity.setObject(JSON.parseObject(str,myEntity.getObject().getClass()));
                             Message message = new Message();
-                            message.what = flag;
+                            message.what=flag;
+                            LogUtil.d("发消息通知---------");
                             handler.sendMessage(message);
 
                         } catch (Exception e) {
+                            e.printStackTrace();
                             //    ShowToast.Short(context, "获取数据失败");
 
                         }
@@ -143,6 +143,7 @@ public class GetNetworkData {
 
                     @Override
                     public void onFailure(HttpException e, String s) {
+
 
                         NetWorkUtils.showMsg(context);
 
@@ -152,4 +153,8 @@ public class GetNetworkData {
             }
         }.start();
     }
+
+
+
+
 }

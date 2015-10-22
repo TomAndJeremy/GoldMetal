@@ -153,6 +153,23 @@
             android:name=".activity.AnnouncementActivity"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".activity.news.InvestmentOrgActivity" >
+        </activity>
+        <activity android:name=".activity.TradeOrgActivity" >
+        </activity>
+        <activity android:name=".activity.TradeRuleActivity" >
+        </activity>
+        <activity android:name=".activity.TodayStrategyActivity" >
+        </activity>
+        <activity
+            android:name=".activity.CalendarActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+
+
+
+
 
 
 
@@ -343,14 +360,7 @@
         </activity>
         <!-- 分享SDK配置结束 -->
 
-        <activity android:name=".activity.news.InvestmentOrgActivity" >
-        </activity>
-        <activity android:name=".activity.TradeOrgActivity" >
-        </activity>
-        <activity android:name=".activity.TradeRuleActivity" >
-        </activity>
-        <activity android:name=".activity.TodayStrategyActivity" >
-        </activity>
+
     </application>
 
 </manifest>

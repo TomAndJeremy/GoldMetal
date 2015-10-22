@@ -39,6 +39,8 @@ import java.util.List;
 public class MarketFragment extends BaseFragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
 
+    private String ZIXUAN_URL = "http://db2015.wstock.cn/wsDB_API/stock.php?symbol=SH000002,SH000012,SH000022,SH000032,SH000042,SH000052,SH000062&r_type=2";
+
     private String mParam1;
 
     private ImageView iv_search;//搜索
@@ -70,7 +72,9 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
         }
-        myEntity = new MyEntity();
+//        myEntity = new MyEntity();
+        marketFormInfo = new MarketFormInfo();
+        myEntity = new MyEntity(marketFormInfo);
     }
 
     @Override
@@ -81,21 +85,24 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_market, container, false);
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.market_tablayout);
-        tabLayout.addTab(tabLayout.newTab().setText("自选").setTag(1));
+        tabLayout.addTab(tabLayout.newTab().setText("自选").setTag(1), true);
         tabLayout.addTab(tabLayout.newTab().setText("现货").setTag(2));
-        tabLayout.addTab(tabLayout.newTab().setText("股票").setTag(3), true);
+        tabLayout.addTab(tabLayout.newTab().setText("股票").setTag(3));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch ((int) tab.getTag()) {
                     case 1:
-                        getData("http://db2015.wstock.cn/wsDB_API/stock.php?symbol=OSXAU,OSXAG,OZAG20,OZAG50,OZAG100,OYXAG50KG,OYXAG150KG,NECLI0,OSUDI&r_type=2&u=qq3585&p=qq3771");
+                        //自选
+                        getData(ZIXUAN_URL);
                         break;
                     case 2:
+                        //现货
                         getData("http://db2015.wstock.cn/wsDB_API/stock.php?symbol=OSXAU,OSXAG,OZPT,OZPD,OSHKG&r_type=2&u=qq3585&p=qq3771");
 
                         break;
                     case 3:
+                        //股票
                         LogUtil.e("11111111111111111111111111111111");
                         break;
                 }
@@ -137,10 +144,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
         datas = new ArrayList<>();
         myHandler = new MyHandler();
-        String url = "http://db2015.wstock.cn/wsDB_API/stock.php?symbol=SH124462,SH124712,SH127032,SH122062,SH124232&r_type=2";
-
-        getData(url);
-        //getData("http://db2015.wstock.cn/wsDB_API/stock.php?symbol=OSXAU,OSXAG,OZAG20,OZAG50,OZAG100,OYXAG50KG,OYXAG150KG,NECLI0,OSUDI&r_type=2&u=qq3585&p=qq3771");
+        getData(ZIXUAN_URL);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new SampleDivider(getActivity(), R.drawable.divider_shape));
 
@@ -192,6 +196,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     }
 
 
+    //RecycleView的 item间的分割线
     class SampleDivider extends RecyclerView.ItemDecoration {
         private Drawable mDrawable;
 
@@ -250,6 +255,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                         //pd.dismiss();
                         break;
                     } else {
+                        ToastUtil.showShort(getActivity(), "填充数据...");
                         adapter = new MarketRecyclerAdapter(datas, getActivity());
                         adapter.setOnItemClickListener(new MarketRecyclerAdapter.OnItemClickListener() {
                             @Override

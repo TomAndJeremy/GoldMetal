@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.activity.CalendarActivity;
 import com.juttec.goldmetal.activity.news.AnalysisActivity;
 import com.juttec.goldmetal.activity.news.ExchangeInforActivity;
 import com.juttec.goldmetal.activity.news.InvestmentOrgActivity;
@@ -94,12 +95,18 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.tv_headlines:
+                //财经头条
+
 
                 break;
             case R.id.tv_calendar:
+                //财经日历
+                intent = new Intent(getActivity(), CalendarActivity.class);
+                startActivity(intent);
 
                 break;
             case R.id.tv_broadcast:
+                //快讯直播
 
                 break;
             case R.id.tv_review:

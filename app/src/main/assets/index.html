@@ -1,0 +1,271 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTcD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0013)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="skin/style.css"/> 
+<script type="text/javascript" src="common/jquery.js"></script> 
+<!--<script type="text/javascript" src="../../common/common.js"></script>--> 
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="common/My97DatePicker/WdatePicker.js"></script>
+<title></title>
+<script language="Javascript">
+document.oncontextmenu=new Function("event.returnValue=false");
+document.onselectstart=new Function("event.returnValue=false");
+</script> 
+<!--[if IE 6]>  
+<script type="text/javascript" src="../../common/ie6.js"></script> 
+<script type="text/javascript">     
+DD_belatedPNG.fix("h4,.sxpic,#guojia_1,#guojia_2,#guojia_3,#guojia_4,#guojia_5,#guojia_6,#guojia_7,#guojia_8,b");  
+</script>
+<![endif]--> 
+<style type="text/css">
+	a.icons1{float:right;width:47px;height:20px; 
+background: url('../images/icons1.png') -52px -65px no-repeat;margin-top:10px;margin-right:10px;}
+</style>
+</head> 
+<body>
+ <div class="calendar_time"> <a class="icons1" href="javascript:closeWindow();"></a>
+        <div class="time_bottom">
+          <div class="world_time" id="Beijing"> </div>
+          <div class="world_time" id="London"> </div>
+          <div class="world_time" id="NewYork"> </div>
+          <div class="world_time" id="Sydney"> </div>
+          <div class="world_time" id="Tokyo"> </div>
+        </div>
+      </div>
+	  <div style="clear:both;"></div>
+  <div class="wrap">
+ 
+
+<div style="border:1px solid #D0D0D0;">
+	<div class="yjl_caijingyueli_titleBox">
+                <h1>
+                    财经日历</h1>
+                <h5 id="showtime">
+                     (2014年01月24日)
+                </h5>
+  </div>
+  <div style="clear:both;"></div>
+    <div id="header">
+    	<ul id="showindex"></ul>
+    	<div class="date"><input type="text" id="datetime" name="datetime"  style="width: 100px" onclick="WdatePicker({onpicked:function(){ SetContent($(this).val());}})"/></div>
+    </div>
+	<div style="clear:both;"></div>
+    <div class="shuaixuan">
+    	 <div class="sxpic"> </div>
+    	 <ul>
+    	 <li>
+    	 <a href="javascript:CurrencyDate('1','10001');" id="guojia_1" class="yjl_guojia_1" title="美元" onfocus="this.blur()">美元</a>
+    	 </li>
+    	 <li><a href="javascript:CurrencyDate('2','10011|10005|10006');" id="guojia_2" class="yjl_guojia_2" title="欧元" onfocus="this.blur()">欧元</a></li>
+    	 <li><a href="javascript:CurrencyDate('3','10004');" id="guojia_3" class="yjl_guojia_3" title="英镑" onfocus="this.blur()">英镑</a>
+    	 </li><li><a href="javascript:CurrencyDate('4','10002');" id="guojia_4" class="yjl_guojia_4" title="日元" onfocus="this.blur()">日元</a></li>
+    	 <li><a href="javascript:CurrencyDate('5','10010');" id="guojia_5" class="yjl_guojia_5" title="澳元" onfocus="this.blur()">澳元</a></li>
+    	 <li><a href="javascript:CurrencyDate('6','10007');" id="guojia_6" class="yjl_guojia_6" title="加元" onfocus="this.blur()">加元</a></li>
+    	 <li><a href="javascript:CurrencyDate('7','10019');" id="guojia_7" class="yjl_guojia_7" title="瑞郎" onfocus="this.blur()">瑞郎</a></li>
+    	 <li><a href="javascript:CurrencyDate('8','10003');" id="guojia_8" class="yjl_guojia_8" title="人民币" onfocus="this.blur()">人民币</a></li>
+    	 </ul>
+    </div>
+    <div class="con">
+       <div id="d1" class="cc">
+       	  <table cellpadding="0" cellspacing="0" class="yjl_caijingyueli_newsTable">
+       	  	<thead>
+       	  		<tr><th width='60' class="ti">时间</th><th width='80'>重要性</th><th width='520'>指标内容</th><th width='80'>前值</th><th width='80'>预测值</th><th width='80'>公布值</th></tr>
+       	  	</thead>
+       	  	<tbody><tr><td colspan="6">财经数据正在努力加载中！</td></tr></tbody>
+       	  </table>
+       </div>
+      <div class="ss">
+      	<h4>财经事件</h4>
+      </div>
+       <div id="d2" class="cc">
+        <table  cellpadding="0" cellspacing="0">
+       	  	<thead>
+       	  		<tr><th class='ti'>时间</th><th>地区</th><th>事件</th></tr>
+       	  	</thead>
+       	  	<tbody><tr notvalue=notvalue><td colspan="3">财经事件正在努力加载中！</td></tr></tbody>
+       	  </table>
+       </div>
+       <div class="ss">
+      	<h4>央行动态</h4>
+      </div>
+       <div id="d3" class="cc">
+       <table cellpadding="0" cellspacing="0">
+       	  	<thead>
+       	  		<tr><th class='ti'>时间</th><th>地区</th><th>事件</th></tr>
+       	  	</thead>
+       	  	<tbody><tr notvalue=notvalue><td colspan="3">央行动态正在努力加载中！</td></tr></tbody>
+       	  </table>
+       </div>
+       <div class="ss">
+      	<h4>假日预告</h4>
+      </div>
+       <div id="d4" class="cc">
+       <table cellpadding="0" cellspacing="0">
+       	  	<thead>
+       	  		<tr><th class='ti'>时间</th><th>地区</th><th>事件</th></tr>
+       	  	</thead>
+       	  	<tbody><tr notvalue=notvalue><td colspan="3">假期预告正在努力加载中！</td></tr></tbody>
+       	  </table>
+       </div>
+    </div>
+  </div>
+  </div>
+ <script type="text/javascript">
+     var datauser = 'FX168'
+	 ddd=new Date();
+     var datarow='';
+	 var currdate=ddd.getFullYear()+'-'+(ddd.getMonth()+1)+'-'+((ddd.getDate()<10)?'0'+ddd.getDate():ddd.getDate());
+	 var dataurl = 'http://service.fx168.com'
+		 $("#datetime").val(currdate);
+	 function getMonDate(){    
+	     var d=new Date(),    
+	     day=d.getDay(),    
+	     date=d.getDate();    
+	     if(day==1)        
+	         return d;    
+	     if(day==0)        
+	         d.setDate(date-6);    
+	     else        
+	         d.setDate(date-day+1);    
+	     return d;
+	     }
+	 function getDayName(day){    
+	     var day=parseInt(day);    
+	     if(isNaN(day) || day<0 || day>6)        
+	         return false;    
+	     var weekday=["星期天","星期一","星期二","星期三","星期四","星期五","星期六"];    
+	     return weekday[day];
+	     }
+	 // d是当前星期一的日期对象
+	 var d=getMonDate(); 
+	 var arr=[];
+	 $showindexarr=[];
+	 for(var i=0; i<7; i++){    
+	 	tcurr='';
+	 	date1=(d.getDate()<10)?'0'+d.getDate():d.getDate();
+	 	if(d.getDate()==new Date().getDate())tcurr=' class="tt" ';    
+	     $showindexarr.push('<li><span '+tcurr+' tyshow="'+d.getFullYear()+'年'+(d.getMonth()+1)+'月'+date1+'日"  ty="'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+date1+'">'+(d.getMonth()+1)+'月'+date1+'日('+getDayName(d.getDay())+')</span></li>'); 
+	     d.setDate(d.getDate()+1);  
+	    }
+	 var xdata = new Array();
+	 var ydata = new Array(); 
+	 $("#showindex").html($showindexarr.join(""));  
+	 
+function queryData(){  
+  window.location.href="<?php echo site_url('home/index/1');?>/"+encodeURIComponent($("#guojia").val())+'/'+encodeURIComponent($("#title").val());
+}
+
+
+
+	 $(function(){
+ $("#title").keydown(function() { 
+              if (event.keyCode=="13") {//keyCode=13是回车键
+                 queryData(); 
+              }else
+				if(event.keyCode == 27 ) { 
+					$("#result_id").hide();  
+					} 
+				else
+					if(event.keyCode == 40 ) { 
+					 if($("#result_id").is(":hidden")&&$("#result_id").find("table").length>0){
+						$("#result_id").focus();
+					 }  
+					}
+          }); 
+$("[pye]").click(function(){ 
+window.location.href="<?php echo site_url('home/index/');?>/"+$(this).attr("pye")+'/'+encodeURIComponent($("#guojia").val())+'/'+encodeURIComponent($("#title").val());
+return;
+}); 
+	var close = true ;
+	var a=null;
+   $("#title").keyup(function(){
+    var nkey = $.trim($(this).val()) ;
+    if("" == nkey || null == nkey){
+     $("#result_id").hide() ;
+    }
+    else {
+		if(a!=null)a.abort();
+	a=$.ajax({url:"<?php echo site_url('home/getdata');?>/"+encodeURIComponent($("#guojia").val())+'/'+encodeURIComponent($("#title").val())+'?'+new Date().getTime(),
+		dataType:"json",
+		success:function(data){
+		 var dd=[];
+		 if(data.list.length>0){
+		 dd.push("<table cellpadding='0' cellspacing='0'>");
+         for(var i=0;i<data.list.length;i++)
+		 {
+			dd.push("<tr><td>"+data.list[i].title+"</td><td>"+data.list[i].createtime+"</td></tr>");
+		 }
+		 dd.push("</table>");
+         //html 为ajax请求 返回的 字符串
+     var html = dd.join("");
+	 dd=[];
+     $("#result_id").show() ;
+     $("#result_id").html(html);
+     $("#result_id table tr").click(function(){
+      $("#title").val($(this).find("td:eq(0)").html()) ;
+      $("#result_id").hide() ;
+     }).hover(
+      function () {
+          //$("#title").blur(function(){});
+       //alert(123) ;
+       close = false ;
+      },
+      function () {
+          //$("#title").blur(function(){
+        //$("#result_id").hide() ; 
+       //});
+       //alert(312) ;
+       close = true ;
+      }
+     );
+		 }
+		}
+	});
+     
+    }
+   }).blur(function(){
+    if(close) {
+     $("#result_id").hide() ; 
+    } 
+   });
+})
+
+
+
+
+
+$(function () {
+    var address_array = new Array("北京", "伦敦", "纽约", "悉尼", "东京");
+    var offset_array = new Array(0, -7, -13, 2, 1); //相对北京的时差
+    var address_ids = new Array("Beijing", "London", "NewYork", "Sydney", "Tokyo");
+    for (i = 0; i < 5; i++) {
+        displayTime(address_array[i], offset_array[i], address_ids[i]);
+    }
+})
+/*---------------显示城市时间---------------*/
+function displayTime(city, offset, id) {
+    var time = new Date();
+    var utc = Date.parse(time); //本地时间转化为UTC时间
+    var date = new Date(utc + (3600000 * offset))//目的地时间转化为UTC时间 
+    var hours = date.getHours();
+    if (hours < 10) {
+        hours = "0" + hours;
+    }
+    var minutes = date.getMinutes();
+    if (minutes < 10) {
+        minutes = "0" + minutes;
+    }
+    var seconds = date.getSeconds();
+    if (seconds < 10) {
+        seconds = "0" + seconds;
+    }
+    document.getElementById(id).innerHTML = "<span>" + city + "</span>" + hours + ":" + minutes + ":" + seconds;
+    setTimeout(function () { displayTime(city, offset, id); }, 1000);
+}
+ </script>
+</body>
+</html>
+
