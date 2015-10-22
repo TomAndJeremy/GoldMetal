@@ -2,6 +2,7 @@ package com.juttec.goldmetal.activity;
 
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.database.Cursor;
@@ -25,6 +26,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -60,7 +62,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
@@ -68,7 +74,6 @@ import java.util.StringTokenizer;
  */
 
 public class PublishTopicActivity extends AppCompatActivity implements KeyClickListener, View.OnClickListener {
-
 
 
     public final static int REQUEST_CODE_CAMERA = 111;
@@ -85,7 +90,6 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     private int keyboardHeight;//键盘高度
 
 
-
     private EditText mContent;//发表的内容
 
     private RelativeLayout parentLayout;
@@ -98,7 +102,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     private static String path;//照相后图片的路径
 
     // 存放拍照或从相册选择的图片的路径 的集合
-    private  List<PhotoBean> picPathList = new ArrayList<PhotoBean>();
+    private List<PhotoBean> picPathList = new ArrayList<PhotoBean>();
 
     private NoScrollGridView mGridView;//展示图片的gridview
     private PhotoGridAdapter mAdapter;
@@ -115,11 +119,15 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
     private MyProgressDialog dialog_progress;//正在加载的  进度框
 
+    private Map<Integer, String> map = new HashMap<>();
+
+
 //    private HeadLayout mHeadLayout;//标题栏
 //    private ImageView iv_back;//返回按钮
 
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_topic);
@@ -144,7 +152,6 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         clearData();
         LogUtil.d("onDestroy------------");
     }
-
 
 
     private void initView() {
@@ -176,6 +183,13 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+               /* LogUtil.e("start  " + start);
+                LogUtil.e("before  " + before);
+                LogUtil.e("s  " + s);
+                LogUtil.e("count  " + count);
+                LogUtil.e("aaa    " + s.subSequence(start, s.length()));
+                LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+*/
                 String content = mContent.getText().toString();
                 if (TextUtils.isEmpty(content) || "".equals(content) || content.trim().length() <= 0) {
                     mBtnPush.setSelected(false);
@@ -203,7 +217,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         btEmoji.setOnClickListener(this);
 
         mGridView = (NoScrollGridView) findViewById(R.id.gridview);
-        mAdapter = new PhotoGridAdapter(PublishTopicActivity.this,picPathList);
+        mAdapter = new PhotoGridAdapter(PublishTopicActivity.this, picPathList);
         mGridView.setAdapter(mAdapter);
 
 
@@ -290,13 +304,10 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     }
 
 
-
-
-
     private void readEmojiIcons() {
         emoticons = new Bitmap[EMOJI_NUM];
         for (short i = 0; i < EMOJI_NUM; i++) {
-            emoticons[i] = getImage((i+1) + ".png");
+            emoticons[i] = getImage((i + 1) + ".png");
         }
     }
 
@@ -317,7 +328,6 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     }
 
 
-
     private void changeKeyboardHeight(int height) {
         if (height > 100) {
             keyboardHeight = height;
@@ -330,25 +340,24 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     @Override
     public void keyClickedIndex(final String index) {
 
-
         Html.ImageGetter imageGetter = new Html.ImageGetter() {
             public Drawable getDrawable(String source) {
                 StringTokenizer st = new StringTokenizer(index, ".");
-                Drawable d = new BitmapDrawable(getResources(), emoticons[Integer.parseInt(st.nextToken())-1]);
+                Drawable d = new BitmapDrawable(getResources(), emoticons[Integer.parseInt(st.nextToken()) - 1]);
                 d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
                 return d;
             }
         };
 
+
         Spanned cs = Html.fromHtml("<img src ='" + index + "'/>", imageGetter, null);
+
 
         int cursorPosition = mContent.getSelectionStart();
         mContent.getText().insert(cursorPosition, cs);
 
-
+        map.put(cursorPosition, index);
     }
-
-
 
 
     /**
@@ -364,8 +373,6 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
             return super.onKeyDown(keyCode, event);
         }
     }
-
-
 
 
     public static String string2Unicode(String string) {
@@ -385,10 +392,6 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     }
 
 
-
-
-
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -402,21 +405,21 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
             case R.id.publis_topic_bt_push:
                 //发表话题 按钮
                 String content = mContent.getText().toString();
-                if(TextUtils.isEmpty(content)||"".equals(content)||content.trim().length()<=0){
-                    ToastUtil.showShort(PublishTopicActivity.this,"发表的内容不能为空");
+                if (TextUtils.isEmpty(content) || "".equals(content) || content.trim().length() <= 0) {
+                    ToastUtil.showShort(PublishTopicActivity.this, "发表的内容不能为空");
                     return;
                 }
 
-                LogUtil.d("发表的内容为："+mContent.getText().toString());
+                LogUtil.d("发表的内容为：" + mContent.getText().toString());
 
 
                 dialog_progress.builder().setMessage("努力发表中~").show();
-                if(picPathList.size()==0){
+                if (picPathList.size() == 0) {
                     //如果没有图片 直接调发表动态的接口
                     postDynamic();
-                }else{
+                } else {
                     //如果有图片 先调上传图片的接口
-                    for(int j=0;j<picPathList.size();j++){
+                    for (int j = 0; j < picPathList.size(); j++) {
 
                         upLoadPhoto(picPathList.get(j).getDyPhoto());
                     }
@@ -427,8 +430,8 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
             case R.id.publis_topic_bt_pic:
                 //判断图片数量是否超过3张
-                if(picPathList.size()==3){
-                    ToastUtil.showShort(this,"图片数量已达到上限");
+                if (picPathList.size() == 3) {
+                    ToastUtil.showShort(this, "图片数量已达到上限");
                     return;
                 }
 
@@ -466,6 +469,13 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
                 break;
             case R.id.publis_topic_bt_emoji:
+
+                InputMethodManager inputMethodManager =(InputMethodManager)getApplicationContext().
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+
+
+                inputMethodManager.hideSoftInputFromWindow(mContent.getWindowToken(), 0); //隐藏
+
                 if (!popupWindow.isShowing()) {
 
                     popupWindow.setHeight(keyboardHeight);
@@ -499,8 +509,6 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         startActivityForResult(intent, request);
 
     }
-
-
 
 
     @Override
@@ -551,20 +559,18 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     //设置图片
     private void setImg() {
         //将删除图标 全部隐藏
-        for(int i=0;i<picPathList.size();i++){
+        for (int i = 0; i < picPathList.size(); i++) {
             picPathList.get(i).setIsDelete(false);
         }
         mAdapter.notifyDataSetChanged();
     }
 
 
-
-
     //上传图片接口
-    private void upLoadPhoto(String path){
+    private void upLoadPhoto(String path) {
 
         RequestParams params = new RequestParams();
-        params.addBodyParameter("dyPhotoFile",getBitmapString(path));
+        params.addBodyParameter("dyPhotoFile", getBitmapString(path));
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.send(HttpRequest.HttpMethod.POST, app.getUploadPhotoUrl(), params, new RequestCallBack<String>() {
             @Override
@@ -576,7 +582,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
                     if ("1".equals(object.getString("status"))) {
                         photoList.add(object.getString("message1"));
                         count++;
-                        if(count==picPathList.size()){
+                        if (count == picPathList.size()) {
                             //调用发表动态接口
                             postDynamic();
                         }
@@ -602,20 +608,32 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     }
 
 
-
     //发表动态接口
-    private void postDynamic(){
+    private void postDynamic() {
 
         RequestParams params = new RequestParams();
-        params.addBodyParameter("userId",app.getUserInfoBean().getUserId());
+        params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
         params.addBodyParameter("userName", app.getUserInfoBean().getUserNickName());
-        params.addBodyParameter("dyContent", string2Unicode(mContent.getText().toString()));
-        for(int i=0;i<photoList.size();i++){
-            if(i==0) {
+
+        String content =mContent.getText().toString();
+        for (Map.Entry entry : map.entrySet()) {
+
+            Integer key = (Integer) entry.getKey();
+            String value = (String) entry.getValue();
+
+            content=   content.replaceFirst("￼", "`" + value + "`");
+//             mContent.getText().replace(key, key + 1, "`" + value+"`" );
+
+        }
+        params.addBodyParameter("dyContent", string2Unicode(content));
+        // params.addBodyParameter("dyContent", string2Unicode(toSend));
+
+        for (int i = 0; i < photoList.size(); i++) {
+            if (i == 0) {
                 params.addBodyParameter("dyPhotoOne", photoList.get(0));
-            }else if(i==1){
+            } else if (i == 1) {
                 params.addBodyParameter("dyPhotoTwo", photoList.get(1));
-            }else if(i==2){
+            } else if (i == 2) {
                 params.addBodyParameter("dyPhotoThree", photoList.get(2));
             }
         }
@@ -654,20 +672,17 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     }
 
 
-
     //清楚数据
-    private  void  clearData(){
+    private void clearData() {
         path = null;
-        if(picPathList!=null){
-            if(picPathList.size()>0){
+        if (picPathList != null) {
+            if (picPathList.size() > 0) {
                 picPathList.clear();
             }
             picPathList = null;
         }
-        count =0;
+        count = 0;
     }
-
-
 
 
     // 根据路径 取图片 将图片变成字符串

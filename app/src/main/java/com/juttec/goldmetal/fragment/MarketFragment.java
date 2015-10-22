@@ -70,6 +70,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
         }
+        myEntity = new MyEntity();
     }
 
     @Override
@@ -136,7 +137,10 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
         datas = new ArrayList<>();
         myHandler = new MyHandler();
-        getData("http://db2015.wstock.cn/wsDB_API/stock.php?symbol=OSXAU,OSXAG,OZAG20,OZAG50,OZAG100,OYXAG50KG,OYXAG150KG,NECLI0,OSUDI&r_type=2&u=qq3585&p=qq3771");
+        String url = "http://db2015.wstock.cn/wsDB_API/stock.php?symbol=SH124462,SH124712,SH127032,SH122062,SH124232&r_type=2";
+
+        getData(url);
+        //getData("http://db2015.wstock.cn/wsDB_API/stock.php?symbol=OSXAU,OSXAG,OZAG20,OZAG50,OZAG100,OYXAG50KG,OYXAG150KG,NECLI0,OSUDI&r_type=2&u=qq3585&p=qq3771");
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new SampleDivider(getActivity(), R.drawable.divider_shape));
 

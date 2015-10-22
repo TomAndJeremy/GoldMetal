@@ -2,8 +2,16 @@ package com.juttec.goldmetal.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +35,7 @@ import com.juttec.goldmetal.customview.CircleImageView;
 import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
+import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -40,9 +49,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Jeremy on 2015/9/14.
@@ -59,7 +72,9 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     RecycleViewWithHeadAdapter recycleViewWithHeadAdapter;
 
     private MyAlertDialog mDialog;//对话框
+    private Bitmap[] emoticons;
 
+    private static final int EMOJI_NUM = 54;//表情数目
 
     //初始化
     public MomentRecyclerViewAdapter(ArrayList<DynamicEntityList> entityList, Context context, MyApplication app) {
@@ -70,6 +85,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         this.app = app;
         popupWindow = new ReplyPopupWindow(context);
         mDialog = new MyAlertDialog(context);
+        readEmojiIcons();
     }
 
     public void setHeadAdapter(RecycleViewWithHeadAdapter recycleViewWithHeadAdapter) {
@@ -86,6 +102,80 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         return holder;
     }
 
+    private void readEmojiIcons() {
+        emoticons = new Bitmap[EMOJI_NUM];
+        for (short i = 0; i < EMOJI_NUM; i++) {
+            emoticons[i] = getImage((i + 1) + ".png");
+        }
+    }
+
+    /**
+     * For loading smileys from assets
+     */
+    private Bitmap getImage(String path) {
+        AssetManager mngr = context.getAssets();
+        InputStream in = null;
+        try {
+            in = mngr.open("emoticons/" + path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Bitmap temp = BitmapFactory.decodeStream(in, null, null);
+        return temp;
+    }
+
+
+    private Html.ImageGetter getImageGetter(final int t) {
+        return new Html.ImageGetter() {
+            @Override
+            public Drawable getDrawable(String source) {
+
+                Drawable d = new BitmapDrawable(context.getResources(), emoticons[t]);
+                d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+                return d;
+            }
+        };
+    }
+
+    private Editable getEditable(String contentUnicode) {
+        String content = unicode2String(contentUnicode);
+
+        Editable editable = new Editable.Factory().newEditable("");
+        final String[] s = content.split("`");
+        for (int i = 0; i < s.length; i++) {
+
+
+            StringTokenizer st = new StringTokenizer(s[i], ".");
+
+
+            int t = 0;
+            try {
+                t = Integer.parseInt(st.nextToken()) - 1;
+
+                if (t < EMOJI_NUM) {
+                    final int finalI = i;
+                    Spanned cs = Html.fromHtml("<img src ='" + s[finalI] + "'/>", getImageGetter(t), null);
+                    editable.append(cs);
+                    i++;
+
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            if (i < s.length) {
+                editable.append(s[i]);
+            }
+
+
+        }
+        return editable;
+    }
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
@@ -94,7 +184,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             @Override
             public void onClick(View v) {
                 //检查个人信息是否完善
-                if(!checkNameAndPhoto()){
+                if (!checkNameAndPhoto()) {
                     return;
                 }
                 popupWindow.create().show(v);
@@ -113,7 +203,8 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
         holder.name.setText(entityList.get(position).getUserName());//设置用户名
         holder.time.setText(entityList.get(position).getAddTime());//时间
-        holder.content.setText(unicode2String(entityList.get(position).getDyContent()));//正文
+
+        holder.content.setText(getEditable(entityList.get(position).getDyContent()));// 正文
 
 
         ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + entityList.get(position).getUserPhoto(), holder.headPortrait);
@@ -150,7 +241,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             public void onClick(View v) {
                 holder.thumb.setClickable(false);
                 //检查个人信息是否完善
-                if(!checkNameAndPhoto()){
+                if (!checkNameAndPhoto()) {
                     return;
                 }
                 RequestParams params = new RequestParams();
@@ -190,7 +281,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                            }finally {
+                            } finally {
                                 holder.thumb.setClickable(true);
                             }
 
@@ -230,7 +321,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                            }finally {
+                            } finally {
                                 holder.thumb.setClickable(true);
                             }
 
@@ -255,7 +346,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             @Override
             public void onClick(View v) {
                 //检查个人信息是否完善
-                if(!checkNameAndPhoto()){
+                if (!checkNameAndPhoto()) {
                     return;
                 }
                 Intent intent = new Intent(context, MomentPersonalActivity.class);
@@ -439,7 +530,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                     @Override
                     public void onClick(View v) {
                         //检查个人信息是否完善
-                        if(!checkNameAndPhoto()){
+                        if (!checkNameAndPhoto()) {
                             return;
                         }
                         popupWindow.create().show(v);
@@ -483,7 +574,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                         @Override
                         public void onClick(View v) {
                             //检查个人信息是否完善
-                            if(!checkNameAndPhoto()){
+                            if (!checkNameAndPhoto()) {
                                 return;
                             }
                             popupWindow.create().show(v);
@@ -509,10 +600,9 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     }
 
 
-
     //判断用户是否编辑了个人的昵称和头像
-    private boolean checkNameAndPhoto(){
-        if("".equals(app.getUserInfoBean().getUserNickName())){
+    private boolean checkNameAndPhoto() {
+        if ("".equals(app.getUserInfoBean().getUserNickName())) {
             //设置昵称
             mDialog.builder()
                     .setTitle("提示").setMsg("您还没有昵称，请至账号界面设置后再操作，谢谢！")
@@ -525,7 +615,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                     }).show();
             return false;
 
-        }else if("null".equals(app.getUserInfoBean().getUserPhoto())){
+        } else if ("null".equals(app.getUserInfoBean().getUserPhoto())) {
             //设置头像
             mDialog.builder()
                     .setTitle("提示").setMsg("您还没有个人头像，请当前界面设置后再操作，谢谢！")
@@ -539,9 +629,6 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         }
         return true;
     }
-
-
-
 
 
     /**
@@ -562,7 +649,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             @Override
             public void onClick(View v) {
                 //检查个人信息是否完善
-                if(!checkNameAndPhoto()){
+                if (!checkNameAndPhoto()) {
                     return;
                 }
                 Intent intent = new Intent(context, MomentPersonalActivity.class);
