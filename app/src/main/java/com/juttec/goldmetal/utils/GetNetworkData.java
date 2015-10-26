@@ -105,14 +105,19 @@ public class GetNetworkData {
     }
 
 
+    /**
+     * 获取接口数据
+     * @param url
+     * @param myEntity
+     * @param context
+     * @param handler
+     * @param flag
+     */
     public static void getKLineData(  final String url, final MyEntity myEntity, final Context context,
                                       final Handler handler ,final int flag) {
-
         new Thread() {
-
             @Override
             public void run() {
-
                 HttpUtils httpUtils = new HttpUtils();
                 httpUtils.configCurrentHttpCacheExpiry(1000);
                 httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
@@ -126,6 +131,8 @@ public class GetNetworkData {
                             str = "{\"result\":" + responseInfo.result.toString() + "}";
                         }
 
+                        LogUtil.d("自选数据:---------"+str);
+
                         try {
 
                             myEntity.setObject(JSON.parseObject(str,myEntity.getObject().getClass()));
@@ -136,17 +143,14 @@ public class GetNetworkData {
 
                         } catch (Exception e) {
                             e.printStackTrace();
-                            //    ShowToast.Short(context, "获取数据失败");
+                            ToastUtil.showShort(context, "获取数据出错");
 
                         }
                     }
 
                     @Override
                     public void onFailure(HttpException e, String s) {
-
-
                         NetWorkUtils.showMsg(context);
-
                     }
                 });
 

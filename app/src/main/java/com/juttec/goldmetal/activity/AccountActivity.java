@@ -231,7 +231,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                                     } else {
                                         phoneDialog.dismiss();
                                         //修改手机号
-                                        editUserInfo(QQ, tv_qq, et_phone.getText().toString().trim());
+                                        editUserInfo(MOBILE, tv_phone, et_phone.getText().toString().trim());
 
                                     }
                                 } else {
@@ -433,6 +433,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             params.addBodyParameter("userName",result);
         }else if(type==QQ){
             params.addBodyParameter("userQQ",result);
+        }else if(type==MOBILE){
+            params.addBodyParameter("userMobile",result);
         }
 
         HttpUtils httpUtils = new HttpUtils();
@@ -442,32 +444,37 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 dialog_progress.dismiss();
 
                 JSONObject object = null;
-                        try {
-                            object = new JSONObject(responseInfo.result.toString());
-                            String status = object.getString("status");
-                            String promptInfor = object.getString("promptInfor");
-                            if("1".equals(status)){
-                                timeCount.cancel();
-                                btn_code.setText("获取验证码");
-                                btn_code.setClickable(true);
-                                tv.setText(result);
-
-                                if(type==NICKNAME){
-                                    userInfoBean.setUserNickName(result);
-                                }else if(type==NAME){
-                                    userInfoBean.setUserName(result);
-                                }else if(type==QQ){
-                                    userInfoBean.setUserQQ(result);
-                                }
-                            }else{
-
-                            }
-
-                            ToastUtil.showShort(AccountActivity.this,promptInfor);
-
-                        }catch (JSONException e) {
-                            e.printStackTrace();
+                try {
+                    object = new JSONObject(responseInfo.result.toString());
+                    String status = object.getString("status");
+                    String promptInfor = object.getString("promptInfor");
+                    if ("1".equals(status)) {
+                        if(type==MOBILE){
+                            timeCount.cancel();
+                            btn_code.setText("获取验证码");
+                            btn_code.setClickable(true);
                         }
+
+                        tv.setText(result);
+
+                        if (type == NICKNAME) {
+                            userInfoBean.setUserNickName(result);
+                        } else if (type == NAME) {
+                            userInfoBean.setUserName(result);
+                        } else if (type == QQ) {
+                            userInfoBean.setUserQQ(result);
+                        }else if(type == MOBILE){
+                            userInfoBean.setMobile(result);
+                        }
+                    } else {
+
+                    }
+
+                    ToastUtil.showShort(AccountActivity.this, promptInfor);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

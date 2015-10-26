@@ -4,11 +4,10 @@ import java.util.List;
 
 
 /**
- * @author nanjingbiao
  * 
  */
 public class RSIEntity {
-	public RSIEntity(List<OHLCEntity> OHLCData) {
+	public RSIEntity(List<KChartInfo.ResultEntity> OHLCData) {
 
 	}
 }

@@ -1,100 +1,141 @@
 package com.juttec.goldmetal.bean.chartentity;
 
+import java.util.List;
+
 /**
- * 分时图的每分钟数据
+ * 分时图的每分钟数据 实体
  * 
- * @author nanjingbiao
- * 
+ *
  */
 public class TimesEntity {
-	private String time;// 时间
-	private double weightedIndex;// 大盘加权指数
-	private double nonWeightedIndex;// 大盘不加权指数
-	private int buy;// 买入量
-	private int sell;// 卖出量
-	private int volume;// 交易量
-	private float buyRatio;// 买入率
-	private float sellRatio;// 卖出率
+	private List<ResultEntity> result;
 
 	public TimesEntity() {
-		super();
 	}
 
-	public TimesEntity(String time, double weightedIndex, double nonWeightedIndex, int buy,
-			int sell, int volume) {
-		super();
-		this.time = time;
-		this.weightedIndex = weightedIndex;
-		this.nonWeightedIndex = nonWeightedIndex;
-		this.buy = buy;
-		this.sell = sell;
-		this.volume = volume;
-		this.buyRatio = buy * 10.0f / 10.0f / (buy + sell);
-		this.sellRatio = sell * 10.0f / 10.0f / (buy + sell);
+	public TimesEntity(List<ResultEntity> result) {
+
+		this.result = result;
 	}
 
-	public String getTime() {
-		return time;
+	public List<ResultEntity> getResult() {
+		return result;
 	}
 
-	public void setTime(String time) {
-		this.time = time;
+	public void setResult(List<ResultEntity> result) {
+		this.result = result;
 	}
 
-	public double getWeightedIndex() {
-		return weightedIndex;
-	}
 
-	public void setWeightedIndex(double weightedIndex) {
-		this.weightedIndex = weightedIndex;
-	}
 
-	public double getNonWeightedIndex() {
-		return nonWeightedIndex;
-	}
+	/**
+	 * Symbol : NECLI0
+	 * Name : 美原油指数
+	 * Date : 2015-08-20 06:01:00
+	 * LastClose : 42.7
+	 * TimeTrend : 42.705
+	 * AverageLine : 42.705
+	 * Open_Int : 1333580
+	 * Volume : 121
+	 * Amount : 0
+	 */
 
-	public void setNonWeightedIndex(double nonWeightedIndex) {
-		this.nonWeightedIndex = nonWeightedIndex;
-	}
+//	struct _data_kline {
+//		Symbol          char(16),//代码，16字节
+//		Name            char(32),//名字，32字节
+//		datetime        timestamp,//交易时间，4字节
+//		LastClose       float,//昨日收盘价 4字节
+//		TimeTrend       float,//高开收低价的均价 白线 4字节
+//		AverageLine     float,//均价 总交易额除总交易量 黄线 4字节
+//		Open_Int        float,//持仓量 4字节
+//		volume          float,//总成交量 4字节
+//		amount          float//总成交额 4字节
+//	}data_kline;
 
-	public int getBuy() {
-		return buy;
-	}
+	public class ResultEntity {
+		private String Symbol;
+		private String Name;
+		private String Date;
+		private String LastClose;
+		private double TimeTrend;
+		private double AverageLine;
+		private String Open_Int;
+		private String Volume;
+		private String Amount;
 
-	public void setBuy(int buy) {
-		this.buy = buy;
-	}
 
-	public int getSell() {
-		return sell;
-	}
 
-	public void setSell(int sell) {
-		this.sell = sell;
-	}
+		public void setSymbol(String Symbol) {
+			this.Symbol = Symbol;
+		}
 
-	public int getVolume() {
-		return volume;
-	}
+		public void setName(String Name) {
+			this.Name = Name;
+		}
 
-	public void setVolume(int volume) {
-		this.volume = volume;
-	}
+		public void setDate(String Date) {
+			this.Date = Date;
+		}
 
-	public float getBuyRatio() {
-		return buyRatio;
-	}
+		public void setLastClose(String LastClose) {
+			this.LastClose = LastClose;
+		}
 
-	public void setBuyRatio(float buyRatio) {
-		this.buyRatio = buyRatio;
-	}
+		public void setTimeTrend(double TimeTrend) {
+			this.TimeTrend = TimeTrend;
+		}
 
-	public float getSellRatio() {
-		return sellRatio;
-	}
+		public void setAverageLine(double AverageLine) {
+			this.AverageLine = AverageLine;
+		}
 
-	public void setSellRatio(float sellRatio) {
-		this.sellRatio = sellRatio;
+		public void setOpen_Int(String Open_Int) {
+			this.Open_Int = Open_Int;
+		}
+
+		public void setVolume(String Volume) {
+			this.Volume = Volume;
+		}
+
+		public void setAmount(String Amount) {
+			this.Amount = Amount;
+		}
+
+		public String getSymbol() {
+			return Symbol;
+		}
+
+		public String getName() {
+			return Name;
+		}
+
+		public String getDate() {
+			return Date;
+		}
+
+		public String getLastClose() {
+			return LastClose;
+		}
+
+		public double getTimeTrend() {
+			return TimeTrend;
+		}
+
+		public double getAverageLine() {
+			return AverageLine;
+		}
+
+		public String getOpen_Int() {
+			return Open_Int;
+		}
+
+		public String getVolume() {
+			return Volume;
+		}
+
+		public String getAmount() {
+			return Amount;
+		}
 	}
 
 }

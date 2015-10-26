@@ -39,7 +39,7 @@ public class GridChart extends View {
 	public static final int DEFAULT_UPER_LATITUDE_NUM = 3;
 
 	/** 默认下表纬线数 */
-	private static final int DEFAULT_LOWER_LATITUDE_NUM = 1;
+	public static int DEFAULT_LOWER_LATITUDE_NUM = 1;
 
 	/** 默认经线数 */
 	public static final int DEFAULT_LOGITUDE_NUM = 3;
@@ -155,8 +155,14 @@ public class GridChart extends View {
 
 		longitudeSpacing = (viewWidth - 2) / (DEFAULT_LOGITUDE_NUM + 1);
 
-		latitudeSpacing = (viewHeight - 4 - DEFAULT_AXIS_TITLE_SIZE - topTitleHeight - mTabHight)
-				/ (DEFAULT_UPER_LATITUDE_NUM + DEFAULT_LOWER_LATITUDE_NUM + 2);
+		if(DEFAULT_LOWER_LATITUDE_NUM!=0){
+			latitudeSpacing = (viewHeight - 4 - DEFAULT_AXIS_TITLE_SIZE - topTitleHeight - mTabHight)
+					/ (DEFAULT_UPER_LATITUDE_NUM + DEFAULT_LOWER_LATITUDE_NUM + 2);
+		}else{
+			latitudeSpacing = (viewHeight - 4 - DEFAULT_AXIS_TITLE_SIZE - topTitleHeight - mTabHight)
+					/ (DEFAULT_UPER_LATITUDE_NUM + DEFAULT_LOWER_LATITUDE_NUM + 1);
+		}
+
 		mUperChartHeight = latitudeSpacing * (DEFAULT_UPER_LATITUDE_NUM + 1);
 		LOWER_CHART_TOP = viewHeight - 1 - latitudeSpacing * (DEFAULT_LOWER_LATITUDE_NUM + 1);
 		UPER_CHART_BOTTOM = 1 + topTitleHeight + latitudeSpacing * (DEFAULT_UPER_LATITUDE_NUM + 1);
@@ -272,7 +278,11 @@ public class GridChart extends View {
 					1 + DEFAULT_AXIS_TITLE_SIZE + 2, paint);
 		}
 		canvas.drawLine(1, UPER_CHART_BOTTOM, viewWidth - 1, UPER_CHART_BOTTOM, paint);
-		canvas.drawLine(1, LOWER_CHART_TOP, viewWidth - 1, LOWER_CHART_TOP, paint);
+
+		if(DEFAULT_LOWER_LATITUDE_NUM!=0){
+			canvas.drawLine(1, LOWER_CHART_TOP, viewWidth - 1, LOWER_CHART_TOP, paint);
+		}
+
 		if (showLowerChartTabs) {
 			canvas.drawLine(1, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE + 2, viewWidth - 1,
 					UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE + 2, paint);

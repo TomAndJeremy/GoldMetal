@@ -10,7 +10,7 @@ public class MACDEntity {
 	private List<Double> DIFs;
 	private List<Double> MACDs;
 
-	public MACDEntity(List<OHLCEntity> OHLCData) {
+	public MACDEntity(List<KChartInfo.ResultEntity> OHLCData) {
 		DEAs = new ArrayList<Double>();
 		DIFs = new ArrayList<Double>();
 		MACDs = new ArrayList<Double>();
@@ -28,7 +28,7 @@ public class MACDEntity {
 		if (OHLCData != null && OHLCData.size() > 0) {
 
 			for (int i = OHLCData.size() - 1; i >= 0; i--) {
-				close = OHLCData.get(i).getClose();
+				close = Double.parseDouble(OHLCData.get(i).getClose());
 				if (i == OHLCData.size() - 1) {
 					eMA12 = close;
 					eMA26 = close;

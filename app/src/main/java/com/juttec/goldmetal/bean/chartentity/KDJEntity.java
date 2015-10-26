@@ -9,7 +9,7 @@ public class KDJEntity {
 	private ArrayList<Double> Ds;
 	private ArrayList<Double> Js;
 
-	public KDJEntity(List<OHLCEntity> OHLCData) {
+	public KDJEntity(List<KChartInfo.ResultEntity> OHLCData) {
 		Ks = new ArrayList<Double>();
 		Ds = new ArrayList<Double>();
 		Js = new ArrayList<Double>();
@@ -25,18 +25,18 @@ public class KDJEntity {
 
 		if (OHLCData != null && OHLCData.size() > 0) {
 
-			OHLCEntity oHLCEntity = OHLCData.get(OHLCData.size() - 1);
-			double high = oHLCEntity.getHigh();
-			double low = oHLCEntity.getLow();
+			KChartInfo.ResultEntity oHLCEntity = OHLCData.get(OHLCData.size() - 1);
+			double high =Double.parseDouble( oHLCEntity.getHigh());
+			double low =Double.parseDouble( oHLCEntity.getLow());
 
 			for (int i = OHLCData.size() - 1; i >= 0; i--) {
 				if (i < OHLCData.size() - 1) {
 					oHLCEntity = OHLCData.get(i);
-					high = high > oHLCEntity.getHigh() ? high : oHLCEntity.getHigh();
-					low = low < oHLCEntity.getLow() ? low : oHLCEntity.getLow();
+					high = high >Double.parseDouble(  oHLCEntity.getHigh()) ? high :Double.parseDouble(oHLCEntity.getHigh());
+					low = low < Double.parseDouble( oHLCEntity.getLow()) ? low : Double.parseDouble(oHLCEntity.getLow());
 				}
 				if (high != low) {
-					rSV = (oHLCEntity.getClose() - low) / (high - low) * 100;
+					rSV = (Double.parseDouble( oHLCEntity.getClose()) - low) / (high - low) * 100;
 				}
 				if (i == OHLCData.size() - 1) {
 					k = rSV;

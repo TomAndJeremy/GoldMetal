@@ -9,13 +9,14 @@ import android.view.MotionEvent;
 
 
 import com.juttec.goldmetal.bean.chartentity.TimesEntity;
+import com.juttec.goldmetal.utils.DateUtil;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
 public class TimesView extends GridChart {
-	private final int DATA_MAX_COUNT = 4 * 60;
-	private List<TimesEntity> timesList;
+	private  int DATA_MAX_COUNT = 12 * 60;
+	private List<TimesEntity.ResultEntity> timesList;
 
 	private float uperBottom;
 	private float uperHeight;
@@ -25,7 +26,7 @@ public class TimesView extends GridChart {
 
 	private double initialWeightedIndex;
 	private float uperHalfHigh;
-	private float lowerHigh;
+	//	private float lowerHigh;
 	private float uperRate;
 	private float lowerRate;
 
@@ -60,7 +61,7 @@ public class TimesView extends GridChart {
 
 		initialWeightedIndex = 0;
 		uperHalfHigh = 0;
-		lowerHigh = 0;
+//		lowerHigh = 0;
 		uperRate = 0;
 		lowerRate = 0;
 		showDetails = false;
@@ -71,6 +72,7 @@ public class TimesView extends GridChart {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+		DEFAULT_LOWER_LATITUDE_NUM = 0;
 		if (timesList == null || timesList.size() <= 0) {
 			return;
 		}
@@ -83,9 +85,9 @@ public class TimesView extends GridChart {
 		if (uperHalfHigh > 0) {
 			uperRate = uperHeight / uperHalfHigh / 2.0f;
 		}
-		if (lowerHigh > 0) {
-			lowerRate = lowerHeight / lowerHigh;
-		}
+//		if (lowerHigh > 0) {
+//			lowerRate = lowerHeight / lowerHigh;
+//		}
 
 		// 绘制上部曲线及下部线条
 		drawLines(canvas);
@@ -102,11 +104,11 @@ public class TimesView extends GridChart {
 			float width = getWidth();
 			float left = 5.0f;
 			float top = 4.0f;
-			float right = 3.0f + 6.5f * DEFAULT_AXIS_TITLE_SIZE;
+			float right = 3.0f + 13f * DEFAULT_AXIS_TITLE_SIZE;
 			float bottom = 7.0f + 4 * DEFAULT_AXIS_TITLE_SIZE;
 			if (touchX < width / 2.0f) {
 				right = width - 4.0f;
-				left = width - 4.0f - 6.5f * DEFAULT_AXIS_TITLE_SIZE;
+				left = width - 4.0f - 13.0f * DEFAULT_AXIS_TITLE_SIZE;
 			}
 
 			// 绘制点击线条
@@ -132,24 +134,24 @@ public class TimesView extends GridChart {
 			textPaint.setColor(Color.WHITE);
 			textPaint.setFakeBoldText(true);
 			try {
-				TimesEntity fenshiData = timesList.get((int) ((touchX - 2) / dataSpacing));
-				canvas.drawText("时间: " + fenshiData.getTime(), left + 1, top
+				TimesEntity.ResultEntity fenshiData = timesList.get((int) ((touchX - 2) / dataSpacing));
+				canvas.drawText("时间: " + fenshiData.getDate(), left + 1, top
 						+ DEFAULT_AXIS_TITLE_SIZE, textPaint);
 
 				canvas.drawText("价格:", left + 1, top + DEFAULT_AXIS_TITLE_SIZE * 2.0f, textPaint);
-				double price = fenshiData.getWeightedIndex();
+				double price = fenshiData.getAverageLine();
 				if (price >= initialWeightedIndex) {
 					textPaint.setColor(Color.RED);
 				} else {
 					textPaint.setColor(Color.GREEN);
 				}
 				canvas.drawText(new DecimalFormat("#.##").format(price), left + 1
-						+ DEFAULT_AXIS_TITLE_SIZE * 2.5f, top + DEFAULT_AXIS_TITLE_SIZE * 2.0f,
+								+ DEFAULT_AXIS_TITLE_SIZE * 2.5f, top + DEFAULT_AXIS_TITLE_SIZE * 2.0f,
 						textPaint);
 
 				textPaint.setColor(Color.WHITE);
 				canvas.drawText("涨跌:", left + 1, top + DEFAULT_AXIS_TITLE_SIZE * 3.0f, textPaint);
-				double change = (fenshiData.getWeightedIndex() - initialWeightedIndex)
+				double change = (fenshiData.getAverageLine() - initialWeightedIndex)
 						/ initialWeightedIndex;
 				if (change >= 0) {
 					textPaint.setColor(Color.RED);
@@ -157,14 +159,14 @@ public class TimesView extends GridChart {
 					textPaint.setColor(Color.GREEN);
 				}
 				canvas.drawText(new DecimalFormat("#.##%").format(change), left + 1
-						+ DEFAULT_AXIS_TITLE_SIZE * 2.5f, top + DEFAULT_AXIS_TITLE_SIZE * 3.0f,
+								+ DEFAULT_AXIS_TITLE_SIZE * 2.5f, top + DEFAULT_AXIS_TITLE_SIZE * 3.0f,
 						textPaint);
 
 				textPaint.setColor(Color.WHITE);
 				canvas.drawText("成交:", left + 1, top + DEFAULT_AXIS_TITLE_SIZE * 4.0f, textPaint);
 				textPaint.setColor(Color.YELLOW);
 				canvas.drawText(String.valueOf(fenshiData.getVolume()), left + 1
-						+ DEFAULT_AXIS_TITLE_SIZE * 2.5f, top + DEFAULT_AXIS_TITLE_SIZE * 4.0f,
+								+ DEFAULT_AXIS_TITLE_SIZE * 2.5f, top + DEFAULT_AXIS_TITLE_SIZE * 4.0f,
 						textPaint);
 
 			} catch (Exception e) {
@@ -219,11 +221,30 @@ public class TimesView extends GridChart {
 				DEFAULT_AXIS_TITLE_SIZE, paint);
 
 		// 绘制X轴Titles
-		canvas.drawText("09:30", 2, uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
-		canvas.drawText("11:30/13:00", viewWidth / 2.0f - DEFAULT_AXIS_TITLE_SIZE * 2.5f,
-				uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
-		canvas.drawText("15:00", viewWidth - 2 - DEFAULT_AXIS_TITLE_SIZE * 2.5f, uperBottom
-				+ DEFAULT_AXIS_TITLE_SIZE, paint);
+
+		int t1 = (int)(super.getLongitudeSpacing()/ dataSpacing);
+		if(t1<=timesList.size()){
+			canvas.drawText(DateUtil.formatDate(timesList.get(t1).getDate()), 2+super.getLongitudeSpacing()-3.0f * DEFAULT_AXIS_TITLE_SIZE,
+					uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
+		}
+
+
+		int t2 = (int)(super.getLongitudeSpacing()*2 / dataSpacing);
+		if(t2<=timesList.size()){
+			canvas.drawText(DateUtil.formatDate(timesList.get(t2).getDate()), 2+super.getLongitudeSpacing()*2-3.0f * DEFAULT_AXIS_TITLE_SIZE,
+					uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
+		}
+
+
+		int t3 = (int)(super.getLongitudeSpacing()*3 / dataSpacing);
+		if(t3<=timesList.size()){
+			canvas.drawText(DateUtil.formatDate(timesList.get(t3).getDate()), 2+super.getLongitudeSpacing()*3-3.0f * DEFAULT_AXIS_TITLE_SIZE,
+					uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
+		}
+//		canvas.drawText("11:30/13:00", viewWidth / 2.0f - DEFAULT_AXIS_TITLE_SIZE * 2.5f,
+//				uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
+//		canvas.drawText("15:00", viewWidth - 2 - DEFAULT_AXIS_TITLE_SIZE * 2.5f, uperBottom
+//				+ DEFAULT_AXIS_TITLE_SIZE, paint);
 	}
 
 	private void drawLines(Canvas canvas) {
@@ -232,13 +253,13 @@ public class TimesView extends GridChart {
 		float uperYellowY = 0;
 		Paint paint = new Paint();
 		for (int i = 0; i < timesList.size() && i < DATA_MAX_COUNT; i++) {
-			TimesEntity fenshiData = timesList.get(i);
+			TimesEntity.ResultEntity fenshiData = timesList.get(i);
 
 			// 绘制上部表中曲线
-			float endWhiteY = (float) (uperBottom - (fenshiData.getNonWeightedIndex()
+			float endWhiteY = (float) (uperBottom - (fenshiData.getTimeTrend()
 					+ uperHalfHigh - initialWeightedIndex)
 					* uperRate);
-			float endYelloY = (float) (uperBottom - (fenshiData.getWeightedIndex() + uperHalfHigh - initialWeightedIndex)
+			float endYelloY = (float) (uperBottom - (fenshiData.getAverageLine() + uperHalfHigh - initialWeightedIndex)
 					* uperRate);
 
 			if (i != 0) {
@@ -253,16 +274,16 @@ public class TimesView extends GridChart {
 			uperYellowY = endYelloY;
 
 			// 绘制下部表内数据线
-			int buy = fenshiData.getBuy();
-			if (i <= 0) {
-				paint.setColor(Color.RED);
-			} else if (fenshiData.getNonWeightedIndex() >= timesList.get(i - 1)
-					.getNonWeightedIndex()) {
-				paint.setColor(Color.RED);
-			} else {
-				paint.setColor(Color.GREEN);
-			}
-			canvas.drawLine(x, lowerBottom, x, lowerBottom - buy * lowerRate, paint);
+//			int buy = fenshiData.getResult().get(0).getBuy();
+//			if (i <= 0) {
+//				paint.setColor(Color.RED);
+//			} else if (fenshiData.getResult().get(0).getTimeTrend() >= timesList.get(i - 1)
+//					.getResult().get(0).getTimeTrend()) {
+//				paint.setColor(Color.RED);
+//			} else {
+//				paint.setColor(Color.GREEN);
+//			}
+//			canvas.drawLine(x, lowerBottom, x, lowerBottom - buy * lowerRate, paint);
 		}
 
 	}
@@ -270,53 +291,53 @@ public class TimesView extends GridChart {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-		case MotionEvent.ACTION_MOVE:
-			touchX = event.getRawX();
-			if (touchX < 2 || touchX > getWidth() - 2) {
-				return false;
-			}
-			showDetails = true;
-			postInvalidate();
-			break;
+			case MotionEvent.ACTION_DOWN:
+			case MotionEvent.ACTION_MOVE:
+				touchX = event.getRawX();
+				if (touchX < 2 || touchX > getWidth() - 2) {
+					return false;
+				}
+				showDetails = true;
+				postInvalidate();
+				break;
 
-		case MotionEvent.ACTION_UP:
-		case MotionEvent.ACTION_CANCEL:
-		case MotionEvent.ACTION_OUTSIDE:
-			showDetails = false;
-			break;
+			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_CANCEL:
+			case MotionEvent.ACTION_OUTSIDE:
+				showDetails = false;
+				break;
 
-		default:
-			break;
+			default:
+				break;
 		}
 
 		return true;
 	}
 
-	public void setTimesList(List<TimesEntity> timesList) {
+	public void setTimesList(List<TimesEntity.ResultEntity> timesList) {
 		if (timesList == null || timesList.size() <= 0) {
 			return;
 		}
 		this.timesList = timesList;
+		DATA_MAX_COUNT = timesList.size()+60;
 
-		TimesEntity fenshiData = timesList.get(0);
-		double weightedIndex = fenshiData.getWeightedIndex();
-		double nonWeightedIndex = fenshiData.getNonWeightedIndex();
-		int buy = fenshiData.getBuy();
+		TimesEntity.ResultEntity fenshiData = timesList.get(0);
+		double weightedIndex = fenshiData.getAverageLine();
+		double nonWeightedIndex = fenshiData.getTimeTrend();
+//		int buy = fenshiData.getBuy();
 		initialWeightedIndex = weightedIndex;
-		lowerHigh = buy;
+//		lowerHigh = buy;
 		for (int i = 1; i < timesList.size() && i < DATA_MAX_COUNT; i++) {
 			fenshiData = timesList.get(i);
-			weightedIndex = fenshiData.getWeightedIndex();
-			nonWeightedIndex = fenshiData.getNonWeightedIndex();
-			buy = fenshiData.getBuy();
+			weightedIndex = fenshiData.getAverageLine();
+			nonWeightedIndex = fenshiData.getTimeTrend();
+//			buy = fenshiData.getBuy();
 
 			uperHalfHigh = (float) (uperHalfHigh > Math
 					.abs(nonWeightedIndex - initialWeightedIndex) ? uperHalfHigh : Math
 					.abs(nonWeightedIndex - initialWeightedIndex));
-			uperHalfHigh = (float) (uperHalfHigh > Math.abs(weightedIndex - initialWeightedIndex) ? uperHalfHigh
-					: Math.abs(weightedIndex - initialWeightedIndex));
-			lowerHigh = lowerHigh > buy ? lowerHigh : buy;
+
+//			lowerHigh = lowerHigh > buy ? lowerHigh : buy;
 		}
 		postInvalidate();
 

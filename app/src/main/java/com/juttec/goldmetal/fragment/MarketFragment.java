@@ -29,7 +29,6 @@ import com.juttec.goldmetal.bean.MarketFormInfo;
 import com.juttec.goldmetal.bean.MyEntity;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.utils.GetNetworkData;
-import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -39,7 +38,11 @@ import java.util.List;
 public class MarketFragment extends BaseFragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
 
-    private String ZIXUAN_URL = "http://db2015.wstock.cn/wsDB_API/stock.php?symbol=SH000002,SH000012,SH000022,SH000032,SH000042,SH000052,SH000062&r_type=2";
+    //自选接口路径
+    private String OPTIONAL_URL = "http://db2015.wstock.cn/wsDB_API/stock.php?symbol=OSXAU,OSXAG,OZAG20,OZAG50,OZAG100,OYXAG50KG,OYXAG150KG,NECLI0,OSUDI&r_type=2&u=qq3585&p=qq3771";
+    //现货 接口 路径
+    private String SPOT_URL = "http://db2015.wstock.cn/wsDB_API/stock.php?symbol=OSXAU,OSXAG,OZPT,OZPD,OSHKG&r_type=2&u=qq3585&p=qq3771";
+
 
     private String mParam1;
 
@@ -94,16 +97,16 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                 switch ((int) tab.getTag()) {
                     case 1:
                         //自选
-                        getData(ZIXUAN_URL);
+                        getData(OPTIONAL_URL);
                         break;
                     case 2:
                         //现货
-                        getData("http://db2015.wstock.cn/wsDB_API/stock.php?symbol=OSXAU,OSXAG,OZPT,OZPD,OSHKG&r_type=2&u=qq3585&p=qq3771");
+                        getData(SPOT_URL);
 
                         break;
                     case 3:
                         //股票
-                        LogUtil.e("11111111111111111111111111111111");
+                        ToastUtil.showShort(getActivity(),"请稍等，稍候接入！");
                         break;
                 }
             }
@@ -144,7 +147,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
         datas = new ArrayList<>();
         myHandler = new MyHandler();
-        getData(ZIXUAN_URL);
+        getData(OPTIONAL_URL);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new SampleDivider(getActivity(), R.drawable.divider_shape));
 
@@ -261,6 +264,10 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                             @Override
                             public void itemclickListener(View view, int position) {
                                 Intent intent = new Intent(getActivity(), ChartActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("name", datas.get(position).getName());
+                                bundle.putString("symbol", datas.get(position).getSymbol());
+                                intent.putExtras(bundle);
                                 startActivity(intent);
                             }
                         });
