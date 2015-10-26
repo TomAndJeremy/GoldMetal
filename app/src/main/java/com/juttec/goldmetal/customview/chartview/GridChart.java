@@ -410,4 +410,9 @@ public class GridChart extends View {
 		return topTitleHeight;
 	}
 
+
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+	}
 }

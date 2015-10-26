@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 public class PriceReductionActivity extends AppCompatActivity {
 
     private final double KG_OUNCE = 35.2739619;
-    private double dollarRmb = 6.1127;
+    private double dollarRmb = 6.1137;
     EditText etDollarOunce, etRmbOunce, etRmbKg;
     TextWatcher twDollarOunce, twRmbOunce, twRmbKg;
     DecimalFormat decimalFormat;

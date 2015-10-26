@@ -1,7 +1,14 @@
 package com.juttec.goldmetal.dialog;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -16,9 +23,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.adapter.EmoticonsGridAdapter;
+import com.juttec.goldmetal.adapter.EmoticonsPagerAdapter;
+import com.juttec.goldmetal.utils.EmojiWindow;
+import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
+
+import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2015/10/11.
@@ -36,17 +51,19 @@ public class ReplyPopupWindow {
 
     private PopupWindow popupWindow;
 
+    View contentview;
 
 
-    public ReplyPopupWindow(Context context){
+    public ReplyPopupWindow(Context context) {
 
         mContext = context;
 
     }
 
 
-    public ReplyPopupWindow create(){
-       View contentview = LayoutInflater.from(mContext).inflate(R.layout.commonality_comments, null);
+    public ReplyPopupWindow create() {
+        contentview = LayoutInflater.from(mContext).inflate(R.layout.commonality_comments, null);
+
         contentview.setFocusable(true); // 这个很重要
         contentview.setFocusableInTouchMode(true);
         popupWindow = new PopupWindow(contentview, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -69,7 +86,6 @@ public class ReplyPopupWindow {
         });
 
 
-
         mEditText = (EditText) contentview.findViewById(R.id.comment_et_reply);
         mEditText.setFocusable(true);
         mEditText.setFocusableInTouchMode(true);
@@ -83,21 +99,35 @@ public class ReplyPopupWindow {
 
         mImageButton = (ImageButton) contentview.findViewById(R.id.comment_ib_emoji);
 
-        mSend = (Button) contentview.findViewById(R.id.btn_send);
+        mImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+              /*  if (popUpView.getVisibility() == LinearLayout.GONE) {
+                    popUpView.setVisibility(LinearLayout.VISIBLE);
+                    InputMethodManager inputMethodManager = (InputMethodManager) mContext.getApplicationContext().
+                            getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                    inputMethodManager.hideSoftInputFromWindow(mEditText.getWindowToken(), 0); //隐藏
+                } else {
+                    popUpView.setVisibility(LinearLayout.GONE);
+                }*/
+            }
+        });
+
+        mSend = (Button) contentview.findViewById(R.id.btn_send);
         //发送按钮的点击事件
         mSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String content = mEditText.getText().toString();
-                if(TextUtils.isEmpty(content)||"".equals(content)||content.trim().length()<=0){
+                if (TextUtils.isEmpty(content) || "".equals(content) || content.trim().length() <= 0) {
                     ToastUtil.showShort(mContext, "内容不能为空");
                     return;
                 }
                 mOnClickSendListener.onClickSend(content);
             }
         });
-
 
 
         //edittext监听内容变化   更改发送按钮的背景
@@ -110,9 +140,9 @@ public class ReplyPopupWindow {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String content = mEditText.getText().toString();
-                if(TextUtils.isEmpty(content)||"".equals(content)||content.trim().length()<=0){
+                if (TextUtils.isEmpty(content) || "".equals(content) || content.trim().length() <= 0) {
                     mSend.setSelected(false);
-                }else{
+                } else {
                     mSend.setSelected(true);
                 }
             }
@@ -123,46 +153,46 @@ public class ReplyPopupWindow {
             }
         });
 
+
         return this;
     }
 
 
     //popupwindowde 的显示
-    public void show(View view){
+    public void show(View view) {
         popupWindow.showAtLocation(view, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
     }
 
     //popupwindowde 的消失
-    public  void  dismiss(){
+    public void dismiss() {
         popupWindow.dismiss();
     }
 
 
     //设置edittext中 提示 type:0 表示评论   1：回复
-    public void setHint(int type,String name){
+    public void setHint(int type, String name) {
 
-        if(type==0){
+        if (type == 0) {
             mEditText.setHint("评论" + name);
-        }else{
+        } else {
             mEditText.setHint("回复" + name);
         }
     }
 
 
-
-
-
-
     //接口  作用：发送按钮的点击事件
-    public interface  OnClickSendListener{
+    public interface OnClickSendListener {
         void onClickSend(String content);
     }
 
 
     private OnClickSendListener mOnClickSendListener;
 
-    public void setOnClickSendListener(OnClickSendListener listener){
+    public void setOnClickSendListener(OnClickSendListener listener) {
         mOnClickSendListener = listener;
     }
+
+
+
 
 }

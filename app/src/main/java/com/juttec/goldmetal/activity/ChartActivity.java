@@ -34,7 +34,6 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     private HeadLayout mHeadLayout;
     MarketTimesFragment timesFragment;//分时图
     MarketKChartsFragment kChartsFragment;//K线图
-
     //从MarketFragment传递过来的
     private String name;//名称
     private String symbol;//代码
@@ -52,6 +51,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     };
 
     //K线图 周期
+    //周期
     private String cycles_klines[] = new String[]{
             "1分钟",
             "5分钟",
@@ -63,6 +63,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
             "周线",
             "月线"
     };
+
 
     //K线图指标
     private String indexs[] = new String[]{
@@ -90,12 +91,10 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     //分时图URL
     private String TIME_URL ;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
-
         symbol = getIntent().getStringExtra("symbol");
         name = getIntent().getStringExtra("name");
 
@@ -111,6 +110,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         LogUtil.d("分时图TIME_URL-------------"+TIME_URL);
         timesFragment =  MarketTimesFragment.newInstance(TIME_URL);
+
         transaction.replace(R.id.fragment_container, timesFragment).commit();
 
         initView();
@@ -127,17 +127,12 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
         tv_title = (TextView) mHeadLayout.findViewById(R.id.head_title);
         //设置标题
         tv_title.setText(name);
-
         tv_cycle = (TextView) mHeadLayout.findViewById(R.id.left_text);
         tv_cycle.setOnClickListener(this);
 
-
         tv_index = (TextView) mHeadLayout.findViewById(R.id.right_text);
         tv_index.setOnClickListener(this);
-
         setCycle();
-
-
 
         btn_times = (Button) findViewById(R.id.btn_time);
         btn_times.setOnClickListener(this);
@@ -150,16 +145,9 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
-
-    //初始化数据
     private void initData() {
 
     }
-
-
-
-
 
     //根据当前是K线图或分时图  设置 当前的周期属性
     private void setCycle(){
@@ -187,18 +175,19 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
         String mDate = sf.format(lastDay);
         return  mDate;
     }
-
-
-    //点击事件
     @Override
     public void onClick(View v) {
         AlertDialog.Builder builder;
+
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
         switch (v.getId()) {
             case R.id.left_text:
                 //周期
+
                 builder = new AlertDialog.Builder(ChartActivity.this);
                 // builder.create().requestWindowFeature(Window.FEATURE_NO_TITLE);
                 builder.setItems(cycles_current, new DialogInterface.OnClickListener() {
@@ -267,10 +256,13 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                                     break;
                             }
                             timesFragment = MarketTimesFragment.newInstance(url);
-                            LogUtil.d("Time_URL-------------"+url);
+                            LogUtil.d("Time_URL-------------" + url);
                             transaction.replace(R.id.fragment_container, timesFragment).commit();
                         }
                     }
+
+
+
 
                 }).show();
 
@@ -282,7 +274,16 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                 builder.setItems(indexs, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ToastUtil.showShort(ChartActivity.this, indexs[which] + "被选中");
+                        String index = indexs[which].replace("指标","");
+
+
+                        LogUtil.e(ChartActivity.this, 145, "index   " + index);
+                        if (kChartsFragment != null) {
+
+                            kChartsFragment.setIndex(index);
+
+                        }
+                        ToastUtil.showShort(ChartActivity.this, index + "被选中");
 
                     }
 
@@ -291,20 +292,22 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.btn_time:
-                //分时图
-                isKLine = false;
-                setCycle();
-                LogUtil.d("分时图TIME_URL-------------"+TIME_URL);
-                timesFragment = MarketTimesFragment.newInstance(TIME_URL);
-                transaction.replace(R.id.fragment_container, timesFragment).commit();
+        //分时图
+        isKLine = false;
+        setCycle();
+        LogUtil.d("分时图TIME_URL-------------"+TIME_URL);
+        timesFragment = MarketTimesFragment.newInstance(TIME_URL);
+
+        transaction.replace(R.id.fragment_container, timesFragment).commit();
                 break;
             case R.id.btn_k_line:
                 //K线图
-                isKLine = true;
-                setCycle();
-                kChartsFragment = MarketKChartsFragment.newInstance(KLINES_URL+"&return_t="+return_t+"&qt_type="+qt_type);
-                LogUtil.d("KLINES_URL-------------"+KLINES_URL+"&return_t="+return_t+"&qt_type="+qt_type);
-                transaction.replace(R.id.fragment_container, kChartsFragment).commit();
+        isKLine = true;
+        setCycle();
+        kChartsFragment = MarketKChartsFragment.newInstance(KLINES_URL+"&return_t="+return_t+"&qt_type="+qt_type);
+        LogUtil.d("KLINES_URL-------------"+KLINES_URL+"&return_t="+return_t+"&qt_type="+qt_type);
+
+        transaction.replace(R.id.fragment_container, kChartsFragment).commit();
 
                 break;
 

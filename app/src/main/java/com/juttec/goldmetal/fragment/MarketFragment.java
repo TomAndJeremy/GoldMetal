@@ -29,6 +29,7 @@ import com.juttec.goldmetal.bean.MarketFormInfo;
 import com.juttec.goldmetal.bean.MyEntity;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.utils.GetNetworkData;
+import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -42,7 +43,6 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     private String OPTIONAL_URL = "http://db2015.wstock.cn/wsDB_API/stock.php?symbol=OSXAU,OSXAG,OZAG20,OZAG50,OZAG100,OYXAG50KG,OYXAG150KG,NECLI0,OSUDI&r_type=2&u=qq3585&p=qq3771";
     //现货 接口 路径
     private String SPOT_URL = "http://db2015.wstock.cn/wsDB_API/stock.php?symbol=OSXAU,OSXAG,OZPT,OZPD,OSHKG&r_type=2&u=qq3585&p=qq3771";
-
 
     private String mParam1;
 
@@ -106,7 +106,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                         break;
                     case 3:
                         //股票
-                        ToastUtil.showShort(getActivity(),"请稍等，稍候接入！");
+                        ToastUtil.showShort(getActivity(), "请稍等，稍候接入！");
                         break;
                 }
             }

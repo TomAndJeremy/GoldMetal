@@ -97,9 +97,13 @@ public class KChartsView extends GridChart implements GridChart.OnTabClickListen
      */
     private List<MALineEntity> MALineData;
 
+
+
     private String mTabTitle;
 
-    /** 下部表的数据 **/
+    /**
+     * 下部表的数据
+     **/
     MACDEntity mMACDData;
     KDJEntity mKDJData;
     RSIEntity mRSIData;
@@ -119,6 +123,9 @@ public class KChartsView extends GridChart implements GridChart.OnTabClickListen
         init();
     }
 
+    public void setmTabTitle(String mTabTitle) {
+        this.mTabTitle = mTabTitle;
+    }
     private void init() {
         super.setOnTabClickListener(this);
         mShowDataNum = DEFAULT_CANDLE_NUM;
@@ -126,12 +133,15 @@ public class KChartsView extends GridChart implements GridChart.OnTabClickListen
         showDetails = false;
         mMaxPrice = -1;
         mMinPrice = -1;
-        mTabTitle = "MACD";
+       //mTabTitle = "MACD";
 
         mOHLCData = new ArrayList<KChartInfo.ResultEntity>();
         mMACDData = new MACDEntity(null);
         mKDJData = new KDJEntity(null);
         mRSIData = new RSIEntity(null);
+       setShowLowerChartTabs(false);
+
+
     }
 
     @Override

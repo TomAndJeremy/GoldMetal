@@ -2,16 +2,9 @@ package com.juttec.goldmetal.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +28,7 @@ import com.juttec.goldmetal.customview.CircleImageView;
 import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
+import com.juttec.goldmetal.utils.EmojiWindow;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -48,11 +42,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
  * Created by Jeremy on 2015/9/14.
@@ -60,7 +52,8 @@ import java.util.StringTokenizer;
 public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecyclerViewAdapter.ViewHolder> {
 
 
-    private ReplyPopupWindow popupWindow;
+    private ReplyPopupWindow replyPopupWindow ;
+
 
     // 数据集
     ArrayList<DynamicEntityList> entityList;
@@ -72,6 +65,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     private Bitmap[] emoticons;
 
     private static final int EMOJI_NUM = 54;//表情数目
+    private EmojiWindow readEmojiWindow;
 
     //初始化
     public MomentRecyclerViewAdapter(ArrayList<DynamicEntityList> entityList, Context context, MyApplication app) {
@@ -80,9 +74,12 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
         this.context = context;
         this.app = app;
-        popupWindow = new ReplyPopupWindow(context);
+        replyPopupWindow = new ReplyPopupWindow(context);
         mDialog = new MyAlertDialog(context);
-        readEmojiIcons();
+        //readEmojiIcons();
+        readEmojiWindow = new EmojiWindow(context);
+        emoticons = readEmojiWindow.readEmojiIcons();
+
     }
 
     public void setHeadAdapter(RecycleViewWithHeadAdapter recycleViewWithHeadAdapter) {
@@ -99,31 +96,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         return holder;
     }
 
-    private void readEmojiIcons() {
-        emoticons = new Bitmap[EMOJI_NUM];
-        for (short i = 0; i < EMOJI_NUM; i++) {
-            emoticons[i] = getImage((i + 1) + ".png");
-        }
-    }
-
-    /**
-     * For loading smileys from assets
-     */
-    private Bitmap getImage(String path) {
-        AssetManager mngr = context.getAssets();
-        InputStream in = null;
-        try {
-            in = mngr.open("emoticons/" + path);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Bitmap temp = BitmapFactory.decodeStream(in, null, null);
-        return temp;
-    }
-
-
-    private Html.ImageGetter getImageGetter(final int t) {
+   /* private Html.ImageGetter getImageGetter(final int t) {
         return new Html.ImageGetter() {
             @Override
             public Drawable getDrawable(String source) {
@@ -172,7 +145,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         }
         return editable;
     }
-
+*/
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
@@ -184,13 +157,13 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 if (!checkNameAndPhoto()) {
                     return;
                 }
-                popupWindow.create().show(v);
-                popupWindow.setHint(0, entityList.get(position).getUserName());
-                popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
+                replyPopupWindow.create().show(v);
+                replyPopupWindow.setHint(0, entityList.get(position).getUserName());
+                replyPopupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
                     @Override
                     public void onClickSend(String content) {
 
-                        comment(position, popupWindow, entityList.get(position).getId(), content);
+                        comment(position, replyPopupWindow, entityList.get(position).getId(), content);
 
                     }
                 });
@@ -201,7 +174,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         holder.name.setText(entityList.get(position).getUserName());//设置用户名
         holder.time.setText(entityList.get(position).getAddTime());//时间
 
-        holder.content.setText(getEditable(entityList.get(position).getDyContent()));// 正文
+        holder.content.setText(readEmojiWindow.getEditable(entityList.get(position).getDyContent()));// 正文
 
 
 
@@ -531,9 +504,9 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                         if (!checkNameAndPhoto()) {
                             return;
                         }
-                        popupWindow.create().show(v);
-                        popupWindow.setHint(1, entityList.get(position).getDyCommentReply().get(finalI).getDiscussantName());
-                        popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
+                        replyPopupWindow.create().show(v);
+                        replyPopupWindow.setHint(1, entityList.get(position).getDyCommentReply().get(finalI).getDiscussantName());
+                        replyPopupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
                             @Override
                             public void onClickSend(String content) {
                                 reply(position, finalI, content);
@@ -575,10 +548,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                             if (!checkNameAndPhoto()) {
                                 return;
                             }
-                            popupWindow.create().show(v);
-                            popupWindow.setHint(1, entityList.get(position).getDyCommentReply().get(finalI).getDyReply().get(finalJ).getUserName());
+                            replyPopupWindow.create().show(v);
+                            replyPopupWindow.setHint(1, entityList.get(position).getDyCommentReply().get(finalI).getDyReply().get(finalJ).getUserName());
 
-                            popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
+                            replyPopupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
                                 @Override
                                 public void onClickSend(String content) {
                                     reply(position, finalI, finalJ, content);
@@ -755,7 +728,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                         entityList.get(position).getDyCommentReply().get(i).setDyReply(dyReplyInfoBeans);
                         notifyDataSetChanged();
                         recycleViewWithHeadAdapter.notifyDataSetChanged();
-                        popupWindow.dismiss();
+                        replyPopupWindow.dismiss();
                     }
 
                 } catch (JSONException e) {

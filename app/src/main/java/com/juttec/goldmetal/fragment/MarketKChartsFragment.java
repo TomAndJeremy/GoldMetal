@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.bean.MyEntity;
 import com.juttec.goldmetal.bean.chartentity.KChartInfo;
+import com.juttec.goldmetal.bean.chartentity.OHLCEntity;
 import com.juttec.goldmetal.customview.chartview.KChartsView;
 import com.juttec.goldmetal.utils.GetNetworkData;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -29,7 +30,8 @@ public class MarketKChartsFragment extends Fragment {
 	private KChartInfo kChartInfo;
 	public static String url;
 	private static MarketKChartsFragment kChartsFragment;
-
+	private String index;
+	
 	/**
 	 * 静态工厂方法需要一个int型的值来初始化fragment的参数，
 	 * 然后返回新的fragment到调用者
@@ -41,17 +43,23 @@ public class MarketKChartsFragment extends Fragment {
 		return kChartsFragment;
 	}
 
-
+	public void setIndex(String index) {
+		if (mMyChartsView != null) {
+			mMyChartsView.setmTabTitle(index);
+			mMyChartsView.postInvalidate();
+		}
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_kcharts, null);
 		mMyChartsView = (KChartsView) view.findViewById(R.id.my_charts_view);
+		mMyChartsView.setmTabTitle("MACD");
 		handler = new MyHandler();
 		datas = new ArrayList<KChartInfo.ResultEntity>();
 		kChartInfo = new KChartInfo();
 		myEntity = new MyEntity(kChartInfo);
-		GetNetworkData.getKLineData(url, myEntity, getActivity(), handler,NEWEST);
+		GetNetworkData.getKLineData(url, myEntity, getActivity(), handler, NEWEST);
 		return view;
 	}
 
@@ -92,3 +100,4 @@ public class MarketKChartsFragment extends Fragment {
 		kChartsFragment = null;
 	}
 }
+

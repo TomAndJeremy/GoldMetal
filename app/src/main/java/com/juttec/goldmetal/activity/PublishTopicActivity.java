@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -223,14 +224,14 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
         readEmojiIcons();
         enablePopUpView();
-        //checkKeyboardHeight(parentLayout);
+        // checkKeyboardHeight(parentLayout);
 
     }
 
 
     int previousHeightDiffrence = 0;
 
-    private void checkKeyboardHeight(final LinearLayout parentLayout) {
+    private void checkKeyboardHeight(final RelativeLayout parentLayout) {
         parentLayout.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
 
@@ -239,6 +240,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
                         Rect r = new Rect();
                         parentLayout.getWindowVisibleDisplayFrame(r);
+
 
                         int screenHeight = parentLayout.getRootView()
                                 .getHeight();
@@ -249,16 +251,8 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
                         }
 
                         previousHeightDiffrence = heightDifference;
-                        if (heightDifference > 100) {
-
-                            isKeyBoardVisible = true;
-                            changeKeyboardHeight(heightDifference);
-
-                        } else {
-
-                            isKeyBoardVisible = false;
-
-                        }
+                        //changeKeyboardHeight(heightDifference);
+                        isKeyBoardVisible = heightDifference > 100;
 
                     }
                 });
@@ -281,7 +275,8 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         // Creating a pop window for emoticons keyboard
         popupWindow = new PopupWindow(popUpView, LinearLayout.LayoutParams.MATCH_PARENT,
                 keyboardHeight, false);
-
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
         TextView backSpace;
         backSpace = (TextView) popUpView.findViewById(R.id.back);
         backSpace.setOnClickListener(new View.OnClickListener() {
@@ -470,7 +465,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
                 break;
             case R.id.publis_topic_bt_emoji:
 
-                InputMethodManager inputMethodManager =(InputMethodManager)getApplicationContext().
+                InputMethodManager inputMethodManager = (InputMethodManager) getApplicationContext().
                         getSystemService(Context.INPUT_METHOD_SERVICE);
 
 
@@ -485,7 +480,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
                     } else {
                         emojiconsCover.setVisibility(LinearLayout.VISIBLE);
                     }
-                    popupWindow.showAtLocation(parentLayout, Gravity.BOTTOM, 0, 0);
+                    popupWindow.showAtLocation(PublishTopicActivity.this.getCurrentFocus(), Gravity.BOTTOM, 0, 0);
 
                 } else {
                     popupWindow.dismiss();
@@ -615,13 +610,13 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
         params.addBodyParameter("userName", app.getUserInfoBean().getUserNickName());
 
-        String content =mContent.getText().toString();
+        String content = mContent.getText().toString();
         for (Map.Entry entry : map.entrySet()) {
 
             Integer key = (Integer) entry.getKey();
             String value = (String) entry.getValue();
 
-            content=   content.replaceFirst("￼", "`" + value + "`");
+            content = content.replaceFirst("￼", "`" + value + "`");
 //             mContent.getText().replace(key, key + 1, "`" + value+"`" );
 
         }
