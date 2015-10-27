@@ -77,6 +77,7 @@ public class ExchangeNoticeActivity extends AppCompatActivity implements SwipeRe
 
 
         listView = (LoadMoreListView) this.findViewById(R.id.listview);
+        listView.setSelected(false);
         listView.setDividerHeight(0);
 
         listView.setOnLoadNextListener(new LoadMoreListView.OnLoadNextListener() {

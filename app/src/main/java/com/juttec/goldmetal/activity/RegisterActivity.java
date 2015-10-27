@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
+import com.juttec.goldmetal.customview.HeadLayout;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
@@ -39,14 +40,14 @@ import static com.juttec.goldmetal.R.id.register_bt_ok;
  */
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
-   private  EditText phone;//手机号
-   private  EditText identifyCode;//验证码
-   private EditText password;//密码
-   private  EditText pwdConfig;//确认密码
+    private EditText phone;//手机号
+    private EditText identifyCode;//验证码
+    private EditText password;//密码
+    private EditText pwdConfig;//确认密码
 
-   private  Button getCode;//获取验证码
+    private Button getCode;//获取验证码
 
-    private   Button register;//注册 按钮
+    private Button register;//注册 按钮
     private TextView tv_mark;//手机注册
 
     private String toActivity;//  ForgetPwdActivity  RegisterActivity
@@ -61,13 +62,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private MyProgressDialog dialog;//正在加载的  进度框
 
 
-
     private int countDown = 60 * 1000;//倒计时的时间  默认为60秒
 
 
     private long firstTime = 0;
     private long lastTime = 0;
-    private int codeTime = 3*60*1000;//验证码有效期  默认3分钟内有效
+    private int codeTime = 3 * 60 * 1000;//验证码有效期  默认3分钟内有效
 
 
     @Override
@@ -99,16 +99,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         register.setSelected(true);
 
 
-        if(toActivity.equals("RegisterActivity")){
+        if (toActivity.equals("RegisterActivity")) {
             //注册
 
-        }else{
+
+        } else {
             //忘记密码
             tv_mark.setVisibility(View.GONE);
             register.setText("确定");
+            HeadLayout headLayout = (HeadLayout) findViewById(R.id.head_layout);
+            headLayout.setHeadTitle("找回密码");
+
         }
-
-
 
 
         getCode.setOnClickListener(this);
@@ -143,10 +145,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case register_bt_ok:
                 //进行注册
-                if(phoneVerification()){
-                    if(checkCode()){
-                        if(checkPwd()){
-                            if(checkIsOutTime()){
+                if (phoneVerification()) {
+                    if (checkCode()) {
+                        if (checkPwd()) {
+                            if (checkIsOutTime()) {
                                 //注册用户
                                 registerUser();
                             }
@@ -176,16 +178,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
     //判断验证码是否正确
-    private boolean  checkCode(){
+    private boolean checkCode() {
         String code = identifyCode.getText().toString().trim();
         if (code == null || "".equals(code)) {
             SnackbarUtil.showShort(this, "请输入验证码");
             return false;
-        }else if(code_back==null) {
+        } else if (code_back == null) {
             SnackbarUtil.showShort(this, "请获取验证码");
             return false;
-        }else{
-            if(!code.equals(code_back)){
+        } else {
+            if (!code.equals(code_back)) {
                 SnackbarUtil.showShort(this, "验证码错误");
                 return false;
             }
@@ -199,7 +201,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String pwd = password.getText().toString().trim();
         String confirmPwd = pwdConfig.getText().toString().trim();
 
-        if (pwd == null || "".equals(pwd) ) {
+        if (pwd == null || "".equals(pwd)) {
             SnackbarUtil.showShort(this, "请输入密码");
             return false;
         } else {
@@ -217,25 +219,25 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     return false;
                 } else {
 
-                        if (pwd.equals(confirmPwd)) {
-                            return true;
-                        } else {
-                            SnackbarUtil.showShort(this, "两次密码输入不一致,请重新输入");
-                            return false;
-                        }
+                    if (pwd.equals(confirmPwd)) {
+                        return true;
+                    } else {
+                        SnackbarUtil.showShort(this, "两次密码输入不一致,请重新输入");
+                        return false;
                     }
                 }
+            }
 
         }
     }
 
     //判断验证码是否过期
-    private boolean checkIsOutTime(){
+    private boolean checkIsOutTime() {
         lastTime = System.currentTimeMillis();
-        if(lastTime-firstTime>codeTime){
+        if (lastTime - firstTime > codeTime) {
             SnackbarUtil.showShort(this, "验证码已过期,请重新获取");
             return false;
-        }else if(!phone.getText().toString().trim().equals(phone_back)){
+        } else if (!phone.getText().toString().trim().equals(phone_back)) {
             SnackbarUtil.showShort(this, "验证码错误");
             return false;
         }
@@ -243,29 +245,22 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-
-
-
-
-
-
-
     /**
      * 获取验证码 接口
      */
-    private void getCode(){
+    private void getCode() {
 
         if (phoneVerification()) {
             timeCount.start();
             RequestParams params = new RequestParams();
             params.addBodyParameter("userMobile", phone.getText().toString().trim());
-            new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getSendMessageUrl(),params, new RequestCallBack<String>() {
+            new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getSendMessageUrl(), params, new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(ResponseInfo<String> responseInfo) {
 
                     try {
                         JSONObject jsonObject = new JSONObject(responseInfo.result.toString());
-                        LogUtil.d("获取验证码接口--------------"+responseInfo.result.toString());
+                        LogUtil.d("获取验证码接口--------------" + responseInfo.result.toString());
                         String status = jsonObject.getString("status");
                         String promptInfor = jsonObject.getString("promptInfor");
 
@@ -276,14 +271,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                             phone_back = jsonObject.getString("message1");
                             code_back = jsonObject.getString("message2");
-                        }else{
+                        } else {
                             getCode.setText("重新获取");
                             getCode.setClickable(true);
                             SnackbarUtil.showShort(getApplicationContext(), promptInfor);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }finally {
+                    } finally {
                     }
 
                 }
@@ -302,52 +297,51 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     /**
      * 注册接口      忘记密码接口
      */
-    private void registerUser(){
-            dialog.builder().setMessage("请稍等~").show();
-            RequestParams params = new RequestParams();
-            params.addBodyParameter("userMobile", phone_back);
-            params.addBodyParameter("password", password.getText().toString().trim());
-            String url;
-            if(toActivity.equals("RegisterActivity")){
-                //注册
-                url = app.getUserRegisterUrl();
-            }else{
-                //忘记密码
-                url = app.getForgetPasswordUrl();
-            }
-            new HttpUtils().send(HttpRequest.HttpMethod.POST, url, params, new RequestCallBack<String>() {
-                @Override
-                public void onSuccess(ResponseInfo<String> responseInfo) {
-                    dialog.dismiss();
-                    LogUtil.d(responseInfo.result.toString());
+    private void registerUser() {
+        dialog.builder().setMessage("请稍等~").show();
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("userMobile", phone_back);
+        params.addBodyParameter("password", password.getText().toString().trim());
+        String url;
+        if (toActivity.equals("RegisterActivity")) {
+            //注册
+            url = app.getUserRegisterUrl();
+        } else {
+            //忘记密码
+            url = app.getForgetPasswordUrl();
+        }
+        new HttpUtils().send(HttpRequest.HttpMethod.POST, url, params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                LogUtil.d(responseInfo.result.toString());
 
-                    JSONObject jsonObject = null;
-                    try {
-                        jsonObject = new JSONObject(responseInfo.result.toString());
-                        String status = jsonObject.getString("status");
-                        String promptInfor = jsonObject.getString("promptInfor");
-                        ToastUtil.showShort(RegisterActivity.this, promptInfor);
-                        if ("1".equals(status)) {
-                            SharedPreferencesUtil.setParam(RegisterActivity.this, "username", phone_back);
-                            SharedPreferencesUtil.clearParam(RegisterActivity.this,"pwd");
-                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra("from", "RegisterActivity");
-                            startActivity(intent);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(responseInfo.result.toString());
+                    String status = jsonObject.getString("status");
+                    String promptInfor = jsonObject.getString("promptInfor");
+                    ToastUtil.showShort(RegisterActivity.this, promptInfor);
+                    if ("1".equals(status)) {
+                        SharedPreferencesUtil.setParam(RegisterActivity.this, "username", phone_back);
+                        SharedPreferencesUtil.clearParam(RegisterActivity.this, "pwd");
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("from", "RegisterActivity");
+                        startActivity(intent);
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                @Override
-                public void onFailure(HttpException error, String msg) {
-                    dialog.dismiss();
-                    NetWorkUtils.showMsg(RegisterActivity.this);
-                }
-            });
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                NetWorkUtils.showMsg(RegisterActivity.this);
+            }
+        });
     }
-
-
 
 
     /**
@@ -355,6 +349,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
      */
     class TimeCount extends CountDownTimer {
         private int leftTime;
+
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);// 参数依次为时长,和计时的时间间隔
         }
