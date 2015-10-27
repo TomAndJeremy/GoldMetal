@@ -36,21 +36,20 @@ public class GridChart extends View {
 	private static final int DEFAULT_LONGI_LAITUDE_COLOR = Color.GRAY;
 
 	/** 默认上表纬线数 */
-	public static final int DEFAULT_UPER_LATITUDE_NUM = 3;
+	public static final int DEFAULT_UPER_LATITUDE_NUM = 5;
 
 	/** 默认下表纬线数 */
 	public static int DEFAULT_LOWER_LATITUDE_NUM = 1;
 
 	/** 默认经线数 */
-	public static final int DEFAULT_LOGITUDE_NUM = 3;
+	public static final int DEFAULT_LOGITUDE_NUM = 5;
 
 	/** 默认边框的颜色 */
 	public static final int DEFAULT_BORDER_COLOR = Color.TRANSPARENT;
 
 	/** 默认虚线效果
 	 *  DashPathEffect  可以使用DashPathEffect来创建一个虚线的轮廓(短横线/小圆点)，而不是使用实线 */
-	private static final PathEffect DEFAULT_DASH_EFFECT = new DashPathEffect(new float[] { 3, 3, 3,
-			3 }, 1);
+	private static final PathEffect DEFAULT_DASH_EFFECT = new DashPathEffect(new float[] { 10,6,24,21}, 1);
 
 	/** 下表的顶部 */
 	public static float LOWER_CHART_TOP;
