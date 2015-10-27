@@ -30,6 +30,21 @@ public class KChartInfo {
      * High : 1134.19
      * Low : 1130.07
      */
+
+
+
+//    struct _data_kline {
+//        symbol     char(16),//代码，16字节
+//        name       char(32),//名字，32字节
+//        datetime   timestamp,//交易时间，4字节
+//        open       float,//开盘价 4字节
+//        low        float,//最低价 4字节
+//        high       float,//最高价 4字节
+//        close      float,//收盘价 4字节
+//        volume     float,//总成交量 4字节
+//        amount     float//总成交额 4字节
+//    }data_kline;
+
     public class ResultEntity {
         private String Date;
         private String Close;
