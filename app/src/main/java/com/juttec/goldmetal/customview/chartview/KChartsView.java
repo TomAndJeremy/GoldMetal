@@ -13,6 +13,7 @@ import com.juttec.goldmetal.bean.chartentity.KDJEntity;
 import com.juttec.goldmetal.bean.chartentity.MACDEntity;
 import com.juttec.goldmetal.bean.chartentity.MALineEntity;
 import com.juttec.goldmetal.bean.chartentity.RSIEntity;
+import com.juttec.goldmetal.utils.DateUtil;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -169,6 +170,10 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
                 left = width - 4.0f - 13 * DEFAULT_AXIS_TITLE_SIZE;
             }
             int selectIndext = (int) ((width - 2.0f - mStartX) / mCandleWidth + mDataStartIndext);
+            //防止数组越界
+            if(selectIndext>=mOHLCData.size()){
+                return;
+            }
 
             /** 绘制 点击 线条 **/
             Paint paint = new Paint();
@@ -283,6 +288,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
 
     }
 
+
     private void drawTitles(Canvas canvas) {
         Paint textPaint = new Paint();
         textPaint.setColor(DEFAULT_AXIS_Y_TITLE_COLOR);
@@ -291,14 +297,23 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         // Y轴Titles
         canvas.drawText(new DecimalFormat("#.##").format(mMinPrice), 1, UPER_CHART_BOTTOM - 1,
                 textPaint);
-        canvas.drawText(new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 4),
+        canvas.drawText(new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) /6),
                 1, UPER_CHART_BOTTOM - getLatitudeSpacing() - 1, textPaint);
         canvas.drawText(
-                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 4 * 2), 1,
+                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 6 * 2), 1,
                 UPER_CHART_BOTTOM - getLatitudeSpacing() * 2 - 1, textPaint);
         canvas.drawText(
-                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 4 * 3), 1,
+                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 2), 1,
                 UPER_CHART_BOTTOM - getLatitudeSpacing() * 3 - 1, textPaint);
+
+        canvas.drawText(
+                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 6 * 4), 1,
+                UPER_CHART_BOTTOM - getLatitudeSpacing() * 4 - 1, textPaint);
+        canvas.drawText(
+                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 6 * 5), 1,
+                UPER_CHART_BOTTOM - getLatitudeSpacing() * 5 - 1, textPaint);
+
+
         canvas.drawText(new DecimalFormat("#.##").format(mMaxPrice), 1,
                 DEFAULT_AXIS_TITLE_SIZE * 2, textPaint);
 
@@ -308,16 +323,26 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
 
         int p = getWidth() / (DEFAULT_LOGITUDE_NUM+1);
 
-        canvas.drawText(mOHLCData.get(mDataStartIndext+mShowDataNum/ (DEFAULT_LOGITUDE_NUM+1)).getDate(), getWidth()-p - 4 - 4.5f
-                * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
+
+
         try {
+            canvas.drawText(DateUtil.formatDate(mOHLCData.get(mDataStartIndext+(int)(mShowDataNum*1.0f/ (DEFAULT_LOGITUDE_NUM+1))).getDate()), getWidth()-p - 4 - 2.5f
+                    * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
+
+            canvas.drawText(DateUtil.formatDate(mOHLCData.get(mDataStartIndext+(int)(mShowDataNum*1.0/(DEFAULT_LOGITUDE_NUM+1)*2)).getDate()), getWidth()-p*2 - 4 - 2.5f
+                    * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
+
             canvas.drawText(
-                    String.valueOf(mOHLCData.get(mDataStartIndext + mShowDataNum / 2).getDate()),
-                    getWidth() / 2 - 4.5f * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM
+                    String.valueOf(DateUtil.formatDate(mOHLCData.get(mDataStartIndext + (int)(mShowDataNum*1.0/(DEFAULT_LOGITUDE_NUM+1)*3)).getDate())),
+                    getWidth() / 2 - 2.5f * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM
                             + DEFAULT_AXIS_TITLE_SIZE, textPaint);
+
+            canvas.drawText(DateUtil.formatDate(mOHLCData.get(mDataStartIndext +(int)(mShowDataNum*1.0/(DEFAULT_LOGITUDE_NUM+1)*4)).getDate()), getWidth()-p*4 - 4 - 2.5f
+                    * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
+
             canvas.drawText(
-                    String.valueOf(mOHLCData.get(mDataStartIndext + (mShowDataNum/(DEFAULT_LOGITUDE_NUM+1))*DEFAULT_LOGITUDE_NUM+1).getDate()),
-                    p-(4.5f* DEFAULT_AXIS_TITLE_SIZE), UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
+                    String.valueOf(DateUtil.formatDate(mOHLCData.get(mDataStartIndext +(int)(mShowDataNum*1.0/(DEFAULT_LOGITUDE_NUM+1)*5)).getDate())),
+                    p-(2.5f* DEFAULT_AXIS_TITLE_SIZE), UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
         } catch (Exception e) {
 
         }
@@ -484,7 +509,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
             canvas.drawText(new DecimalFormat("#.##").format(high), 2, lowertop
                     + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
             canvas.drawText(new DecimalFormat("#.##").format((high + low) / 2), 2, lowertop
-                    + lowerHight / 2 + DEFAULT_AXIS_TITLE_SIZE, textPaint);
+                    + lowerHight / 2 + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
             canvas.drawText(new DecimalFormat("#.##").format(low), 2, lowertop + lowerHight,
                     textPaint);
 
@@ -540,7 +565,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
             canvas.drawText(new DecimalFormat("#.##").format(high), 2, lowertop
                     + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
             canvas.drawText(new DecimalFormat("#.##").format((high + low) / 2), 2, lowertop
-                    + lowerHight / 2 + DEFAULT_AXIS_TITLE_SIZE, textPaint);
+                    + lowerHight / 2 + DEFAULT_AXIS_TITLE_SIZE -2, textPaint);
             canvas.drawText(new DecimalFormat("#.##").format(low), 2, lowertop + lowerHight,
                     textPaint);
 
@@ -646,11 +671,11 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
 
         for (MALineEntity lineEntity : MALineData) {
             for (int i = mDataStartIndext; i < lineEntity.getLineData().size()
-                    && i < mShowDataNum + mDataStartIndext; i++) {
-                mMinPrice = mMinPrice < lineEntity.getLineData().get(i) ? mMinPrice : lineEntity
-                        .getLineData().get(i);
-                mMaxPrice = mMaxPrice > lineEntity.getLineData().get(i) ? mMaxPrice : lineEntity
-                        .getLineData().get(i);
+                        && i < mShowDataNum + mDataStartIndext; i++) {
+                    mMinPrice = mMinPrice < lineEntity.getLineData().get(i) ? mMinPrice : lineEntity
+                            .getLineData().get(i);
+                    mMaxPrice = mMaxPrice > lineEntity.getLineData().get(i) ? mMaxPrice : lineEntity
+                            .getLineData().get(i);
             }
         }
 
@@ -720,15 +745,18 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         return result;
     }
 
+
     public List<KChartInfo.ResultEntity> getOHLCData() {
         return mOHLCData;
     }
+
 
     public void setOHLCData(List<KChartInfo.ResultEntity> OHLCData) {
         if (OHLCData == null || OHLCData.size() <= 0) {
             return;
         }
         this.mOHLCData = OHLCData;
+
         initMALineData();
         mMACDData = new MACDEntity(mOHLCData);
         mKDJData = new KDJEntity(mOHLCData);

@@ -127,7 +127,7 @@ public class TimesView extends GridChart {
 			canvas.drawLine(right, bottom, right, top, borderPaint);
 			canvas.drawLine(right, bottom, left, bottom, borderPaint);
 
-			// 绘制详情文字
+			//绘制详情文字
 			Paint textPaint = new Paint();
 			textPaint.setTextSize(DEFAULT_AXIS_TITLE_SIZE);
 			textPaint.setColor(Color.WHITE);
