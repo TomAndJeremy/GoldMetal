@@ -38,6 +38,10 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     private String name;//名称
     private String symbol;//代码
 
+    private String name_cycle;
+
+
+
     private FragmentManager fragmentManager;
 
     private String cycles_current[] = null;
@@ -105,17 +109,22 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                 "&u=qq3585&p=qq3771";
 
 
+        initView();
+        initData();
+
+        //设置相应的周期和指标
+        setCycle();
 
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         LogUtil.d("分时图TIME_URL-------------"+TIME_URL);
         timesFragment =  MarketTimesFragment.newInstance(TIME_URL);
-
         transaction.replace(R.id.fragment_container, timesFragment).commit();
 
-        initView();
+        btn_times.setSelected(true);
 
-        initData();
+
+
     }
 
 
@@ -132,7 +141,6 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
         tv_index = (TextView) mHeadLayout.findViewById(R.id.right_text);
         tv_index.setOnClickListener(this);
-        setCycle();
 
         btn_times = (Button) findViewById(R.id.btn_time);
         btn_times.setOnClickListener(this);
@@ -154,9 +162,13 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
         if(isKLine){
             tv_index.setVisibility(View.VISIBLE);
             cycles_current = cycles_klines;
+            btn_times.setSelected(false);
+            btn_Kline.setSelected(true);
         }else{
             tv_index.setVisibility(View.GONE);
             cycles_current = cycles_time;
+            btn_times.setSelected(true);
+            btn_Kline.setSelected(false);
         }
     }
 
@@ -193,7 +205,9 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                 builder.setItems(cycles_current, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        name_cycle = cycles_current[which];
                         if(isKLine){
+
                             //K线图1 5 15 30 60分钟 4小时  日线 周线  月线
                             switch (which){
                                 case  0:
@@ -234,7 +248,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                                     qt_type = 1;
                                     break;
                             }
-
+                            tv_title.setText(name+"-"+name_cycle);
                             kChartsFragment = MarketKChartsFragment.newInstance(KLINES_URL+"&return_t="+return_t+"&qt_type="+qt_type);
                             LogUtil.d("KLINES_URL-------------"+KLINES_URL+"&return_t="+return_t+"&qt_type="+qt_type);
                             transaction.replace(R.id.fragment_container, kChartsFragment).commit();
@@ -255,15 +269,12 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                                     url = TIME_URL+"&date="+getDate(3);
                                     break;
                             }
+                            tv_title.setText(name+"-"+name_cycle);
                             timesFragment = MarketTimesFragment.newInstance(url);
                             LogUtil.d("Time_URL-------------" + url);
                             transaction.replace(R.id.fragment_container, timesFragment).commit();
                         }
                     }
-
-
-
-
                 }).show();
 
                 break;

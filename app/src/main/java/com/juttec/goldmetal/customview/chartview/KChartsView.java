@@ -38,7 +38,7 @@ public class KChartsView extends GridChart implements GridChart.OnTabClickListen
     /**
      * 默认X轴字体颜色
      **/
-    private static final int DEFAULT_AXIS_X_TITLE_COLOR = Color.RED;
+    private static final int DEFAULT_AXIS_X_TITLE_COLOR = Color.WHITE;
 
     /**
      * 显示的最小Candle数

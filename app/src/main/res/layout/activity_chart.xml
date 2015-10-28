@@ -12,7 +12,9 @@
         style="@style/HeadBarStytle"
         app:headtitle="@string/head_title_chart"
         app:lefttext="@string/chart_period"
-        app:righttext="@string/chart_index"></com.juttec.goldmetal.customview.HeadLayout>
+        app:righttext="@string/chart_index">
+
+    </com.juttec.goldmetal.customview.HeadLayout>
 
 
     <!--<android.support.v4.app.FragmentTabHost-->

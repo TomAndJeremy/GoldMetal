@@ -140,6 +140,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if (TextUtils.isEmpty(nameContent) || "".equals(nameContent) || nameContent.trim().length() <= 0) {
                 btn_login.setSelected(false);
             } else if(TextUtils.isEmpty(pwdContent) || "".equals(pwdContent) || pwdContent.trim().length() <= 0){
+                btn_login.setSelected(false);
+            }else{
                 btn_login.setSelected(true);
             }
         }

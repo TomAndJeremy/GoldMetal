@@ -66,7 +66,6 @@ public class TimesView extends GridChart {
 		lowerRate = 0;
 		showDetails = false;
 		touchX = 0;
-
 	}
 
 	@Override
@@ -193,26 +192,41 @@ public class TimesView extends GridChart {
 				uperBottom, paint);
 
 		canvas.drawText(
-				new DecimalFormat("#.##").format(initialWeightedIndex - uperHalfHigh * 0.5f), 2,
+				new DecimalFormat("#.##").format(initialWeightedIndex - uperHalfHigh * 1.0f / 3), 2,
 				uperBottom - getLatitudeSpacing(), paint);
-		text = new DecimalFormat("#.##%").format(-uperHalfHigh * 0.5f / initialWeightedIndex);
+		text = new DecimalFormat("#.##%").format(-uperHalfHigh * 2.0f/3 / initialWeightedIndex);
 		canvas.drawText(text, viewWidth - 5 - text.length() * DEFAULT_AXIS_TITLE_SIZE / 2.0f,
 				uperBottom - getLatitudeSpacing(), paint);
 
+
+		canvas.drawText(
+				new DecimalFormat("#.##").format(initialWeightedIndex - uperHalfHigh * 2.0f/3), 2,
+				uperBottom - getLatitudeSpacing()*2, paint);
+		text = new DecimalFormat("#.##%").format(-uperHalfHigh * 1.0f/3 / initialWeightedIndex);
+		canvas.drawText(text, viewWidth - 5 - text.length() * DEFAULT_AXIS_TITLE_SIZE / 2.0f,
+				uperBottom - getLatitudeSpacing()*2, paint);
+
 		paint.setColor(Color.WHITE);
 		canvas.drawText(new DecimalFormat("#.##").format(initialWeightedIndex), 2, uperBottom
-				- getLatitudeSpacing() * 2, paint);
+				- getLatitudeSpacing() * 3, paint);
 		text = "0.00%";
 		canvas.drawText(text, viewWidth - 6 - text.length() * DEFAULT_AXIS_TITLE_SIZE / 2.0f,
-				uperBottom - getLatitudeSpacing() * 2, paint);
+				uperBottom - getLatitudeSpacing() * 3, paint);
 
 		paint.setColor(Color.RED);
 		canvas.drawText(
-				new DecimalFormat("#.##").format(uperHalfHigh * 0.5f + initialWeightedIndex), 2,
-				uperBottom - getLatitudeSpacing() * 3, paint);
-		text = new DecimalFormat("#.##%").format(uperHalfHigh * 0.5f / initialWeightedIndex);
+				new DecimalFormat("#.##").format(uperHalfHigh * 1.0f/3 + initialWeightedIndex), 2,
+				uperBottom - getLatitudeSpacing() * 4, paint);
+		text = new DecimalFormat("#.##%").format(uperHalfHigh * 1.0f/3 / initialWeightedIndex);
 		canvas.drawText(text, viewWidth - 6 - text.length() * DEFAULT_AXIS_TITLE_SIZE / 2.0f,
-				uperBottom - getLatitudeSpacing() * 3, paint);
+				uperBottom - getLatitudeSpacing() * 4, paint);
+
+		canvas.drawText(
+				new DecimalFormat("#.##").format(uperHalfHigh * 2.0f/3 + initialWeightedIndex), 2,
+				uperBottom - getLatitudeSpacing() * 5, paint);
+		text = new DecimalFormat("#.##%").format(uperHalfHigh * 2.0f/3 / initialWeightedIndex);
+		canvas.drawText(text, viewWidth - 6 - text.length() * DEFAULT_AXIS_TITLE_SIZE / 2.0f,
+				uperBottom - getLatitudeSpacing() * 5, paint);
 
 		canvas.drawText(new DecimalFormat("#.##").format(uperHalfHigh + initialWeightedIndex), 2,
 				DEFAULT_AXIS_TITLE_SIZE, paint);
@@ -222,6 +236,7 @@ public class TimesView extends GridChart {
 
 		// 绘制X轴Titles
 
+		paint.setColor(Color.WHITE);
 		int t1 = (int)(super.getLongitudeSpacing()/ dataSpacing);
 		if(t1<=timesList.size()){
 			canvas.drawText(DateUtil.formatDate(timesList.get(t1).getDate()), 2+super.getLongitudeSpacing()-3.0f * DEFAULT_AXIS_TITLE_SIZE,
@@ -239,6 +254,18 @@ public class TimesView extends GridChart {
 		int t3 = (int)(super.getLongitudeSpacing()*3 / dataSpacing);
 		if(t3<=timesList.size()){
 			canvas.drawText(DateUtil.formatDate(timesList.get(t3).getDate()), 2+super.getLongitudeSpacing()*3-3.0f * DEFAULT_AXIS_TITLE_SIZE,
+					uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
+		}
+
+		int t4 = (int)(super.getLongitudeSpacing()*4 / dataSpacing);
+		if(t4<=timesList.size()){
+			canvas.drawText(DateUtil.formatDate(timesList.get(t4).getDate()), 2+super.getLongitudeSpacing()*4-3.0f * DEFAULT_AXIS_TITLE_SIZE,
+					uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
+		}
+
+		int t5 = (int)(super.getLongitudeSpacing()*5 / dataSpacing);
+		if(t5<=timesList.size()){
+			canvas.drawText(DateUtil.formatDate(timesList.get(t5).getDate()), 2+super.getLongitudeSpacing()*5-3.0f * DEFAULT_AXIS_TITLE_SIZE,
 					uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
 		}
 //		canvas.drawText("11:30/13:00", viewWidth / 2.0f - DEFAULT_AXIS_TITLE_SIZE * 2.5f,
