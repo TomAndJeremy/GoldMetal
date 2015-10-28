@@ -37,11 +37,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     //从MarketFragment传递过来的
     private String name;//名称
     private String symbol;//代码
-
     private String name_cycle;
-
-
-
     private FragmentManager fragmentManager;
 
     private String cycles_current[] = null;
@@ -109,22 +105,20 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                 "&u=qq3585&p=qq3771";
 
 
-        initView();
-        initData();
 
+     
+        initView();
+
+        initData();
         //设置相应的周期和指标
         setCycle();
-
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        LogUtil.d("分时图TIME_URL-------------"+TIME_URL);
+        LogUtil.d("分时图TIME_URL-------------" + TIME_URL);
         timesFragment =  MarketTimesFragment.newInstance(TIME_URL);
         transaction.replace(R.id.fragment_container, timesFragment).commit();
 
         btn_times.setSelected(true);
-
-
-
     }
 
 
@@ -141,6 +135,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
         tv_index = (TextView) mHeadLayout.findViewById(R.id.right_text);
         tv_index.setOnClickListener(this);
+
 
         btn_times = (Button) findViewById(R.id.btn_time);
         btn_times.setOnClickListener(this);
@@ -207,7 +202,6 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                     public void onClick(DialogInterface dialog, int which) {
                         name_cycle = cycles_current[which];
                         if(isKLine){
-
                             //K线图1 5 15 30 60分钟 4小时  日线 周线  月线
                             switch (which){
                                 case  0:
@@ -275,6 +269,10 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                             transaction.replace(R.id.fragment_container, timesFragment).commit();
                         }
                     }
+
+
+
+
                 }).show();
 
                 break;
@@ -290,8 +288,9 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
                         LogUtil.e(ChartActivity.this, 145, "index   " + index);
                         if (kChartsFragment != null) {
-
-                            kChartsFragment.setIndex(index);
+                            if (index.equals("MACD") || index.equals("KDJ") || index.equals("RSI")) {
+                                kChartsFragment.setIndex(index);
+                            }
 
                         }
                         ToastUtil.showShort(ChartActivity.this, index + "被选中");

@@ -18,7 +18,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KChartsView extends GridChart implements GridChart.OnTabClickListener {
+public class KChartsView extends GridChart /*implements GridChart.OnTabClickListener*/ {
 
 
     /**
@@ -127,7 +127,7 @@ public class KChartsView extends GridChart implements GridChart.OnTabClickListen
         this.mTabTitle = mTabTitle;
     }
     private void init() {
-        super.setOnTabClickListener(this);
+        //super.setOnTabClickListener(this);
         mShowDataNum = DEFAULT_CANDLE_NUM;
         mDataStartIndext = 0;
         showDetails = false;
@@ -304,16 +304,20 @@ public class KChartsView extends GridChart implements GridChart.OnTabClickListen
 
         // X轴Titles
         textPaint.setColor(DEFAULT_AXIS_X_TITLE_COLOR);
-        canvas.drawText(mOHLCData.get(mDataStartIndext).getDate(), getWidth() - 4 - 4.5f
+
+
+        int p = getWidth() / (DEFAULT_LOGITUDE_NUM+1);
+
+        canvas.drawText(mOHLCData.get(mDataStartIndext+mShowDataNum/ (DEFAULT_LOGITUDE_NUM+1)).getDate(), getWidth()-p - 4 - 4.5f
                 * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
         try {
             canvas.drawText(
                     String.valueOf(mOHLCData.get(mDataStartIndext + mShowDataNum / 2).getDate()),
-                    getWidth() / 2 - 2.25f * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM
+                    getWidth() / 2 - 4.5f * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM
                             + DEFAULT_AXIS_TITLE_SIZE, textPaint);
             canvas.drawText(
-                    String.valueOf(mOHLCData.get(mDataStartIndext + mShowDataNum - 1).getDate()),
-                    2, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
+                    String.valueOf(mOHLCData.get(mDataStartIndext + (mShowDataNum/(DEFAULT_LOGITUDE_NUM+1))*DEFAULT_LOGITUDE_NUM+1).getDate()),
+                    p-(4.5f* DEFAULT_AXIS_TITLE_SIZE), UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
         } catch (Exception e) {
 
         }
@@ -757,9 +761,9 @@ public class KChartsView extends GridChart implements GridChart.OnTabClickListen
 
     }
 
-    public void onTabClick(int indext) {
+   /* public void onTabClick(int indext) {
         String[] titles = getLowerChartTabTitles();
         mTabTitle = titles[indext];
         postInvalidate();
-    }
+    }*/
 }
