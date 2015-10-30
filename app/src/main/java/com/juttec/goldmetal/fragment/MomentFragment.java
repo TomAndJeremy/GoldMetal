@@ -146,7 +146,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
         initView(view);//初始化控件
 
-        setRecyclerView(view);//舒适化recycleview
+        setRecyclerView(view);//初始化化recycleview
 
 
         gson = new Gson();

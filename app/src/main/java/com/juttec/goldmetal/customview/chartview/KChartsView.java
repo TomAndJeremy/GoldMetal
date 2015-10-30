@@ -14,6 +14,7 @@ import com.juttec.goldmetal.bean.chartentity.MACDEntity;
 import com.juttec.goldmetal.bean.chartentity.MALineEntity;
 import com.juttec.goldmetal.bean.chartentity.RSIEntity;
 import com.juttec.goldmetal.utils.DateUtil;
+import com.juttec.goldmetal.utils.LogUtil;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
     /**
      * OHLC数据
      */
-    private List<KChartInfo.ResultEntity>  mOHLCData;
+    private List<KChartInfo.ResultEntity> mOHLCData;
 
     /**
      * 显示的OHLC数据起始位置
@@ -98,7 +99,10 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
      */
     private List<MALineEntity> MALineData;
 
-
+    /**
+     * SMA数据
+     */
+    private List<MALineEntity> SMALineData;
 
     private String mTabTitle;
 
@@ -127,6 +131,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
     public void setmTabTitle(String mTabTitle) {
         this.mTabTitle = mTabTitle;
     }
+
     private void init() {
         //super.setOnTabClickListener(this);
         mShowDataNum = DEFAULT_CANDLE_NUM;
@@ -134,13 +139,13 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         showDetails = false;
         mMaxPrice = -1;
         mMinPrice = -1;
-       //mTabTitle = "MACD";
+        //mTabTitle = "MACD";
 
         mOHLCData = new ArrayList<KChartInfo.ResultEntity>();
         mMACDData = new MACDEntity(null);
         mKDJData = new KDJEntity(null);
         mRSIData = new RSIEntity(null);
-       setShowLowerChartTabs(false);
+        setShowLowerChartTabs(false);
 
 
     }
@@ -157,7 +162,10 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         drawTitles(canvas);
         drawCandleDetails(canvas);
     }
-    /** 绘制蜡烛图 **/
+
+    /**
+     * 绘制蜡烛图
+     **/
     private void drawCandleDetails(Canvas canvas) {
         if (showDetails) {
             float width = getWidth();
@@ -171,7 +179,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
             }
             int selectIndext = (int) ((width - 2.0f - mStartX) / mCandleWidth + mDataStartIndext);
             //防止数组越界
-            if(selectIndext>=mOHLCData.size()){
+            if (selectIndext >= mOHLCData.size()) {
                 return;
             }
 
@@ -202,9 +210,9 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
                     + DEFAULT_AXIS_TITLE_SIZE, textPaint);
 
             canvas.drawText("开盘:", left + 1, top + DEFAULT_AXIS_TITLE_SIZE * 2.0f, textPaint);
-            double open =Double.parseDouble(mOHLCData.get(selectIndext).getOpen());
+            double open = Double.parseDouble(mOHLCData.get(selectIndext).getOpen());
             try {
-                double ysdclose =Double.parseDouble(mOHLCData.get(selectIndext + 1).getClose());
+                double ysdclose = Double.parseDouble(mOHLCData.get(selectIndext + 1).getClose());
                 if (open >= ysdclose) {
                     textPaint.setColor(Color.RED);
                 } else {
@@ -233,10 +241,10 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
 
             textPaint.setColor(Color.WHITE);
             canvas.drawText("最低:", left + 1, top + DEFAULT_AXIS_TITLE_SIZE * 4.0f, textPaint);
-            double low =Double.parseDouble(mOHLCData.get(selectIndext).getLow());
+            double low = Double.parseDouble(mOHLCData.get(selectIndext).getLow());
             try {
-                double yesterday = Double.parseDouble((mOHLCData.get(selectIndext + 1).getLow()) +Double.parseDouble( mOHLCData.get(
-                        selectIndext + 1).getHigh()) )/ 2.0f;
+                double yesterday = Double.parseDouble((mOHLCData.get(selectIndext + 1).getLow()) + Double.parseDouble(mOHLCData.get(
+                        selectIndext + 1).getHigh())) / 2.0f;
                 if (yesterday <= low) {
                     textPaint.setColor(Color.RED);
                 } else {
@@ -251,9 +259,9 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
 
             textPaint.setColor(Color.WHITE);
             canvas.drawText("收盘:", left + 1, top + DEFAULT_AXIS_TITLE_SIZE * 5.0f, textPaint);
-            double close =Double.parseDouble(mOHLCData.get(selectIndext).getClose());
+            double close = Double.parseDouble(mOHLCData.get(selectIndext).getClose());
             try {
-                double yesdopen =Double.parseDouble( (mOHLCData.get(selectIndext + 1).getLow()) + Double.parseDouble(mOHLCData.get(
+                double yesdopen = Double.parseDouble((mOHLCData.get(selectIndext + 1).getLow()) + Double.parseDouble(mOHLCData.get(
                         selectIndext + 1).getHigh())) / 2.0f;
                 if (yesdopen <= close) {
                     textPaint.setColor(Color.RED);
@@ -288,7 +296,6 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
 
     }
 
-
     private void drawTitles(Canvas canvas) {
         Paint textPaint = new Paint();
         textPaint.setColor(DEFAULT_AXIS_Y_TITLE_COLOR);
@@ -297,15 +304,14 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         // Y轴Titles
         canvas.drawText(new DecimalFormat("#.##").format(mMinPrice), 1, UPER_CHART_BOTTOM - 1,
                 textPaint);
-        canvas.drawText(new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) /6),
+        canvas.drawText(new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 4),
                 1, UPER_CHART_BOTTOM - getLatitudeSpacing() - 1, textPaint);
         canvas.drawText(
-                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 6 * 2), 1,
+                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 4 * 2), 1,
                 UPER_CHART_BOTTOM - getLatitudeSpacing() * 2 - 1, textPaint);
         canvas.drawText(
-                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 2), 1,
+                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 4 * 3), 1,
                 UPER_CHART_BOTTOM - getLatitudeSpacing() * 3 - 1, textPaint);
-
         canvas.drawText(
                 new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 6 * 4), 1,
                 UPER_CHART_BOTTOM - getLatitudeSpacing() * 4 - 1, textPaint);
@@ -321,28 +327,25 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         textPaint.setColor(DEFAULT_AXIS_X_TITLE_COLOR);
 
 
-        int p = getWidth() / (DEFAULT_LOGITUDE_NUM+1);
-
-
+        int p = getWidth() / (DEFAULT_LOGITUDE_NUM + 1);
 
         try {
-            canvas.drawText(DateUtil.formatDate(mOHLCData.get(mDataStartIndext+(int)(mShowDataNum*1.0f/ (DEFAULT_LOGITUDE_NUM+1))).getDate()), getWidth()-p - 4 - 2.5f
+            canvas.drawText(DateUtil.formatDate(mOHLCData.get(mDataStartIndext + (int) (mShowDataNum * 1.0f / (DEFAULT_LOGITUDE_NUM + 1))).getDate()), getWidth() - p - 4 - 2.5f
                     * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
 
-            canvas.drawText(DateUtil.formatDate(mOHLCData.get(mDataStartIndext+(int)(mShowDataNum*1.0/(DEFAULT_LOGITUDE_NUM+1)*2)).getDate()), getWidth()-p*2 - 4 - 2.5f
+            canvas.drawText(DateUtil.formatDate(mOHLCData.get(mDataStartIndext + (int) (mShowDataNum * 1.0 / (DEFAULT_LOGITUDE_NUM + 1) * 2)).getDate()), getWidth() - p * 2 - 4 - 2.5f
                     * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
 
             canvas.drawText(
-                    String.valueOf(DateUtil.formatDate(mOHLCData.get(mDataStartIndext + (int)(mShowDataNum*1.0/(DEFAULT_LOGITUDE_NUM+1)*3)).getDate())),
-                    getWidth() / 2 - 2.5f * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM
+                    String.valueOf(mOHLCData.get(mDataStartIndext + mShowDataNum / 2).getDate()),
+                    getWidth() / 2 - 4.5f * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM
                             + DEFAULT_AXIS_TITLE_SIZE, textPaint);
-
-            canvas.drawText(DateUtil.formatDate(mOHLCData.get(mDataStartIndext +(int)(mShowDataNum*1.0/(DEFAULT_LOGITUDE_NUM+1)*4)).getDate()), getWidth()-p*4 - 4 - 2.5f
+            canvas.drawText(DateUtil.formatDate(mOHLCData.get(mDataStartIndext + (int) (mShowDataNum * 1.0 / (DEFAULT_LOGITUDE_NUM + 1) * 4)).getDate()), getWidth() - p * 4 - 4 - 2.5f
                     * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
 
             canvas.drawText(
-                    String.valueOf(DateUtil.formatDate(mOHLCData.get(mDataStartIndext +(int)(mShowDataNum*1.0/(DEFAULT_LOGITUDE_NUM+1)*5)).getDate())),
-                    p-(2.5f* DEFAULT_AXIS_TITLE_SIZE), UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
+                    String.valueOf(DateUtil.formatDate(mOHLCData.get(mDataStartIndext + (int) (mShowDataNum * 1.0 / (DEFAULT_LOGITUDE_NUM + 1) * 5)).getDate())),
+                    p - (2.5f * DEFAULT_AXIS_TITLE_SIZE), UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
         } catch (Exception e) {
 
         }
@@ -360,8 +363,8 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         for (int i = 0; i < mShowDataNum && mDataStartIndext + i < mOHLCData.size(); i++) {
             KChartInfo.ResultEntity entity = mOHLCData.get(mDataStartIndext + i);
             float open = (float) ((mMaxPrice - Double.parseDouble(entity.getOpen())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);
-            float close = (float) ((mMaxPrice -Double.parseDouble(entity.getClose())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);
-            float high = (float) ((mMaxPrice -Double.parseDouble(entity.getHigh())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);
+            float close = (float) ((mMaxPrice - Double.parseDouble(entity.getClose())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);
+            float high = (float) ((mMaxPrice - Double.parseDouble(entity.getHigh())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);
             float low = (float) ((mMaxPrice - Double.parseDouble(entity.getLow())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);
 
             float left = (float) (width - 2 - mCandleWidth * (i + 1));
@@ -380,10 +383,42 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
 
         }
 
-        /** 绘制上部曲线图及上部分MA值 **/
+      /*  *//** 绘制上部曲线图及上部分MA值 **//*
         float MATitleWidth = width / 10.0f * 10.0f / MALineData.size();
         for (int j = 0; j < MALineData.size(); j++) {
             MALineEntity lineEntity = MALineData.get(j);
+
+            float startX = 0;
+            float startY = 0;
+            Paint paint = new Paint();
+            paint.setColor(lineEntity.getLineColor());
+            paint.setTextSize(DEFAULT_AXIS_TITLE_SIZE);
+            canvas.drawText(
+                    lineEntity.getTitle()
+                            + "="
+                            + new DecimalFormat("#.##").format(lineEntity.getLineData().get(
+                            mDataStartIndext)), 2 + MATitleWidth * j,
+                    DEFAULT_AXIS_TITLE_SIZE, paint);
+            for (int i = 0; i < mShowDataNum
+                    && mDataStartIndext + i < lineEntity.getLineData().size(); i++) {
+                if (i != 0) {
+                    canvas.drawLine(
+                            startX,
+                            startY + DEFAULT_AXIS_TITLE_SIZE + 4,
+                            (float) (width - 2 - mCandleWidth * i - mCandleWidth * 0.5f),
+                            (float) ((mMaxPrice - lineEntity.getLineData()
+                                    .get(mDataStartIndext + i)) * rate + DEFAULT_AXIS_TITLE_SIZE + 4),
+                            paint);
+                }
+                startX = (float) (width - 2 - mCandleWidth * i - mCandleWidth * 0.5f);
+                startY = (float) ((mMaxPrice - lineEntity.getLineData().get(mDataStartIndext + i)) * rate);
+            }
+        }
+    }*/
+        /** 绘制上部曲线图及上部分MA值 **/
+        float MATitleWidth = width / 10.0f * 10.0f / MALineData.size();
+        for (int j = 0; j < SMALineData.size(); j++) {
+            MALineEntity lineEntity = SMALineData.get(j);
 
             float startX = 0;
             float startY = 0;
@@ -510,6 +545,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
                     + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
             canvas.drawText(new DecimalFormat("#.##").format((high + low) / 2), 2, lowertop
                     + lowerHight / 2 + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
+
             canvas.drawText(new DecimalFormat("#.##").format(low), 2, lowertop + lowerHight,
                     textPaint);
 
@@ -565,7 +601,8 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
             canvas.drawText(new DecimalFormat("#.##").format(high), 2, lowertop
                     + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
             canvas.drawText(new DecimalFormat("#.##").format((high + low) / 2), 2, lowertop
-                    + lowerHight / 2 + DEFAULT_AXIS_TITLE_SIZE -2, textPaint);
+                    + lowerHight / 2 + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
+
             canvas.drawText(new DecimalFormat("#.##").format(low), 2, lowertop + lowerHight,
                     textPaint);
 
@@ -671,11 +708,11 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
 
         for (MALineEntity lineEntity : MALineData) {
             for (int i = mDataStartIndext; i < lineEntity.getLineData().size()
-                        && i < mShowDataNum + mDataStartIndext; i++) {
-                    mMinPrice = mMinPrice < lineEntity.getLineData().get(i) ? mMinPrice : lineEntity
-                            .getLineData().get(i);
-                    mMaxPrice = mMaxPrice > lineEntity.getLineData().get(i) ? mMaxPrice : lineEntity
-                            .getLineData().get(i);
+                    && i < mShowDataNum + mDataStartIndext; i++) {
+                mMinPrice = mMinPrice < lineEntity.getLineData().get(i) ? mMinPrice : lineEntity
+                        .getLineData().get(i);
+                mMaxPrice = mMaxPrice > lineEntity.getLineData().get(i) ? mMaxPrice : lineEntity
+                        .getLineData().get(i);
             }
         }
 
@@ -709,6 +746,47 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
             mStartX = event.getRawX();
             mStartY = event.getRawY();
         }
+    }
+
+    private float SMA(List<KChartInfo.ResultEntity> entityList, int position, int day, int weight) {
+        float close = Float.parseFloat(entityList.get(position).getClose());
+
+
+        if (day == 1) {
+            return close;
+        } else {
+            if (position + 1 > entityList.size()) {
+                return close;
+            }
+            return (weight * close + (day - 1) * SMA(entityList, position + 1, day - 1, weight)) / (day + 1);
+
+        }
+
+    }
+
+    private List<Float> initSMA(List<KChartInfo.ResultEntity> entityList, int days, int weight) {
+        if (days < 2 || entityList == null || entityList.size() <= 0) {
+            return null;
+        }
+        List<Float> SMAValues = new ArrayList<Float>();
+
+        float result = 0;
+        for (int i = 0; i < entityList.size(); i++) {
+
+            if (i > entityList.size() - days) {
+                result = SMA(entityList, i, entityList.size() - i, weight);
+            } else {
+                result = SMA(entityList, i, days, weight);
+            }
+            SMAValues.add(result);
+        }
+
+
+        for (Float f : SMAValues
+                ) {
+            LogUtil.e("SMAValues  " + f);
+        }
+        return SMAValues;
     }
 
     /**
@@ -745,18 +823,15 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         return result;
     }
 
-
     public List<KChartInfo.ResultEntity> getOHLCData() {
         return mOHLCData;
     }
-
 
     public void setOHLCData(List<KChartInfo.ResultEntity> OHLCData) {
         if (OHLCData == null || OHLCData.size() <= 0) {
             return;
         }
         this.mOHLCData = OHLCData;
-
         initMALineData();
         mMACDData = new MACDEntity(mOHLCData);
         mKDJData = new KDJEntity(mOHLCData);
@@ -786,6 +861,29 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         MALineData.add(MA5);
         MALineData.add(MA10);
         MALineData.add(MA20);
+
+    }
+
+    private void initSMALineData() {
+        MALineEntity MA5 = new MALineEntity();
+        MA5.setTitle("SMA5");
+        MA5.setLineColor(Color.WHITE);
+        MA5.setLineData(initSMA(mOHLCData, 5, 2));
+
+        MALineEntity MA10 = new MALineEntity();
+        MA10.setTitle("SMA10");
+        MA10.setLineColor(Color.CYAN);
+        MA10.setLineData(initSMA(mOHLCData, 10, 2));
+
+        MALineEntity MA20 = new MALineEntity();
+        MA20.setTitle("SMA20");
+        MA20.setLineColor(Color.BLUE);
+        MA20.setLineData(initSMA(mOHLCData, 20, 2));
+
+        SMALineData = new ArrayList<MALineEntity>();
+        SMALineData.add(MA5);
+        SMALineData.add(MA10);
+        SMALineData.add(MA20);
 
     }
 
