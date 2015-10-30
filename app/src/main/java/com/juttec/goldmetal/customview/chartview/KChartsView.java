@@ -833,6 +833,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         }
         this.mOHLCData = OHLCData;
         initMALineData();
+        initSMALineData();
         mMACDData = new MACDEntity(mOHLCData);
         mKDJData = new KDJEntity(mOHLCData);
         mRSIData = new RSIEntity(mOHLCData);
