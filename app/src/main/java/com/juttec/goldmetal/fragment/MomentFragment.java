@@ -139,6 +139,14 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        i = 1;
+
+        getInfo(i, MyApplication.DYNAMIC_TYPE_ALL);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
