@@ -60,11 +60,11 @@
             android:textSize="@dimen/normal_size" />
     </LinearLayout>
 
-    <android.support.v4.view.ViewPager
+   <!-- <android.support.v4.view.ViewPager
         android:id="@+id/emoticons_pager"
         android:layout_width="match_parent"
         android:layout_height="260dp"
-        android:background="#ff0000"></android.support.v4.view.ViewPager>
+        android:background="#ff0000"></android.support.v4.view.ViewPager>-->
 
 
 </LinearLayout>

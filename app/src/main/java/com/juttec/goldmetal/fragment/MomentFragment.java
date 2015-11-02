@@ -254,21 +254,21 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.moment_tv_message:
                 //消息界面  先判断用户信息是否完善
-                if(checkNameAndPhoto()){
+                if (checkNameAndPhoto()) {
                     startActivity(new Intent(getActivity(), MessageActivity.class));
                 }
 
                 break;
             case R.id.moment_tv_follow:
                 //我的关注界面  先判断用户信息是否完善
-                if(checkNameAndPhoto()){
+                if (checkNameAndPhoto()) {
                     startActivity(new Intent(getActivity(), FollowActivity.class));
                 }
 
                 break;
             case R.id.right_text:
                 //发表动态  先判断用户信息是否完善
-                if(checkNameAndPhoto()){
+                if (checkNameAndPhoto()) {
                     startActivity(new Intent(getActivity(), PublishTopicActivity.class));
                 }
 
@@ -283,7 +283,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
     //设置头像  弹出从从相册选择或是相机拍摄
-    private void setHeadPhoto(){
+    private void setHeadPhoto() {
         //头像的点击事件
         final Dialog dialog = new Dialog(getActivity(), R.style.AlertDialogStyle);
         dialog.setCanceledOnTouchOutside(true);
@@ -390,10 +390,9 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     }
 
 
-
     //判断用户是否编辑了个人的昵称和头像
-    private boolean checkNameAndPhoto(){
-        if("".equals(app.getUserInfoBean().getUserNickName())){
+    private boolean checkNameAndPhoto() {
+        if ("".equals(app.getUserInfoBean().getUserNickName())) {
             //设置昵称
             mDialog.builder()
                     .setTitle("提示").setMsg("您还没有昵称，请至账号界面设置后再操作，谢谢！")
@@ -406,7 +405,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                     }).show();
             return false;
 
-        }else if("null".equals(app.getUserInfoBean().getUserPhoto())){
+        } else if ("null".equals(app.getUserInfoBean().getUserPhoto())) {
             //设置头像
             mDialog.builder()
                     .setTitle("提示").setMsg("您还没有个人头像，请当前界面设置后再操作，谢谢！")
@@ -421,8 +420,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         }
         return true;
     }
-
-
 
 
     //上传用户头像  的接口

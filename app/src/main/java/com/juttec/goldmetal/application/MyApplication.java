@@ -18,8 +18,8 @@ public class MyApplication extends Application {
 //    public static final String ImgBASEURL = "http://192.168.1.35:8155";
 
 
-    public static final String BASEURL = "http://192.168.1.35:8899/App_Areas/";
-    public static final String ImgBASEURL = "http://192.168.1.35:8899";
+    public static final String BASEURL = "http://192.168.1.5:8899/App_Areas/";
+    public static final String ImgBASEURL = "http://192.168.1.5:8899";
 
 
     public static final int EMOJI_NUM = 54;//表情数目

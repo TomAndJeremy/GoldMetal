@@ -757,9 +757,9 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         } else {
             if (position + 1 > entityList.size()) {
                 return close;
+
             }
             return (weight * close + (day - 1) * SMA(entityList, position + 1, day - 1, weight)) / (day + 1);
-
         }
 
     }
@@ -769,6 +769,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
             return null;
         }
         List<Float> SMAValues = new ArrayList<Float>();
+        float close = Float.parseFloat(entityList.get(entityList.size() - 1).getClose());
 
         float result = 0;
         for (int i = 0; i < entityList.size(); i++) {
@@ -779,12 +780,6 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
                 result = SMA(entityList, i, days, weight);
             }
             SMAValues.add(result);
-        }
-
-
-        for (Float f : SMAValues
-                ) {
-            LogUtil.e("SMAValues  " + f);
         }
         return SMAValues;
     }
