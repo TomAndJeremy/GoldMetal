@@ -10,11 +10,13 @@ public class PayLogEntity {
 	}
 
 	public PayLogEntity(String time, double money, int type) {
+
 		super();
 		this.time = time;
 		this.money = money;
 		this.type = type;
 	}
+
 
 	public String getTime() {
 		return time;
@@ -39,5 +41,8 @@ public class PayLogEntity {
 	public void setType(int type) {
 		this.type = type;
 	}
+
+
+
 
 }

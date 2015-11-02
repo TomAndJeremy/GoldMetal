@@ -9,14 +9,24 @@ public class KDJEntity {
 	private ArrayList<Double> Ds;
 	private ArrayList<Double> Js;
 
+	private ArrayList<Double> maxs;
+	private ArrayList<Double> mins;
+
+	private int mDay;//影响KDJ指标变化的 变量 默认值为：9  （范围：2-90）
+
 	public KDJEntity(List<KChartInfo.ResultEntity> OHLCData) {
 		Ks = new ArrayList<Double>();
 		Ds = new ArrayList<Double>();
 		Js = new ArrayList<Double>();
 
+		maxs = new ArrayList<Double>();
+		mins = new ArrayList<Double>();
+
 		ArrayList<Double> ks = new ArrayList<Double>();
 		ArrayList<Double> ds = new ArrayList<Double>();
 		ArrayList<Double> js = new ArrayList<Double>();
+
+		mDay = 9;
 
 		double k = 0.0;
 		double d = 0.0;
@@ -30,17 +40,44 @@ public class KDJEntity {
 			double low =Double.parseDouble( oHLCEntity.getLow());
 
 			for (int i = OHLCData.size() - 1; i >= 0; i--) {
+				oHLCEntity = OHLCData.get(i);
+
+				Double mLow = Double.parseDouble(oHLCEntity.getLow());
+				Double mHigh = Double.parseDouble(oHLCEntity.getHigh());
+
+				mins.add(mLow);
+				maxs.add(mHigh);
+
 				if (i < OHLCData.size() - 1) {
-					oHLCEntity = OHLCData.get(i);
-					high = high >Double.parseDouble(  oHLCEntity.getHigh()) ? high :Double.parseDouble(oHLCEntity.getHigh());
-					low = low < Double.parseDouble( oHLCEntity.getLow()) ? low : Double.parseDouble(oHLCEntity.getLow());
+					if (OHLCData.size() - i <= mDay) {
+						//所求天数 <= mDay 时
+						high = high > mHigh ? high : mHigh;
+						low = low < mLow ? low : mLow;
+					} else {
+						high = 0;
+						low = 0;
+						//所求天数 > mDay 时
+						for (int a = mins.size() - 1; a >= mins.size() - mDay; a--) {
+							high = high > maxs.get(a) ? high : maxs.get(a);
+							low =  low < mins.get(a) ? low:mins.get(a);
+						}
+
+					}
 				}
+
+
 				if (high != low) {
 					rSV = (Double.parseDouble( oHLCEntity.getClose()) - low) / (high - low) * 100;
 				}
+
+
+
+
 				if (i == OHLCData.size() - 1) {
-					k = rSV;
-					d = k;
+//					k = rSV;
+//					d = k;
+					k = 50 * 2 / 3 + rSV / 3;
+					d = 50 * 2 / 3 + k / 3;
 
 				} else {
 					k = k * 2 / 3 + rSV / 3;

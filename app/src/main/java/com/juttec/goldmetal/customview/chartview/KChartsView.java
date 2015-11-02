@@ -91,9 +91,9 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
     /**
      * 当前数据的最大最小值
      */
+
     private double mMaxPrice;
     private double mMinPrice;
-
     /**
      * MA数据
      */
@@ -607,10 +607,70 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
                     textPaint);
 
         } else if (mTabTitle.trim().equalsIgnoreCase("RSI")) {
+            List<Double> Rsi1 = mRSIData.getValue();
+
+
+            double low = Rsi1.get(mDataStartIndext);
+            double high = low;
+            double rate = 0.0;
+            for (int i = mDataStartIndext; i < mDataStartIndext + mShowDataNum && i < Rsi1.size(); i++) {
+                low = low < Rsi1.get(i) ? low : Rsi1.get(i);
+//                low = low < Ds.get(i) ? low : Ds.get(i);
+//                low = low < Js.get(i) ? low : Js.get(i);
+
+                high = high > Rsi1.get(i) ? high : Rsi1.get(i);
+//                high = high > Ds.get(i) ? high : Ds.get(i);
+//                high = high > Js.get(i) ? high : Js.get(i);
+            }
+            rate = lowerHight / (high - low);
+
+            // 绘制白、黄、紫线
+            float k = 0.0f;
+            float d = 0.0f;
+            float j = 0.0f;
+            for (int i = mDataStartIndext; i < mDataStartIndext + mShowDataNum && i < Rsi1.size(); i++) {
+
+                if (i != mDataStartIndext) {
+                    canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
+                                    * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
+                            (float) ((high - Rsi1.get(i)) * rate) + lowertop, viewWidth - 2
+                                    - (float) mCandleWidth * (i - mDataStartIndext)
+                                    + (float) mCandleWidth / 2, k, whitePaint);
+
+//                    canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
+//                                    * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
+//                            (float) ((high - Ds.get(i)) * rate) + lowertop, viewWidth - 2
+//                                    - (float) mCandleWidth * (i - mDataStartIndext)
+//                                    + (float) mCandleWidth / 2, d, yellowPaint);
+//
+//                    canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
+//                                    * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
+//                            (float) ((high - Js.get(i)) * rate) + lowertop, viewWidth - 2
+//                                    - (float) mCandleWidth * (i - mDataStartIndext)
+//                                    + (float) mCandleWidth / 2, j, magentaPaint);
+                }
+                k = (float) ((high - Rsi1.get(i)) * rate) + lowertop;
+//                d = (float) ((high - Ds.get(i)) * rate) + lowertop;
+//                j = (float) ((high - Js.get(i)) * rate) + lowertop;
+            }
+
+            canvas.drawText(new DecimalFormat("#.##").format(high), 2, lowertop
+                    + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
+            canvas.drawText(new DecimalFormat("#.##").format((high + low) / 2), 2, lowertop
+                    + lowerHight / 2 + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
+
+            canvas.drawText(new DecimalFormat("#.##").format(low), 2, lowertop + lowerHight,
+                    textPaint);
+
+
+        }else if (mTabTitle.trim().equalsIgnoreCase("BOLL")) {
+
 
         }
 
     }
+
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -857,7 +917,6 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         MALineData.add(MA5);
         MALineData.add(MA10);
         MALineData.add(MA20);
-
     }
 
     private void initSMALineData() {

@@ -66,5 +66,5 @@
         android:layout_height="260dp"
         android:background="#ff0000"></android.support.v4.view.ViewPager>-->
 
-
+-->
 </LinearLayout>

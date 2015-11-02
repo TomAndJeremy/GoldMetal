@@ -288,7 +288,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
                         LogUtil.e(ChartActivity.this, 145, "index   " + index);
                         if (kChartsFragment != null) {
-                            if (index.equals("MACD") || index.equals("KDJ") || index.equals("RSI")) {
+                            if (index.equals("MACD") || index.equals("KDJ") || index.equals("RSI")|| index.equals("BOLL")) {
                                 kChartsFragment.setIndex(index);
                             }
 

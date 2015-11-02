@@ -19,6 +19,13 @@ public class SharedPreferencesUtil {
 
 
 
+
+    //KDJ_DAY  影响KDJ指标变化的变量  默认值为：9   int
+
+
+
+
+
         /**
          * 保存在手机里面的文件名
          */
