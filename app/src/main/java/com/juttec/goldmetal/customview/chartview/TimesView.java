@@ -236,37 +236,42 @@ public class TimesView extends GridChart {
 
 		// 绘制X轴Titles
 
+
 		paint.setColor(Color.WHITE);
-		int t1 = (int)(super.getLongitudeSpacing()/ dataSpacing);
-		if(t1<=timesList.size()){
-			canvas.drawText(DateUtil.formatDate(timesList.get(t1).getDate()), 2+super.getLongitudeSpacing()-3.0f * DEFAULT_AXIS_TITLE_SIZE,
-					uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
-		}
+		try {
+			int t1 = (int)(super.getLongitudeSpacing()/ dataSpacing);
+			if(t1<=timesList.size()){
+                canvas.drawText(DateUtil.formatDate(timesList.get(t1).getDate()), 2+super.getLongitudeSpacing()-3.0f * DEFAULT_AXIS_TITLE_SIZE,
+                        uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
+            }
 
 
-		int t2 = (int)(super.getLongitudeSpacing()*2 / dataSpacing);
-		if(t2<=timesList.size()){
-			canvas.drawText(DateUtil.formatDate(timesList.get(t2).getDate()), 2+super.getLongitudeSpacing()*2-3.0f * DEFAULT_AXIS_TITLE_SIZE,
-					uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
-		}
+			int t2 = (int)(super.getLongitudeSpacing()*2 / dataSpacing);
+			if(t2<=timesList.size()){
+                canvas.drawText(DateUtil.formatDate(timesList.get(t2).getDate()), 2+super.getLongitudeSpacing()*2-3.0f * DEFAULT_AXIS_TITLE_SIZE,
+                        uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
+            }
 
 
-		int t3 = (int)(super.getLongitudeSpacing()*3 / dataSpacing);
-		if(t3<=timesList.size()){
-			canvas.drawText(DateUtil.formatDate(timesList.get(t3).getDate()), 2+super.getLongitudeSpacing()*3-3.0f * DEFAULT_AXIS_TITLE_SIZE,
-					uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
-		}
+			int t3 = (int)(super.getLongitudeSpacing()*3 / dataSpacing);
+			if(t3<=timesList.size()){
+                canvas.drawText(DateUtil.formatDate(timesList.get(t3).getDate()), 2+super.getLongitudeSpacing()*3-3.0f * DEFAULT_AXIS_TITLE_SIZE,
+                        uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
+            }
 
-		int t4 = (int)(super.getLongitudeSpacing()*4 / dataSpacing);
-		if(t4<=timesList.size()){
-			canvas.drawText(DateUtil.formatDate(timesList.get(t4).getDate()), 2+super.getLongitudeSpacing()*4-3.0f * DEFAULT_AXIS_TITLE_SIZE,
-					uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
-		}
+			int t4 = (int)(super.getLongitudeSpacing()*4 / dataSpacing);
+			if(t4<=timesList.size()){
+                canvas.drawText(DateUtil.formatDate(timesList.get(t4).getDate()), 2+super.getLongitudeSpacing()*4-3.0f * DEFAULT_AXIS_TITLE_SIZE,
+                        uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
+            }
 
-		int t5 = (int)(super.getLongitudeSpacing()*5 / dataSpacing);
-		if(t5<=timesList.size()){
-			canvas.drawText(DateUtil.formatDate(timesList.get(t5).getDate()), 2+super.getLongitudeSpacing()*5-3.0f * DEFAULT_AXIS_TITLE_SIZE,
-					uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
+			int t5 = (int)(super.getLongitudeSpacing()*5 / dataSpacing);
+			if(t5<=timesList.size()){
+                canvas.drawText(DateUtil.formatDate(timesList.get(t5).getDate()), 2+super.getLongitudeSpacing()*5-3.0f * DEFAULT_AXIS_TITLE_SIZE,
+                        uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
+            }
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 //		canvas.drawText("11:30/13:00", viewWidth / 2.0f - DEFAULT_AXIS_TITLE_SIZE * 2.5f,
 //				uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);

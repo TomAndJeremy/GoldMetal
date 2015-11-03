@@ -50,14 +50,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="今日策略:"
-                android:textColor="@color/red" />
+                android:text="金银比:  70.1"
+                android:textColor="#ABABAB"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="今日策略:"
-                android:textColor="@color/red" />
+                android:text="金铂比： 1.5"
+                android:textColor="#ABABAB" />
         </LinearLayout>
     </LinearLayout>
 

@@ -64,10 +64,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
@@ -562,8 +560,8 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
 
     //上传图片接口
-    private void upLoadPhoto(String path) {
 
+    private void upLoadPhoto(String path) {
         RequestParams params = new RequestParams();
         params.addBodyParameter("dyPhotoFile", getBitmapString(path));
         HttpUtils httpUtils = new HttpUtils();

@@ -25,6 +25,10 @@ import com.juttec.goldmetal.utils.ToastUtil;
  */
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private static final int MIN_REFRESH_TIME = 5; //刷新时间  最低限制：5s
+    private static final int MAX_REFRESH_TIME = 3*60*60;//最大限制  3小时
+
+
     private TextView rl_setting_parameter;//指标参数设置
     private SwitchCompat iv_screen_light;//设置屏幕常亮
     private SwitchCompat iv_display_refresh;//是否显示刷新时间
@@ -76,7 +80,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
 
         et_refresh_time = (EditText) findViewById(R.id.et_refresh_time);
-        et_refresh_time.setText((Integer) SharedPreferencesUtil.getParam(this, "refreshTime", 5) + "");
+        et_refresh_time.setText((Integer) SharedPreferencesUtil.getParam(this, "refreshTime", MIN_REFRESH_TIME) + "");
         //输入框的监听
         et_refresh_time.addTextChangedListener(new TextWatcher() {
             @Override
@@ -89,12 +93,12 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             public void afterTextChanged(Editable s) {
                 LogUtil.d("et_refresh_time-------"+et_refresh_time.getText().toString());
                 if("".equals(et_refresh_time.getText().toString().trim())){
-                    et_refresh_time.setText((Integer) SharedPreferencesUtil.getParam(SettingActivity.this,"refreshTime",5)+"");
+                    et_refresh_time.setText((Integer) SharedPreferencesUtil.getParam(SettingActivity.this,"refreshTime",MIN_REFRESH_TIME)+"");
 
                 }else{
                     int time = Integer.parseInt(et_refresh_time.getText().toString());
-                    if(time<1||time>600){
-                        et_refresh_time.setText((Integer) SharedPreferencesUtil.getParam(SettingActivity.this,"refreshTime",5)+"");
+                    if(time<MIN_REFRESH_TIME||time>MAX_REFRESH_TIME){
+                        et_refresh_time.setText((Integer) SharedPreferencesUtil.getParam(SettingActivity.this,"refreshTime",MIN_REFRESH_TIME)+"");
                     }
                 }
 
@@ -161,7 +165,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
             case R.id.iv_refresh_time_reduce:
                 time = Integer.parseInt(et_refresh_time.getText().toString());
-                if(time<=1){
+                if(time<=MIN_REFRESH_TIME){
                     ToastUtil.showShort(this,"已到最低限制");
                 }else{
                     et_refresh_time.setText(time-1+"");
@@ -170,7 +174,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.iv_refresh_time_plus:
                time = Integer.parseInt(et_refresh_time.getText().toString());
-                if(time>=600){
+                if(time>=MAX_REFRESH_TIME){
                     ToastUtil.showShort(this,"已到最高限制");
                 }else{
                     et_refresh_time.setText(time+1+"");
