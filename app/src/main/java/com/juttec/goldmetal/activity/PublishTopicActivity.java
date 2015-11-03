@@ -618,7 +618,8 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 //             mContent.getText().replace(key, key + 1, "`" + value+"`" );
 
         }
-        params.addBodyParameter("dyContent", string2Unicode(content));
+        params.addBodyParameter("dyContent",content);
+        //params.addBodyParameter("dyContent", string2Unicode(content));
         // params.addBodyParameter("dyContent", string2Unicode(toSend));
 
         for (int i = 0; i < photoList.size(); i++) {

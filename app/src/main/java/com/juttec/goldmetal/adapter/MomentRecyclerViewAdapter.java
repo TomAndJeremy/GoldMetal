@@ -29,6 +29,7 @@ import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
 import com.juttec.goldmetal.utils.EmojiWindow;
+
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -52,7 +53,7 @@ import java.util.Map;
 public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecyclerViewAdapter.ViewHolder> {
 
 
-    private ReplyPopupWindow replyPopupWindow ;
+    private ReplyPopupWindow replyPopupWindow;
 
 
     // 数据集
@@ -76,7 +77,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         this.app = app;
         replyPopupWindow = new ReplyPopupWindow(context);
         mDialog = new MyAlertDialog(context);
-        //readEmojiIcons();
+        //   readEmojiIcons();
         readEmojiWindow = new EmojiWindow(context);
         emoticons = readEmojiWindow.readEmojiIcons();
 
@@ -96,56 +97,56 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         return holder;
     }
 
-   /* private Html.ImageGetter getImageGetter(final int t) {
-        return new Html.ImageGetter() {
-            @Override
-            public Drawable getDrawable(String source) {
+    /* private Html.ImageGetter getImageGetter(final int t) {
+         return new Html.ImageGetter() {
+             @Override
+             public Drawable getDrawable(String source) {
 
-                Drawable d = new BitmapDrawable(context.getResources(), emoticons[t]);
-                d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-                return d;
-            }
-        };
-    }
+                 Drawable d = new BitmapDrawable(context.getResources(), emoticons[t]);
+                 d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+                 return d;
+             }
+         };
+     }
 
-    private Editable getEditable(String contentUnicode) {
-        String content = unicode2String(contentUnicode);
+     private Editable getEditable(String contentUnicode) {
+         String content = unicode2String(contentUnicode);
 
-        Editable editable = new Editable.Factory().newEditable("");
-        final String[] s = content.split("`");
-        for (int i = 0; i < s.length; i++) {
-
-
-            StringTokenizer st = new StringTokenizer(s[i], ".");
+         Editable editable = new Editable.Factory().newEditable("");
+         final String[] s = content.split("`");
+         for (int i = 0; i < s.length; i++) {
 
 
-            int t = 0;
-            try {
-                t = Integer.parseInt(st.nextToken()) - 1;
-
-                if (t < EMOJI_NUM) {
-                    final int finalI = i;
-                    Spanned cs = Html.fromHtml("<img src ='" + s[finalI] + "'/>", getImageGetter(t), null);
-                    editable.append(cs);
-                    i++;
-
-                }
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+             StringTokenizer st = new StringTokenizer(s[i], ".");
 
 
-            if (i < s.length) {
-                editable.append(s[i]);
-            }
+             int t = 0;
+             try {
+                 t = Integer.parseInt(st.nextToken()) - 1;
+
+                 if (t < EMOJI_NUM) {
+                     final int finalI = i;
+                     Spanned cs = Html.fromHtml("<img src ='" + s[finalI] + "'/>", getImageGetter(t), null);
+                     editable.append(cs);
+                     i++;
+
+                 }
+             } catch (NumberFormatException e) {
+                 e.printStackTrace();
+             } catch (Exception e) {
+                 e.printStackTrace();
+             }
 
 
-        }
-        return editable;
-    }
-*/
+             if (i < s.length) {
+                 editable.append(s[i]);
+             }
+
+
+         }
+         return editable;
+     }
+ */
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
@@ -175,7 +176,6 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         holder.time.setText(entityList.get(position).getAddTime());//时间
 
         holder.content.setText(readEmojiWindow.getEditable(entityList.get(position).getDyContent()));// 正文
-
 
 
         ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + entityList.get(position).getUserPhoto(), holder.headPortrait);
@@ -482,8 +482,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             String commentContent = entityList.get(position).getDyCommentReply().get(i).getCommentContent();
 
             tvCommentName.setText(commentName);
-            tvCommentContent.setText(commentContent);
 
+
+            // tvCommentContent.setText(commentContent);
+            tvCommentContent.setText(readEmojiWindow.getEditable(commentContent));
 
             //点击昵称跳转到用户个人界面
             clickName(tvCommentName, entityList.get(position).getDyCommentReply().get(i).getDiscussantId(), commentName);

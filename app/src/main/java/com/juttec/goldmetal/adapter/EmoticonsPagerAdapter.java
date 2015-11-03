@@ -1,5 +1,6 @@
 package com.juttec.goldmetal.adapter;
 
+import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -15,10 +16,10 @@ public class EmoticonsPagerAdapter extends PagerAdapter {
 
 	ArrayList<String> emoticons;
 	private static final int NO_OF_EMOTICONS_PER_PAGE = 20;
-	FragmentActivity mActivity;
+	Activity mActivity;
 	EmoticonsGridAdapter.KeyClickListener mListener;
 
-	public EmoticonsPagerAdapter(FragmentActivity activity,
+	public EmoticonsPagerAdapter(Activity activity,
 			ArrayList<String> emoticons, KeyClickListener listener) {
 		this.emoticons = emoticons;
 		this.mActivity = activity;

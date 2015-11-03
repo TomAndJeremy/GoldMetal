@@ -197,8 +197,8 @@ public class EmojiWindow implements EmoticonsGridAdapter.KeyClickListener {
 
     }
 
-    public Editable getEditable(String contentUnicode) {
-        String content = unicode2String(contentUnicode);
+    public Editable getEditable(String content) {
+        //String content = unicode2String(contentUnicode);
 
         Editable editable = new Editable.Factory().newEditable("");
         final String[] s = content.split("`");
@@ -232,6 +232,7 @@ public class EmojiWindow implements EmoticonsGridAdapter.KeyClickListener {
 
 
         }
+
         return editable;
     }
     private Html.ImageGetter getImageGetter(final int t) {
