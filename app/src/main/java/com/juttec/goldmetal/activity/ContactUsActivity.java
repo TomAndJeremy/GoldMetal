@@ -120,9 +120,23 @@ public class ContactUsActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(MyAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(final MyAdapter.ViewHolder holder, final int position) {
 
             holder.textView.setText(maps.get(position).get("text"));
+
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if ("phone".equals(maps.get(position).get("img"))) {
+
+                    } else {
+                    }
+
+                }
+            });
+
             if ("phone".equals(maps.get(position).get("img"))) {
 
                 holder.imageView.setImageResource(R.mipmap.content_account_icon_phone);
