@@ -19,6 +19,7 @@ import com.juttec.goldmetal.bean.DyReplyInfoBean;
 import com.juttec.goldmetal.customview.listview.NoScrollListView;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
+import com.juttec.goldmetal.utils.EmojiWindow;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -61,7 +62,7 @@ public class CommentAdapter extends BaseAdapter{
     private ReplyAdapter replyAdapter;
 
     private PersonDynamicAdapter adapter;
-
+    private EmojiWindow readEmojiWindow;
 
     //关注界面  的构造方法
     public CommentAdapter(Context context,PersonDynamicAdapter adapter, List<DyCommentReplyBean> list,String dyId){
@@ -73,6 +74,9 @@ public class CommentAdapter extends BaseAdapter{
         mInflater = LayoutInflater.from(context);
         popupWindow = new ReplyPopupWindow(context);
         dialog = new MyProgressDialog(context);
+
+        readEmojiWindow = new EmojiWindow(context);
+        readEmojiWindow.readEmojiIcons();
     }
 
     //个人主页 的构造方法
@@ -86,6 +90,9 @@ public class CommentAdapter extends BaseAdapter{
         currentUserId = userid;
         popupWindow = new ReplyPopupWindow(context);
         dialog = new MyProgressDialog(context);
+
+        readEmojiWindow = new EmojiWindow(context);
+        readEmojiWindow.readEmojiIcons();
     }
 
     @Override
@@ -125,7 +132,7 @@ public class CommentAdapter extends BaseAdapter{
 
         dyCommentReplyBean = mLists.get(position);
         holder.tv_comment.setText(dyCommentReplyBean.getDiscussantName());
-        holder.tv_content.setText(dyCommentReplyBean.getCommentContent());
+        holder.tv_content.setText(readEmojiWindow.getEditable(dyCommentReplyBean.getCommentContent()));
 
         //填充回复数据
         if(currentUserId!=null){
@@ -217,11 +224,8 @@ public class CommentAdapter extends BaseAdapter{
      * true:是自己   false:不是自己
      */
    private boolean checkSelf(String id){
-        if(app.getUserInfoBean().getUserId().equals(id)){
-            return true;
-        }
-       return false;
-    }
+       return app.getUserInfoBean().getUserId().equals(id);
+   }
 
 
 

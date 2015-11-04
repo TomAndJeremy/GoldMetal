@@ -37,6 +37,8 @@ public class MessageReplyAdapter extends BaseAdapter{
         mContext = context;
         mLists = list;
         mInflater = LayoutInflater.from(context);
+
+
         readEmojiWindow = new EmojiWindow(context);
         readEmojiWindow.readEmojiIcons();
     }

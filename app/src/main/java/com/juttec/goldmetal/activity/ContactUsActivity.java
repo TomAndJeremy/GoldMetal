@@ -1,5 +1,7 @@
 package com.juttec.goldmetal.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -130,7 +132,8 @@ public class ContactUsActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
                     if ("phone".equals(maps.get(position).get("img"))) {
-
+                        Intent intent=new Intent("android.intent.action.CALL", Uri.parse("tel:" + maps.get(position).get("text")));
+                        startActivity(intent);
                     } else {
                     }
 

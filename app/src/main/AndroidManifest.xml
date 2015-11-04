@@ -3,6 +3,7 @@
     package="com.juttec.goldmetal" >
 
     <!-- 个推SDK权限配置开始 -->
+    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

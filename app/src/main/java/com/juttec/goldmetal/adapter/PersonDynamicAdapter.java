@@ -28,6 +28,7 @@ import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.customview.listview.NoScrollListView;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
+import com.juttec.goldmetal.utils.EmojiWindow;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -69,7 +70,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
     private MyProgressDialog dialog;//加载时的 进度框
 
 //    private boolean isSupported = false;//自己是否点赞  默认为false
-
+private EmojiWindow readEmojiWindow;
 
     public PersonDynamicAdapter(Context context, List<DynamicEntityList> list) {
         app = (MyApplication) context.getApplicationContext();
@@ -78,6 +79,9 @@ public class PersonDynamicAdapter extends BaseAdapter {
         mInflater = LayoutInflater.from(context);
         popupWindow = new ReplyPopupWindow(context);
         dialog = new MyProgressDialog(context);
+        readEmojiWindow = new EmojiWindow(context);
+        readEmojiWindow.readEmojiIcons();
+
     }
 
     public PersonDynamicAdapter(Context context, List<DynamicEntityList> list, String userid) {
@@ -88,6 +92,9 @@ public class PersonDynamicAdapter extends BaseAdapter {
         currentUserId = userid;
         popupWindow = new ReplyPopupWindow(context);
         dialog = new MyProgressDialog(context);
+        readEmojiWindow = new EmojiWindow(context);
+        readEmojiWindow.readEmojiIcons();
+
     }
 
     private PersonDynamicAdapter create() {
@@ -144,7 +151,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
         dynamicEntityList = mLists.get(position);
         holder.name.setText(dynamicEntityList.getUserName());//设置用户名
         holder.time.setText(dynamicEntityList.getAddTime());//时间
-        holder.content.setText(unicode2String(dynamicEntityList.getDyContent()));//正文
+        holder.content.setText(readEmojiWindow.getEditable(dynamicEntityList.getDyContent()));//正文
         //设置头像
         ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + dynamicEntityList.getUserPhoto(), holder.headPortrait);
 

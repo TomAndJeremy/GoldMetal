@@ -12,6 +12,7 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.MomentPersonalActivity;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.DyReplyInfoBean;
+import com.juttec.goldmetal.utils.EmojiWindow;
 
 import java.util.List;
 
@@ -32,12 +33,14 @@ public class ReplyAdapter extends BaseAdapter{
 
     private String currentUserId;//个人主页的用户id   判断是否在个人主页
 
-
+    private EmojiWindow readEmojiWindow;
     public ReplyAdapter(Context context, List<DyReplyInfoBean> list){
         app = (MyApplication) context.getApplicationContext();
         mContext = context;
         mLists = list;
         mInflater = LayoutInflater.from(context);
+        readEmojiWindow = new EmojiWindow(context);
+        readEmojiWindow.readEmojiIcons();
     }
 
 
@@ -47,6 +50,8 @@ public class ReplyAdapter extends BaseAdapter{
         mLists = list;
         mInflater = LayoutInflater.from(context);
         currentUserId = userid;
+        readEmojiWindow = new EmojiWindow(context);
+        readEmojiWindow.readEmojiIcons();
     }
 
     @Override
@@ -87,7 +92,7 @@ public class ReplyAdapter extends BaseAdapter{
         dyReplyInfoBean = mLists.get(position);
         holder.tv_reply.setText(dyReplyInfoBean.getUserName());
         holder.tv_replyed.setText(dyReplyInfoBean.getRepliedName());
-        holder.tv_content.setText(dyReplyInfoBean.getReplyContent());
+        holder.tv_content.setText(readEmojiWindow.getEditable(dyReplyInfoBean.getReplyContent()));
 
 
 

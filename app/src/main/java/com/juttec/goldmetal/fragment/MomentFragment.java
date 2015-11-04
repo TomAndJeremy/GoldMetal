@@ -538,8 +538,13 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                         }
                         List<DynamicEntityList> dynamicEntityLists = dynamicMsgBean.getEntityList();
 
-                        entityList.addAll(dynamicEntityLists);//向集合中添加数据
-                        i++;//每次加载后页数加一
+
+                        try {
+                            entityList.addAll(dynamicEntityLists);//向集合中添加数据
+                            i++;//每次加载后页数加一
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         if (adapter == null) {
                             adapter = new MomentRecyclerViewAdapter(entityList, getActivity(), app);
 

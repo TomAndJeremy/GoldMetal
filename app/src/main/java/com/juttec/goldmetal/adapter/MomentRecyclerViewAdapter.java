@@ -77,7 +77,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         mDialog = new MyAlertDialog(context);
         //   readEmojiIcons();
         readEmojiWindow = new EmojiWindow(context);
-     readEmojiWindow.readEmojiIcons();
+        readEmojiWindow.readEmojiIcons();
 
     }
 
@@ -623,9 +623,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 if (!checkNameAndPhoto()) {
                     return;
                 }
+
                 Intent intent = new Intent(context, MomentPersonalActivity.class);
                 intent.putExtra("userId", userID);
-                intent.putExtra("userName", userName);
+                intent.putExtra("userName",  userName.replace(":", ""));
                 context.startActivity(intent);
             }
         });
