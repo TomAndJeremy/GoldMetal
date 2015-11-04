@@ -14,15 +14,15 @@ public class MyApplication extends Application {
 
     public static final String IMAGECACHE = "/imageCache/";// 图片缓存目录
 
-//    public static final String BASEURL = "http://192.168.1.35:8155/App_Areas/";
-//    public static final String ImgBASEURL = "http://192.168.1.35:8155";
+    public static final String BASEURL = "http://117.132.8.93:9988/App_Areas/";
+    public static final String ImgBASEURL = "http://117.132.8.93:9988";
 
 
-    public static final String BASEURL = "http://192.168.1.5:8899/App_Areas/";
-    public static final String ImgBASEURL = "http://192.168.1.5:8899";
+//    public static final String BASEURL = "http://192.168.1.5:8899/App_Areas/";
+//    public static final String ImgBASEURL = "http://192.168.1.5:8899";
 
 
-    public static final int EMOJI_NUM = 54;//表情数目
+
 
     public static final String DYNAMIC_TYPE_ALL = "all";
     public static final String DYNAMIC_TYPE_ATTENTION = "attention";
@@ -251,6 +251,10 @@ public class MyApplication extends Application {
     public String getSubmitAdvice() {
 
         return BASEURL + "App_User/SubmitAdvice";
+    }
+//提交反馈信息
+    public String getGetExchangeRateUrl() {
+        return BASEURL + "App_Consulting/GetExchangeRate";
     }
 
 

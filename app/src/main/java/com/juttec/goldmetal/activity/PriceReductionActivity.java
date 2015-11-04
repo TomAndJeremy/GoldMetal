@@ -1,14 +1,28 @@
 package com.juttec.goldmetal.activity;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.utils.LogUtil;
+import com.juttec.goldmetal.utils.NetWorkUtils;
+import com.juttec.goldmetal.utils.ToastUtil;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 
@@ -20,14 +34,50 @@ public class PriceReductionActivity extends AppCompatActivity {
     TextWatcher twDollarOunce, twRmbOunce, twRmbKg;
     DecimalFormat decimalFormat;
 
+    private MyApplication app;
+    private TextView tvRate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_price_reduction);
+
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.show();
+        app = (MyApplication) getApplication();
         decimalFormat = new DecimalFormat("###.00");
         etDollarOunce = (EditText) this.findViewById(R.id.et_dollar_ounce);
         etRmbOunce = (EditText) this.findViewById(R.id.et_rmb_ounce);
         etRmbKg = (EditText) this.findViewById(R.id.et_rmb_kg);
+        tvRate = (TextView) this.findViewById(R.id.tv_rate);
+
+
+        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetExchangeRateUrl(), new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog.dismiss();
+                try {
+                    JSONObject object = new JSONObject(responseInfo.result.toString());
+
+                    String status = object.getString("status");
+                    if ("1".equals(status)) {
+                        dollarRmb = Double.parseDouble(object.getString("message1"));
+                        tvRate.setText(dollarRmb+"");
+
+                    } else {
+                        ToastUtil.showShort(getApplication(),"获取汇率失败");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog.dismiss();
+                NetWorkUtils.showMsg(PriceReductionActivity.this);
+            }
+        });
 
         twDollarOunce = new DOTextWatcher();
         twRmbOunce = new ROTextWatcher();
@@ -142,7 +192,7 @@ public class PriceReductionActivity extends AppCompatActivity {
             double priceRmbKg;
 
 
-            priceRmbOunce  = Double.parseDouble(s.toString());
+            priceRmbOunce = Double.parseDouble(s.toString());
             priceRmbKg = priceRmbOunce * KG_OUNCE;
             priceDollarOunce = priceRmbOunce / dollarRmb;
             LogUtil.e("priceDollarOunce  " + priceDollarOunce + "  ,priceRmbOunce  " + priceRmbOunce + ",priceRmbKg  " + priceRmbKg);
