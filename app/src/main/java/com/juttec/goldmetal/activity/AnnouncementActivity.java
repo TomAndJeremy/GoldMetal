@@ -45,7 +45,6 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
     MyAdapter myAdapter;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +53,6 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
 
         init();
     }
-
 
 
     private void init() {
@@ -101,7 +99,6 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
         getData(pageIndex);
 
     }
-
 
 
     public void getData(int i) {
@@ -227,6 +224,7 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
             TextView tvContent;
         }
     }
+
     @Override
     protected void onStop() {
         super.onStop();
