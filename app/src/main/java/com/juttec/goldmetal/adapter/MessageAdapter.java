@@ -1,6 +1,7 @@
 package com.juttec.goldmetal.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.MessageBean;
+import com.juttec.goldmetal.utils.EmojiWindow;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -31,11 +33,19 @@ public class MessageAdapter extends BaseAdapter{
     private MyApplication app;
 
 
+
+    private EmojiWindow readEmojiWindow;
+
+
     public MessageAdapter(Context context,List<MessageBean> list){
         app = (MyApplication) context.getApplicationContext();
         mContext = context;
         mLists = list;
         mInflater = LayoutInflater.from(context);
+
+        readEmojiWindow = new EmojiWindow(context);
+        readEmojiWindow.readEmojiIcons();
+
     }
 
     @Override
@@ -75,8 +85,8 @@ public class MessageAdapter extends BaseAdapter{
 
         messageBean = mLists.get(position);
         holder.tv_name.setText(messageBean.getMsgReplyerName());
-        holder.tv_title.setText(messageBean.getMsgBirefTitle());
-        holder.tv_content.setText(messageBean.getMsgBriefContent());
+        holder.tv_title.setText(readEmojiWindow.getEditable(messageBean.getMsgBirefTitle()));
+        holder.tv_content.setText(readEmojiWindow.getEditable(messageBean.getMsgBriefContent()));
         holder.tv_time.setText(messageBean.getMsgAddTime());
         ImageLoader.getInstance().displayImage(app.getImgBaseUrl() + messageBean.getMsgUserPhoto(), holder.iv_photo);
 

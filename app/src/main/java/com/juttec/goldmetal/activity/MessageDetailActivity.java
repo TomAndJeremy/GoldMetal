@@ -17,6 +17,7 @@ import com.juttec.goldmetal.bean.MessageBean;
 import com.juttec.goldmetal.customview.listview.NoScrollListView;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
+import com.juttec.goldmetal.utils.EmojiWindow;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -63,7 +64,7 @@ public class MessageDetailActivity extends AppCompatActivity implements View.OnC
     private List<DyReplyInfoBean> mLists;
 
     private MessageReplyAdapter mAdapter;
-
+    private EmojiWindow readEmojiWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +77,11 @@ public class MessageDetailActivity extends AppCompatActivity implements View.OnC
         mLists = new ArrayList<DyReplyInfoBean>();
         //初始化控件
         initView();
-
+        readEmojiWindow = new EmojiWindow(this);
+        readEmojiWindow.readEmojiIcons();
 
         //调接口 获取消息详情数据
-        getMessageDetailData(getIntent().getStringExtra("msgType"),getIntent().getStringExtra("msgDetailsId"));
+        getMessageDetailData(getIntent().getStringExtra("msgType"), getIntent().getStringExtra("msgDetailsId"));
 
     }
 
@@ -103,7 +105,7 @@ public class MessageDetailActivity extends AppCompatActivity implements View.OnC
         ImageLoader.getInstance().displayImage(app.getImgBaseUrl() + messageBean.getMsgUserPhoto(), iv_photo);
         tv_name.setText(messageBean.getMsgReplyerName());
         tv_tiem.setText(messageBean.getMsgAddTime());
-        tv_content.setText(messageBean.getMsgBriefContent());
+        tv_content.setText(readEmojiWindow.getEditable(messageBean.getMsgBriefContent()));
     }
 
 

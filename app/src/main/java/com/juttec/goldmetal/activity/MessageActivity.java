@@ -1,6 +1,7 @@
 package com.juttec.goldmetal.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -19,6 +20,7 @@ import com.juttec.goldmetal.bean.MessageBean;
 import com.juttec.goldmetal.customview.listview.LoadMoreListView;
 import com.juttec.goldmetal.customview.listview.LoadingFooter;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
+import com.juttec.goldmetal.utils.EmojiWindow;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -70,6 +72,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +102,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         tv_delete.setTextSize(18);
         tv_delete.setGravity(Gravity.CENTER);
 
+
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         mListView = (LoadMoreListView) findViewById(R.id.listview);
         //短按事件的监听
@@ -107,6 +111,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         mListView.setOnItemLongClickListener(this);
         //加载更多的监听
         mListView.setOnLoadNextListener(this);
+
 
 
         // 顶部刷新的样式

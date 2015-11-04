@@ -63,9 +63,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     RecycleViewWithHeadAdapter recycleViewWithHeadAdapter;
 
     private MyAlertDialog mDialog;//对话框
-    private Bitmap[] emoticons;
 
-    private static final int EMOJI_NUM = 54;//表情数目
     private EmojiWindow readEmojiWindow;
 
     //初始化
@@ -79,7 +77,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         mDialog = new MyAlertDialog(context);
         //   readEmojiIcons();
         readEmojiWindow = new EmojiWindow(context);
-        emoticons = readEmojiWindow.readEmojiIcons();
+     readEmojiWindow.readEmojiIcons();
 
     }
 
