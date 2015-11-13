@@ -94,7 +94,7 @@
             android:id="@+id/register_et_pwd_config"
             style="@style/EditTextStyle"
             android:background="@null"
-            android:drawableLeft="@mipmap/content_account_icon_password"
+            android:drawableLeft="@mipmap/content_account_icon_password_config"
             android:hint="@string/register_confirm_pwd"
             android:inputType="textPassword" />
 

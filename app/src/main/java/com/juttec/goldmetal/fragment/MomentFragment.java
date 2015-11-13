@@ -66,6 +66,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     private static final String ARG_PARAM1 = "param1";
 
+
     private String mParam1;
     private MyApplication app;
 
@@ -96,6 +97,9 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     private static String path;//存放照相或者从相册选择的图片的路径
 
+
+
+    private final static int REFRESH = 1111;//发表动态后刷新
     private final static int REQUEST_CODE_CAMERA = 333;//照相的返回码
     private final static int REQUEST_CODE_ALBUM = 444;//相册的返回码
     SwipeRefreshLayout refreshLayout;
@@ -136,14 +140,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         getActivity().registerReceiver(myBroadcastReceiver, filter);
 
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        i = 1;
-
-        getInfo(i, MyApplication.DYNAMIC_TYPE_ALL);
     }
 
     @Override
@@ -277,7 +273,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
             case R.id.right_text:
                 //发表动态  先判断用户信息是否完善
                 if (checkNameAndPhoto()) {
-                    startActivity(new Intent(getActivity(), PublishTopicActivity.class));
+                    startActivityForResult(new Intent(getActivity(), PublishTopicActivity.class),REFRESH);
                 }
 
                 break;
@@ -374,6 +370,13 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                     //上传头像
                     uploadUserPhoto();
                 }
+                break;
+            case REFRESH:
+                i = 1;
+                getInfo(i, MyApplication.DYNAMIC_TYPE_ALL);
+
+                recyclerView.scrollToPosition(0);
+
                 break;
         }
 

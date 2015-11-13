@@ -64,6 +64,7 @@ public class PriceReductionActivity extends AppCompatActivity {
                         dollarRmb = Double.parseDouble(object.getString("message1"));
                         tvRate.setText(dollarRmb+"");
 
+
                     } else {
                         ToastUtil.showShort(getApplication(),"获取汇率失败");
                     }

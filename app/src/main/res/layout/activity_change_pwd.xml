@@ -42,7 +42,7 @@
         <EditText
             android:id="@+id/et_confirmpwd"
             style="@style/EditTextStyle_Nobg"
-            android:drawableLeft="@mipmap/content_account_icon_password"
+            android:drawableLeft="@mipmap/content_account_icon_password_config"
             android:hint="@string/hint_pwd_confirm"
             android:password="true"/>
 

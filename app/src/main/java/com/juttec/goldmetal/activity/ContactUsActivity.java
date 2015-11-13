@@ -50,6 +50,7 @@ public class ContactUsActivity extends AppCompatActivity {
 
         final MyProgressDialog progressDialog = new MyProgressDialog(this);
         progressDialog.builder().show();
+
         new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getContactUsUrl(), new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

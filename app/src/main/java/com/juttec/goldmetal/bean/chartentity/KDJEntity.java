@@ -1,5 +1,9 @@
 package com.juttec.goldmetal.bean.chartentity;
 
+import android.util.Log;
+
+import com.juttec.goldmetal.utils.LogUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,9 +58,9 @@ public class KDJEntity {
 						high = high > mHigh ? high : mHigh;
 						low = low < mLow ? low : mLow;
 					} else {
-						high = 0;
-						low = 0;
-						//所求天数 > mDay 时
+						high = maxs.get(OHLCData.size()-i-1);
+                        low = mins.get(OHLCData.size()-i-1);
+                        //所求天数 > mDay 时
 						for (int a = mins.size() - 1; a >= mins.size() - mDay; a--) {
 							high = high > maxs.get(a) ? high : maxs.get(a);
 							low =  low < mins.get(a) ? low:mins.get(a);
@@ -68,7 +72,9 @@ public class KDJEntity {
 
 				if (high != low) {
 					rSV = (Double.parseDouble( oHLCEntity.getClose()) - low) / (high - low) * 100;
-				}
+
+                    Log.e("jeremy",OHLCData.size()- i + "   rsv   " + rSV);
+                }
 
 
 
@@ -76,8 +82,9 @@ public class KDJEntity {
 				if (i == OHLCData.size() - 1) {
 //					k = rSV;
 //					d = k;
-					k = 50 * 2 / 3 + rSV / 3;
-					d = 50 * 2 / 3 + k / 3;
+					/*k = 50 * 2 / 3 + rSV / 3;
+					d = 50 * 2 / 3 + k / 3;*/
+					d = k = rSV;
 
 				} else {
 					k = k * 2 / 3 + rSV / 3;
@@ -95,7 +102,15 @@ public class KDJEntity {
 				Js.add(js.get(i));
 			}
 		}
-	}
+        for (int i = 0; i < ks.size(); i++) {
+            LogUtil.e("ks ==" + ks.get(i));
+            LogUtil.e("DS ==" + ds.get(i));
+            LogUtil.e("js ==" + js.get(i));
+            LogUtil.e(i+"+++++++++++++++++++++++++++++++++++++++++++");
+        }
+    }
+
+
 
 	public ArrayList<Double> getK() {
 		return Ks;

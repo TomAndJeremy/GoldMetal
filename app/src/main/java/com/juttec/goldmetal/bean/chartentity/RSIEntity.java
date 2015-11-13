@@ -104,7 +104,30 @@ public class RSIEntity {
 	public List<Double> getValue() {
 		return RSI1;
 	}
+  /*	private List<Double> RSI1;
+	private List<Double> RSI2;
+	private List<Double> RSI3;
 
+
+	private List<Double> diffs;//当日差值
+
+
+	private int mParameter;//影响RSI指标变化的 变量 默认值为：6 12 24  （范围：2-99）
+
+	public RSIEntity(List<KChartInfo.ResultEntity> OHLCData) {
+		int n = 1;
+		List<Double> lc = new ArrayList<>();
+		for (int i = 0; i < OHLCData.size(); i++) {
+			double close = Double.parseDouble(OHLCData.get(i).getClose());
+			if (i < n) {
+				lc.add(close);
+			} else {
+				lc.add(Double.parseDouble(OHLCData.get(i - n).getClose()));
+			}
+		}
+
+	}
+*/
 
 
 }

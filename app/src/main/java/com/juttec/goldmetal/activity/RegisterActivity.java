@@ -109,6 +109,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             register.setText("确定");
             HeadLayout headLayout = (HeadLayout) findViewById(R.id.head_layout);
             headLayout.setHeadTitle("找回密码");
+            password.setHint("新密码");
+            pwdConfig.setHint("密码确认");
+
 
         }
 

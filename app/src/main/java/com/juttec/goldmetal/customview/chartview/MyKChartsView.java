@@ -16,13 +16,7 @@ import com.juttec.goldmetal.bean.chartentity.RSIEntity;
 import com.juttec.goldmetal.utils.DateUtil;
 import com.juttec.goldmetal.utils.LogUtil;
 
-import org.apache.http.util.EncodingUtils;
-
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
@@ -30,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class KChartsView extends GridChart /*implements GridChart.OnTabClickListener*/ {
+public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickListener*/ {
 
 
     /**
@@ -125,17 +119,17 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
     KDJEntity mKDJData;
     RSIEntity mRSIData;
 
-    public KChartsView(Context context) {
+    public MyKChartsView(Context context) {
         super(context);
         init();
     }
 
-    public KChartsView(Context context, AttributeSet attrs) {
+    public MyKChartsView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public KChartsView(Context context, AttributeSet attrs, int defStyle) {
+    public MyKChartsView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
@@ -143,24 +137,24 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
     public void setTabTitle(String mTabTitle) {
         this.mTabTitle = mTabTitle;
     }
+
     public void setUpTitle(String mUpTitle) {
         this.mUpTitle = mUpTitle;
     }
+
     private void init() {
-        //super.setOnTabClickListener(this);
+
         mShowDataNum = DEFAULT_CANDLE_NUM;
         mDataStartIndext = 0;
         showDetails = false;
         mMaxPrice = -1;
         mMinPrice = -1;
-        //mTabTitle = "MACD";
+
 
         mOHLCData = new ArrayList<KChartInfo.ResultEntity>();
         mMACDData = new MACDEntity(null);
         mKDJData = new KDJEntity(null);
         mRSIData = new RSIEntity(null);
-        //   setShowLowerChartTabs(false);
-
 
     }
 
@@ -173,303 +167,10 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         }
 
 
-        drawUpperRegion(canvas);
-        //  drawLowerRegion(canvas);
-        drawTitles(canvas);
-        drawCandleDetails(canvas);
-    }
-
-    /**
-     * 绘制蜡烛图
-     **/
-    private void drawCandleDetails(Canvas canvas) {
-        if (showDetails) {
-            float width = getWidth();
-            float left = 3.0f;
-            float top = (float) (5.0 + DEFAULT_AXIS_TITLE_SIZE);
-            float right = 3.0f + 13 * DEFAULT_AXIS_TITLE_SIZE;
-            float bottom = 8.0f + 7 * DEFAULT_AXIS_TITLE_SIZE;
-            if (mStartX < width / 2.0f) {
-                right = width - 4.0f;
-                left = width - 4.0f - 13 * DEFAULT_AXIS_TITLE_SIZE;
-            }
-            int selectIndext = (int) ((width - 2.0f - mStartX) / mCandleWidth + mDataStartIndext);
-            //防止数组越界
-            if (selectIndext >= mOHLCData.size()) {
-                return;
-            }
-
-            /** 绘制 点击 线条 **/
-            Paint paint = new Paint();
-            paint.setColor(Color.LTGRAY);
-            paint.setAlpha(150);
-            paint.setStrokeWidth(5);
-            canvas.drawLine(mStartX, 2.0f + DEFAULT_AXIS_TITLE_SIZE, mStartX, UPER_CHART_BOTTOM,
-                    paint);
-            canvas.drawLine(mStartX, getHeight() - 2.0f, mStartX, LOWER_CHART_TOP, paint);
-            canvas.drawRect(left, top, right, bottom, paint);
-            /**  详情区域 **/
-            Paint borderPaint = new Paint();
-            borderPaint.setColor(Color.WHITE);
-            borderPaint.setStrokeWidth(2);
-            canvas.drawLine(left, top, left, bottom, borderPaint);
-            canvas.drawLine(left, top, right, top, borderPaint);
-            canvas.drawLine(right, bottom, right, top, borderPaint);
-            canvas.drawLine(right, bottom, left, bottom, borderPaint);
-
-            /** 绘制详情文字 **/
-            Paint textPaint = new Paint();
-            textPaint.setTextSize(DEFAULT_AXIS_TITLE_SIZE);
-            textPaint.setColor(Color.WHITE);
-            textPaint.setFakeBoldText(true);
-            canvas.drawText("日期: " + mOHLCData.get(selectIndext).getDate(), left + 1, top
-                    + DEFAULT_AXIS_TITLE_SIZE, textPaint);
-
-            canvas.drawText("开盘:", left + 1, top + DEFAULT_AXIS_TITLE_SIZE * 2.0f, textPaint);
-            double open = Double.parseDouble(mOHLCData.get(selectIndext).getOpen());
-            try {
-                double ysdclose = Double.parseDouble(mOHLCData.get(selectIndext + 1).getClose());
-                if (open >= ysdclose) {
-                    textPaint.setColor(Color.RED);
-                } else {
-                    textPaint.setColor(Color.GREEN);
-                }
-                canvas.drawText(new DecimalFormat("#.##").format(open), left + 1
-                                + DEFAULT_AXIS_TITLE_SIZE * 2.5f, top + DEFAULT_AXIS_TITLE_SIZE * 2.0f,
-                        textPaint);
-            } catch (Exception e) {
-                canvas.drawText(new DecimalFormat("#.##").format(open), left + 1
-                                + DEFAULT_AXIS_TITLE_SIZE * 2.5f, top + DEFAULT_AXIS_TITLE_SIZE * 2.0f,
-                        textPaint);
-            }
-
-            textPaint.setColor(Color.WHITE);
-            canvas.drawText("最高:", left + 1, top + DEFAULT_AXIS_TITLE_SIZE * 3.0f, textPaint);
-            double high = Double.parseDouble(mOHLCData.get(selectIndext).getHigh());
-            if (open < high) {
-                textPaint.setColor(Color.RED);
-            } else {
-                textPaint.setColor(Color.GREEN);
-            }
-            canvas.drawText(new DecimalFormat("#.##").format(high), left + 1
-                            + DEFAULT_AXIS_TITLE_SIZE * 2.5f, top + DEFAULT_AXIS_TITLE_SIZE * 3.0f,
-                    textPaint);
-
-            textPaint.setColor(Color.WHITE);
-            canvas.drawText("最低:", left + 1, top + DEFAULT_AXIS_TITLE_SIZE * 4.0f, textPaint);
-            double low = Double.parseDouble(mOHLCData.get(selectIndext).getLow());
-            try {
-                double yesterday = Double.parseDouble((mOHLCData.get(selectIndext + 1).getLow()) + Double.parseDouble(mOHLCData.get(
-                        selectIndext + 1).getHigh())) / 2.0f;
-                if (yesterday <= low) {
-                    textPaint.setColor(Color.RED);
-                } else {
-                    textPaint.setColor(Color.GREEN);
-                }
-            } catch (Exception e) {
-
-            }
-            canvas.drawText(new DecimalFormat("#.##").format(low), left + 1
-                            + DEFAULT_AXIS_TITLE_SIZE * 2.5f, top + DEFAULT_AXIS_TITLE_SIZE * 4.0f,
-                    textPaint);
-
-            textPaint.setColor(Color.WHITE);
-            canvas.drawText("收盘:", left + 1, top + DEFAULT_AXIS_TITLE_SIZE * 5.0f, textPaint);
-            double close = Double.parseDouble(mOHLCData.get(selectIndext).getClose());
-            try {
-                double yesdopen = Double.parseDouble((mOHLCData.get(selectIndext + 1).getLow()) + Double.parseDouble(mOHLCData.get(
-                        selectIndext + 1).getHigh())) / 2.0f;
-                if (yesdopen <= close) {
-                    textPaint.setColor(Color.RED);
-                } else {
-                    textPaint.setColor(Color.GREEN);
-                }
-            } catch (Exception e) {
-
-            }
-            canvas.drawText(new DecimalFormat("#.##").format(close), left + 1
-                            + DEFAULT_AXIS_TITLE_SIZE * 2.5f, top + DEFAULT_AXIS_TITLE_SIZE * 5.0f,
-                    textPaint);
-
-            textPaint.setColor(Color.WHITE);
-            canvas.drawText("涨跌幅:", left + 1, top + DEFAULT_AXIS_TITLE_SIZE * 6.0f, textPaint);
-            try {
-                double yesdclose = Double.parseDouble(mOHLCData.get(selectIndext + 1).getClose());
-                double priceRate = (close - yesdclose) / yesdclose;
-                if (priceRate >= 0) {
-                    textPaint.setColor(Color.RED);
-                } else {
-                    textPaint.setColor(Color.GREEN);
-                }
-                canvas.drawText(new DecimalFormat("#.##%").format(priceRate), left + 1
-                                + DEFAULT_AXIS_TITLE_SIZE * 3.5f, top + DEFAULT_AXIS_TITLE_SIZE * 6.0f,
-                        textPaint);
-            } catch (Exception e) {
-                canvas.drawText("--", left + 1 + DEFAULT_AXIS_TITLE_SIZE * 3.5f, top
-                        + DEFAULT_AXIS_TITLE_SIZE * 6.0f, textPaint);
-            }
-        }
-
-    }
-
-    private void drawTitles(Canvas canvas) {
-        Paint textPaint = new Paint();
-        textPaint.setColor(DEFAULT_AXIS_Y_TITLE_COLOR);
-        textPaint.setTextSize(DEFAULT_AXIS_TITLE_SIZE);
-
-        // Y轴Titles
-        canvas.drawText(new DecimalFormat("#.##").format(mMinPrice), 1, UPER_CHART_BOTTOM - 1,
-                textPaint);
-        canvas.drawText(new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 4),
-                1, UPER_CHART_BOTTOM - getLatitudeSpacing() - 1, textPaint);
-        canvas.drawText(
-                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 4 * 2), 1,
-                UPER_CHART_BOTTOM - getLatitudeSpacing() * 2 - 1, textPaint);
-        canvas.drawText(
-                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 4 * 3), 1,
-                UPER_CHART_BOTTOM - getLatitudeSpacing() * 3 - 1, textPaint);
-        canvas.drawText(
-                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 6 * 4), 1,
-                UPER_CHART_BOTTOM - getLatitudeSpacing() * 4 - 1, textPaint);
-        canvas.drawText(
-                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 6 * 5), 1,
-                UPER_CHART_BOTTOM - getLatitudeSpacing() * 5 - 1, textPaint);
-
-
-        canvas.drawText(new DecimalFormat("#.##").format(mMaxPrice), 1,
-                DEFAULT_AXIS_TITLE_SIZE * 2, textPaint);
-
-        // X轴Titles
-        textPaint.setColor(DEFAULT_AXIS_X_TITLE_COLOR);
-
-
-        int p = getWidth() / (DEFAULT_LOGITUDE_NUM + 1);
-
-        try {
-            canvas.drawText(DateUtil.formatDate(mOHLCData.get(mDataStartIndext + (int) (mShowDataNum * 1.0f / (DEFAULT_LOGITUDE_NUM + 1))).getDate()), getWidth() - p - 4 - 2.5f
-                    * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
-
-            canvas.drawText(DateUtil.formatDate(mOHLCData.get(mDataStartIndext + (int) (mShowDataNum * 1.0 / (DEFAULT_LOGITUDE_NUM + 1) * 2)).getDate()), getWidth() - p * 2 - 4 - 2.5f
-                    * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
-
-            canvas.drawText(
-                    String.valueOf(mOHLCData.get(mDataStartIndext + mShowDataNum / 2).getDate()),
-                    getWidth() / 2 - 4.5f * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM
-                            + DEFAULT_AXIS_TITLE_SIZE, textPaint);
-            canvas.drawText(DateUtil.formatDate(mOHLCData.get(mDataStartIndext + (int) (mShowDataNum * 1.0 / (DEFAULT_LOGITUDE_NUM + 1) * 4)).getDate()), getWidth() - p * 4 - 4 - 2.5f
-                    * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
-
-            canvas.drawText(
-                    String.valueOf(DateUtil.formatDate(mOHLCData.get(mDataStartIndext + (int) (mShowDataNum * 1.0 / (DEFAULT_LOGITUDE_NUM + 1) * 5)).getDate())),
-                    p - (2.5f * DEFAULT_AXIS_TITLE_SIZE), UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void drawUpperRegion(Canvas canvas) {
-        /** 绘制蜡烛图 **/
-        Paint redPaint = new Paint();
-        redPaint.setColor(Color.RED);
-        Paint greenPaint = new Paint();
-        greenPaint.setColor(Color.GREEN);
-        int width = getWidth();
-        mCandleWidth = (width - 4) / 10.0 * 10.0 / mShowDataNum;
-        double rate = (getUperChartHeight() - 2) / (mMaxPrice - mMinPrice);
-       /* for (int i = 0; i < mShowDataNum && mDataStartIndext + i < mOHLCData.size(); i++) {
-            KChartInfo.ResultEntity entity = mOHLCData.get(mDataStartIndext + i);
-            float open = (float) ((mMaxPrice - Double.parseDouble(entity.getOpen())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);
-            float close = (float) ((mMaxPrice - Double.parseDouble(entity.getClose())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);
-            float high = (float) ((mMaxPrice - Double.parseDouble(entity.getHigh())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);
-            float low = (float) ((mMaxPrice - Double.parseDouble(entity.getLow())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);
-
-            float left = (float) (width - 2 - mCandleWidth * (i + 1));
-            float right = (float) (width - 3 - mCandleWidth * i);
-            float startX = (float) (width - 3 - mCandleWidth * i - (mCandleWidth - 1) / 2);
-            if (open > close) {
-                canvas.drawRect(left, close, right, open, greenPaint);
-                canvas.drawLine(startX, high, startX, low, greenPaint);
-            } else if (open == close) {
-                canvas.drawLine(left, open, right, open, redPaint);
-                canvas.drawLine(startX, high, startX, low, redPaint);
-            } else {
-                canvas.drawRect(left, open, right, close, redPaint);
-                canvas.drawLine(startX, high, startX, low, redPaint);
-            }
-
-        }
-*/
-        /** 绘制上部曲线图及上部分MA值 **/
-        float MATitleWidth = width / 10.0f * 10.0f / MALineData.size();
-        if (mUpTitle.trim().equalsIgnoreCase("SMA")) {
-            for (int j = 0; j < SMALineData.size(); j++) {
-                MALineEntity lineEntity = SMALineData.get(j);
-
-                float startX = 0;
-                float startY = 0;
-                Paint paint = new Paint();
-                paint.setColor(lineEntity.getLineColor());
-                paint.setTextSize(DEFAULT_AXIS_TITLE_SIZE);
-                canvas.drawText(
-                        lineEntity.getTitle()
-                                + "="
-                                + new DecimalFormat("#.##").format(lineEntity.getLineData().get(
-                                mDataStartIndext)), 2 + MATitleWidth * j,
-                        DEFAULT_AXIS_TITLE_SIZE, paint);
-                for (int i = 0; i < mShowDataNum
-                        && mDataStartIndext + i < lineEntity.getLineData().size(); i++) {
-                    if (i != 0) {
-                        canvas.drawLine(
-                                startX,
-                                startY + DEFAULT_AXIS_TITLE_SIZE + 4,
-                                (float) (width - 2 - mCandleWidth * i - mCandleWidth * 0.5f),
-                                (float) ((mMaxPrice - lineEntity.getLineData()
-                                        .get(mDataStartIndext + i)) * rate + DEFAULT_AXIS_TITLE_SIZE + 4),
-                                paint);
-                    }
-                    startX = (float) (width - 2 - mCandleWidth * i - mCandleWidth * 0.5f);
-                    startY = (float) ((mMaxPrice - lineEntity.getLineData().get(mDataStartIndext + i)) * rate);
-                }
-            }
-        } else if (mUpTitle.trim().equalsIgnoreCase("BOLL")) {
-            String [] fileName=new String[]{"mid","upper","lower"};//白，黄，红
-            int[] color = new int[]{Color.WHITE, Color.YELLOW, Color.RED};
-
-            for (int j = 0; j < fileName.length; j++) {
-
-                List<Double> list = getFromAssets(fileName[j]);
-
-
-                float startX = 0;
-                float startY = 0;
-                Paint paint = new Paint();
-                paint.setColor(color[j]);
-                paint.setTextSize(DEFAULT_AXIS_TITLE_SIZE);
-                canvas.drawText(
-                        fileName[j]
-                                + "="
-                                + new DecimalFormat("#.##").format(list.get(
-                                mDataStartIndext)), 2 + MATitleWidth * j,
-                        DEFAULT_AXIS_TITLE_SIZE, paint);
-                for (int i = 0; i < mShowDataNum
-                        && mDataStartIndext + i < list.size(); i++) {
-
-                    LogUtil.e(fileName[j]+"---------"+list.get(i));
-                    if (i != 0) {
-                        canvas.drawLine(
-                                startX,
-                                startY + DEFAULT_AXIS_TITLE_SIZE + 4,
-                                (float) (width - 2 - mCandleWidth * i - mCandleWidth * 0.5f),
-                                (float) ((mMaxPrice - list
-                                        .get(mDataStartIndext + i)) * rate + DEFAULT_AXIS_TITLE_SIZE + 4),
-                                paint);
-                    }
-                    startX = (float) (width - 2 - mCandleWidth * i - mCandleWidth * 0.5f);
-                    startY = (float) ((mMaxPrice - list.get(mDataStartIndext + i)) * rate);
-                }
-            }
-        }
-
+        // drawUpperRegion(canvas);
+        drawLowerRegion(canvas);
+        // drawTitles(canvas);
+        // drawCandleDetails(canvas);
     }
 
     private void drawLowerRegion(Canvas canvas) {
@@ -477,10 +178,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         float lowerHight = getHeight() - lowertop - 4;
         float viewWidth = getWidth();
 
-        /** 下部表的数据 **/
-        // MACDData mMACDData;
-        // KDJData mKDJData;
-        // RSIData mRSIData;
+
         Paint whitePaint = new Paint();
         whitePaint.setColor(Color.WHITE);
         Paint yellowPaint = new Paint();
@@ -491,19 +189,13 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         Paint textPaint = new Paint();
         textPaint.setColor(DEFAULT_AXIS_Y_TITLE_COLOR);
         textPaint.setTextSize(DEFAULT_AXIS_TITLE_SIZE);
+        int width = getWidth();
+        mCandleWidth = (width - 4) / 10.0 * 10.0 / mShowDataNum;
         if (mTabTitle.trim().equalsIgnoreCase("MACD")) {
 
-
-            List<Double> MACD = getFromAssets("macd");
-            List<Double> DEA = getFromAssets("dea");
-            List<Double> DIF = getFromAssets("dif");
-
-            LogUtil.e("MACD size " + MACD.size());
-            int width = getWidth();
-            mCandleWidth = (width - 4) / 10.0 * 10.0 / mShowDataNum;
-           /* List<Double> MACD = mMACDData.getMACD();
+            List<Double> MACD = mMACDData.getMACD();
             List<Double> DEA = mMACDData.getDEA();
-            List<Double> DIF = mMACDData.getDIF();*/
+            List<Double> DIF = mMACDData.getDIF();
 
             double low = DEA.get(mDataStartIndext);
             double high = low;
@@ -634,11 +326,9 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
             canvas.drawText(new DecimalFormat("#.##").format(high), 2, lowertop
                     + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
             canvas.drawText(new DecimalFormat("#.##").format((high + low) / 2), 2, lowertop
-                    + lowerHight / 2 + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
-
+                    + lowerHight / 2 + DEFAULT_AXIS_TITLE_SIZE, textPaint);
             canvas.drawText(new DecimalFormat("#.##").format(low), 2, lowertop + lowerHight,
                     textPaint);
-
         } else if (mTabTitle.trim().equalsIgnoreCase("RSI")) {
             List<Double> Rsi1 = mRSIData.getValue();
 
@@ -990,15 +680,6 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         } catch (Exception e) {
             e.printStackTrace();
         }
-       /* List<Double> result = new ArrayList<>();
-
-        for (int i = 0; i < list.size(); i++) {
-            int j = list.size() - i - 1;
-            result.add(j, list.get(i));
-            LogUtil.e("j  ##### " + j);
-            LogUtil.e("i  ##### " + i);
-        }*/
-
         Collections.reverse(list);
         return list;
     }
