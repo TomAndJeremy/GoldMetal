@@ -1,5 +1,7 @@
 package com.juttec.goldmetal.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -60,10 +62,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         app = (MyApplication) getApplication();
         dialog = new MyProgressDialog(this);
 
@@ -291,9 +295,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         app.setUserInfoBean(userInfoBean);
 
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        ToastUtil.showShort(LoginActivity.this,"登录成功");
+                      /*  Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);*/
+
+                        ToastUtil.showShort(LoginActivity.this, "登录成功");
                         finish();
                     }else{
                         ToastUtil.showShort(LoginActivity.this,promptInfor);

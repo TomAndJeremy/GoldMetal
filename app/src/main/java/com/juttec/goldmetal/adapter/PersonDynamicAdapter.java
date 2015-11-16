@@ -299,7 +299,7 @@ private EmojiWindow readEmojiWindow;
             String id = supportInfoBeans.get(i).getUserId();
 
             //如果点赞人中包含自己  将点赞按钮设置为已点赞
-            if (id.equals(app.getUserInfoBean().getUserId())) {
+            if (app.isLogin()&&id.equals(app.getUserInfoBean().getUserId())) {
                 thumb.setSelected(true);
             }
 

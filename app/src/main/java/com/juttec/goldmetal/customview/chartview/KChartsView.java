@@ -640,7 +640,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
                     textPaint);
 
         } else if (mTabTitle.trim().equalsIgnoreCase("RSI")) {
-            List<Double> Rsi1 = mRSIData.getValue();
+            List<Double> Rsi1 = mRSIData.getRSI1();
 
 
             double low = Rsi1.get(mDataStartIndext);

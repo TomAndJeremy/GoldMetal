@@ -12,6 +12,15 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 public class MyApplication extends Application {
 
+
+
+    public boolean isLogin() {
+        if (this.userInfoBean != null) {
+            return true;
+        }
+        return false;
+    }
+
     public static final String IMAGECACHE = "/imageCache/";// 图片缓存目录
 
     public static final String BASEURL = "http://117.132.8.93:9988/App_Areas/";

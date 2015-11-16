@@ -146,7 +146,7 @@ public class MarketKChartsFragment extends Fragment {
                 entity.setHigh(s2);
                 entity.setLow(s3);
                 entity.setOpen(s4);
-                entity.setDate(s5 + s6);
+                entity.setDate(s6);
 
                 datas.add(entity);
             }

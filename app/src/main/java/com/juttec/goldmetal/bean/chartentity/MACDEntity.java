@@ -41,7 +41,7 @@ public class MACDEntity {
 					eMA26 = eMA26 * 25 / 27 + close * 2 / 27;
 					dIF = eMA12 - eMA26;
 					dEA = dEA * 8 / 10 + dIF * 2 / 10;
-					mACD = dIF - dEA;
+					mACD = (dIF - dEA)*2;
 				}
 				dEAs.add(dEA);
 				dIFs.add(dIF);

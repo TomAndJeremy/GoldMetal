@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.AccountActivity;
 import com.juttec.goldmetal.activity.ImagePagerActivity;
+import com.juttec.goldmetal.activity.LoginActivity;
 import com.juttec.goldmetal.activity.MomentPersonalActivity;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.DyCommentReplyBean;
@@ -209,8 +210,11 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             @Override
             public void onClick(View v) {
                 holder.thumb.setClickable(false);
+
+
                 //检查个人信息是否完善
                 if (!checkNameAndPhoto()) {
+
                     return;
                 }
                 RequestParams params = new RequestParams();
@@ -398,7 +402,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             Map<String, String> map = new HashMap<String, String>();
             String name = entityList.get(position).getDySupport().get(i).getUserName();
             //判断返回的点赞名单中是否有自己
-            if (name.equals(app.getUserInfoBean().getUserNickName())) {
+            if (app.isLogin() && name.equals(app.getUserInfoBean().getUserNickName())) {
                 viewHolder.thumb.setSelected(true);
             }
             map.put("name", name);
@@ -496,14 +500,17 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             replyRoot.setOrientation(LinearLayout.VERTICAL);
 
             final int finalI = i;
-            if (!entityList.get(position).getDyCommentReply().get(i).getDiscussantId().equals(app.getUserInfoBean().getUserId())) {
-                commentMsg.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //检查个人信息是否完善
-                        if (!checkNameAndPhoto()) {
-                            return;
-                        }
+
+
+            final int finalI1 = i;
+            commentMsg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //检查个人信息是否完善
+                    if (!checkNameAndPhoto()) {
+                        return;
+                    }
+                    if (!entityList.get(position).getDyCommentReply().get(finalI1).getDiscussantId().equals(app.getUserInfoBean().getUserId())) {
                         replyPopupWindow.create().show(v);
                         replyPopupWindow.setHint(1, entityList.get(position).getDyCommentReply().get(finalI).getDiscussantName());
                         replyPopupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
@@ -513,8 +520,8 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                             }
                         });
                     }
-                });
-            }
+                }
+            });
 
 
             for (int j = 0; j < size; j++) {
@@ -540,14 +547,16 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
 
                 final int finalJ = j;
-                if (!app.getUserInfoBean().getUserId().equals(entityList.get(position).getDyCommentReply().get(finalI).getDyReply().get(finalJ).getUserId())) {
-                    replyMsg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //检查个人信息是否完善
-                            if (!checkNameAndPhoto()) {
-                                return;
-                            }
+                replyMsg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //检查个人信息是否完善
+                        if (!checkNameAndPhoto()) {
+                            return;
+                        }
+
+                        if (!app.getUserInfoBean().getUserId().equals(entityList.get(position).getDyCommentReply().get(finalI).getDyReply().get(finalJ).getUserId())) {
+
                             replyPopupWindow.create().show(v);
                             replyPopupWindow.setHint(1, entityList.get(position).getDyCommentReply().get(finalI).getDyReply().get(finalJ).getUserName());
 
@@ -558,11 +567,11 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                                 }
                             });
                         }
+                    }
 
 
-                    });
+                });
 
-                }
 
             }
             viewRoot.addView(replyRoot);
@@ -573,6 +582,12 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
     //判断用户是否编辑了个人的昵称和头像
     private boolean checkNameAndPhoto() {
+        if (!app.isLogin()) {
+            ToastUtil.showShort(context, "请先登录");
+            context.startActivity(new Intent(context, LoginActivity.class));
+            return false;
+        }
+
         if ("".equals(app.getUserInfoBean().getUserNickName())) {
             //设置昵称
             mDialog.builder()
@@ -619,14 +634,14 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //检查个人信息是否完善
+               /* //检查个人信息是否完善
                 if (!checkNameAndPhoto()) {
                     return;
                 }
-
+*/
                 Intent intent = new Intent(context, MomentPersonalActivity.class);
                 intent.putExtra("userId", userID);
-                intent.putExtra("userName",  userName.replace(":", ""));
+                intent.putExtra("userName", userName.replace(":", ""));
                 context.startActivity(intent);
             }
         });

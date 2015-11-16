@@ -31,8 +31,14 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     public View getTabView(int position) {
 
         View v = View.inflate(context, R.layout.cutom_tab, null);
+        v.setSelected(false);
+        if (position == 0) {
+            v.setSelected(true);
+
+        }
         TextView tv = (TextView) v.findViewById(R.id.textView);
         tv.setText(tabTitles[position]);
+
         ImageView img = (ImageView) v.findViewById(R.id.imageView);
         img.setImageResource(tabIcon[position]);
         return v;

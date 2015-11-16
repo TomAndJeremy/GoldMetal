@@ -127,8 +127,10 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
         mListView = (PersonLoadListView) findViewById(R.id.listview);
 
         //当用户进入自己的主页时   隐藏关注按钮
-        if(userId.equals(app.getUserInfoBean().getUserId())){
-            mListView.getHeaderView().hideFocusButton();
+        if (app.isLogin()) {
+            if (userId.equals(app.getUserInfoBean().getUserId())) {
+                mListView.getHeaderView().hideFocusButton();
+            }
         }
 
 
@@ -219,8 +221,15 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
 //        }
 
         RequestParams params = new RequestParams();
-        params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
+
         params.addBodyParameter("userIdOne", userId);
+
+        if (app.isLogin()) {
+
+            params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
+        } else {
+            params.addBodyParameter("userId", "123");
+        }
         params.addBodyParameter("pageIndex", pageIndex +"");
         params.addBodyParameter("dyType", MyApplication.DYNAMIC_TYPE_PERSONAL);
         new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetDynamicUrl(), params, new RequestCallBack<String>() {

@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.AccountActivity;
 import com.juttec.goldmetal.activity.FollowActivity;
+import com.juttec.goldmetal.activity.LoginActivity;
 import com.juttec.goldmetal.activity.MessageActivity;
 import com.juttec.goldmetal.activity.PublishTopicActivity;
 import com.juttec.goldmetal.adapter.MomentRecyclerViewAdapter;
@@ -202,9 +203,12 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
         mHeadPhoto = (CircleImageView) myHead.findViewById(R.id.iv_head_photo);
         mHeadPhoto.setOnClickListener(this);
-        if (!"null".equals(app.getUserInfoBean().getUserPhoto())) {
-            ImageLoader.getInstance().displayImage(app.getImgBaseUrl() + app.getUserInfoBean().getUserPhoto(), mHeadPhoto);
+        if (app.isLogin()) {
+            if (!"null".equals(app.getUserInfoBean().getUserPhoto())) {
+                ImageLoader.getInstance().displayImage(app.getImgBaseUrl() + app.getUserInfoBean().getUserPhoto(), mHeadPhoto);
+            }
         }
+
 
 
         //init tabs
@@ -280,7 +284,14 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
             case R.id.iv_head_photo:
                 //设置头像
-                setHeadPhoto();
+                if (app.isLogin()) {
+                    setHeadPhoto();
+                } else {
+                    ToastUtil.showShort(getActivity(),"请先登录再进行操作");
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+
+                }
+
                 break;
         }
     }
@@ -519,7 +530,11 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     private void getInfo(int page, String type) {
         RequestParams params = new RequestParams();
 
-        params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
+        if (app.isLogin()) {
+            params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
+        } else {
+            params.addBodyParameter("userId", "1");
+        }
         params.addBodyParameter("pageIndex", page + "");
         params.addBodyParameter("dyType", type);
 

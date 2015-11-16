@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
 
         init();
 
-        viewPager.setCurrentItem(2);
+
     }
 
 
@@ -89,10 +89,16 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         // 自定义tablayout布局
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
+
+
             if (tab != null) {
                 tab.setCustomView(myFragmentPagerAdapter.getTabView(i));
             }
         }
+
+
+        tabLayout.getTabAt(0).select();
+
     }
 
     @Override

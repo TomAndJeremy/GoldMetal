@@ -41,7 +41,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.MainActivity"
+
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -75,7 +76,7 @@
             android:name=".activity.FindBcakPWDActivity"
             android:label="FindBcakPWDActivity" />
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="MainActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
