@@ -11,115 +11,115 @@ import java.util.List;
 public class RSIEntity {
 
 
-    private List<Double> RSI1;
-    private List<Double> RSI2;
-    private List<Double> RSI3;
+	private List<Double> RSI1;
+	private List<Double> RSI2;
+	private List<Double> RSI3;
 
 
-    private List<Double> diffs;//当日差值
+	private List<Double> diffs;//当日差值
 
 
-    private int mParameter;//影响RSI指标变化的 变量 默认值为：6 12 24  （范围：2-99）
+	private int mParameter;//影响RSI指标变化的 变量 默认值为：6 12 24  （范围：2-99）
 
-    public RSIEntity(List<KChartInfo.ResultEntity> OHLCData) {
-        RSI1 = calRSI(OHLCData, 6);
-        RSI2 = calRSI(OHLCData, 12);
-        RSI3 = calRSI(OHLCData, 24);
-    }
+	public RSIEntity(List<KChartInfo.ResultEntity> OHLCData) {
+		RSI1 = calRSI(OHLCData, 6);
+		RSI2 = calRSI(OHLCData, 12);
+		RSI3 = calRSI(OHLCData, 24);
+	}
 
-    private List<Double> calRSI(List<KChartInfo.ResultEntity> OHLCData,int day){
-
-
-
-        diffs = new ArrayList<Double>();
+	private List<Double> calRSI(List<KChartInfo.ResultEntity> OHLCData,int day){
 
 
-        List<Double> rsi = new ArrayList<Double>();
+
+		diffs = new ArrayList<Double>();
 
 
-        mParameter = day;
+		List<Double> rsi = new ArrayList<Double>();
 
 
-        double close = 0;
-        double open = 0;
+		mParameter = day;
 
 
-        double riseTotal = 0.0;
-        double fallTotal = 0.0;
+		double close = 0;
+		double open = 0;
 
-        double value = 0.0;
+
+		double riseTotal = 0.0;
+		double fallTotal = 0.0;
+
+		double value = 0.0;
 
 
 //		A为N日内收盘价的正数之和，B为N日内收盘价的负数之和乘以（—1）
 //		这样，A和B均为正，将A、B代入RSI计算公式，
 //		则 RSI（N）=A÷（A＋B）×100
 
-        if (OHLCData != null && OHLCData.size() > 0) {
+		if (OHLCData != null && OHLCData.size() > 0) {
 
-            for (int i = OHLCData.size() - 1; i >= 0; i--) {
-                close = Double.parseDouble(OHLCData.get(i).getClose());
-                open = Double.parseDouble(OHLCData.get(i).getOpen());
+			for (int i = OHLCData.size() - 1; i >= 0; i--) {
+				close = Double.parseDouble(OHLCData.get(i).getClose());
+				open = Double.parseDouble(OHLCData.get(i).getOpen());
 
-                diffs.add(close - open);
-                riseTotal = 0;
-                fallTotal = 0;
-                if (OHLCData.size() - i <= mParameter) {
-                    //所求天数 <= mParameter 时
-                    for (int j = diffs.size() - 1; j >= 0; j--) {
-
-
-                        if (diffs.get(j) >= 0) {
-                            //上涨 总数
-                            riseTotal += diffs.get(j);
-
-                        } else {
-                            //下跌 总数
-                            fallTotal += diffs.get(j);
-                        }
-                    }
+				diffs.add(close - open);
+				riseTotal = 0;
+				fallTotal = 0;
+				if (OHLCData.size() - i <= mParameter) {
+					//所求天数 <= mParameter 时
+					for (int j = diffs.size() - 1; j >= 0; j--) {
 
 
-                } else {
-                    //所求天数 > mParameter 时
+						if (diffs.get(j) >= 0) {
+							//上涨 总数
+							riseTotal += diffs.get(j);
+
+						} else {
+							//下跌 总数
+							fallTotal += diffs.get(j);
+						}
+					}
 
 
-                    for (int a = diffs.size() - 1; a >= diffs.size() - mParameter; a--) {
-                        if (diffs.get(a) >= 0) {
-                            //上涨 总数
-                            riseTotal += diffs.get(a);
-
-                        } else {
-                            //下跌 总数
-                            fallTotal += diffs.get(a);
-                        }
-                    }
-
-                }
-
-                value = riseTotal / (riseTotal - fallTotal) * 100;
-
-                rsi.add(value);
-
-            }
-
-            Collections.reverse(rsi);
-        }
-        return rsi;
-
-    }
+				} else {
+					//所求天数 > mParameter 时
 
 
-    public List<Double> getRSI1() {
-        return RSI1;
-    }
+					for (int a = diffs.size() - 1; a >= diffs.size() - mParameter; a--) {
+						if (diffs.get(a) >= 0) {
+							//上涨 总数
+							riseTotal += diffs.get(a);
 
-    public List<Double> getRSI2() {
-        return RSI2;
-    }
+						} else {
+							//下跌 总数
+							fallTotal += diffs.get(a);
+						}
+					}
 
-    public List<Double> getRSI3() {
-        return RSI3;
-    }
+				}
+
+				value = riseTotal / (riseTotal - fallTotal) * 100;
+
+				rsi.add(value);
+
+			}
+
+			Collections.reverse(rsi);
+		}
+		return rsi;
+
+	}
+
+
+	public List<Double> getRSI1() {
+		return RSI1;
+	}
+
+	public List<Double> getRSI2() {
+		return RSI2;
+	}
+
+	public List<Double> getRSI3() {
+		return RSI3;
+	}
 
 
 }
