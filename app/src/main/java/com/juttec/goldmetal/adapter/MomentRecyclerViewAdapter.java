@@ -1,5 +1,6 @@
 package com.juttec.goldmetal.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -31,6 +32,7 @@ import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
 import com.juttec.goldmetal.utils.EmojiWindow;
 
+import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -56,6 +58,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
     private ReplyPopupWindow replyPopupWindow;
 
+    private final static int LOGIN = 2222;//登陆后刷新
 
     // 数据集
     ArrayList<DynamicEntityList> entityList;
@@ -584,7 +587,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     private boolean checkNameAndPhoto() {
         if (!app.isLogin()) {
             ToastUtil.showShort(context, "请先登录");
-            context.startActivity(new Intent(context, LoginActivity.class));
+            ((Activity)context).startActivityForResult(new Intent(context, LoginActivity.class), LOGIN);
             return false;
         }
 

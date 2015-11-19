@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.ImagePagerActivity;
+import com.juttec.goldmetal.activity.LoginActivity;
 import com.juttec.goldmetal.activity.MomentPersonalActivity;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.DyCommentReplyBean;
@@ -175,7 +176,10 @@ private EmojiWindow readEmojiWindow;
                 holder.thumb.setClickable(false);
 
                 //点赞或  取消赞 接口
-                supportOrCancle(position, mLists.get(position).getId(), holder.thumb, holder.supportName);
+                if (isLogin()) {
+
+                    supportOrCancle(position, mLists.get(position).getId(), holder.thumb, holder.supportName);
+                }
             }
         });
 
@@ -191,7 +195,9 @@ private EmojiWindow readEmojiWindow;
                     @Override
                     public void onClickSend(String content) {
                         //评论接口
-                        comment(position, mLists.get(position).getId(), content);
+                        if (isLogin()) {
+                            comment(position, mLists.get(position).getId(), content);
+                        }
                     }
                 });
             }
@@ -496,7 +502,19 @@ private EmojiWindow readEmojiWindow;
         });
     }
 
+    private boolean isLogin() {
+        if (!app.isLogin()) {
+            ToastUtil.showShort(mContext,"请先登录再进行操作");
+           mContext. startActivity(new Intent(mContext, LoginActivity.class));
+            return false;
+        }
 
+        if (app.getUserInfoBean().getUserNickName() == null) {
+            ToastUtil.showShort(mContext,"请先设置昵称再进行操作");
+            return false;
+        }
+        return true;
+    }
 }
 
 

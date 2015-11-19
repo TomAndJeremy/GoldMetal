@@ -5,7 +5,7 @@ import java.util.List;
 public class MALineEntity {
 
 	/** 线表示数据 */
-	private List<Float> lineData;
+	private List<Double> lineData;
 
 	/** 线的标题 */
 	private String title;
@@ -17,17 +17,17 @@ public class MALineEntity {
 		super();
 	}
 
-	public MALineEntity(List<Float> lineData, String title, int lineColor) {
+	public MALineEntity(List<Double> lineData, String title, int lineColor) {
 		this.lineData = lineData;
 		this.title = title;
 		this.lineColor = lineColor;
 	}
 
-	public List<Float> getLineData() {
+	public List<Double> getLineData() {
 		return lineData;
 	}
 
-	public void setLineData(List<Float> lineData) {
+	public void setLineData(List<Double> lineData) {
 		this.lineData = lineData;
 	}
 

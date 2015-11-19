@@ -95,6 +95,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Wechat-2.6.3" level="project" />
+    <orderEntry type="library" exported="" name="realm-android-0.84.1" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Wechat-Moments-2.6.3" level="project" />
     <orderEntry type="library" exported="" name="support-v4-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="MobTools" level="project" />

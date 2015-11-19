@@ -1,6 +1,10 @@
 package com.juttec.goldmetal.bean.chartentity;
 
+import com.juttec.goldmetal.utils.KChartUtils;
+import com.juttec.goldmetal.utils.LogUtil;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -11,17 +15,17 @@ import java.util.List;
 public class BOLLEntity {
 
 
-	//上轨线UP是UP数值的连线，用黄色线表示；
-	// 中轨线MB是MB数值的连线，用白色线表示；
-	// 下轨线DN是DN数值的连线，用紫色线表示
+    //上轨线UP是UP数值的连线，用黄色线表示；
+    // 中轨线MB是MB数值的连线，用白色线表示；
+    // 下轨线DN是DN数值的连线，用紫色线表示
 
-	private List<Double> UPs;
-	private List<Double> MBs;
-	private List<Double> DNs;
+    private List<Double> UPs;
+    private List<Double> MBs;
+    private List<Double> DNs;
 
 
 	/*（1）计算MA
-			MA=N日内的收盘价之和÷N
+            MA=N日内的收盘价之和÷N
 	 （2）计算标准差MD
 			MD=平方根N日的（C－MA）的两次方之和除以N
 	 （3）计算MB、UP、DN线
@@ -30,107 +34,84 @@ public class BOLLEntity {
 			DN=MB－k×MD
 	（K为参数，可根据股票的特性来做相应的调整，一般默认为2）*/
 
-	private int k = 2; //影响BOLL指标变化的 变量 默认值为：2（范围：2-99）
-	private int N = 20;//N日内的收盘价之和中的N  默认值为20
+    private int k = 2; //影响BOLL指标变化的 变量 默认值为：2（范围：2-99）
+    private int N = 20;//N日内的收盘价之和中的N  默认值为20
 
 
-	public BOLLEntity(List<KChartInfo.ResultEntity> OHLCData) {
-		UPs = new ArrayList<Double>();
-		MBs = new ArrayList<Double>();
-		DNs = new ArrayList<Double>();
+    public BOLLEntity(List<KChartInfo.ResultEntity> OHLCData) {
 
-		List<Double> ups = new ArrayList<Double>();
-		List<Double> mbs = new ArrayList<Double>();
-		List<Double> dns = new ArrayList<Double>();
+        List<Double> closes = new ArrayList<>();
+        for (int i = OHLCData.size() - 1; i >= 0; i--) {
+            closes.add(Double.parseDouble(OHLCData.get(i).getClose()));
+        }
 
-		List<Double> mas = new ArrayList<Double>();//ma数据的集合
-
-
-		List<Double> closes= new ArrayList<Double>();//收盘价的集合
-
-		double close = 0.0;//收盘价
-		double closeTotal = 0.0;//总收盘价
-
-		double ma = 0.0;//N日内的收盘价之和÷N
-		double md = 0.0;//  标准差   MD=平方根N日的（C－MA）的两次方之和除以N
-
-		double MB = 0.0;
-		double UP = 0.0;
-		double DN = 0.0;
+        double f1 = 0.0;
+        MBs = KChartUtils.initMA(closes, N);
+        UPs = new ArrayList<>();
+        DNs = new ArrayList<>();
 
 
-		if (OHLCData != null && OHLCData.size() > 0) {
+        double ma = 0.0, avedev, devsq;
+        List<Double> list = new ArrayList<>();
+        for (int i = 0; i < closes.size(); i++) {
+            f1 = f1 + closes.get(i);
+            if (i >= 19) {
+                f1 = f1 - closes.get(i - 19);
+                ma = f1 / 19;
+            } else {
+                continue;
+            }
+            avedev = 0.0;
+            devsq = 0.0;
+            for (int p = i; p > i - 19 + 1; p--) {
+                avedev = avedev + Math.abs(closes.get(p) - ma);
+                devsq = devsq + (closes.get(p) - ma) * (closes.get(p) - ma);
 
-			for (int i = OHLCData.size() - 1; i >= 0; i--) {
-				close = Double.parseDouble(OHLCData.get(i).getClose());
-				closes.add(close);
+            }
 
-				closeTotal = closeTotal + close;
+            list.add(Math.sqrt(devsq / (19 - 1)));
 
+            if (i == 19) {
+                for (int q = 19 - 1; q > -1; q--) {
+                    list.add(0, list.get(list.size()-1));
+                }
+            }
 
-				//计算MA  与  MD
-				if(OHLCData.size() - i < N){
-					//所求天数 < N时
-					ma = closeTotal/(OHLCData.size() - i);
-					double sum = 0.0;
-					sum = sum+ (close - ma)*(close - ma);
-					md = Math.sqrt(sum/(OHLCData.size() - i));
+        }
 
-				}else{
-					double mCloseTotal = closeTotal;
-					//所求天数 >= N时
-					for(int j = OHLCData.size() - i-N;j>0;j--){
-						mCloseTotal = mCloseTotal - closes.get(j);
-					}
-
-					ma = mCloseTotal/N;
-					double sum = 0.0;
-					sum = sum+ (close - ma)*(close - ma);
-					md = Math.sqrt(sum/N);
-				}
-
-				mas.add(ma);
-
-				//第一天的MB值  设置为 第一天的MA值
-				if(i ==OHLCData.size() - 1 ){
-					MB = mas.get(0);
-
-				}else{
-					MB = mas.get(OHLCData.size()-i-2);
-				}
-
-				UP = MB + k*md;
-				DN = MB - k*md;
-
-				mbs.add(MB);
-				ups.add(UP);
-				dns.add(DN);
-			}
+        for (int i = 0; i < MBs.size(); i++) {
 
 
-			for (int i = mbs.size() - 1; i >= 0; i--) {
-				MBs.add(mbs.get(i));
-				UPs.add(ups.get(i));
-				DNs.add(DNs.get(i));
-			}
-		}
+            UPs.add(MBs.get(i) + list.get(i) * k);
+            DNs.add(MBs.get(i) - list.get(i) * k);
 
-	}
+        }
 
 
 
-	public List<Double> getUPs() {
-		return UPs;
-	}
+        Collections.reverse(MBs);
+        Collections.reverse(UPs);
+        Collections.reverse(DNs);
+    }
 
-	public List<Double> getMBs() {
-		return MBs;
-	}
+    public List<Double> getUPs() {
+        return UPs;
 
-	public List<Double> getDNs() {
-		return DNs;
-	}
+    }
+
+    public List<Double> getMBs() {
+        return MBs;
+    }
+
+    public List<Double> getDNs() {
+        return DNs;
+    }
 
 
 
 }
+
+
+
+
+

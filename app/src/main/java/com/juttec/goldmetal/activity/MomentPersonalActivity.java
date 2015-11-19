@@ -143,7 +143,11 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
             @Override
             public void onClick(View v) {
                 //设置关注或取消关注接口
-                setFocusOr();
+
+                if (isLogin()) {
+                    setFocusOr();
+                }
+
             }
         });
     }
@@ -364,6 +368,18 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
 
     }
 
+    private boolean isLogin() {
+        if (!app.isLogin()) {
+            ToastUtil.showShort(this,"请先登录再进行操作");
+            startActivity(new Intent(this, LoginActivity.class));
+            return false;
+        }
 
+        if (app.getUserInfoBean().getUserNickName() == null) {
+            ToastUtil.showShort(this,"请先设置昵称再进行操作");
+            return false;
+        }
+        return true;
+    }
 
 }

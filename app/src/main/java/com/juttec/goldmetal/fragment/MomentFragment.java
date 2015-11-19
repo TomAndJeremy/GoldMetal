@@ -101,6 +101,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
     private final static int REFRESH = 1111;//发表动态后刷新
+     private final static int LOGIN = 2222;//登陆后刷新
     private final static int REQUEST_CODE_CAMERA = 333;//照相的返回码
     private final static int REQUEST_CODE_ALBUM = 444;//相册的返回码
     SwipeRefreshLayout refreshLayout;
@@ -288,7 +289,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                     setHeadPhoto();
                 } else {
                     ToastUtil.showShort(getActivity(),"请先登录再进行操作");
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    startActivityForResult(new Intent(getActivity(), LoginActivity.class), LOGIN);
 
                 }
 
@@ -389,6 +390,14 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                 recyclerView.scrollToPosition(0);
 
                 break;
+            case LOGIN:
+                if (app.isLogin()) {
+                    if (!"null".equals(app.getUserInfoBean().getUserPhoto())) {
+                        LogUtil.e("1233333");
+                        ImageLoader.getInstance().displayImage(app.getImgBaseUrl() + app.getUserInfoBean().getUserPhoto(), mHeadPhoto);
+                    }
+                }
+                break;
         }
 
     }
@@ -414,6 +423,10 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     //判断用户是否编辑了个人的昵称和头像
     private boolean checkNameAndPhoto() {
+        if (!app.isLogin()) {
+            getActivity().startActivityForResult(new Intent(getActivity(), LoginActivity.class), LOGIN);
+            return false;
+        }
         if ("".equals(app.getUserInfoBean().getUserNickName())) {
             //设置昵称
             mDialog.builder()
@@ -603,5 +616,9 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        LogUtil.e("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+    }
 }

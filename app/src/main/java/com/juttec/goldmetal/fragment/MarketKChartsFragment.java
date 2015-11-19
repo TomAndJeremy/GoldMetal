@@ -98,7 +98,7 @@ public class MarketKChartsFragment extends Fragment {
                         break;
                     } else {
                         mMyChartsView.setOHLCData(datas);
-                        //mMyChartsView.setLowerChartTabTitles(new String[]{"MACD", "KDJ", "RSI"});
+
                         mMyChartsView.postInvalidate();
                         break;
                     }

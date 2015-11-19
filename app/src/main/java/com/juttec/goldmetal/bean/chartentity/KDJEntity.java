@@ -73,7 +73,7 @@ public class KDJEntity {
 				if (high != low) {
 					rSV = (Double.parseDouble( oHLCEntity.getClose()) - low) / (high - low) * 100;
 
-                    Log.e("jeremy",OHLCData.size()- i + "   rsv   " + rSV);
+
                 }
 
 
@@ -102,12 +102,7 @@ public class KDJEntity {
 				Js.add(js.get(i));
 			}
 		}
-        for (int i = 0; i < ks.size(); i++) {
-            LogUtil.e("ks ==" + ks.get(i));
-            LogUtil.e("DS ==" + ds.get(i));
-            LogUtil.e("js ==" + js.get(i));
-            LogUtil.e(i+"+++++++++++++++++++++++++++++++++++++++++++");
-        }
+
     }
 
 

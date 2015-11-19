@@ -8,13 +8,14 @@ import android.util.AttributeSet;
 import android.util.FloatMath;
 import android.view.MotionEvent;
 
+import com.juttec.goldmetal.bean.chartentity.BOLLEntity;
+import com.juttec.goldmetal.bean.chartentity.DMAEntity;
 import com.juttec.goldmetal.bean.chartentity.KChartInfo;
 import com.juttec.goldmetal.bean.chartentity.KDJEntity;
 import com.juttec.goldmetal.bean.chartentity.MACDEntity;
 import com.juttec.goldmetal.bean.chartentity.MALineEntity;
 import com.juttec.goldmetal.bean.chartentity.RSIEntity;
 import com.juttec.goldmetal.utils.DateUtil;
-import com.juttec.goldmetal.utils.LogUtil;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -59,7 +60,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
     /**
      * 最小可识别的移动距离
      */
-    private final static int MIN_MOVE_DISTANCE = 15;
+    private final static int MIN_MOVE_DISTANCE = 7;
 
     /**
      * Candle宽度
@@ -101,7 +102,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
     /**
      * MA数据
      */
-   // private List<MALineEntity> MALineData;
+    // private List<MALineEntity> MALineData;
 
     /**
      * SMA数据
@@ -118,6 +119,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
     MACDEntity mMACDData;
     KDJEntity mKDJData;
     RSIEntity mRSIData;
+    DMAEntity mDMAEntity;
 
     public MyKChartsView(Context context) {
         super(context);
@@ -169,8 +171,8 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
 
         drawUpperRegion(canvas);
         drawLowerRegion(canvas);
-         drawTitles(canvas);
-         drawCandleDetails(canvas);
+        drawTitles(canvas);
+        drawCandleDetails(canvas);
     }
 
     private void drawLowerRegion(Canvas canvas) {
@@ -185,7 +187,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
         yellowPaint.setColor(Color.YELLOW);
         Paint magentaPaint = new Paint();
         magentaPaint.setColor(Color.MAGENTA);
-         Paint greenPaint = new Paint();
+        Paint greenPaint = new Paint();
         greenPaint.setColor(Color.GREEN);
 
         Paint textPaint = new Paint();
@@ -358,23 +360,32 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
             for (int i = mDataStartIndext; i < mDataStartIndext + mShowDataNum && i < Rsi1.size(); i++) {
 
                 if (i != mDataStartIndext) {
-                    canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
-                                    * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
-                            (float) ((high - Rsi1.get(i)) * rate) + lowertop, viewWidth - 2
-                                    - (float) mCandleWidth * (i - mDataStartIndext)
-                                    + (float) mCandleWidth / 2, line1, whitePaint);
 
-                    canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
-                                    * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
-                            (float) ((high - Rsi2.get(i)) * rate) + lowertop, viewWidth - 2
-                                    - (float) mCandleWidth * (i - mDataStartIndext)
-                                    + (float) mCandleWidth / 2, line2, greenPaint);
 
-                    canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
-                                    * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
-                            (float) ((high - Rsi3.get(i)) * rate) + lowertop, viewWidth - 2
-                                    - (float) mCandleWidth * (i - mDataStartIndext)
-                                    + (float) mCandleWidth / 2, line3, yellowPaint);
+                    if (Rsi1.get(i) != 0.0) {
+                        canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
+                                        * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
+                                (float) ((high - Rsi1.get(i)) * rate) + lowertop, viewWidth - 2
+                                        - (float) mCandleWidth * (i - mDataStartIndext)
+                                        + (float) mCandleWidth / 2, line1, whitePaint);
+                    }
+
+
+                    if (Rsi2.get(i) != 0.0) {
+                        canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
+                                        * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
+                                (float) ((high - Rsi2.get(i)) * rate) + lowertop, viewWidth - 2
+                                        - (float) mCandleWidth * (i - mDataStartIndext)
+                                        + (float) mCandleWidth / 2, line2, yellowPaint);
+                    }
+
+                    if (Rsi3.get(i) != 0.0) {
+                        canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
+                                        * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
+                                (float) ((high - Rsi3.get(i)) * rate) + lowertop, viewWidth - 2
+                                        - (float) mCandleWidth * (i - mDataStartIndext)
+                                        + (float) mCandleWidth / 2, line3, magentaPaint);
+                    }
                 }
                 line1 = (float) ((high - Rsi1.get(i)) * rate) + lowertop;
                 line2 = (float) ((high - Rsi2.get(i)) * rate) + lowertop;
@@ -388,6 +399,66 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
 
             canvas.drawText(new DecimalFormat("#.##").format(low), 2, lowertop + lowerHight,
                     textPaint);
+
+
+        } else if (mTabTitle.trim().equalsIgnoreCase("DMA")) {
+
+
+            List<Double> DIF = mDMAEntity.getDIF();
+            List<Double> AMA = mDMAEntity.getAMA();
+
+
+            double low = DIF.get(mDataStartIndext);
+            double high = low;
+            double rate = 0.0;
+            for (int i = mDataStartIndext; i < mDataStartIndext + mShowDataNum && i < DIF.size(); i++) {
+                low = low < DIF.get(i) ? low : DIF.get(i);
+                low = low < AMA.get(i) ? low : AMA.get(i);
+
+                high = high > DIF.get(i) ? high : DIF.get(i);
+                high = high > AMA.get(i) ? high : AMA.get(i);
+            }
+            rate = lowerHight / (high - low);
+
+            // 绘制白、黄、紫线
+            float line1 = 0.0f;
+            float line2 = 0.0f;
+            for (int i = mDataStartIndext; i < mDataStartIndext + mShowDataNum && i < DIF.size(); i++) {
+
+                if (i != mDataStartIndext) {
+
+                    if (DIF.size() - i >= 50) {
+                        canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
+                                        * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
+                                (float) ((high - DIF.get(i)) * rate) + lowertop, viewWidth - 2
+                                        - (float) mCandleWidth * (i - mDataStartIndext)
+                                        + (float) mCandleWidth / 2, line1, whitePaint);
+
+                    }
+
+                    if (DIF.size() - i >= 59) {
+                        canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
+                                        * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
+                                (float) ((high - AMA.get(i)) * rate) + lowertop, viewWidth - 2
+                                        - (float) mCandleWidth * (i - mDataStartIndext)
+                                        + (float) mCandleWidth / 2, line2, greenPaint);
+
+
+                    }
+
+                }
+                line1 = (float) ((high - DIF.get(i)) * rate) + lowertop;
+                line2 = (float) ((high - AMA.get(i)) * rate) + lowertop;
+
+            }
+
+            canvas.drawText(new DecimalFormat("#.##").format(high), 2, lowertop
+                    + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
+            canvas.drawText(new DecimalFormat("#.##").format((high + low) / 2), 2, lowertop
+                    + lowerHight / 2 + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
+
+            canvas.drawText(new DecimalFormat("#.##").format(low), 2, lowertop
+                    + lowerHight, textPaint);
 
 
         }
@@ -510,7 +581,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
     }
 
     private void zoomOut() {
-        mShowDataNum--;
+        mShowDataNum++;
         if (mShowDataNum < MIN_CANDLE_NUM) {
             mShowDataNum = MIN_CANDLE_NUM;
         }
@@ -531,8 +602,8 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
         }
     }
 
-    private float SMA(List<KChartInfo.ResultEntity> entityList, int position, int day, int weight) {
-        float close = Float.parseFloat(entityList.get(position).getClose());
+    private Double SMA(List<KChartInfo.ResultEntity> entityList, int position, int day, int weight) {
+        Double close = Double.parseDouble(entityList.get(position).getClose());
 
 
         if (day == 1) {
@@ -547,14 +618,14 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
 
     }
 
-    private List<Float> initSMA(List<KChartInfo.ResultEntity> entityList, int days, int weight) {
+    private List<Double> initSMA(List<KChartInfo.ResultEntity> entityList, int days, int weight) {
         if (days < 2 || entityList == null || entityList.size() <= 0) {
             return null;
         }
-        List<Float> SMAValues = new ArrayList<Float>();
-        float close = Float.parseFloat(entityList.get(entityList.size() - 1).getClose());
+        List<Double> SMAValues = new ArrayList<Double>();
+        double close = Double.parseDouble(entityList.get(entityList.size() - 1).getClose());
 
-        float result = 0;
+        Double result = 0.0;
         for (int i = 0; i < entityList.size(); i++) {
 
             if (i > entityList.size() - days) {
@@ -567,39 +638,6 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
         return SMAValues;
     }
 
-    /**
-     * 初始化MA值，从数组的最后一个数据开始初始化
-     *
-     * @param entityList
-     * @param days
-     * @return
-     */
-    private List<Float> initMA(List<KChartInfo.ResultEntity> entityList, int days) {
-        if (days < 2 || entityList == null || entityList.size() <= 0) {
-            return null;
-        }
-        List<Float> MAValues = new ArrayList<Float>();
-
-        float sum = 0;
-        float avg = 0;
-        for (int i = entityList.size() - 1; i >= 0; i--) {
-            float close = Float.parseFloat(entityList.get(i).getClose());
-            if (i > entityList.size() - days) {
-                sum = sum + close;
-                avg = sum / (entityList.size() - i);
-            } else {
-                sum = close + avg * (days - 1);
-                avg = sum / days;
-            }
-            MAValues.add(avg);
-        }
-
-        List<Float> result = new ArrayList<Float>();
-        for (int j = MAValues.size() - 1; j >= 0; j--) {
-            result.add(MAValues.get(j));
-        }
-        return result;
-    }
 
     public List<KChartInfo.ResultEntity> getOHLCData() {
         return mOHLCData;
@@ -610,37 +648,37 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
             return;
         }
         this.mOHLCData = OHLCData;
-        initMALineData();
+        //initMALineData();
         initSMALineData();
         mMACDData = new MACDEntity(mOHLCData);
         mKDJData = new KDJEntity(mOHLCData);
         mRSIData = new RSIEntity(mOHLCData);
-
+        mDMAEntity = new DMAEntity(mOHLCData);
         setCurrentData();
         postInvalidate();
     }
 
-    private void initMALineData() {
+   /* private void initMALineData() {
         MALineEntity MA5 = new MALineEntity();
         MA5.setTitle("MA5");
         MA5.setLineColor(Color.WHITE);
-        MA5.setLineData(initMA(mOHLCData, 5));
+        MA5.setLineData(KChartUtils.initMA(mOHLCData, 5));
 
         MALineEntity MA10 = new MALineEntity();
         MA10.setTitle("MA10");
         MA10.setLineColor(Color.CYAN);
-        MA10.setLineData(initMA(mOHLCData, 10));
+        MA10.setLineData(KChartUtils.initMA(mOHLCData, 10));
 
         MALineEntity MA20 = new MALineEntity();
         MA20.setTitle("MA20");
         MA20.setLineColor(Color.BLUE);
-        MA20.setLineData(initMA(mOHLCData, 20));
-
+        MA20.setLineData(KChartUtils.initMA(mOHLCData, 20));
+*/
      /*   MALineData = new ArrayList<MALineEntity>();
         MALineData.add(MA5);
         MALineData.add(MA10);
-        MALineData.add(MA20);*/
-    }
+        MALineData.add(MA20);
+    }*/
 
     private void initSMALineData() {
         MALineEntity MA5 = new MALineEntity();
@@ -696,13 +734,13 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
         // Y轴Titles
         canvas.drawText(new DecimalFormat("#.##").format(mMinPrice), 1, UPER_CHART_BOTTOM - 1,
                 textPaint);
-        canvas.drawText(new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 4),
+        canvas.drawText(new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 6),
                 1, UPER_CHART_BOTTOM - getLatitudeSpacing() - 1, textPaint);
         canvas.drawText(
-                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 4 * 2), 1,
+                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 6 * 2), 1,
                 UPER_CHART_BOTTOM - getLatitudeSpacing() * 2 - 1, textPaint);
         canvas.drawText(
-                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 4 * 3), 1,
+                new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 6 * 3), 1,
                 UPER_CHART_BOTTOM - getLatitudeSpacing() * 3 - 1, textPaint);
         canvas.drawText(
                 new DecimalFormat("#.##").format(mMinPrice + (mMaxPrice - mMinPrice) / 6 * 4), 1,
@@ -730,7 +768,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
 
             canvas.drawText(
                     String.valueOf(mOHLCData.get(mDataStartIndext + mShowDataNum / 2).getDate()),
-                    getWidth() / 2 - 4.5f * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM
+                    getWidth() / 2 - 2.5f * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM
                             + DEFAULT_AXIS_TITLE_SIZE, textPaint);
             canvas.drawText(DateUtil.formatDate(mOHLCData.get(mDataStartIndext + (int) (mShowDataNum * 1.0 / (DEFAULT_LOGITUDE_NUM + 1) * 4)).getDate()), getWidth() - p * 4 - 4 - 2.5f
                     * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
@@ -742,6 +780,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
             e.printStackTrace();
         }
     }
+
     private void drawUpperRegion(Canvas canvas) {
         /** 绘制蜡烛图 **/
         Paint redPaint = new Paint();
@@ -751,7 +790,32 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
         int width = getWidth();
         mCandleWidth = (width - 4) / 10.0 * 10.0 / mShowDataNum;
         double rate = (getUperChartHeight() - 2) / (mMaxPrice - mMinPrice);
+
+
+        if (mUpTitle.trim().equalsIgnoreCase("BOLL")) {
+            BOLLEntity bollEntity = new BOLLEntity(mOHLCData);
+            List<Double> lows = bollEntity.getDNs();
+            List<Double> highs = bollEntity.getUPs();
+
+            mMinPrice = lows.get(mDataStartIndext);
+            mMaxPrice = highs.get(mDataStartIndext);
+
+
+            for (int i = mDataStartIndext; i < mDataStartIndext + mShowDataNum && i < lows.size(); i++) {
+                if (lows.get(i) > Double.MIN_VALUE) {
+                    mMinPrice = mMinPrice < lows.get(i) ? mMinPrice : lows.get(i);
+
+                }
+                mMaxPrice = mMaxPrice > highs.get(i) ? mMaxPrice : highs.get(i);
+            }
+
+            rate = (getUperChartHeight() - 2) / (mMaxPrice - mMinPrice);
+        }
+
+
         for (int i = 0; i < mShowDataNum && mDataStartIndext + i < mOHLCData.size(); i++) {
+
+
             KChartInfo.ResultEntity entity = mOHLCData.get(mDataStartIndext + i);
             float open = (float) ((mMaxPrice - Double.parseDouble(entity.getOpen())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);
             float close = (float) ((mMaxPrice - Double.parseDouble(entity.getClose())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);
@@ -806,13 +870,14 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
                 }
             }
         } else if (mUpTitle.trim().equalsIgnoreCase("BOLL")) {
-            String [] fileName=new String[]{"mid","upper","lower"};//白，黄，红
-            int[] color = new int[]{Color.WHITE, Color.YELLOW, Color.RED};
+            String[] fileName = new String[]{"upper", "mid", "lower"};//白，黄，红
+            int[] color = new int[]{Color.YELLOW, Color.WHITE, Color.MAGENTA};
 
-            for (int j = 0; j < fileName.length; j++) {
+            BOLLEntity bollEntity = new BOLLEntity(mOHLCData);
+            List<Double>[] lists = new List[]{bollEntity.getUPs(), bollEntity.getMBs(), bollEntity.getDNs()};
 
-                List<Double> list = getFromAssets(fileName[j]);
 
+            for (int j = 0; j < lists.length; j++) {
 
                 float startX = 0;
                 float startY = 0;
@@ -822,31 +887,32 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
                 canvas.drawText(
                         fileName[j]
                                 + "="
-                                + new DecimalFormat("#.##").format(list.get(
+                                + new DecimalFormat("#.##").format(lists[j].get(
                                 mDataStartIndext)), 2 + MATitleWidth * j,
                         DEFAULT_AXIS_TITLE_SIZE, paint);
                 for (int i = 0; i < mShowDataNum
-                        && mDataStartIndext + i < list.size(); i++) {
+                        && mDataStartIndext + i < lists[j].size(); i++) {
 
-                    LogUtil.e(fileName[j]+"---------"+list.get(i));
-                    if (i != 0) {
+
+                    if (i != 0 && lists[1].get(mDataStartIndext + i) > Double.MIN_VALUE) {//中线要大于Double.MIN_VALUE
                         canvas.drawLine(
                                 startX,
                                 startY + DEFAULT_AXIS_TITLE_SIZE + 4,
                                 (float) (width - 2 - mCandleWidth * i - mCandleWidth * 0.5f),
-                                (float) ((mMaxPrice - list
+                                (float) ((mMaxPrice - lists[j]
                                         .get(mDataStartIndext + i)) * rate + DEFAULT_AXIS_TITLE_SIZE + 4),
                                 paint);
                     }
                     startX = (float) (width - 2 - mCandleWidth * i - mCandleWidth * 0.5f);
-                    startY = (float) ((mMaxPrice - list.get(mDataStartIndext + i)) * rate);
+                    startY = (float) ((mMaxPrice - lists[j].get(mDataStartIndext + i)) * rate);
                 }
             }
         }
 
     }
+
     /**
-     * 绘制蜡烛图
+     * 绘制详情文字
      **/
     private void drawCandleDetails(Canvas canvas) {
         if (showDetails) {

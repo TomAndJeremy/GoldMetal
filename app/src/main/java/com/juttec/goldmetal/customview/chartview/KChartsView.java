@@ -837,8 +837,8 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         }
     }
 
-    private float SMA(List<KChartInfo.ResultEntity> entityList, int position, int day, int weight) {
-        float close = Float.parseFloat(entityList.get(position).getClose());
+    private Double SMA(List<KChartInfo.ResultEntity> entityList, int position, int day, int weight) {
+        Double close = Double.parseDouble(entityList.get(position).getClose());
 
 
         if (day == 1) {
@@ -853,14 +853,14 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
 
     }
 
-    private List<Float> initSMA(List<KChartInfo.ResultEntity> entityList, int days, int weight) {
+    private List<Double> initSMA(List<KChartInfo.ResultEntity> entityList, int days, int weight) {
         if (days < 2 || entityList == null || entityList.size() <= 0) {
             return null;
         }
-        List<Float> SMAValues = new ArrayList<Float>();
-        float close = Float.parseFloat(entityList.get(entityList.size() - 1).getClose());
+        List<Double> SMAValues = new ArrayList<Double>();
+        Double close = Double.parseDouble(entityList.get(entityList.size() - 1).getClose());
 
-        float result = 0;
+        Double result = 0.0;
         for (int i = 0; i < entityList.size(); i++) {
 
             if (i > entityList.size() - days) {
@@ -880,16 +880,16 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
      * @param days
      * @return
      */
-    private List<Float> initMA(List<KChartInfo.ResultEntity> entityList, int days) {
+    private List<Double> initMA(List<KChartInfo.ResultEntity> entityList, int days) {
         if (days < 2 || entityList == null || entityList.size() <= 0) {
             return null;
         }
-        List<Float> MAValues = new ArrayList<Float>();
+        List<Double> MAValues = new ArrayList<Double>();
 
-        float sum = 0;
-        float avg = 0;
+        Double sum = 0.0;
+        Double avg = 0.0;
         for (int i = entityList.size() - 1; i >= 0; i--) {
-            float close = Float.parseFloat(entityList.get(i).getClose());
+            Double close = Double.parseDouble(entityList.get(i).getClose());
             if (i > entityList.size() - days) {
                 sum = sum + close;
                 avg = sum / (entityList.size() - i);
@@ -900,7 +900,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
             MAValues.add(avg);
         }
 
-        List<Float> result = new ArrayList<Float>();
+        List<Double> result = new ArrayList<Double>();
         for (int j = MAValues.size() - 1; j >= 0; j--) {
             result.add(MAValues.get(j));
         }
