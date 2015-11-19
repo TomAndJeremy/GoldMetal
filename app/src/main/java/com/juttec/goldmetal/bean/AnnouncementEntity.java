@@ -1,4 +1,4 @@
-package com.juttec.goldmetal.bean.chartentity;
+package com.juttec.goldmetal.bean;
 
 public class AnnouncementEntity {
 	private String title;// 公告标题

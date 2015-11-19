@@ -9,38 +9,39 @@ import java.util.Objects;
 
 /**
  * Created by jeremy on 2015/11/17.
+ *
+ * 画图时用到的工具类
  */
 public class KChartUtils {
     /**
-     * 初始化MA值，从数组的最后一个数据开始初始化
+     * 初始化MA（n日内的平均）值
      *
-     * @param closes
-     * @param n
+     * @param closes  所有数值
+     * @param n 平均数参数
      * @return
      */
 
-    public static List<Double> initMA(List<Double> entityList, int n) {
+    public static List<Double> initMA(List<Double> closes, int n) {
 
-        List<Double> closes = entityList;
-        List<Double> MBs = new ArrayList<>();
-        double f1 = 0.0;
-        double NA = Double.MIN_VALUE;
+        List<Double> MBs = new ArrayList<>();//计算后的平均数
+        double f1 = 0.0;//存储数据和
+        double NA = Double.MIN_VALUE;//double所能表示的最小数
 
         for (int i = 0; i < closes.size(); i++) {
             if (closes.get(i) == NA) {
                 MBs.add(NA);
                 continue;
             } else {
-                f1 = f1 + closes.get(i);
+                f1 = f1 + closes.get(i);//求和
             }
             if ((n != 0) && i >= (n - 1)) {
                 if (closes.get(i - n + 1) != NA) {
                     if (closes.get(i) == NA) {
                         MBs.add(NA);
                     } else {
-                        MBs.add(f1 / n);
+                        MBs.add(f1 / n);//平局数
                     }
-                    f1 = f1 - closes.get((i - n) + 1);
+                    f1 = f1 - closes.get((i - n) + 1);//求今天往前n天的和
                 } else {
                     MBs.add(NA);
                 }
@@ -53,32 +54,5 @@ public class KChartUtils {
         }
         return MBs;
     }
- /*public static List<Double> initMA(List<Double> entityList, int days) {
-        if (days < 2 || entityList == null || entityList.size() <= 0) {
-            return null;
-        }
-        List<Double> MAValues = new ArrayList<Double>();
 
-        Double sum = 0.0;
-        Double avg = 0.0;
-        for (int i = 0; i<entityList.size(); i++) {
-            Double close = entityList.get(i);
-            if (i <=days) {
-                sum = sum + close;
-                avg = sum / (entityList.size() - i);
-            } else {
-                sum = close + avg * (days - 1);
-                avg = sum / days;
-            }
-            MAValues.add(avg);
-        }
-
-        List<Double> result = new ArrayList<Double>();
-        for (int j = MAValues.size() - 1; j >= 0; j--) {
-            result.add(MAValues.get(j));
-        }
-        return result;
-    }
-
-*/
 }

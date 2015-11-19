@@ -37,43 +37,44 @@ public class BOLLEntity {
     private int k = 2; //影响BOLL指标变化的 变量 默认值为：2（范围：2-99）
     private int N = 20;//N日内的收盘价之和中的N  默认值为20
 
+    private int M=N-1;//中线=MA(N_1)
 
     public BOLLEntity(List<KChartInfo.ResultEntity> OHLCData) {
 
         List<Double> closes = new ArrayList<>();
         for (int i = OHLCData.size() - 1; i >= 0; i--) {
-            closes.add(Double.parseDouble(OHLCData.get(i).getClose()));
+            closes.add(Double.parseDouble(OHLCData.get(i).getClose()));//获得收盘价
         }
 
-        double f1 = 0.0;
-        MBs = KChartUtils.initMA(closes, N);
+
+        MBs = KChartUtils.initMA(closes, N);//中线，n日内的收盘价
         UPs = new ArrayList<>();
         DNs = new ArrayList<>();
 
-
+        double f1 = 0.0;//和
         double ma = 0.0, avedev, devsq;
-        List<Double> list = new ArrayList<>();
+        List<Double> list = new ArrayList<>();//方差中间值
         for (int i = 0; i < closes.size(); i++) {
             f1 = f1 + closes.get(i);
-            if (i >= 19) {
-                f1 = f1 - closes.get(i - 19);
-                ma = f1 / 19;
+            if (i >= M) {
+                f1 = f1 - closes.get(i - M);
+                ma = f1 / M;
             } else {
                 continue;
             }
             avedev = 0.0;
             devsq = 0.0;
-            for (int p = i; p > i - 19 + 1; p--) {
+            for (int p = i; p > i - M + 1; p--) {
                 avedev = avedev + Math.abs(closes.get(p) - ma);
-                devsq = devsq + (closes.get(p) - ma) * (closes.get(p) - ma);
+                devsq = devsq + (closes.get(p) - ma) * (closes.get(p) - ma);//平方和
 
             }
 
-            list.add(Math.sqrt(devsq / (19 - 1)));
+            list.add(Math.sqrt(devsq / (M - 1)));//方差
 
-            if (i == 19) {
-                for (int q = 19 - 1; q > -1; q--) {
-                    list.add(0, list.get(list.size()-1));
+            if (i == M) {
+                for (int q = M - 1; q > -1; q--) {
+                    list.add(0, list.get(list.size()-1));//补全之前的数据
                 }
             }
 
@@ -82,13 +83,14 @@ public class BOLLEntity {
         for (int i = 0; i < MBs.size(); i++) {
 
 
-            UPs.add(MBs.get(i) + list.get(i) * k);
-            DNs.add(MBs.get(i) - list.get(i) * k);
+            UPs.add(MBs.get(i) + list.get(i) * k);//上线
+            DNs.add(MBs.get(i) - list.get(i) * k);//下线
 
         }
 
 
 
+        //将数据反转
         Collections.reverse(MBs);
         Collections.reverse(UPs);
         Collections.reverse(DNs);

@@ -31,12 +31,12 @@ public class DMAEntity {
         }
 
 
-        List<Double> MA_10 = KChartUtils.initMA(list, 10);
-        List<Double> MA_50 = KChartUtils.initMA(list, 50);
+        List<Double> MA_10 = KChartUtils.initMA(list, 10);//10天平均数
+        List<Double> MA_50 = KChartUtils.initMA(list, 50);//50天平均数
 
 
         DIF = new ArrayList<>();
-        Double NA = Double.MIN_VALUE;
+        Double NA = Double.MIN_VALUE;//最小正数
         for (int i = 0; i < OHLCData.size(); i++) {
           double ma10 = MA_10.get(i);
             double ma50 = MA_50.get(i);
@@ -50,16 +50,7 @@ public class DMAEntity {
 
         }
 
-        AMA = KChartUtils.initMA(DIF, 10);
-
-        for (int i = 0; i < DIF.size(); i++) {
-
-            LogUtil.e(i + "  DIF  " + DIF.get(i));
-        }
-          for (int i = 0; i < AMA.size(); i++) {
-
-            LogUtil.e(i + "  AMA  " + AMA.get(i));
-        }
+        AMA = KChartUtils.initMA(DIF, 10);//DIF的10天平均数
 
         Collections.reverse(DIF);
         Collections.reverse(AMA);

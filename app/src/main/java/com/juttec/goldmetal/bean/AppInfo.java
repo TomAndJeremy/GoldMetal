@@ -1,4 +1,4 @@
-package com.juttec.goldmetal.bean.chartentity;
+package com.juttec.goldmetal.bean;
 
 public class AppInfo {
 	private boolean shouldUpdate;// 是否需要更新应用

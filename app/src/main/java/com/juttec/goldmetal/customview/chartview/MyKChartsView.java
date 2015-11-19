@@ -559,17 +559,6 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
             mMinPrice = mMinPrice < Double.parseDouble(entity.getLow()) ? mMinPrice : Double.parseDouble(entity.getLow());
             mMaxPrice = mMaxPrice > Double.parseDouble(entity.getHigh()) ? mMaxPrice : Double.parseDouble(entity.getHigh());
         }
-
-      /*  for (MALineEntity lineEntity : MALineData) {
-            for (int i = mDataStartIndext; i < lineEntity.getLineData().size()
-                    && i < mShowDataNum + mDataStartIndext; i++) {
-                mMinPrice = mMinPrice < lineEntity.getLineData().get(i) ? mMinPrice : lineEntity
-                        .getLineData().get(i);
-                mMaxPrice = mMaxPrice > lineEntity.getLineData().get(i) ? mMaxPrice : lineEntity
-                        .getLineData().get(i);
-            }
-        }*/
-
     }
 
     private void zoomIn() {
@@ -581,7 +570,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
     }
 
     private void zoomOut() {
-        mShowDataNum++;
+        mShowDataNum--;
         if (mShowDataNum < MIN_CANDLE_NUM) {
             mShowDataNum = MIN_CANDLE_NUM;
         }
