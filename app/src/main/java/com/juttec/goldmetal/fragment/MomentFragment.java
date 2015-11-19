@@ -424,7 +424,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     //判断用户是否编辑了个人的昵称和头像
     private boolean checkNameAndPhoto() {
         if (!app.isLogin()) {
-            getActivity().startActivityForResult(new Intent(getActivity(), LoginActivity.class), LOGIN);
+            startActivityForResult(new Intent(getActivity(), LoginActivity.class), LOGIN);
             return false;
         }
         if ("".equals(app.getUserInfoBean().getUserNickName())) {
@@ -577,7 +577,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                             e.printStackTrace();
                         }
                         if (adapter == null) {
-                            adapter = new MomentRecyclerViewAdapter(entityList, getActivity(), app);
+                            adapter = new MomentRecyclerViewAdapter(entityList, getActivity(), app, MomentFragment.this);
 
 
                             // 添加头部

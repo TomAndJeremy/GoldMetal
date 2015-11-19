@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,11 +71,14 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
     private EmojiWindow readEmojiWindow;
 
+    private Fragment mFragment;
+
     //初始化
-    public MomentRecyclerViewAdapter(ArrayList<DynamicEntityList> entityList, Context context, MyApplication app) {
+    public MomentRecyclerViewAdapter(ArrayList<DynamicEntityList> entityList, Context context, MyApplication app,Fragment mFragment) {
         super();
         this.entityList = entityList;
 
+        this.mFragment = mFragment;
         this.context = context;
         this.app = app;
         replyPopupWindow = new ReplyPopupWindow(context);
@@ -217,7 +221,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
                 //检查个人信息是否完善
                 if (!checkNameAndPhoto()) {
-
+                    holder.thumb.setClickable(true);
                     return;
                 }
                 RequestParams params = new RequestParams();
@@ -587,7 +591,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     private boolean checkNameAndPhoto() {
         if (!app.isLogin()) {
             ToastUtil.showShort(context, "请先登录");
-            ((Activity)context).startActivityForResult(new Intent(context, LoginActivity.class), LOGIN);
+            mFragment.startActivityForResult(new Intent(context, LoginActivity.class), LOGIN);
             return false;
         }
 

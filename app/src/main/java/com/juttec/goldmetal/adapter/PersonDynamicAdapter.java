@@ -179,6 +179,8 @@ private EmojiWindow readEmojiWindow;
                 if (isLogin()) {
 
                     supportOrCancle(position, mLists.get(position).getId(), holder.thumb, holder.supportName);
+                } else {
+                    holder.thumb.setClickable(false);
                 }
             }
         });
