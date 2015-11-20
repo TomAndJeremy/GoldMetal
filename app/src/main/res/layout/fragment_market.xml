@@ -1,5 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:headview="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,10 +9,10 @@
     <com.juttec.goldmetal.customview.HeadLayout
         android:id="@+id/head_layout"
         style="@style/HeadBarStytle"
-        headview:back="false"
-        headview:headtitle="@string/head_title_market"
-        headview:leftimg="@mipmap/nav_btn_market_message"
-        headview:rightimg="@mipmap/nav_btn_market_user" />
+        app:back="false"
+        app:headtitle="@string/head_title_market"
+        app:leftimg="@mipmap/nav_btn_market_message"
+        app:rightimg="@mipmap/nav_btn_market_user" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,22 +66,28 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:background="@color/colorPrimary">
 
         <android.support.design.widget.TabLayout
             android:id="@+id/market_tablayout"
             style="@style/MarketFragment.TabLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:fillViewport="false"></android.support.design.widget.TabLayout>
+            android:layout_weight="5"
+            app:tabMode="scrollable"
+            android:fillViewport="false">
+
+        </android.support.design.widget.TabLayout>
 
         <ImageView
             android:id="@+id/market_search"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:src="@mipmap/content_btn_market_search" />
     </LinearLayout>
 

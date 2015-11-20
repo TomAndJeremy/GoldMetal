@@ -287,7 +287,7 @@ public class TimesView extends GridChart {
             }
 
             int t5 = (int) (super.getLongitudeSpacing() * 5 / dataSpacing);
-            if (t5 < timesList.size()) {
+            if (t5 <= timesList.size()) {
                 canvas.drawText(DateUtil.formatDate(timesList.get(t5).getDate()), 2 + super.getLongitudeSpacing() * 5 - 3.0f * DEFAULT_AXIS_TITLE_SIZE,
                         uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
 

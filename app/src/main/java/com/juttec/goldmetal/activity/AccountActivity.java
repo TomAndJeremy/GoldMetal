@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -397,7 +398,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                     public void onClick(View v) {
                         if (type==QQ) {
                             //设置EditText只能输数字
-                            dialog.setEditType();
+                            dialog.setEditType(EditorInfo.TYPE_CLASS_PHONE);
                         }
                         result = dialog.getResult();
                         if (result == null || TextUtils.isEmpty(result)) {

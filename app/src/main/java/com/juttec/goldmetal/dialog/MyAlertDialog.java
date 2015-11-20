@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -150,8 +149,9 @@ public class MyAlertDialog {
     }
 
     //设置edittext的 输入类型
-    public void setEditType(){
-        edittxt_result.setInputType(EditorInfo.TYPE_CLASS_PHONE);
+    public void setEditType(int type){
+        //EditorInfo.TYPE_CLASS_PHONE
+        edittxt_result.setInputType(type);
     }
 
 

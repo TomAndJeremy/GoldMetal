@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="10dp"
+
+    android:orientation="horizontal">
+
+
+    <TextView
+        android:layout_weight="1"
+        android:id="@+id/tv_symbol"
+        android:layout_width="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/small_size"
+        android:text="SH00007"
+        android:maxEms="10"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/small_size"
+        android:text="稀缺资源"
+        android:maxEms="10"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/tv_letter"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/small_size"
+        android:text="XQZY"
+        android:maxEms="10"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textColor="@color/black"/>
+
+
+
+</LinearLayout>

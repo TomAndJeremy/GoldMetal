@@ -16,13 +16,7 @@ import com.juttec.goldmetal.bean.chartentity.RSIEntity;
 import com.juttec.goldmetal.utils.DateUtil;
 import com.juttec.goldmetal.utils.LogUtil;
 
-import org.apache.http.util.EncodingUtils;
-
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
@@ -982,7 +976,6 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
             BufferedReader BufferedReader = new BufferedReader(new InputStreamReader(in));
             String s1 = null;
             while ((s1 = BufferedReader.readLine()) != null) {
-
                 list.add(Double.parseDouble(s1));
             }
             BufferedReader.close();

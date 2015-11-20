@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
@@ -22,6 +21,8 @@ public class MarketRecyclerAdapter extends RecyclerView.Adapter<MarketRecyclerAd
     List<MarketFormInfo.ResultEntity> datas ;
     Context context;
     private OnItemClickListener mOnItemClickListener;
+    private OnItemLongClickListener mOnItemLongClickListener;
+
 
     public MarketRecyclerAdapter(List<MarketFormInfo.ResultEntity> datas, Context context) {
         this.datas = datas;
@@ -46,12 +47,27 @@ public class MarketRecyclerAdapter extends RecyclerView.Adapter<MarketRecyclerAd
     @Override
     public void onBindViewHolder(MarketRecyclerAdapter.ViewHolder holder, final int position) {
 
+        //短按事件注册
       holder.itemView.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
               mOnItemClickListener.itemclickListener(v, position);
           }
       });
+
+
+        //长按事件注册
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                mOnItemLongClickListener.itemLongClickListener(v, position);
+
+                return true;
+            }
+        });
+
+
+
 
         MarketFormInfo.ResultEntity resultEntity = datas.get(position);
 
@@ -64,13 +80,13 @@ public class MarketRecyclerAdapter extends RecyclerView.Adapter<MarketRecyclerAd
         holder.tvScale.setText(resultEntity.getPriceChangeRatio());
 
         if(Double.parseDouble(resultEntity.getBP1())-Double.parseDouble(resultEntity.getSP1())<0){
-            holder.tvSale.setTextColor(Color.rgb(255, 0, 0));
-            holder.tvBuy.setTextColor(Color.rgb(255, 0, 0));
-            holder.tvIncrease.setBackgroundColor(Color.rgb(255, 0, 0));
+            holder.tvSale.setTextColor(Color.RED);
+            holder.tvBuy.setTextColor(Color.RED);
+            holder.tvIncrease.setBackgroundColor(Color.RED);
         } else {
-            holder.tvSale.setTextColor(Color.rgb(0, 255, 0));
-            holder.tvBuy.setTextColor(Color.rgb(0, 255, 0));
-            holder.tvIncrease.setBackgroundColor(Color.rgb(0, 255, 0));
+            holder.tvSale.setTextColor(Color.GREEN);
+            holder.tvBuy.setTextColor(Color.GREEN);
+            holder.tvIncrease.setBackgroundColor(Color.GREEN);
         }
     }
 
@@ -102,11 +118,27 @@ public class MarketRecyclerAdapter extends RecyclerView.Adapter<MarketRecyclerAd
         }
     }
 
+
+
+
+
     public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
         this.mOnItemClickListener = mOnItemClickListener;
     }
 
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener){
+        this.mOnItemLongClickListener = listener;
+    }
+
+
+    //item的 短按 事件接口   进入到详情
     public interface OnItemClickListener{
          void itemclickListener(View view ,int position);
+    }
+
+    //item的 长按事件接口  加入到自选 或从自选中移除
+    public interface  OnItemLongClickListener{
+        void itemLongClickListener(View view,int position);
     }
 }

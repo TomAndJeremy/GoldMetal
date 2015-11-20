@@ -102,7 +102,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
     /**
      * MA数据
      */
-    // private List<MALineEntity> MALineData;
+   // private List<MALineEntity> MALineData;
 
     /**
      * SMA数据
@@ -171,8 +171,8 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
 
         drawUpperRegion(canvas);
         drawLowerRegion(canvas);
-        drawTitles(canvas);
-        drawCandleDetails(canvas);
+         drawTitles(canvas);
+         drawCandleDetails(canvas);
     }
 
     private void drawLowerRegion(Canvas canvas) {
@@ -187,7 +187,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
         yellowPaint.setColor(Color.YELLOW);
         Paint magentaPaint = new Paint();
         magentaPaint.setColor(Color.MAGENTA);
-        Paint greenPaint = new Paint();
+         Paint greenPaint = new Paint();
         greenPaint.setColor(Color.GREEN);
 
         Paint textPaint = new Paint();
@@ -401,7 +401,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
                     textPaint);
 
 
-        } else if (mTabTitle.trim().equalsIgnoreCase("DMA")) {
+        }else if (mTabTitle.trim().equalsIgnoreCase("DMA")) {
 
 
             List<Double> DIF = mDMAEntity.getDIF();
@@ -460,10 +460,10 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
             canvas.drawText(new DecimalFormat("#.##").format(low), 2, lowertop
                     + lowerHight, textPaint);
 
-
         }
 
-    }
+
+        }
 
 
     @Override
@@ -559,6 +559,17 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
             mMinPrice = mMinPrice < Double.parseDouble(entity.getLow()) ? mMinPrice : Double.parseDouble(entity.getLow());
             mMaxPrice = mMaxPrice > Double.parseDouble(entity.getHigh()) ? mMaxPrice : Double.parseDouble(entity.getHigh());
         }
+
+      /*  for (MALineEntity lineEntity : MALineData) {
+            for (int i = mDataStartIndext; i < lineEntity.getLineData().size()
+                    && i < mShowDataNum + mDataStartIndext; i++) {
+                mMinPrice = mMinPrice < lineEntity.getLineData().get(i) ? mMinPrice : lineEntity
+                        .getLineData().get(i);
+                mMaxPrice = mMaxPrice > lineEntity.getLineData().get(i) ? mMaxPrice : lineEntity
+                        .getLineData().get(i);
+            }
+        }*/
+
     }
 
     private void zoomIn() {
@@ -595,6 +606,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
         Double close = Double.parseDouble(entityList.get(position).getClose());
 
 
+
         if (day == 1) {
             return close;
         } else {
@@ -627,7 +639,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
         return SMAValues;
     }
 
-
+ 
     public List<KChartInfo.ResultEntity> getOHLCData() {
         return mOHLCData;
     }
@@ -637,7 +649,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
             return;
         }
         this.mOHLCData = OHLCData;
-        //initMALineData();
+//        initMALineData();
         initSMALineData();
         mMACDData = new MACDEntity(mOHLCData);
         mKDJData = new KDJEntity(mOHLCData);
@@ -647,28 +659,28 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
         postInvalidate();
     }
 
-   /* private void initMALineData() {
+    /*private void initMALineData() {
         MALineEntity MA5 = new MALineEntity();
         MA5.setTitle("MA5");
         MA5.setLineColor(Color.WHITE);
-        MA5.setLineData(KChartUtils.initMA(mOHLCData, 5));
+        MA5.setLineData(initMA(mOHLCData, 5));
 
         MALineEntity MA10 = new MALineEntity();
         MA10.setTitle("MA10");
         MA10.setLineColor(Color.CYAN);
-        MA10.setLineData(KChartUtils.initMA(mOHLCData, 10));
+        MA10.setLineData(initMA(mOHLCData, 10));
 
         MALineEntity MA20 = new MALineEntity();
         MA20.setTitle("MA20");
         MA20.setLineColor(Color.BLUE);
-        MA20.setLineData(KChartUtils.initMA(mOHLCData, 20));
-*/
-     /*   MALineData = new ArrayList<MALineEntity>();
+        MA20.setLineData(initMA(mOHLCData, 20));
+
+     *//*   MALineData = new ArrayList<MALineEntity>();
         MALineData.add(MA5);
         MALineData.add(MA10);
-        MALineData.add(MA20);
-    }*/
-
+        MALineData.add(MA20);*//*
+    }
+*/
     private void initSMALineData() {
         MALineEntity MA5 = new MALineEntity();
         MA5.setTitle("SMA5");
@@ -769,7 +781,6 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
             e.printStackTrace();
         }
     }
-
     private void drawUpperRegion(Canvas canvas) {
         /** 绘制蜡烛图 **/
         Paint redPaint = new Paint();
@@ -779,6 +790,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
         int width = getWidth();
         mCandleWidth = (width - 4) / 10.0 * 10.0 / mShowDataNum;
         double rate = (getUperChartHeight() - 2) / (mMaxPrice - mMinPrice);
+
 
 
         if (mUpTitle.trim().equalsIgnoreCase("BOLL")) {
@@ -802,9 +814,8 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
         }
 
 
+
         for (int i = 0; i < mShowDataNum && mDataStartIndext + i < mOHLCData.size(); i++) {
-
-
             KChartInfo.ResultEntity entity = mOHLCData.get(mDataStartIndext + i);
             float open = (float) ((mMaxPrice - Double.parseDouble(entity.getOpen())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);
             float close = (float) ((mMaxPrice - Double.parseDouble(entity.getClose())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);
@@ -899,9 +910,8 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
         }
 
     }
-
     /**
-     * 绘制详情文字
+     * 绘制蜡烛图
      **/
     private void drawCandleDetails(Canvas canvas) {
         if (showDetails) {

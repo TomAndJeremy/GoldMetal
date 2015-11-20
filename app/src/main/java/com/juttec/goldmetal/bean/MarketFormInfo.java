@@ -9,6 +9,7 @@ public class MarketFormInfo {
     private List<ResultEntity> result;
 
     public MarketFormInfo() {
+        
     }
 
     public MarketFormInfo(List<ResultEntity> result) {

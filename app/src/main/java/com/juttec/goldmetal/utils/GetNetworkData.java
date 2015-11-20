@@ -143,7 +143,8 @@ public class GetNetworkData {
 
                         } catch (Exception e) {
                             e.printStackTrace();
-                            ToastUtil.showShort(context, "获取数据出错");
+
+                                ToastUtil.showShort(context, responseInfo.result.toString());
 
                         }
                     }
@@ -157,6 +158,10 @@ public class GetNetworkData {
             }
         }.start();
     }
+
+
+
+
 
 
 
