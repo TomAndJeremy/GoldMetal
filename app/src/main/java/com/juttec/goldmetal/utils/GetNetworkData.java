@@ -21,149 +21,113 @@ import com.lidroid.xutils.http.client.HttpRequest;
 
 
 public class GetNetworkData {
-    public static void getData(final RequestParams requestParams, final String url,
-                               final MyEntity myEntity, final Context context, final Handler handler, final int flag) {
 
-        new Thread() {
-            @Override
-            public void run() {
+    private String url;
+    private MyEntity myEntity;
+    private  Context context;
+    private  Handler handler;
+    private  Thread thread;
+    private  boolean shouldConnect;
 
-                HttpUtils httpUtils = new HttpUtils();
-                httpUtils.configCurrentHttpCacheExpiry(1000);
-                httpUtils.send(HttpRequest.HttpMethod.POST, url, requestParams, new RequestCallBack<String>() {
-                    @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        try {
-                            myEntity.setObject(JSON.parseObject(responseInfo.result.toString(), myEntity.getObject().getClass()));
-                            Message message = new Message();
-                            message.what = flag;
-                            handler.sendMessage(message);
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            //   ShowToast.Short(context, "获取数据失败");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(HttpException e, String s) {
-                        e.printStackTrace();
-                        //     ShowToast.Short(context, "获取数据失败,请检查网络");
-                    }
-                });
-
-            }
-        }.start();
-    }
-
-
-
-
-
-
-    public static void getKLineData(  final String url, final MyEntity myEntity, final Context context,
-                                      final Handler handler ,final ProgressDialog pd ,final int flag) {
-
-        new Thread() {
-
-            @Override
-            public void run() {
-
-                HttpUtils httpUtils = new HttpUtils();
-                httpUtils.configCurrentHttpCacheExpiry(1000);
-                httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
-                    @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        String str;
-                        if (responseInfo.result.toString().equals("unkown user")) {
-                            str = "{\"result\":[]}";
-                        } else {
-                            str = "{\"result\":" + responseInfo.result.toString() + "}";
-                        }
-                        try {
-                            myEntity.setObject(JSON.parseObject(str, myEntity.getObject().getClass()));
-                            Message message = new Message();
-                            message.what = flag;
-                            handler.sendMessage(message);
-
-                        } catch (Exception e) {
-                            //    ShowToast.Short(context, "获取数据失败");
-                            pd.dismiss();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(HttpException e, String s) {
-                        pd.dismiss();
-                        NetWorkUtils.showMsg(context);
-
-                    }
-                });
-
-            }
-        }.start();
-    }
 
 
     /**
      * 获取接口数据
-     * @param url
-     * @param myEntity
-     * @param context
-     * @param handler
+     *
+     * @param sUrl
+     * @param sMyEntity
+     * @param sContext
+     * @param sHandler
      * @param flag
      */
-    public static void getKLineData(  final String url, final MyEntity myEntity, final Context context,
-                                      final Handler handler ,final int flag) {
-        new Thread() {
+    public  void getKLineData(final String sUrl, final MyEntity sMyEntity, final Context sContext,
+                                    final Handler sHandler, final int flag) {
+
+        url = sUrl;
+        myEntity = sMyEntity;
+        context = sContext;
+        handler = sHandler;
+
+
+        thread= new Thread(new Runnable() {
             @Override
             public void run() {
-                HttpUtils httpUtils = new HttpUtils();
-                httpUtils.configCurrentHttpCacheExpiry(1000);
-                httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
-                    @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                shouldConnect = true;
 
-                        String str;
-                        if (responseInfo.result.toString().equals("unkown user")) {
-                            str = "{\"result\":[]}";
-                        } else {
-                            str = "{\"result\":" + responseInfo.result.toString() + "}";
-                        }
+                while (shouldConnect) {
+                    HttpUtils httpUtils = new HttpUtils();
+                    httpUtils.configCurrentHttpCacheExpiry(1000);
+                    httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
+                        @Override
+                        public void onSuccess(ResponseInfo<String> responseInfo) {
 
-                        LogUtil.d("自选数据:---------"+str);
+                            String str;
+                            if (responseInfo.result.toString().equals("unkown user")) {
+                                str = "{\"result\":[]}";
+                            } else {
+                                str = "{\"result\":" + responseInfo.result.toString() + "}";
+                            }
 
-                        try {
+                            LogUtil.d("自选数据:---------" + str);
 
-                            myEntity.setObject(JSON.parseObject(str,myEntity.getObject().getClass()));
-                            Message message = new Message();
-                            message.what=flag;
-                            LogUtil.d("发消息通知---------");
-                            handler.sendMessage(message);
+                            try {
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                                myEntity.setObject(JSON.parseObject(str, myEntity.getObject().getClass()));
+                                Message message = new Message();
+                                message.what = flag;
+                                LogUtil.d("发消息通知---------");
+                                handler.sendMessage(message);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
 
                                 ToastUtil.showShort(context, responseInfo.result.toString());
 
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(HttpException e, String s) {
-                        NetWorkUtils.showMsg(context);
-                    }
-                });
+                        @Override
+                        public void onFailure(HttpException e, String s) {
+                            NetWorkUtils.showMsg(context);
+                        }
+                    });
 
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        }.start();
+        });
+        thread.start();
+
     }
 
 
+    public  void setUrl(final String sUrl) {
+        url = sUrl;
 
+    }
 
+    public  void reset(final String sUrl, final MyEntity sMyEntity, final Context sContext,
+                             final Handler sHandler) {
+        url = sUrl;
+        myEntity = sMyEntity;
+        context = sContext;
+        handler = sHandler;
+    }
 
+    public  void stop() {
 
+        if (thread != null&&thread.isAlive()) {
+          shouldConnect = false;
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-
+        }
+    }
 }

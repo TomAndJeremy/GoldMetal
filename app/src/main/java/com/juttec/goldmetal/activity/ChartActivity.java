@@ -15,6 +15,7 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.customview.HeadLayout;
 import com.juttec.goldmetal.fragment.MarketKChartsFragment;
 import com.juttec.goldmetal.fragment.MarketTimesFragment;
+import com.juttec.goldmetal.utils.GetNetworkData;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 
@@ -288,10 +289,11 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
                         LogUtil.e(ChartActivity.this, 145, "index   " + index);
                         if (kChartsFragment != null) {
-                            if (index.equals("MACD") || index.equals("KDJ") || index.equals("RSI")) {
+                            if (index.equals("MACD") || index.equals("KDJ") || index.equals("RSI")||index.equals("DMA")) {
                                 kChartsFragment.setIndex(index);
-                            }else{
+                            }else {
                                 kChartsFragment.setUpIndex(index);
+
                             }
 
                         }
@@ -317,11 +319,11 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
         isKLine = true;
         setCycle();
         kChartsFragment = MarketKChartsFragment.newInstance(KLINES_URL+"&return_t="+return_t+"&qt_type="+qt_type);
-        LogUtil.d("KLINES_URL-------------"+KLINES_URL+"&return_t="+return_t+"&qt_type="+qt_type);
+            LogUtil.d("KLINES_URL-------------"+KLINES_URL+"&return_t="+return_t+"&qt_type="+qt_type);
 
-        transaction.replace(R.id.fragment_container, kChartsFragment).commit();
+            transaction.replace(R.id.fragment_container, kChartsFragment).commit();
 
-                break;
+            break;
 
             case R.id.btn_free_remind:
                 //免费提醒
@@ -331,4 +333,6 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
         }
 
     }
+
+
 }

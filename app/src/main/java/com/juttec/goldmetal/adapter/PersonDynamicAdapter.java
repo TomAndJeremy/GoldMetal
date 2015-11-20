@@ -45,6 +45,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -70,8 +71,8 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
     private MyProgressDialog dialog;//加载时的 进度框
 
-//    private boolean isSupported = false;//自己是否点赞  默认为false
-private EmojiWindow readEmojiWindow;
+    //    private boolean isSupported = false;//自己是否点赞  默认为false
+    private EmojiWindow readEmojiWindow;
 
     public PersonDynamicAdapter(Context context, List<DynamicEntityList> list) {
         app = (MyApplication) context.getApplicationContext();
@@ -307,7 +308,7 @@ private EmojiWindow readEmojiWindow;
             String id = supportInfoBeans.get(i).getUserId();
 
             //如果点赞人中包含自己  将点赞按钮设置为已点赞
-            if (app.isLogin()&&id.equals(app.getUserInfoBean().getUserId())) {
+            if (app.isLogin() && id.equals(app.getUserInfoBean().getUserId())) {
                 thumb.setSelected(true);
             }
 
@@ -452,7 +453,7 @@ private EmojiWindow readEmojiWindow;
                                     app.getUserInfoBean().getUserId(),
                                     app.getUserInfoBean().getUserNickName()
                             );
-                            mLists.get(position).getDySupport().add(0,dySupportInfoBean);
+                            mLists.get(position).getDySupport().add(0, dySupportInfoBean);
 
                             intent.setAction("com.juttec.goldmetal.addsupport");
 
@@ -487,10 +488,9 @@ private EmojiWindow readEmojiWindow;
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }finally {
+                } finally {
                     thumb.setClickable(true);
                 }
-
 
 
             }
@@ -506,13 +506,13 @@ private EmojiWindow readEmojiWindow;
 
     private boolean isLogin() {
         if (!app.isLogin()) {
-            ToastUtil.showShort(mContext,"请先登录再进行操作");
-           mContext. startActivity(new Intent(mContext, LoginActivity.class));
+            ToastUtil.showShort(mContext, "请先登录再进行操作");
+            mContext.startActivity(new Intent(mContext, LoginActivity.class));
             return false;
         }
 
         if (app.getUserInfoBean().getUserNickName() == null) {
-            ToastUtil.showShort(mContext,"请先设置昵称再进行操作");
+            ToastUtil.showShort(mContext, "请先设置昵称再进行操作");
             return false;
         }
         return true;

@@ -45,6 +45,11 @@ import io.realm.RealmResults;
 
 
 public class MarketFragment extends BaseFragment implements View.OnClickListener {
+
+
+    GetNetworkData getKLineData;
+
+
     private static final String ARG_PARAM1 = "param1";
 
     //自选接口路径   symbol=OSXAU,OSXAG,OZAG20,OZAG50,OZAG100,OYXAG50KG,OYXAG150KG,NECLI0,OSUDI&u=qq3585&p=qq3771
@@ -139,7 +144,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_market, container, false);
         tabLayout = (TabLayout) view.findViewById(R.id.market_tablayout);
-        tabLayout.addTab(tabLayout.newTab().setText("自选").setTag(1),true);
+        tabLayout.addTab(tabLayout.newTab().setText("自选").setTag(1), true);
         tabLayout.addTab(tabLayout.newTab().setText("上证A股").setTag(2));
         tabLayout.addTab(tabLayout.newTab().setText("上证B股").setTag(3));
         tabLayout.addTab(tabLayout.newTab().setText("深证A股").setTag(4));
@@ -231,7 +236,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         //将 标志设置为：自选股
         isOptional = true;
         //调接口获取自选股数据
-        getData(OPTIONAL_URL+url);
+        getData(OPTIONAL_URL + url);
     }
 
 
@@ -278,6 +283,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         if(myRealm!=null){
             myRealm.close();
         }
+        getKLineData.stop();
     }
 
     @Override
@@ -297,7 +303,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                                 String et = dialog.getResult().trim();
                                 if (et.length() == 8) {
                                     //开始搜素
-                                    GetNetworkData.getKLineData(SEARCH_URL + "&symbol=" + et, myEntity, getActivity(), myHandler, NEWEST);
+                                  new   GetNetworkData().getKLineData(SEARCH_URL + "&symbol=" + et, myEntity, getActivity(), myHandler, NEWEST);
                                     tabLayout.getTabAt(5).select();
 
                                     dialog.dismiss();
@@ -391,8 +397,9 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
 
     private void getData(String url) {
-        LogUtil.d("股票URL-------------"+url);
-        GetNetworkData.getKLineData(url, myEntity, getActivity(), myHandler, NEWEST);
+        LogUtil.d("股票URL-------------" + url);
+        getKLineData=  new GetNetworkData();
+        getKLineData.getKLineData(url, myEntity, getActivity(), myHandler, NEWEST);
     }
 
     /**
@@ -427,6 +434,9 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                                 Bundle bundle = new Bundle();
                                 bundle.putString("name", datas.get(position).getName());
                                 bundle.putString("symbol", datas.get(position).getSymbol());
+                                bundle.putString("high",datas.get(position).getHigh());
+                                bundle.putString("low", datas.get(position).getLow());
+                                bundle.putString("low", datas.get(position).getLow());
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
@@ -504,7 +514,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
             mLists.add(c.getSymbol());
         }
 
-        LogUtil.d("从数据库检索到的数据："+mLists.toString());
+        LogUtil.d("从数据库检索到的数据：" + mLists.toString());
     }
 
 
@@ -527,8 +537,4 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         }
         myRealm.commitTransaction();
     }
-
-
-
-
 }

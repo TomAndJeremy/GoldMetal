@@ -616,9 +616,5 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        LogUtil.e("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
-    }
+
 }

@@ -24,7 +24,7 @@ public class GridChart extends View {
 
 	// ////////////默认值////////////////
 	/** 默认背景色 */
-	public static final int DEFAULT_BACKGROUD = R.mipmap.bg_chart;
+	public static final int DEFAULT_BACKGROUD =R.color.black /*R.mipmap.bg_chart*/;
 
 	/** 默认XY轴字体大小 **/
 	public static final int DEFAULT_AXIS_TITLE_SIZE = 22;

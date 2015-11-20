@@ -72,7 +72,7 @@ public class MarketKChartsFragment extends Fragment {
         datas = new ArrayList<KChartInfo.ResultEntity>();
         kChartInfo = new KChartInfo();
         myEntity = new MyEntity(kChartInfo);
-        GetNetworkData.getKLineData(url, myEntity, getActivity(), handler, NEWEST);
+      new   GetNetworkData().getKLineData(url, myEntity, getActivity(), handler, NEWEST);
         return view;
     }
 
@@ -91,8 +91,8 @@ public class MarketKChartsFragment extends Fragment {
             kChartInfo = (KChartInfo) myEntity.getObject();
             switch (msg.what) {
                 case NEWEST:
-                   // datas = kChartInfo.getResult();
-                    datas = getFromAssets();
+                    datas = kChartInfo.getResult();
+                    //datas = getFromAssets();
                     if (datas.size() == 0) {
                         ToastUtil.showShort(getActivity(), "没有数据...");
                         break;

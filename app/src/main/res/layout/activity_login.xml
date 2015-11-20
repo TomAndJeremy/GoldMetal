@@ -9,6 +9,7 @@
         android:id="@+id/head_layout"
         style="@style/HeadBarStytle"
         app:headtitle="@string/login"
+        app:leftimg="@mipmap/nav_btn_back_arrow"
         app:righttext="注册">
         >
 

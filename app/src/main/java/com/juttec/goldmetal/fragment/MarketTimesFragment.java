@@ -56,7 +56,7 @@ public class MarketTimesFragment extends Fragment {
 		handler = new MyHandler();
 		timesEntity = new TimesEntity();
 		myEntity = new MyEntity(timesEntity);
-		GetNetworkData.getKLineData(TIME_URL, myEntity, mContext, handler, NEWEST);
+		new GetNetworkData().getKLineData(TIME_URL, myEntity, mContext, handler, NEWEST);
 	}
 
 	@Override

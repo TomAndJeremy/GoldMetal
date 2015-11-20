@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.MyFragmentPagerAdapter;
 import com.juttec.goldmetal.fragment.BaseFragment;
+import com.juttec.goldmetal.utils.GetNetworkData;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.SharedPreferencesUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
 
         //退出当前账号
         if(getIntent().getFlags()== Intent.FLAG_ACTIVITY_CLEAR_TOP&&getIntent().getStringExtra("from").equals("AccountActivity")){
-            startActivity(new Intent(this,LoginActivity.class));
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
 
@@ -150,6 +151,5 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         }
         return super.onKeyUp(keyCode, event);
     }
-
 
 }
