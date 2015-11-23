@@ -36,6 +36,7 @@ public class MarketKChartsFragment extends Fragment {
     public static String url;
     private static MarketKChartsFragment kChartsFragment;
     private String index;
+    private GetNetworkData getNetworkData;
 
     /**
      * 静态工厂方法需要一个int型的值来初始化fragment的参数，
@@ -48,6 +49,7 @@ public class MarketKChartsFragment extends Fragment {
         return kChartsFragment;
     }
 
+    //设置下下指标刷新
     public void setIndex(String index) {
         if (mMyChartsView != null) {
             mMyChartsView.setTabTitle(index);
@@ -55,6 +57,7 @@ public class MarketKChartsFragment extends Fragment {
         }
     }
 
+    //设置上指标刷新
     public void setUpIndex(String index) {
         if (mMyChartsView != null) {
             mMyChartsView.setUpTitle(index);
@@ -72,7 +75,9 @@ public class MarketKChartsFragment extends Fragment {
         datas = new ArrayList<KChartInfo.ResultEntity>();
         kChartInfo = new KChartInfo();
         myEntity = new MyEntity(kChartInfo);
-      new   GetNetworkData().getKLineData(url, myEntity, getActivity(), handler, NEWEST);
+
+        getNetworkData = new GetNetworkData();
+    getNetworkData.getKLineData(url, myEntity, getActivity(), handler, NEWEST);
         return view;
     }
 
@@ -113,7 +118,7 @@ public class MarketKChartsFragment extends Fragment {
         kChartsFragment = null;
     }
 
-    //从assets 文件夹中获取文件并读取数据
+    //从assets 文件夹中获取文件并读取数据（测试时用）
     public   List<KChartInfo.ResultEntity> getFromAssets() {
         List<KChartInfo.ResultEntity> datas = new ArrayList<>();
 
@@ -163,6 +168,12 @@ public class MarketKChartsFragment extends Fragment {
 
         Collections.reverse(datas);
         return datas;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getNetworkData.stop();
     }
 }
 

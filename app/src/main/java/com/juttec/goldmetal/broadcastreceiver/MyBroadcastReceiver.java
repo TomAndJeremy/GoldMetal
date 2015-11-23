@@ -36,22 +36,20 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 
     public void setMyAdapter(RecycleViewWithHeadAdapter myAdapter) {
         this.myAdapter = myAdapter;
-    }
+    }//传递adapter
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-
         //从Intent中获取action
         for (int i = 0; i < entityList.size(); i++) {
             if (intent.getStringExtra("dyId").equals(entityList.get(i).getId())) {
 
                 if ("com.juttec.goldmetal.addsupport".equals(intent.getAction())) {
-                    entityList.get(i).getDySupport().add(0,(DySupportInfoBean) intent.getParcelableExtra("support"));
+                    //将点赞实体添加到集合众
+                    entityList.get(i).getDySupport().add(0,(DySupportInfoBean) intent.getParcelableExtra("support"));//点赞
                     myAdapter.notifyDataSetChanged();
-                } else if ("com.juttec.goldmetal.cancelsupport".equals(intent.getAction())) {
-
-
+                } else if ("com.juttec.goldmetal.cancelsupport".equals(intent.getAction())) {//取消赞
+                    //取消咱
                     for (int j = 0; j < entityList.get(i).getDySupport().size(); j++) {
                         if (app.getUserInfoBean().getUserId().equals(entityList.get(i).getDySupport().get(j).getUserId())) {
                             entityList.get(i).getDySupport().remove(j);
@@ -59,19 +57,14 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
                             return;
                         }
                     }
-
-                } else if ("com.juttec.goldmetal.comment".equals(intent.getAction())) {
-
+                } else if ("com.juttec.goldmetal.comment".equals(intent.getAction())) {//添加评论
+                    //添加评论
                     entityList.get(i).getDyCommentReply().add((DyCommentReplyBean) intent.getParcelableExtra("comment"));
                     myAdapter.notifyDataSetChanged();
                 }
-
-
                 return;
             }
 
         }
-
-
     }
 }

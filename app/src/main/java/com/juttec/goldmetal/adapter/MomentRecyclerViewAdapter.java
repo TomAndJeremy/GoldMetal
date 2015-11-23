@@ -83,7 +83,6 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         this.app = app;
         replyPopupWindow = new ReplyPopupWindow(context);
         mDialog = new MyAlertDialog(context);
-        //   readEmojiIcons();
         readEmojiWindow = new EmojiWindow(context);
         readEmojiWindow.readEmojiIcons();
 
@@ -102,61 +101,11 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
-
-    /* private Html.ImageGetter getImageGetter(final int t) {
-         return new Html.ImageGetter() {
-             @Override
-             public Drawable getDrawable(String source) {
-
-                 Drawable d = new BitmapDrawable(context.getResources(), emoticons[t]);
-                 d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-                 return d;
-             }
-         };
-     }
-
-     private Editable getEditable(String contentUnicode) {
-         String content = unicode2String(contentUnicode);
-
-         Editable editable = new Editable.Factory().newEditable("");
-         final String[] s = content.split("`");
-         for (int i = 0; i < s.length; i++) {
-
-
-             StringTokenizer st = new StringTokenizer(s[i], ".");
-
-
-             int t = 0;
-             try {
-                 t = Integer.parseInt(st.nextToken()) - 1;
-
-                 if (t < EMOJI_NUM) {
-                     final int finalI = i;
-                     Spanned cs = Html.fromHtml("<img src ='" + s[finalI] + "'/>", getImageGetter(t), null);
-                     editable.append(cs);
-                     i++;
-
-                 }
-             } catch (NumberFormatException e) {
-                 e.printStackTrace();
-             } catch (Exception e) {
-                 e.printStackTrace();
-             }
-
-
-             if (i < s.length) {
-                 editable.append(s[i]);
-             }
-
-
-         }
-         return editable;
-     }
- */
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
 
+        //点击评论按钮
         holder.replyIMB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -231,7 +180,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 params.addBodyParameter("status", holder.thumb.isSelected() ? "1" : "0");//如果已点赞 则取消赞   如果没点赞 则点赞
 
 
-                if (holder.thumb.isSelected()) {
+                if (holder.thumb.isSelected()) {//如果已点赞
 
                     params.addBodyParameter("status", "1");//取消赞
                     new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelSupportUrl(), params, new RequestCallBack<String>() {
@@ -241,8 +190,6 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                             try {
                                 JSONObject object = new JSONObject(responseInfo.result.toString());
                                 if ("1".equals(object.getString("status"))) {
-
-
                                     for (int i = 0; i < entityList.get(position).getDySupport().size(); i++) {
 
                                         if (entityList.get(position).getDySupport().get(i).getUserId().equals(app.getUserInfoBean().getUserId())) {
@@ -418,12 +365,13 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         }
 
 
+        //有人点赞就显示，没有人点赞就不显示
         if (n > 0) {
             viewHolder.support.setVisibility(View.VISIBLE);
         } else {
             viewHolder.support.setVisibility(View.GONE);
         }
-        return surposes;
+        return surposes;//返回点赞的名单
     }
 
     //添加点赞的人名
@@ -487,21 +435,21 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             final TextView tvCommentName = (TextView) commentMsg.findViewById(R.id.comment_name);
             TextView tvCommentContent = (TextView) commentMsg.findViewById(R.id.comment_content);
 
+            //获得评论人的姓名与评论内容并设置显示
             String commentName = entityList.get(position).getDyCommentReply().get(i).getDiscussantName() + ":";//
             String commentContent = entityList.get(position).getDyCommentReply().get(i).getCommentContent();
-
             tvCommentName.setText(commentName);
-
-
-            // tvCommentContent.setText(commentContent);
             tvCommentContent.setText(readEmojiWindow.getEditable(commentContent));
 
             //点击昵称跳转到用户个人界面
             clickName(tvCommentName, entityList.get(position).getDyCommentReply().get(i).getDiscussantId(), commentName);
 
 
+            //将一条评论添加到父布局中
             viewRoot.addView(commentMsg);
 
+
+            //添加评论中的回复
             int size = entityList.get(position).getDyCommentReply().get(i).getDyReply().size();
             final LinearLayout replyRoot = new LinearLayout(context);
             replyRoot.setOrientation(LinearLayout.VERTICAL);
@@ -641,11 +589,6 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* //检查个人信息是否完善
-                if (!checkNameAndPhoto()) {
-                    return;
-                }
-*/
                 Intent intent = new Intent(context, MomentPersonalActivity.class);
                 intent.putExtra("userId", userID);
                 intent.putExtra("userName", userName.replace(":", ""));
@@ -655,6 +598,8 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     }
 
 
+
+    //发送评论
     private void comment(final int position, final ReplyPopupWindow popupWindow, String dyId, final String content) {
 
         final String discussantId = app.getUserInfoBean().getUserId();
@@ -701,6 +646,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
     }
 
+    //回复评论
     private void reply(final int position, final int i, final String content) {
 
         reply(position, i, -1, content);
@@ -708,6 +654,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
     }
 
+    //回复回复
     private void reply(final int position, final int i, final int j, final String content) {
         RequestParams param = new RequestParams();
 
@@ -747,26 +694,20 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                         DyReplyInfoBean dyReplyInfoBean = new DyReplyInfoBean(userId, userName, repliedId, repliedName, content);
                         ArrayList<DyReplyInfoBean> dyReplyInfoBeans = (ArrayList<DyReplyInfoBean>) entityList.get(position).getDyCommentReply().get(i).getDyReply();
                         dyReplyInfoBeans.add(dyReplyInfoBean);
-
                         entityList.get(position).getDyCommentReply().get(i).setDyReply(dyReplyInfoBeans);
                         notifyDataSetChanged();
                         recycleViewWithHeadAdapter.notifyDataSetChanged();
                         replyPopupWindow.dismiss();
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-
             @Override
             public void onFailure(HttpException error, String msg) {
                 NetWorkUtils.showMsg(context);
             }
         });
     }
-
-
 }
 

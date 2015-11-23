@@ -69,27 +69,28 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
     private String mParam1;
+
     private MyApplication app;
 
 
-    private boolean isLoadingMore;
-    View view;
-    private int i = 1;
+    private boolean isLoadingMore;//判断是否加载
+    View view;//显示界面
+    private int i = 1;//加载第一页
 
     //tabs
-    private TextView dynamic, message, follow;
+    private TextView dynamic, message, follow;//动态，消息，关注
 
 
-    ArrayList<DynamicEntityList> entityList;
+    private ArrayList<DynamicEntityList> entityList;//实体集合
 
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
-    MomentRecyclerViewAdapter adapter;
-    RecycleViewWithHeadAdapter myAdapter;
+    private MomentRecyclerViewAdapter adapter;
+    private RecycleViewWithHeadAdapter myAdapter;
 
-    View myHead;
+    private View myHead;//头部
 
-    Gson gson;
+    private Gson gson;
 
 
     private CircleImageView mHeadPhoto;//头像
@@ -99,16 +100,17 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     private static String path;//存放照相或者从相册选择的图片的路径
 
 
-
     private final static int REFRESH = 1111;//发表动态后刷新
-     private final static int LOGIN = 2222;//登陆后刷新
+    private final static int LOGIN = 2222;//登陆后刷新
     private final static int REQUEST_CODE_CAMERA = 333;//照相的返回码
     private final static int REQUEST_CODE_ALBUM = 444;//相册的返回码
     SwipeRefreshLayout refreshLayout;
-    MyBroadcastReceiver myBroadcastReceiver;
+    MyBroadcastReceiver myBroadcastReceiver;//同步点赞或者评论
 
     private MyAlertDialog mDialog;//对话框
 
+
+    //初始化
     public static MomentFragment newInstance(String param1) {
         MomentFragment fragment = new MomentFragment();
         Bundle args = new Bundle();
@@ -181,6 +183,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
             }
         });//初次进入加载
 
+
+        //下拉监听
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -202,14 +206,14 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         myHead.findViewById(R.id.moment_btn_cancel).setVisibility(View.GONE);
         myHead.findViewById(R.id.moment_btn_follow).setVisibility(View.GONE);
 
+        //头像
         mHeadPhoto = (CircleImageView) myHead.findViewById(R.id.iv_head_photo);
         mHeadPhoto.setOnClickListener(this);
-        if (app.isLogin()) {
+        if (app.isLogin()) {//如果用户已经登陆
             if (!"null".equals(app.getUserInfoBean().getUserPhoto())) {
                 ImageLoader.getInstance().displayImage(app.getImgBaseUrl() + app.getUserInfoBean().getUserPhoto(), mHeadPhoto);
             }
         }
-
 
 
         //init tabs
@@ -224,14 +228,15 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         recyclerView.setLayoutManager(layoutManager);
 
 
+        //设置上拉加载
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
                 int totalItemCount = layoutManager.getItemCount();
-                //lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载，各位自由选择
-                // dy>0 表示向下滑动
+                //lastVisibleItem >= totalItemCount - 1 表示剩下1个item自动加载，各位自由选择
+                // dy>0 表示上拉
                 if (lastVisibleItem >= totalItemCount - 1 && dy > 0) {
                     if (!isLoadingMore) {
 
@@ -278,7 +283,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
             case R.id.right_text:
                 //发表动态  先判断用户信息是否完善
                 if (checkNameAndPhoto()) {
-                    startActivityForResult(new Intent(getActivity(), PublishTopicActivity.class),REFRESH);
+                    startActivityForResult(new Intent(getActivity(), PublishTopicActivity.class), REFRESH);
                 }
 
                 break;
@@ -288,7 +293,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                 if (app.isLogin()) {
                     setHeadPhoto();
                 } else {
-                    ToastUtil.showShort(getActivity(),"请先登录再进行操作");
+                    ToastUtil.showShort(getActivity(), "请先登录再进行操作");
                     startActivityForResult(new Intent(getActivity(), LoginActivity.class), LOGIN);
 
                 }
@@ -390,10 +395,12 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                 recyclerView.scrollToPosition(0);
 
                 break;
-            case LOGIN:
+            case LOGIN://登陆后设置头像,刷新数据
                 if (app.isLogin()) {
+                    adapter.notifyDataSetChanged();
+                    myAdapter.notifyDataSetChanged();
+
                     if (!"null".equals(app.getUserInfoBean().getUserPhoto())) {
-                        LogUtil.e("1233333");
                         ImageLoader.getInstance().displayImage(app.getImgBaseUrl() + app.getUserInfoBean().getUserPhoto(), mHeadPhoto);
                     }
                 }
@@ -542,6 +549,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
      */
     private void getInfo(int page, String type) {
         RequestParams params = new RequestParams();
+
+
 
         if (app.isLogin()) {
             params.addBodyParameter("userId", app.getUserInfoBean().getUserId());

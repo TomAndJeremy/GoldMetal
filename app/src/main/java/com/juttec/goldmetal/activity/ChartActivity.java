@@ -15,7 +15,6 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.customview.HeadLayout;
 import com.juttec.goldmetal.fragment.MarketKChartsFragment;
 import com.juttec.goldmetal.fragment.MarketTimesFragment;
-import com.juttec.goldmetal.utils.GetNetworkData;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 
@@ -42,7 +41,6 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     private FragmentManager fragmentManager;
 
     private String cycles_current[] = null;
-
     //分时图周期
     private String cycles_time[] = new String[]{
             "24小时",
@@ -116,6 +114,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         LogUtil.d("分时图TIME_URL-------------" + TIME_URL);
+
         timesFragment =  MarketTimesFragment.newInstance(TIME_URL);
         transaction.replace(R.id.fragment_container, timesFragment).commit();
 

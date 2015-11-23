@@ -34,6 +34,7 @@ public class MarketTimesFragment extends Fragment {
 	private static MarketTimesFragment marketTimesFragment;
 	private static String TIME_URL;
 
+	private GetNetworkData getNetworkData;
 
 
 
@@ -56,7 +57,8 @@ public class MarketTimesFragment extends Fragment {
 		handler = new MyHandler();
 		timesEntity = new TimesEntity();
 		myEntity = new MyEntity(timesEntity);
-		new GetNetworkData().getKLineData(TIME_URL, myEntity, mContext, handler, NEWEST);
+		getNetworkData = new GetNetworkData();
+		getNetworkData.getKLineData(TIME_URL, myEntity, mContext, handler, NEWEST);
 	}
 
 	@Override
@@ -94,5 +96,11 @@ public class MarketTimesFragment extends Fragment {
 					}
 			}
 		}
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		getNetworkData.stop();
 	}
 }

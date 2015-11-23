@@ -22,13 +22,12 @@ import com.lidroid.xutils.http.client.HttpRequest;
 
 public class GetNetworkData {
 
-    private String url;
-    private MyEntity myEntity;
-    private  Context context;
-    private  Handler handler;
-    private  Thread thread;
-    private  boolean shouldConnect;
-
+    private String url;//路径
+    private MyEntity myEntity;//实体
+    private Context context;//上下文
+    private Handler handler;
+    private Thread thread;
+    private boolean shouldConnect;//是否执行循环
 
 
     /**
@@ -40,8 +39,8 @@ public class GetNetworkData {
      * @param sHandler
      * @param flag
      */
-    public  void getKLineData(final String sUrl, final MyEntity sMyEntity, final Context sContext,
-                                    final Handler sHandler, final int flag) {
+    public void getKLineData(final String sUrl, final MyEntity sMyEntity, final Context sContext,
+                             final Handler sHandler, final int flag) {
 
         url = sUrl;
         myEntity = sMyEntity;
@@ -49,54 +48,58 @@ public class GetNetworkData {
         handler = sHandler;
 
 
-        thread= new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 shouldConnect = true;
 
-                while (shouldConnect) {
-                    HttpUtils httpUtils = new HttpUtils();
-                    httpUtils.configCurrentHttpCacheExpiry(1000);
-                    httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
-                        @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                //给实体类加锁
+                synchronized (myEntity) {
+                        do {
+                            HttpUtils httpUtils = new HttpUtils();
+                            httpUtils.configCurrentHttpCacheExpiry(1000);
+                            httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
+                                @Override
+                                public void onSuccess(ResponseInfo<String> responseInfo) {
 
-                            String str;
-                            if (responseInfo.result.toString().equals("unkown user")) {
-                                str = "{\"result\":[]}";
-                            } else {
-                                str = "{\"result\":" + responseInfo.result.toString() + "}";
-                            }
+                                    String str;
+                                    if (responseInfo.result.toString().equals("unkown user")) {
+                                        str = "{\"result\":[]}";
+                                    } else {
+                                        str = "{\"result\":" + responseInfo.result.toString() + "}";
+                                    }
 
-                            LogUtil.d("自选数据:---------" + str);
+                                    LogUtil.d("自选数据:---------" + str);
+
+                                    try {
+
+                                        myEntity.setObject(JSON.parseObject(str, myEntity.getObject().getClass()));
+                                        Message message = new Message();
+                                        message.what = flag;
+                                        LogUtil.d("发消息通知---------");
+                                        handler.sendMessage(message);
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+
+                                        ToastUtil.showShort(context, responseInfo.result.toString());
+
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(HttpException e, String s) {
+                                    NetWorkUtils.showMsg(context);
+                                }
+                            });
 
                             try {
-
-                                myEntity.setObject(JSON.parseObject(str, myEntity.getObject().getClass()));
-                                Message message = new Message();
-                                message.what = flag;
-                                LogUtil.d("发消息通知---------");
-                                handler.sendMessage(message);
-
-                            } catch (Exception e) {
+                                myEntity.wait(10000);//每10秒钟执行一次
+                            } catch (InterruptedException e) {
                                 e.printStackTrace();
-
-                                ToastUtil.showShort(context, responseInfo.result.toString());
-
                             }
-                        }
+                        } while (shouldConnect);
 
-                        @Override
-                        public void onFailure(HttpException e, String s) {
-                            NetWorkUtils.showMsg(context);
-                        }
-                    });
-
-                    try {
-                        Thread.sleep(10000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         });
@@ -105,29 +108,52 @@ public class GetNetworkData {
     }
 
 
-    public  void setUrl(final String sUrl) {
-        url = sUrl;
+    /**
+     * 重置url
+     * @param sUrl
+     */
+    public void setUrl(String sUrl) {
+        setUrl(sUrl, true);
 
     }
 
-    public  void reset(final String sUrl, final MyEntity sMyEntity, final Context sContext,
-                             final Handler sHandler) {
+    public void setUrl(String sUrl, boolean shouldConnect) {
         url = sUrl;
-        myEntity = sMyEntity;
-        context = sContext;
-        handler = sHandler;
-    }
-
-    public  void stop() {
-
-        if (thread != null&&thread.isAlive()) {
-          shouldConnect = false;
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        if (myEntity != null) {
+            synchronized (myEntity) {
+                myEntity.notifyAll();//唤醒线程
             }
+        }
+
+        this.shouldConnect = shouldConnect;
+
+    }
+
+
+
+    //停止
+    public void stop() {
+
+
+        if (thread != null && thread.isAlive()) {
+            shouldConnect = false;
+            if (myEntity != null) {
+                synchronized (myEntity) {
+                    myEntity.notifyAll();
+                }
+            }
+            thread.interrupt();
 
         }
+    }
+
+    //判断线程isAlive
+    public boolean isAlive() {
+        if (thread == null) {
+            return false;
+        } else {
+            return thread.isAlive();
+        }
+
     }
 }

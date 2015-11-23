@@ -115,6 +115,8 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
         mEditText.setFocusable(true);
         mEditText.setFocusableInTouchMode(true);
         mEditText.requestFocus();
+
+        //键盘弹出
         InputMethodManager imm = (InputMethodManager) mEditText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
         InputMethodManager inputMethodManager =
@@ -122,6 +124,7 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
         inputMethodManager.toggleSoftInputFromWindow(mEditText.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);
 
 
+        //设置监听事件 隐藏表情键盘
         mEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -133,10 +136,12 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
 
 
         mImageButton = (ImageButton) contentview.findViewById(R.id.comment_ib_emoji);
-        readEmojiIcons();
+        readEmojiIcons();//读取表情
         enablePopUpView(popupLayout);
 
 
+
+        //表情按钮点击事件
         mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,6 +158,7 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
             }
         });
 
+        //发送
         mSend = (Button) contentview.findViewById(R.id.btn_send);
 
         //发送按钮的点击事件
@@ -227,6 +233,8 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
         }
     }
 
+
+    //表情键盘事件
     @Override
     public void keyClickedIndex(final String index) {
         Html.ImageGetter imageGetter = new Html.ImageGetter() {
@@ -272,13 +280,7 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
         EmoticonsPagerAdapter adapter = new EmoticonsPagerAdapter((Activity) mContext, paths, this);
         pager.setAdapter(adapter);
 
-
-        // Creating a pop window for emoticons keyboard
-      /*  popupWindow = new PopupWindow(view, LinearLayout.LayoutParams.MATCH_PARENT,
-                keyboardHeight, false);
-        popupWindow.setOutsideTouchable(false);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));*/
-        TextView backSpace;
+        TextView backSpace;//删除按钮
         backSpace = (TextView) view.findViewById(R.id.back);
         backSpace.setOnClickListener(new View.OnClickListener() {
 
@@ -288,18 +290,10 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
                 mEditText.dispatchKeyEvent(event);
             }
         });
-
-      /*  popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-
-            @Override
-            public void onDismiss() {
-                emojiconsCover.setVisibility(LinearLayout.GONE);
-            }
-        });
-*/
     }
 
 
+    //表情键盘高度
     private void changeKeyboardHeight(int height) {
         if (height > 100) {
             keyboardHeight = height;
