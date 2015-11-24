@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.alibaba.fastjson.JSON;
+import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.MyEntity;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -55,50 +56,50 @@ public class GetNetworkData {
 
                 //给实体类加锁
                 synchronized (myEntity) {
-                        do {
-                            HttpUtils httpUtils = new HttpUtils();
-                            httpUtils.configCurrentHttpCacheExpiry(1000);
-                            httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
-                                @Override
-                                public void onSuccess(ResponseInfo<String> responseInfo) {
+                    do {
+                        HttpUtils httpUtils = new HttpUtils();
+                        httpUtils.configCurrentHttpCacheExpiry(1000);
+                        httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
+                            @Override
+                            public void onSuccess(ResponseInfo<String> responseInfo) {
 
-                                    String str;
-                                    if (responseInfo.result.toString().equals("unkown user")) {
-                                        str = "{\"result\":[]}";
-                                    } else {
-                                        str = "{\"result\":" + responseInfo.result.toString() + "}";
-                                    }
-
-                                    LogUtil.d("自选数据:---------" + str);
-
-                                    try {
-
-                                        myEntity.setObject(JSON.parseObject(str, myEntity.getObject().getClass()));
-                                        Message message = new Message();
-                                        message.what = flag;
-                                        LogUtil.d("发消息通知---------");
-                                        handler.sendMessage(message);
-
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-
-                                        ToastUtil.showShort(context, responseInfo.result.toString());
-
-                                    }
+                                String str;
+                                if (responseInfo.result.toString().equals("unkown user")) {
+                                    str = "{\"result\":[]}";
+                                } else {
+                                    str = "{\"result\":" + responseInfo.result.toString() + "}";
                                 }
 
-                                @Override
-                                public void onFailure(HttpException e, String s) {
-                                    NetWorkUtils.showMsg(context);
-                                }
-                            });
+                                LogUtil.d("自选数据:---------" + str);
 
-                            try {
-                                myEntity.wait(10000);//每10秒钟执行一次
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                                try {
+
+                                    myEntity.setObject(JSON.parseObject(str, myEntity.getObject().getClass()));
+                                    Message message = new Message();
+                                    message.what = flag;
+                                    LogUtil.d("发消息通知---------");
+                                    handler.sendMessage(message);
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+
+                                    ToastUtil.showShort(context, responseInfo.result.toString());
+
+                                }
                             }
-                        } while (shouldConnect);
+
+                            @Override
+                            public void onFailure(HttpException e, String s) {
+                                NetWorkUtils.showMsg(context);
+                            }
+                        });
+
+                        try {
+                            myEntity.wait(10000);//每10秒钟执行一次
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } while (shouldConnect && MyApplication.canCycle);
 
                 }
             }

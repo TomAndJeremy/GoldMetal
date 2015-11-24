@@ -267,4 +267,6 @@ public class MyApplication extends Application {
     }
 
 
+    public static boolean canCycle = true;//判断获取数据时候循环是否执行
+
 }
