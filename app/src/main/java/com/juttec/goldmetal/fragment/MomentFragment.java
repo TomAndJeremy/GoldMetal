@@ -195,8 +195,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
             }
         });
-
-
     }
 
 

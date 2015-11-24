@@ -112,6 +112,8 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
 
     private int page = 1;//默认加载第一页的数据
+    private int lastPage = 1;//与page比较判断当前加载的是否是同一页
+
 
 
 
@@ -293,60 +295,61 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                int totalItemCount = layoutManager.getItemCount();
 
-                switch (event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
+                if (firstVisibleItem == 0 || lastVisibleItem >= totalItemCount - 1) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
 
-                        LogUtil.d("MotionEvent.ACTION_DOWN-----:"+event.getY() );
-                        break;
+                            LogUtil.d("MotionEvent.ACTION_DOWN-----:" + event.getY());
+                            break;
 
-                    case MotionEvent.ACTION_MOVE:
-                        LogUtil.d("MotionEvent.ACTION_MOVE-----:"+event.getY() );
+                        case MotionEvent.ACTION_MOVE:
+                            LogUtil.d("MotionEvent.ACTION_MOVE-----:" + event.getY());
 
-                        if(n==1){
-                            //
-                            firstY = event.getY();
-                            LogUtil.d("firstY-----:"+firstY );
-                            n++;
-                        }
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        //将n重新设置为1
-                        n = 1;
-
-                        int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
-                        int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
-                        int totalItemCount = layoutManager.getItemCount();
-
-                        LogUtil.d("MotionEvent.ACTION_UP-----:"+event.getY() );
-                        LogUtil.d("MotionEvent.ACTION_UP======"+page+":"+firstVisibleItem+":"+(firstY-event.getY()));
-                        //下拉 加载上一页数据
-                        //当前不是第一页数据 当前显示的第一条数据的position为0  向下滑动的手势距离大于20
-                        if(page!=1 && firstVisibleItem==0 && firstY-event.getY()<-100){
-                            //下拉  加载上一页数据
-                            if (!isLoadingMore) {
-                                LogUtil.d("下拉  加载上一页数据-----" );
-                                page--;
-                                //
-                                isNoMore = false;
-                                loadData(page);
+                            if (n == 1) {
+                                firstY = event.getY();
+                                LogUtil.d("firstY-----:" + firstY);
+                                n++;
                             }
-                        }
+                            break;
+
+                        case MotionEvent.ACTION_UP:
+                            //将n重新设置为1
+                            n = 1;
 
 
-                        //上拉 加载下一页数据
-                        //当前显示的最后一条数据的position==totalItemCount的position  向上滑动的手势距离大于30
-                        if (lastVisibleItem >= totalItemCount - 1 && firstY-event.getY()>100) {
-                            //上拉 加载下一页数据
-                            if (!isLoadingMore) {
-                                if (!isNoMore) {
-                                    page++;
+                            LogUtil.d("MotionEvent.ACTION_UP-----:" + event.getY());
+                            LogUtil.d("MotionEvent.ACTION_UP======" + page + ":" + firstVisibleItem + ":" + (firstY - event.getY()));
+                            //下拉 加载上一页数据
+                            //当前不是第一页数据 当前显示的第一条数据的position为0  向下滑动的手势距离大于20
+                            if (page != 1 && firstY - event.getY() < -100) {
+                                //下拉  加载上一页数据
+                                if (!isLoadingMore) {
+                                    LogUtil.d("下拉  加载上一页数据-----");
+                                    page--;
+                                    //
+                                    isNoMore = false;
                                     loadData(page);
                                 }
                             }
-                        }
-                        break;
+
+
+                            //上拉 加载下一页数据
+                            //当前显示的最后一条数据的position==totalItemCount的position  向上滑动的手势距离大于30
+                            if (firstY - event.getY() > 100) {
+                                //上拉 加载下一页数据
+                                if (!isLoadingMore) {
+                                    if (!isNoMore) {
+                                        page++;
+                                        loadData(page);
+                                    }
+                                }
+                            }
+                            break;
+                    }
                 }
 
                 return false;
@@ -587,7 +590,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                             adapter.notifyData(datas);
                             layoutManager.scrollToPosition(0);
                             recyclerView.setLayoutManager(layoutManager);
-                        }
+                            lastPage = page;  }
 
 
                         //item的短按事件   进入分时图
