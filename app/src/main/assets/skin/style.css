@@ -159,9 +159,9 @@ h4{
     text-align: center;
     width: 68px;
 }
-.head_l{float:left;width:180px;}
-.head_r{float:left;width:705px;}
-.head_t{float:left;width:705px;font-size:14px;font-weight:600;margin-bottom:10px;}
+.head_l{float:left;width:40%;}
+.head_r{float:left;width:100%;}
+.head_t{float:left;width:100%;font-size:14px;font-weight:600;margin-bottom:10px;}
 .cc table{width:100%;}
 .cc th{text-align:left;}
 .td_star{ display:inline-block; width:12px; height:12px;

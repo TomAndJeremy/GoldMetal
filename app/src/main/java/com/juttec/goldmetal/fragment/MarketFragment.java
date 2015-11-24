@@ -304,6 +304,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                         LogUtil.d("MotionEvent.ACTION_MOVE-----:"+event.getY() );
 
                         if(n==1){
+                            //
                             firstY = event.getY();
                             LogUtil.d("firstY-----:"+firstY );
                             n++;
