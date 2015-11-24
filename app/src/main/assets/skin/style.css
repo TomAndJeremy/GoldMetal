@@ -33,7 +33,7 @@ body{
     font-size: 12px;
 	padding:0px;margin:0px; 
 }
-.wrap{width:1000px;margin:0 auto;background:#ffffff;} 
+.wrap{width:100%;margin:0 auto;background:#ffffff;}
 ul li {
 	list-style: none;
 	float: left;}
@@ -41,9 +41,9 @@ ul li {
     display: inline;
     float: left;
     overflow: hidden;
-    width: 106px;
+    width: 14.18%;
 }
-#header{margin-top:10px;}
+#header{margin-top:10px; width:98%;margin-left:auto;margin-right:auto;}
 #header ul li span{
     background: none repeat scroll 0 0 #EDECEC;
     border-color: #A8A8A8 #B4B3B3;
@@ -53,11 +53,14 @@ ul li {
     border-width: 1px;
     cursor: pointer;
     display: block;
-    height: 32px;
+    height: 60px;
     line-height: 32px;
     margin-left: -1px;
     text-align: center;
-    width: 105px;
+    width: 95.2%;
+}
+#header ul li p{
+    display:block;
 }
 #header .tt{
     background: none repeat scroll 0 0 #FFFFFF;
@@ -66,11 +69,11 @@ ul li {
     color: #045280; 
 }
 #header .date{height:35px;line-height:35px;}
-#header .date input{margin-top:5px;}
-.shuaixuan{clear: both;margin-top:10px;height:50px;padding-top:20px;}
+#header .date input{margin-top:5px;float:right;}
+.shuaixuan{clear: both;height:50px;padding-top:10px;}
 .sxpic{
 	background: url("yjl_caijingyueli_selectOption_sx.png") no-repeat scroll 0 0 transparent;
-    display: inline;
+    display: block;
     float: left;
     height: 21px;
     width: 48px;}
@@ -138,7 +141,7 @@ ul li {
     background-position: -332px -38px;
 }
 .con{clear:both;}
-th{ background:#E7E7E7;color:#555555;height:30px;border-top:1px solid #C0C0C0;text-align:left;}
+th{ background:#E7E7E7;color:#555555;height:30px;border-top:1px solid #C0C0C0;text-align:left;width: 2rem}
 td{ 
     cursor: pointer;
     font-size: 12px;
@@ -159,7 +162,7 @@ h4{
 .head_l{float:left;width:180px;}
 .head_r{float:left;width:705px;}
 .head_t{float:left;width:705px;font-size:14px;font-weight:600;margin-bottom:10px;}
-.cc table{width:998px;}
+.cc table{width:100%;}
 .cc th{text-align:left;}
 .td_star{ display:inline-block; width:12px; height:12px;
 background:url(yjl_caijingyueli_star.png) no-repeat;  margin-right:1px; }
@@ -168,12 +171,12 @@ background:url(yjl_caijingyueli_star2.png) no-repeat; margin-right:1px; }
 .xtrcon{color:#000;}
 td{color:#000;}
 .yjl_caijingyueli_titleBox{ width:100%; text-align:left; float:left;margin-bottom:1px;height:30px;background:#F1F1F1;}
-.yjl_caijingyueli_titleBox h1{ width:80px; text-align:left; float:left; height:20px; 
-line-height:20px; font-size:14px; font-weight:bold; margin-top:4px;  color:#444; 
+.yjl_caijingyueli_titleBox h1{ width:25%; text-align:left; float:left; height:20px;
+line-height:20px; font-size:0.875rem; font-weight:bold; margin-top:4px;  color:#444;
 padding-left:18px; background:url(yjl_caijingrili.gif) no-repeat 0 3px;
 border:0px #000 solid;}
 .yjl_caijingyueli_titleBox h5{float:left; height:20px;line-height:20px;font-size:14px; 
-font-weight:bold; margin-top:4px;  color:#444; width:300px; border:0px #000 solid;}
+font-weight:bold; margin-top:4px;  color:#444; width:60%; border:0px #000 solid;}
 .yjl_caijingyueli_titleBox h6{ float:right; display:inline; text-align:right; 
 font-size:12px; color:#333;border:0px #000 solid;vertical-align:middle; margin:6px 15px 0 0;}
   
@@ -205,41 +208,59 @@ font-weight:bold; color:#555; cursor:default;}
 #kuaixun .odd{background:#EEEEEE;} 
 table .ti{text-align:center;}
 .calendar_time { 
-	width: 1000px;
+	width: 100%;
 	height: 157px;
-	background: url('calendar_bg01.png') no-repeat;
 	margin:0 auto;
 	margin-bottom: 10px;
 	
 }
 .calendar_time .time_bottom {
 	margin:0 auto; 
-	width:680px;
-	padding-top:105px;
+	width:98%;
+}
+.calendar_time img{
+    width:100%;
 }
 
 .time_bottom .world_time {
 	float: left;
-	width: 124px;
-	height: 32px;
-	padding-left: 10px;
-	margin-right: 10px;
+	width: 19%;
+	height: 50px;
+	margin-right: 1px;
 	display: inline;
-	line-height: 32px;
-	background: url('calendar_time.png') no-repeat;
-	font-size: 18px;
+	line-height: 28px;
+	background-color:#fff;
+    border-radius:3px;
+    border:1px solid #999999;
+	font-size: 0.875rem;
 	font-family: Arial;
 }
 .time_bottom .world_time span {
-	float: left;
-	width: 30px;
+
+	width: 1.875rem;
 	height: 17px;
 	line-height: 17px;
 	background-color: #c25800;
 	color: #fff;
 	text-align: center;
 	margin-top: 8px;
-	margin-right: 5px;
-	font-size: 12px;
+	font-size: 0.75rem;
 	font-family: "ËÎÌו";
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+}
+.time_bottom .world_time p{
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    height:18px;
+    margin-top:auto;
+}
+.shuaixuan_div{
+    clear:both;
+    margin-top:30px;
+}
+.date{
+    display: none;
 }

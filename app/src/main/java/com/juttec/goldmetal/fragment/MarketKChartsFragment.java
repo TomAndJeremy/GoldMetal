@@ -49,7 +49,7 @@ public class MarketKChartsFragment extends Fragment {
         return kChartsFragment;
     }
 
-    //设置下下指标刷新
+    //设置下指标刷新
     public void setIndex(String index) {
         if (mMyChartsView != null) {
             mMyChartsView.setTabTitle(index);
@@ -75,9 +75,8 @@ public class MarketKChartsFragment extends Fragment {
         datas = new ArrayList<KChartInfo.ResultEntity>();
         kChartInfo = new KChartInfo();
         myEntity = new MyEntity(kChartInfo);
-
         getNetworkData = new GetNetworkData();
-    getNetworkData.getKLineData(url, myEntity, getActivity(), handler, NEWEST);
+        getNetworkData.getKLineData(url, myEntity, getActivity(), handler, NEWEST);
         return view;
     }
 
@@ -118,7 +117,7 @@ public class MarketKChartsFragment extends Fragment {
         kChartsFragment = null;
     }
 
-    //从assets 文件夹中获取文件并读取数据（测试时用）
+    //从assets 文件夹中获取文件并读取数据
     public   List<KChartInfo.ResultEntity> getFromAssets() {
         List<KChartInfo.ResultEntity> datas = new ArrayList<>();
 
@@ -175,5 +174,6 @@ public class MarketKChartsFragment extends Fragment {
         super.onStop();
         getNetworkData.stop();
     }
+    
 }
 

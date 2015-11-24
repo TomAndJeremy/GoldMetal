@@ -273,25 +273,6 @@ public class TimesView extends GridChart {
         } catch (Exception e) {
             e.printStackTrace();
 
-
-            int t3 = (int) (super.getLongitudeSpacing() * 3 / dataSpacing);
-            if (t3 <= timesList.size()) {
-                canvas.drawText(DateUtil.formatDate(timesList.get(t3).getDate()), 2 + super.getLongitudeSpacing() * 3 - 3.0f * DEFAULT_AXIS_TITLE_SIZE,
-                        uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
-            }
-
-            int t4 = (int) (super.getLongitudeSpacing() * 4 / dataSpacing);
-            if (t4 <= timesList.size()) {
-                canvas.drawText(DateUtil.formatDate(timesList.get(t4).getDate()), 2 + super.getLongitudeSpacing() * 4 - 3.0f * DEFAULT_AXIS_TITLE_SIZE,
-                        uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
-            }
-
-            int t5 = (int) (super.getLongitudeSpacing() * 5 / dataSpacing);
-            if (t5 <= timesList.size()) {
-                canvas.drawText(DateUtil.formatDate(timesList.get(t5).getDate()), 2 + super.getLongitudeSpacing() * 5 - 3.0f * DEFAULT_AXIS_TITLE_SIZE,
-                        uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
-
-            }
 //		canvas.drawText("11:30/13:00", viewWidth / 2.0f - DEFAULT_AXIS_TITLE_SIZE * 2.5f,
 //				uperBottom + DEFAULT_AXIS_TITLE_SIZE, paint);
 //		canvas.drawText("15:00", viewWidth - 2 - DEFAULT_AXIS_TITLE_SIZE * 2.5f, uperBottom

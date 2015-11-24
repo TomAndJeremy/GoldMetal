@@ -3,10 +3,8 @@ package com.juttec.goldmetal.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
@@ -59,6 +57,8 @@ public class MoreFragment extends BaseFragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_more, container, false);
         initView(view);
+
+        ShareSDK.initSDK(getActivity());
         return view;
     }
 
@@ -92,7 +92,7 @@ public class MoreFragment extends BaseFragment implements View.OnClickListener{
 
 
     private void showShare() {
-        ShareSDK.initSDK(getActivity());
+
         OnekeyShare oks = new OnekeyShare();
         //关闭sso授权
         oks.disableSSOWhenAuthorize();

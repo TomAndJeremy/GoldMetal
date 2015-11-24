@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="skin/style.css"/> 
 <script type="text/javascript" src="common/jquery.js"></script> 
 <!--<script type="text/javascript" src="../../common/common.js"></script>--> 
@@ -26,7 +27,8 @@ background: url('../images/icons1.png') -52px -65px no-repeat;margin-top:10px;ma
 </style>
 </head> 
 <body>
- <div class="calendar_time"> <a class="icons1" href="javascript:closeWindow();"></a>
+ <div class="calendar_time">
+     <img src="skin/calendar_bg03.png">
         <div class="time_bottom">
           <div class="world_time" id="Beijing"> </div>
           <div class="world_time" id="London"> </div>
@@ -55,6 +57,7 @@ background: url('../images/icons1.png') -52px -65px no-repeat;margin-top:10px;ma
 	<div style="clear:both;"></div>
     <div class="shuaixuan">
     	 <div class="sxpic"> </div>
+        <div class="shuaixuan_div">
     	 <ul>
     	 <li>
     	 <a href="javascript:CurrencyDate('1','10001');" id="guojia_1" class="yjl_guojia_1" title="美元" onfocus="this.blur()">美元</a>
@@ -67,6 +70,7 @@ background: url('../images/icons1.png') -52px -65px no-repeat;margin-top:10px;ma
     	 <li><a href="javascript:CurrencyDate('7','10019');" id="guojia_7" class="yjl_guojia_7" title="瑞郎" onfocus="this.blur()">瑞郎</a></li>
     	 <li><a href="javascript:CurrencyDate('8','10003');" id="guojia_8" class="yjl_guojia_8" title="人民币" onfocus="this.blur()">人民币</a></li>
     	 </ul>
+        </div>
     </div>
     <div class="con">
        <div id="d1" class="cc">
@@ -136,7 +140,7 @@ background: url('../images/icons1.png') -52px -65px no-repeat;margin-top:10px;ma
 	     var day=parseInt(day);    
 	     if(isNaN(day) || day<0 || day>6)        
 	         return false;    
-	     var weekday=["星期天","星期一","星期二","星期三","星期四","星期五","星期六"];    
+	     var weekday=["周天","周一","周二","周三","周四","周五","周六"];
 	     return weekday[day];
 	     }
 	 // d是当前星期一的日期对象
@@ -147,7 +151,7 @@ background: url('../images/icons1.png') -52px -65px no-repeat;margin-top:10px;ma
 	 	tcurr='';
 	 	date1=(d.getDate()<10)?'0'+d.getDate():d.getDate();
 	 	if(d.getDate()==new Date().getDate())tcurr=' class="tt" ';    
-	     $showindexarr.push('<li><span '+tcurr+' tyshow="'+d.getFullYear()+'年'+(d.getMonth()+1)+'月'+date1+'日"  ty="'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+date1+'">'+(d.getMonth()+1)+'月'+date1+'日('+getDayName(d.getDay())+')</span></li>'); 
+	     $showindexarr.push('<li><span '+tcurr+' tyshow="'+d.getFullYear()+'年'+(d.getMonth()+1)+'月'+date1+'日"  ty="'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+date1+'">'+date1+'日'+"<div>"+'(' +getDayName(d.getDay())+')</span></li>')+"</div>";
 	     d.setDate(d.getDate()+1);  
 	    }
 	 var xdata = new Array();
@@ -262,10 +266,11 @@ function displayTime(city, offset, id) {
     if (seconds < 10) {
         seconds = "0" + seconds;
     }
-    document.getElementById(id).innerHTML = "<span>" + city + "</span>" + hours + ":" + minutes + ":" + seconds;
+    document.getElementById(id).innerHTML = "<span>" + city + "</span>" +"<p>" + hours + ":" + minutes + ":" + seconds + "</p>" ;
     setTimeout(function () { displayTime(city, offset, id); }, 1000);
 }
  </script>
 </body>
+
 </html>
 

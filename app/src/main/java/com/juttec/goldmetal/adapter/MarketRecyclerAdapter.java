@@ -34,6 +34,12 @@ public class MarketRecyclerAdapter extends RecyclerView.Adapter<MarketRecyclerAd
     }
 
 
+    public void notifyData(List<MarketFormInfo.ResultEntity> datas){
+        this.datas = datas;
+        notifyDataSetChanged();
+    }
+
+
     @Override
 
     public MarketRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
