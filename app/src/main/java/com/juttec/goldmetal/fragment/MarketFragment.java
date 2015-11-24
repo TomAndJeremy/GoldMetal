@@ -586,7 +586,11 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                             recyclerView.setAdapter(adapter);
                         }else{
                             adapter.notifyData(datas);
-                            layoutManager.scrollToPosition(0);
+
+                            if (lastPage != page) {
+
+                                layoutManager.scrollToPosition(0);
+                            }
                             recyclerView.setLayoutManager(layoutManager);
                             lastPage = page;  }
 
@@ -700,7 +704,9 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         myRealm.commitTransaction();
     }
 
-
-
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        getNetWorkData.stop();//停止网络访问
+    }
 }

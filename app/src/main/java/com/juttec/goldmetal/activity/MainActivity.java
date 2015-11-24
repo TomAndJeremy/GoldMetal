@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.MyFragmentPagerAdapter;
+import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.fragment.BaseFragment;
 import com.juttec.goldmetal.utils.GetNetworkData;
 import com.juttec.goldmetal.utils.LogUtil;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
     //初始化adapter
     MyFragmentPagerAdapter myFragmentPagerAdapter;
 
-    private PowerManager.WakeLock  mWakeLock;//设置屏幕常亮
+    private PowerManager.WakeLock mWakeLock;//设置屏幕常亮
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
 
 
         //退出当前账号
-        if(getIntent().getFlags()== Intent.FLAG_ACTIVITY_CLEAR_TOP&&getIntent().getStringExtra("from").equals("AccountActivity")){
+        if (getIntent().getFlags() == Intent.FLAG_ACTIVITY_CLEAR_TOP && getIntent().getStringExtra("from").equals("AccountActivity")) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
@@ -50,11 +51,9 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
     }
 
 
-
-
     @Override
     protected void onResume() {
-        if((Boolean) SharedPreferencesUtil.getParam(MainActivity.this, "isScreenLight", true)){
+        if ((Boolean) SharedPreferencesUtil.getParam(MainActivity.this, "isScreenLight", true)) {
             acquireWakeLock();
             LogUtil.d("----------mWakeLock.acquire()");
         }
@@ -79,8 +78,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         tabLayout = (TabLayout) this.findViewById(R.id.tabLayout);
 
 
-
-
         //初始化adapter
         myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(myFragmentPagerAdapter);
@@ -90,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         // 自定义tablayout布局
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
-
 
             if (tab != null) {
                 tab.setCustomView(myFragmentPagerAdapter.getTabView(i));
@@ -106,9 +102,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
     public void onFragmentInteraction(Uri uri) {
 
     }
-
-
-
 
 
     private void acquireWakeLock() {
@@ -130,14 +123,12 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
     }
 
 
-
-
     //如果两次按键时间间隔大于2秒，则不退出
     private long firstTime = 0;
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        switch(keyCode)
-        {
+        switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 long secondTime = System.currentTimeMillis();
                 if (secondTime - firstTime > 2000) {
