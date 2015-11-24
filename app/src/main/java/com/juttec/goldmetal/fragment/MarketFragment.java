@@ -580,7 +580,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                             return ;
                         }
 
-
+                        ToastUtil.showShort(getActivity(), "加载更多数据...");
                         if(adapter==null){
                             adapter = new MarketRecyclerAdapter(datas, getActivity());
                             recyclerView.setAdapter(adapter);

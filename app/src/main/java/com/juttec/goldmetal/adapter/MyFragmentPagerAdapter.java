@@ -58,23 +58,19 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 fragment = MarketFragment.newInstance("f1");
-                //MyApplication.canCycle = true;
+
                 break;
             case 1:
                 fragment = NewsFragment.newInstance("f2");
-               // MyApplication.canCycle = false;
                 break;
             case 2:
                 fragment = MomentFragment.newInstance("f3");
-               // MyApplication.canCycle = false;
                 break;
             case 3:
                 fragment = ServeFragment.newInstance("f4");
-               // MyApplication.canCycle = false;
                 break;
             default:
                 fragment = MoreFragment.newInstance("f5");
-               // MyApplication.canCycle = false;
                 break;
         }
         return fragment;

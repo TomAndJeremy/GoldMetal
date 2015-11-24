@@ -14,7 +14,6 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.MyFragmentPagerAdapter;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.fragment.BaseFragment;
-import com.juttec.goldmetal.utils.GetNetworkData;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.SharedPreferencesUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -95,6 +94,29 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
 
 
         tabLayout.getTabAt(0).select();
+
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                if (position == 0) {
+                    MyApplication.canCycle = true;
+                } else {
+                    MyApplication.canCycle = false;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 
