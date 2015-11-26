@@ -82,6 +82,7 @@
                     android:textSize="20sp" />
 
                 <TextView
+                    android:id="@+id/ca_tv_high"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1167.84"
@@ -99,6 +100,7 @@
                     android:textSize="20sp" />
 
                 <TextView
+                    android:id="@+id/ca_tv_open"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1167.84"
@@ -124,6 +126,7 @@
                     android:textSize="20sp" />
 
                 <TextView
+                    android:id="@+id/ca_tv_low"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1167.84"
@@ -140,6 +143,7 @@
                     android:textSize="20sp" />
 
                 <TextView
+                    android:id="@+id/ca_tv_lastclose"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1167.84"

@@ -62,7 +62,7 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
 
     private Bitmap[] emoticons;
 
-    private static int EMOJI_NUM = 54;
+    private static int EMOJI_NUM = 60;
     private int keyboardHeight;
 
 

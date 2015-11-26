@@ -79,7 +79,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     public final static int REQUEST_CODE_ALBUM = 222;
 
 
-    private static final int EMOJI_NUM = 54;//表情数目
+    private static final int EMOJI_NUM = 60;//表情数目
 
     private View popUpView;
     private LinearLayout emojiconsCover;
@@ -344,8 +344,6 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
 
         Spanned cs = Html.fromHtml("<img src ='" + index + "'/>", imageGetter, null);
-
-
         int cursorPosition = mContent.getSelectionStart();
         mContent.getText().insert(cursorPosition, cs);
 

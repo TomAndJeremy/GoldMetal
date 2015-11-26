@@ -26,13 +26,16 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 
+/**
+ * 价格换算
+ */
 public class PriceReductionActivity extends AppCompatActivity {
 
-    private final double KG_OUNCE = 35.2739619;
-    private double dollarRmb;
+    private final double KG_OUNCE = 35.2739619;//千克与盎司的比率
+    private double dollarRmb;//美元与人民币的汇率
     EditText etDollarOunce, etRmbOunce, etRmbKg;
-    TextWatcher twDollarOunce, twRmbOunce, twRmbKg;
-    DecimalFormat decimalFormat;
+    TextWatcher twDollarOunce, twRmbOunce, twRmbKg;//美元/盎司，人民币/盎司，人民币/千克
+    DecimalFormat decimalFormat;//将数字格式化成保留小数点后两位
 
     private MyApplication app;
     private TextView tvRate;
@@ -52,6 +55,7 @@ public class PriceReductionActivity extends AppCompatActivity {
         tvRate = (TextView) this.findViewById(R.id.tv_rate);
 
 
+       //获取美元人民币汇率
         new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetExchangeRateUrl(), new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -80,6 +84,8 @@ public class PriceReductionActivity extends AppCompatActivity {
             }
         });
 
+
+        //设置监听事件
         twDollarOunce = new DOTextWatcher();
         twRmbOunce = new ROTextWatcher();
         twRmbKg = new RKTextWatcher();
@@ -95,6 +101,8 @@ public class PriceReductionActivity extends AppCompatActivity {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+
+            //取消其他两个文本框的监听事件，以防止循环调用导致栈溢出
             etRmbOunce.removeTextChangedListener(twRmbOunce);
             etRmbKg.removeTextChangedListener(twRmbKg);
 
@@ -120,14 +128,13 @@ public class PriceReductionActivity extends AppCompatActivity {
             priceRmbKg = priceRmbOunce * KG_OUNCE;
 
 
-            LogUtil.e("priceDollarOunce  " + priceDollarOunce + "  ,priceRmbOunce  " + priceRmbOunce + ",priceRmbKg  " + priceRmbKg);
-
             etRmbOunce.setText(decimalFormat.format(priceRmbOunce));
             etRmbKg.setText(decimalFormat.format(priceRmbKg));
         }
 
         @Override
         public void afterTextChanged(Editable s) {
+            //重新添加监听事件
             etRmbOunce.addTextChangedListener(twRmbOunce);
             etRmbKg.addTextChangedListener(twRmbKg);
         }
@@ -158,7 +165,6 @@ public class PriceReductionActivity extends AppCompatActivity {
             priceRmbKg = Double.parseDouble(s.toString());
             priceRmbOunce = priceRmbKg / KG_OUNCE;
             priceDollarOunce = priceRmbOunce / dollarRmb;
-            LogUtil.e("priceDollarOunce  " + priceDollarOunce + "  ,priceRmbOunce  " + priceRmbOunce + ",priceRmbKg  " + priceRmbKg);
             etRmbOunce.setText(decimalFormat.format(priceRmbOunce));
             etDollarOunce.setText(decimalFormat.format(priceDollarOunce));
 
@@ -196,7 +202,6 @@ public class PriceReductionActivity extends AppCompatActivity {
             priceRmbOunce = Double.parseDouble(s.toString());
             priceRmbKg = priceRmbOunce * KG_OUNCE;
             priceDollarOunce = priceRmbOunce / dollarRmb;
-            LogUtil.e("priceDollarOunce  " + priceDollarOunce + "  ,priceRmbOunce  " + priceRmbOunce + ",priceRmbKg  " + priceRmbKg);
             etRmbKg.setText(decimalFormat.format(priceRmbKg));
             etDollarOunce.setText(decimalFormat.format(priceDollarOunce));
 

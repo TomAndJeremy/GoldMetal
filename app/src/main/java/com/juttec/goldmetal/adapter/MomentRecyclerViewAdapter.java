@@ -134,7 +134,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
 
         ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + entityList.get(position).getUserPhoto(), holder.headPortrait);
-
+        LogUtil.e("图片  " + MyApplication.ImgBASEURL + entityList.get(position).getUserPhoto());
 
         //图片的集合
         final ArrayList<PhotoBean> photoBeanList = entityList.get(position).getDyPhoto();
@@ -438,7 +438,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             //获得评论人的姓名与评论内容并设置显示
             String commentName = entityList.get(position).getDyCommentReply().get(i).getDiscussantName() + ":";//
             String commentContent = entityList.get(position).getDyCommentReply().get(i).getCommentContent();
-            tvCommentName.setText(commentName);
+            tvCommentName.setText(commentName+" ");
             tvCommentContent.setText(readEmojiWindow.getEditable(commentContent));
 
             //点击昵称跳转到用户个人界面
@@ -493,8 +493,8 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 hint.setVisibility(View.VISIBLE);
 
                 tvReplyName.setText(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName());
-                tvRepliedName.setText(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName() + ":");
-                tvReplyContent.setText(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent());
+                tvRepliedName.setText(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName() + ": ");
+                tvReplyContent.setText(readEmojiWindow.getEditable(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent()));
                 replyRoot.addView(replyMsg);
 
                 clickName(tvReplyName, entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserId(), entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName());
