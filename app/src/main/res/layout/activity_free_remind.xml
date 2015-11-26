@@ -64,6 +64,7 @@
                     android:layout_toLeftOf="@+id/iv_base_price"
                     android:background="@drawable/edit_free_remind"
                     android:gravity="center"
+                    android:inputType="numberDecimal"
                     android:text="17.41" />
 
                 <ImageView
@@ -90,6 +91,7 @@
                     android:layout_toLeftOf="@+id/iv_floating_value"
                     android:background="@drawable/edit_free_remind"
                     android:gravity="center"
+                    android:inputType="numberDecimal"
                     android:text="0.1" />
 
                 <ImageView

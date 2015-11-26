@@ -35,9 +35,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     private TextView tv_index;//指标
     private TextView tv_title;//标题
 
-
     private TextView tvHigh, tvLow, tvOpen, tvLastClose;
-
     private Button btn_times, btn_Kline, btn_free_remind;//分时图，K线图，免费提醒
 
 
@@ -51,7 +49,6 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     private FragmentManager fragmentManager;
 
     private boolean cycle = true;
-
     private String cycles_current[] = null;
     //分时图周期
     private String cycles_time[] = new String[]{
@@ -90,7 +87,6 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     private boolean isKLine = false;//是否显示的是K线图  默认为False
 
     private String MARKET_URL;
-
     //K线图URL   +&return_t=3&qt_type=15
     private String KLINES_URL;
 
@@ -102,7 +98,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
 
     //分时图URL
-    private String TIME_URL;
+    private String TIME_URL ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +113,9 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
         KLINES_URL = "http://db2015.wstock.cn/wsDB_API/kline.php?symbol=" + symbol +
                 "&r_type=2&num=100";
 
-        TIME_URL = "http://db2015.wstock.cn/wsDB_API/TheTimeTrend.php?r_type=2&symbol=" + symbol;
+        TIME_URL = "http://db2015.wstock.cn/wsDB_API/TheTimeTrend.php?r_type=2&symbol="+symbol;
+
+
 
 
         initView();
@@ -129,7 +127,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         LogUtil.d("分时图TIME_URL-------------" + TIME_URL);
 
-        timesFragment = MarketTimesFragment.newInstance(TIME_URL);
+        timesFragment =  MarketTimesFragment.newInstance(TIME_URL);
         transaction.replace(R.id.fragment_container, timesFragment).commit();
 
         btn_times.setSelected(true);
@@ -160,7 +158,6 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
         btn_free_remind = (Button) findViewById(R.id.btn_free_remind);
         btn_free_remind.setOnClickListener(this);
 
-
         tvHigh = (TextView) this.findViewById(R.id.ca_tv_high);
         tvLow = (TextView) this.findViewById(R.id.ca_tv_low);
         tvOpen = (TextView) this.findViewById(R.id.ca_tv_open);
@@ -170,15 +167,16 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
+    
 
     //根据当前是K线图或分时图  设置 当前的周期属性
-    private void setCycle() {
-        if (isKLine) {
+    private void setCycle(){
+        if(isKLine){
             tv_index.setVisibility(View.VISIBLE);
             cycles_current = cycles_klines;
             btn_times.setSelected(false);
             btn_Kline.setSelected(true);
-        } else {
+        }else{
             tv_index.setVisibility(View.GONE);
             cycles_current = cycles_time;
             btn_times.setSelected(true);
@@ -188,7 +186,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
 
     //获取当前时间
-    private String getDate(int day) {
+    private String getDate(int day){
 //        Date date = new Date();
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //        String mDate = simpleDateFormat.format(date).replaceAll(" ", "%20");
@@ -199,9 +197,8 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
         Date lastDay = ca.getTime(); //结果
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         String mDate = sf.format(lastDay);
-        return mDate;
+        return  mDate;
     }
-
     @Override
     public void onClick(View v) {
         AlertDialog.Builder builder;
@@ -221,74 +218,76 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         name_cycle = cycles_current[which];
-                        if (isKLine) {
+                        if(isKLine){
                             //K线图1 5 15 30 60分钟 4小时  日线 周线  月线
-                            switch (which) {
-                                case 0:
+                            switch (which){
+                                case  0:
                                     return_t = 3;
                                     qt_type = 1;
-                                    LogUtil.d("KLINES_URL-------------" + KLINES_URL + "--------which--------" + which);
+                                    LogUtil.d("KLINES_URL-------------"+KLINES_URL+"--------which--------"+which);
                                     break;
-                                case 1:
+                                case  1:
                                     return_t = 3;
                                     qt_type = 5;
                                     break;
-                                case 2:
+                                case  2:
                                     return_t = 3;
                                     qt_type = 15;
                                     break;
-                                case 3:
+                                case  3:
                                     return_t = 3;
                                     qt_type = 30;
                                     break;
-                                case 4:
+                                case  4:
                                     return_t = 3;
                                     qt_type = 60;
                                     break;
-                                case 5:
+                                case  5:
                                     return_t = 3;
                                     qt_type = 240;
                                     break;
-                                case 6:
+                                case  6:
                                     return_t = 0;
                                     qt_type = 1;
                                     break;
-                                case 7:
+                                case  7:
                                     return_t = 2;
                                     qt_type = 1;
                                     break;
-                                case 8:
+                                case  8:
                                     return_t = 1;
                                     qt_type = 1;
                                     break;
                             }
-                            tv_title.setText(name + "-" + name_cycle);
-                            kChartsFragment = MarketKChartsFragment.newInstance(KLINES_URL + "&return_t=" + return_t + "&qt_type=" + qt_type);
-                            LogUtil.d("KLINES_URL-------------" + KLINES_URL + "&return_t=" + return_t + "&qt_type=" + qt_type);
+                            tv_title.setText(name+"-"+name_cycle);
+                            kChartsFragment = MarketKChartsFragment.newInstance(KLINES_URL+"&return_t="+return_t+"&qt_type="+qt_type);
+                            LogUtil.d("KLINES_URL-------------"+KLINES_URL+"&return_t="+return_t+"&qt_type="+qt_type);
                             transaction.replace(R.id.fragment_container, kChartsFragment).commit();
-                        } else {
+                        }else{
                             //分时图 24 、48、72、96小时
                             String url = null;
-                            switch (which) {
+                            switch(which){
                                 case 0:
-                                    url = TIME_URL;
+                                    url = TIME_URL ;
                                     break;
                                 case 1:
-                                    url = TIME_URL + "&date=" + getDate(1);
+                                    url = TIME_URL+"&date="+getDate(1);
                                     break;
                                 case 2:
-                                    url = TIME_URL + "&date=" + getDate(2);
+                                    url = TIME_URL+"&date="+getDate(2);
                                     break;
                                 case 3:
-                                    url = TIME_URL + "&date=" + getDate(3);
+                                    url = TIME_URL+"&date="+getDate(3);
                                     break;
                             }
-                            tv_title.setText(name + "-" + name_cycle);
+                            tv_title.setText(name+"-"+name_cycle);
                             timesFragment = MarketTimesFragment.newInstance(url);
                             LogUtil.d("Time_URL-------------" + url);
                             transaction.replace(R.id.fragment_container, timesFragment).commit();
                         }
                     }
+
+
 
 
                 }).show();
@@ -301,14 +300,14 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                 builder.setItems(indexs, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String index = indexs[which].replace("指标", "");
+                        String index = indexs[which].replace("指标","");
 
 
                         LogUtil.e(ChartActivity.this, 145, "index   " + index);
                         if (kChartsFragment != null) {
-                            if (index.equals("MACD") || index.equals("KDJ") || index.equals("RSI") || index.equals("DMA")) {
+                            if (index.equals("MACD") || index.equals("KDJ") || index.equals("RSI")||index.equals("DMA")) {
                                 kChartsFragment.setIndex(index);
-                            } else {
+                            }else {
                                 kChartsFragment.setUpIndex(index);
 
                             }
@@ -323,24 +322,24 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.btn_time:
-                //分时图
-                isKLine = false;
-                setCycle();
-                LogUtil.d("分时图TIME_URL-------------" + TIME_URL);
-                timesFragment = MarketTimesFragment.newInstance(TIME_URL);
+        //分时图
+        isKLine = false;
+        setCycle();
+        LogUtil.d("分时图TIME_URL-------------"+TIME_URL);
+        timesFragment = MarketTimesFragment.newInstance(TIME_URL);
 
-                transaction.replace(R.id.fragment_container, timesFragment).commit();
+        transaction.replace(R.id.fragment_container, timesFragment).commit();
                 break;
             case R.id.btn_k_line:
                 //K线图
-                isKLine = true;
-                setCycle();
-                kChartsFragment = MarketKChartsFragment.newInstance(KLINES_URL + "&return_t=" + return_t + "&qt_type=" + qt_type);
-                LogUtil.d("KLINES_URL-------------" + KLINES_URL + "&return_t=" + return_t + "&qt_type=" + qt_type);
+        isKLine = true;
+        setCycle();
+        kChartsFragment = MarketKChartsFragment.newInstance(KLINES_URL+"&return_t="+return_t+"&qt_type="+qt_type);
+            LogUtil.d("KLINES_URL-------------"+KLINES_URL+"&return_t="+return_t+"&qt_type="+qt_type);
 
-                transaction.replace(R.id.fragment_container, kChartsFragment).commit();
+            transaction.replace(R.id.fragment_container, kChartsFragment).commit();
 
-                break;
+            break;
 
             case R.id.btn_free_remind:
                 //免费提醒
@@ -351,9 +350,9 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+
+
     private void initData() {
-
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -369,13 +368,11 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                             tvOpen.setText(d.getOpen());
                             tvLow.setText(d.getLow());
                             tvHigh.setText(d.getHigh());
-
                         }
 
                         @Override
                         public void onFailure(HttpException error, String msg) {
                             NetWorkUtils.showMsg(ChartActivity.this);
-
                         }
                     });
 
@@ -390,6 +387,12 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
             }
         }).start();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cycle = true;
     }
 
     @Override

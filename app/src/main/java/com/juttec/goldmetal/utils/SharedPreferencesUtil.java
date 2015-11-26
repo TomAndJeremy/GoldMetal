@@ -18,6 +18,11 @@ public class SharedPreferencesUtil {
     //refreshTime  刷新时间  int
 
 
+    //isFloatingAlert 浮动提醒开关是否打开  boolean
+    //ReferencePrice 基准价 float
+    //FloatingValue  浮动值 float
+
+
 
 
     //KDJ_DAY  影响KDJ指标变化的变量  默认值为：9   int
