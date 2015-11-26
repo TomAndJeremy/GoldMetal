@@ -95,12 +95,13 @@ public class GetNetworkData {
                                     }
                                 });
                             }
-
+                            LogUtil.e("url  " + url);
                             try {
                                 myEntity.wait(10000);//每10秒钟执行一次
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+
                         } while (shouldConnect);
 
                 }

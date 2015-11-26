@@ -75,11 +75,17 @@ public class MarketKChartsFragment extends Fragment {
         datas = new ArrayList<KChartInfo.ResultEntity>();
         kChartInfo = new KChartInfo();
         myEntity = new MyEntity(kChartInfo);
-        getNetworkData = new GetNetworkData();
-        getNetworkData.getKLineData(url, myEntity, getActivity(), handler, NEWEST);
+
         return view;
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getNetworkData = new GetNetworkData();
+        getNetworkData.getKLineData(url, myEntity, getActivity(), handler, NEWEST);
+    }
 
     /**
      * 自定义Handler

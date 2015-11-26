@@ -129,8 +129,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
         holder.name.setText(entityList.get(position).getUserName());//设置用户名
         holder.time.setText(entityList.get(position).getAddTime());//时间
+        if (entityList.get(position).getDyContent() != null) {
+            holder.content.setText(readEmojiWindow.getEditable(entityList.get(position).getDyContent()));// 正文
 
-        holder.content.setText(readEmojiWindow.getEditable(entityList.get(position).getDyContent()));// 正文
+        }
 
 
         ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + entityList.get(position).getUserPhoto(), holder.headPortrait);
