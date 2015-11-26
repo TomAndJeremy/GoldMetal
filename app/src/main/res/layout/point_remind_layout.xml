@@ -11,7 +11,7 @@
         android:layout_centerVertical="true"
         android:layout_margin="10dp"
         android:text="点位提醒"
-        android:textSize="23sp" />
+        android:textSize="@dimen/normal_size" />
 
     <TextView
         android:id="@+id/tv_remind_level"

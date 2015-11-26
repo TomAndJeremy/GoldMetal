@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         // 自定义tablayout布局
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
-
             if (tab != null) {
                 tab.setCustomView(myFragmentPagerAdapter.getTabView(i));
             }
@@ -120,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
 
     }
 
+
     @Override
     public void onFragmentInteraction(Uri uri) {
 
@@ -143,6 +143,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
             mWakeLock = null;
         }
     }
+
+
 
 
     //如果两次按键时间间隔大于2秒，则不退出

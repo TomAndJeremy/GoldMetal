@@ -265,9 +265,8 @@
         <!-- 个推SDK配置结束 -->
 
 
+
         <!-- 分享SDK配置start -->
-
-
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -276,9 +275,7 @@
             android:windowSoftInputMode="stateHidden|adjustResize" >
             <intent-filter>
                 <data android:scheme="tencent1104907328" />
-
-                <action android:name="android.intent.action.VIEW" />
-
+                <!--<action android:name="android.intent.action.VIEW" />-->
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -305,9 +302,7 @@
             -->
             <intent-filter android:priority="1000" >
                 <data android:scheme="tencent1104907328" />
-
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
@@ -326,7 +321,6 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

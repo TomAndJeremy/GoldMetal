@@ -396,10 +396,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 .setSingleButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (type==QQ) {
-                            //设置EditText只能输数字
-                            dialog.setEditType(EditorInfo.TYPE_CLASS_PHONE);
-                        }
                         result = dialog.getResult();
                         if (result == null || TextUtils.isEmpty(result)) {
                             ToastUtil.showShort(AccountActivity.this, "修改的内容不能为空");
@@ -412,6 +408,10 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                         dialog.dismiss();
                     }
                 }).show();
+        if (type==QQ) {
+            //设置EditText只能输数字
+            dialog.setEditType(EditorInfo.TYPE_CLASS_PHONE);
+        }
     }
 
 

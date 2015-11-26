@@ -29,7 +29,7 @@ public class MyAlertDialog {
     private LinearLayout lLayout_bg;
     private TextView txt_title;
     private TextView txt_msg;
-    public EditText edittxt_result;
+    private EditText edittxt_result;
     private LinearLayout dialog_Group;
     private View dialog_marBottom;
     private LinearLayout ll_btn_yes_no;
@@ -152,6 +152,11 @@ public class MyAlertDialog {
     public void setEditType(int type){
         //EditorInfo.TYPE_CLASS_PHONE
         edittxt_result.setInputType(type);
+    }
+
+    //返回edittext
+    public EditText getEt(){
+        return edittxt_result;
     }
 
 

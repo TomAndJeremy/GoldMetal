@@ -267,7 +267,8 @@ public class MyApplication extends Application {
     }
 
 
-    // 判断是否循环
+
+    // 股票数据刷新：判断是否循环 获取股票数据
     public static boolean canCycle = true;
 
 }

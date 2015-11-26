@@ -1,6 +1,5 @@
 package com.juttec.goldmetal.utils;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -10,7 +9,6 @@ import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.MyEntity;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
@@ -47,8 +45,8 @@ public class GetNetworkData {
         myEntity = sMyEntity;
         context = sContext;
         handler = sHandler;
-
-         httpUtils = new HttpUtils();
+        
+        httpUtils = new HttpUtils();
         httpUtils.configCurrentHttpCacheExpiry(1000);
         thread = new Thread(new Runnable() {
             @Override
@@ -57,51 +55,50 @@ public class GetNetworkData {
 
                 //给实体类加锁
                 synchronized (myEntity) {
-                        do {
+                    do {
 
-                            if (MyApplication.canCycle) {
-                                httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
-                                    @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        if (MyApplication.canCycle) {
+                            httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
+                                @Override
+                                public void onSuccess(ResponseInfo<String> responseInfo) {
 
-                                        String str;
-                                        if (responseInfo.result.toString().equals("unkown user")) {
-                                            str = "{\"result\":[]}";
-                                        } else {
-                                            str = "{\"result\":" + responseInfo.result.toString() + "}";
-                                        }
-
-                                        LogUtil.d("自选数据:---------" + str);
-
-                                        try {
-
-                                            myEntity.setObject(JSON.parseObject(str, myEntity.getObject().getClass()));
-                                            Message message = new Message();
-                                            message.what = flag;
-                                            LogUtil.d("发消息通知---------");
-                                            handler.sendMessage(message);
-
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-
-                                            ToastUtil.showShort(context, responseInfo.result.toString());
-
-                                        }
+                                    String str;
+                                    if (responseInfo.result.toString().equals("unkown user")) {
+                                        str = "{\"result\":[]}";
+                                    } else {
+                                        str = "{\"result\":" + responseInfo.result.toString() + "}";
                                     }
 
-                                    @Override
-                                    public void onFailure(HttpException e, String s) {
-                                        NetWorkUtils.showMsg(context);
-                                    }
-                                });
-                            }
+                                    LogUtil.d("微盛返回的股票数据:---------" + str);
 
-                            try {
-                                myEntity.wait(10000);//每10秒钟执行一次
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        } while (shouldConnect);
+                                    try {
+
+                                        myEntity.setObject(JSON.parseObject(str, myEntity.getObject().getClass()));
+                                        Message message = new Message();
+                                        message.what = flag;
+                                        ToastUtil.showShort(context,"填充数据");
+                                        handler.sendMessage(message);
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+
+                                        ToastUtil.showShort(context, responseInfo.result.toString());
+
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(HttpException e, String s) {
+                                    NetWorkUtils.showMsg(context);
+                                }
+                            });
+                        }
+                        try {
+                            myEntity.wait(10000);//每10秒钟执行一次
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } while (shouldConnect);
 
                 }
             }
@@ -137,7 +134,6 @@ public class GetNetworkData {
 
     //停止
     public void stop() {
-
 
         if (thread != null && thread.isAlive()) {
             shouldConnect = false;
