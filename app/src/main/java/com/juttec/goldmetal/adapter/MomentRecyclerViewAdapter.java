@@ -1,6 +1,5 @@
 package com.juttec.goldmetal.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -32,7 +31,6 @@ import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
 import com.juttec.goldmetal.utils.EmojiWindow;
-
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -42,6 +40,7 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
@@ -73,9 +72,19 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
     private Fragment mFragment;
 
+    protected ImageLoader imageLoader;//图片加载工具
+    private DisplayImageOptions options;//
+
     //初始化
     public MomentRecyclerViewAdapter(ArrayList<DynamicEntityList> entityList, Context context, MyApplication app,Fragment mFragment) {
         super();
+        imageLoader = ImageLoader.getInstance();
+        options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)//设置下载的图片是否缓存在内存中
+                .cacheOnDisk(true)//设置下载的图片是否缓存在SD卡中
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();//构建完成
+
         this.entityList = entityList;
 
         this.mFragment = mFragment;
@@ -135,7 +144,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         }
 
 
-        ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + entityList.get(position).getUserPhoto(), holder.headPortrait);
+        imageLoader.displayImage(MyApplication.ImgBASEURL + entityList.get(position).getUserPhoto(), holder.headPortrait,options);
         LogUtil.e("图片  " + MyApplication.ImgBASEURL + entityList.get(position).getUserPhoto());
 
         //图片的集合

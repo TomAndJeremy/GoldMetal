@@ -95,6 +95,8 @@ public class CommentAdapter extends BaseAdapter{
         readEmojiWindow.readEmojiIcons();
     }
 
+
+
     @Override
     public int getCount() {
 

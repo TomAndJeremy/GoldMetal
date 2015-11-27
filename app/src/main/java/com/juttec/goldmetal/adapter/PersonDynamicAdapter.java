@@ -3,6 +3,7 @@ package com.juttec.goldmetal.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,13 +40,13 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,7 +75,15 @@ public class PersonDynamicAdapter extends BaseAdapter {
     //    private boolean isSupported = false;//自己是否点赞  默认为false
     private EmojiWindow readEmojiWindow;
 
+    private DisplayImageOptions options;
+
     public PersonDynamicAdapter(Context context, List<DynamicEntityList> list) {
+        options = new DisplayImageOptions.Builder()//
+                .cacheInMemory(true)//
+                .cacheOnDisk(true)//
+                .bitmapConfig(Bitmap.Config.RGB_565)//
+                .build();
+
         app = (MyApplication) context.getApplicationContext();
         mContext = context;
         mLists = list;
@@ -87,6 +96,12 @@ public class PersonDynamicAdapter extends BaseAdapter {
     }
 
     public PersonDynamicAdapter(Context context, List<DynamicEntityList> list, String userid) {
+        options = new DisplayImageOptions.Builder()//
+                .cacheInMemory(true)//
+                .cacheOnDisk(true)//
+                .bitmapConfig(Bitmap.Config.RGB_565)//
+                .build();
+
         app = (MyApplication) context.getApplicationContext();
         mContext = context;
         mLists = list;
@@ -155,7 +170,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
         holder.time.setText(dynamicEntityList.getAddTime());//时间
         holder.content.setText(readEmojiWindow.getEditable(dynamicEntityList.getDyContent()));//正文
         //设置头像
-        ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + dynamicEntityList.getUserPhoto(), holder.headPortrait);
+        ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + dynamicEntityList.getUserPhoto(), holder.headPortrait, options);
 
 
         //展示点赞的数据

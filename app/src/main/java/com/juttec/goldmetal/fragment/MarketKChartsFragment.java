@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.bean.MyEntity;
 import com.juttec.goldmetal.bean.chartentity.KChartInfo;
-import com.juttec.goldmetal.customview.chartview.KChartsView;
 import com.juttec.goldmetal.customview.chartview.MyKChartsView;
 import com.juttec.goldmetal.utils.GetNetworkData;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -23,7 +22,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 
 public class MarketKChartsFragment extends Fragment {

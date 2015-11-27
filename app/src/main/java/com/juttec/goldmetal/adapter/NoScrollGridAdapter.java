@@ -26,7 +26,14 @@ public class NoScrollGridAdapter extends BaseAdapter {
 	/** 图片Url集合 */
 	private ArrayList<PhotoBean> imageUrls;
 
+	private DisplayImageOptions options;
+
 	public NoScrollGridAdapter(Context ctx, ArrayList<PhotoBean> urls) {
+		options = new DisplayImageOptions.Builder()//
+				.cacheInMemory(true)//
+				.cacheOnDisk(true)//
+				.bitmapConfig(Config.RGB_565)//
+				.build();
 		this.ctx = ctx;
 		this.imageUrls = urls;
 	}
@@ -53,12 +60,9 @@ public class NoScrollGridAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = View.inflate(ctx, R.layout.item_gridview, null);
 		ImageView imageView = (ImageView) view.findViewById(R.id.iv_image);
-		DisplayImageOptions options = new DisplayImageOptions.Builder()//
-				.cacheInMemory(true)//
-				.cacheOnDisk(true)//
-				.bitmapConfig(Config.RGB_565)//
-				.build();
+
 		ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL+imageUrls.get(position).getDyPhoto(), imageView, options);
+
 		return view;
 	}
 

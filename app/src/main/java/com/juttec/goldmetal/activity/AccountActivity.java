@@ -261,6 +261,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("from","AccountActivity");
                 startActivity(intent);
+                app.setUserInfoBean(null);
                 break;
         }
     }

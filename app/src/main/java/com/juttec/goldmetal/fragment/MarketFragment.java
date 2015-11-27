@@ -311,8 +311,6 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                     switch (event.getAction()) {
 
                         case MotionEvent.ACTION_MOVE:
-                            LogUtil.d("MotionEvent.ACTION_MOVE-----:" + event.getY());
-
                             if (n == 1) {
                                 firstY = event.getY();
                                 LogUtil.d("firstY-----:" + firstY);
@@ -323,9 +321,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                         case MotionEvent.ACTION_UP:
                             //将n重新设置为1
                             n = 1;
-
-
-                            LogUtil.d("MotionEvent.ACTION_UP-----:" + event.getY());
+//                            LogUtil.d("MotionEvent.ACTION_UP-----:" + event.getY());
                             LogUtil.d("MotionEvent.ACTION_UP======" + page + ":" + firstVisibleItem + ":" + (firstY - event.getY()));
                             //下拉 加载上一页数据
                             //当前不是第一页数据 当前显示的第一条数据的position为0  向下滑动的手势距离大于20
@@ -548,11 +544,9 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         LogUtil.d("股票URL-------------" + url);
 
         if (url != null) {
-
             resetURL = url;
             if (getNetWorkData.isAlive()) {
                 getNetWorkData.setUrl(url);
-
             } else {
                 getNetWorkData.getKLineData(url, myEntity, getActivity(), myHandler, NEWEST);
             }

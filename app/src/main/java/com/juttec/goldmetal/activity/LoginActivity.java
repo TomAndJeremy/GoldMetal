@@ -1,7 +1,5 @@
 package com.juttec.goldmetal.activity;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +15,6 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.igexin.sdk.PushManager;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.UserInfoBean;
@@ -71,14 +68,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         app = (MyApplication) getApplication();
         dialog = new MyProgressDialog(this);
 
-
-
-        //初始化个推服务
-        PushManager.getInstance().initialize(this.getApplicationContext());
-
         initView();
 
-        if((Boolean) SharedPreferencesUtil.getParam(this,"remember",false)&&!"".equals(mPwd.getText().toString())){
+        if((Boolean) SharedPreferencesUtil.getParam(this,"remember",true)&&!"".equals(mPwd.getText().toString())){
             login();
         }
 
@@ -91,7 +83,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * 初始化控件
      */
     private void initView(){
-
         RelativeLayout head = (RelativeLayout) this.findViewById(R.id.head_layout);
         tvRegister = (TextView) head.findViewById(R.id.right_text);
         tvRegister.setOnClickListener(this);
@@ -121,7 +112,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         cb_remember = (CheckBox) findViewById(R.id.cb_remember);
         cb_remember.setOnCheckedChangeListener(this);
-        cb_remember.setChecked((Boolean) SharedPreferencesUtil.getParam(this, "remember", false));
+        cb_remember.setChecked((Boolean) SharedPreferencesUtil.getParam(this, "remember", true));
 
 
 

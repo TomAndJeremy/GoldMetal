@@ -2,6 +2,7 @@ package com.juttec.goldmetal.customview.listview;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
@@ -36,6 +37,9 @@ public class PersonLoadListView extends ListView implements
 	}
 
 	private void init() {
+		ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+		this.setLayoutParams(layoutParams);
+
 		mPersonHeader = new PersonHeader(getContext());
 		addHeaderView(mPersonHeader.getView());
 		mLoadingFooter = new LoadingFooter(getContext());

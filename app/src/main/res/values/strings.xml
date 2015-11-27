@@ -201,7 +201,10 @@
 
 
     <!--启动页-->
-    <string name="splash_introduce">欢迎来到掌上贵金属</string>
+    <string name="splash_introduce">欢迎来到国金贵金属</string>
+
+
+
     <string name="title_activity_search_stock">SearchStockActivity</string>
 
 
