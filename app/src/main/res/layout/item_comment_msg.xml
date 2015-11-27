@@ -2,12 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_vertical"
     android:background="@drawable/comment_click_background"
     android:orientation="horizontal">
 
     <TextView
-
         android:id="@+id/reply_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,6 +26,8 @@
 
     <TextView
 
+        android:gravity="center_vertical"
+        android:layout_gravity="center_vertical"
         android:id="@+id/comment_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
