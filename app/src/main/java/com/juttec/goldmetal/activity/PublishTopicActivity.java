@@ -79,7 +79,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     public final static int REQUEST_CODE_ALBUM = 222;
 
 
-    private static final int EMOJI_NUM = 60;//表情数目
+
 
     private View popUpView;
     private LinearLayout emojiconsCover;
@@ -263,7 +263,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         pager.setOffscreenPageLimit(3);
         ArrayList<String> paths = new ArrayList<String>();
 
-        for (short i = 1; i <= EMOJI_NUM; i++) {
+        for (short i = 1; i <= MyApplication.ENUM; i++) {
             paths.add(i + ".png");
         }
         EmoticonsPagerAdapter adapter = new EmoticonsPagerAdapter(this, paths, this);
@@ -298,8 +298,8 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
 
     private void readEmojiIcons() {
-        emoticons = new Bitmap[EMOJI_NUM];
-        for (short i = 0; i < EMOJI_NUM; i++) {
+        emoticons = new Bitmap[MyApplication.ENUM];
+        for (short i = 0; i < MyApplication.ENUM; i++) {
             emoticons[i] = getImage((i + 1) + ".png");
         }
     }

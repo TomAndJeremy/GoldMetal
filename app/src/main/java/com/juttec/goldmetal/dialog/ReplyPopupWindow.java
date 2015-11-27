@@ -31,6 +31,7 @@ import android.widget.TextView;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.EmoticonsGridAdapter;
 import com.juttec.goldmetal.adapter.EmoticonsPagerAdapter;
+import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.utils.ToastUtil;
 
 import java.io.InputStream;
@@ -62,7 +63,7 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
 
     private Bitmap[] emoticons;
 
-    private static int EMOJI_NUM = 60;
+
     private int keyboardHeight;
 
 
@@ -274,7 +275,7 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
         pager.setOffscreenPageLimit(3);
         ArrayList<String> paths = new ArrayList<String>();
 
-        for (short i = 1; i <= EMOJI_NUM; i++) {
+        for (short i = 1; i <= MyApplication.ENUM; i++) {
             paths.add(i + ".png");
         }
         EmoticonsPagerAdapter adapter = new EmoticonsPagerAdapter((Activity) mContext, paths, this);
@@ -305,8 +306,8 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
 
 
     private void readEmojiIcons() {
-        emoticons = new Bitmap[EMOJI_NUM];
-        for (short i = 0; i < EMOJI_NUM; i++) {
+        emoticons = new Bitmap[MyApplication.ENUM];
+        for (short i = 0; i < MyApplication.ENUM; i++) {
             emoticons[i] = getImage((i + 1) + ".png");
         }
     }

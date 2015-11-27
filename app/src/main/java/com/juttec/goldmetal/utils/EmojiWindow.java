@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.EmoticonsGridAdapter;
 import com.juttec.goldmetal.adapter.EmoticonsPagerAdapter;
+import com.juttec.goldmetal.application.MyApplication;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -37,7 +38,6 @@ import java.util.StringTokenizer;
  */
 public class EmojiWindow implements EmoticonsGridAdapter.KeyClickListener {
 
-    private static final int EMOJI_NUM = 54;
 
     private View popUpView;
 
@@ -84,7 +84,7 @@ public class EmojiWindow implements EmoticonsGridAdapter.KeyClickListener {
         pager.setOffscreenPageLimit(3);
         ArrayList<String> paths = new ArrayList<String>();
 
-        for (short i = 1; i <= EMOJI_NUM; i++) {
+        for (short i = 1; i <= MyApplication.ENUM; i++) {
             paths.add(i + ".png");
         }
         EmoticonsPagerAdapter adapter = new EmoticonsPagerAdapter((FragmentActivity) context, paths, this);
@@ -122,7 +122,7 @@ public class EmojiWindow implements EmoticonsGridAdapter.KeyClickListener {
                 getSystemService(Context.INPUT_METHOD_SERVICE);
 
         inputMethodManager.hideSoftInputFromWindow(content.getWindowToken(), 0); //隐藏
-        LogUtil.e("1232343433333333333333");
+
         if (!popupWindow.isShowing()) {
 
             popupWindow.setHeight(keyboardHeight);
@@ -142,8 +142,8 @@ public class EmojiWindow implements EmoticonsGridAdapter.KeyClickListener {
     }
 
     public  Bitmap[] readEmojiIcons( ) {
-        emoticons = new Bitmap[EMOJI_NUM];
-        for (short i = 0; i < EMOJI_NUM; i++) {
+        emoticons = new Bitmap[MyApplication.ENUM];
+        for (short i = 0; i < MyApplication.ENUM; i++) {
             emoticons[i] = getImage((i + 1) + ".png");
         }
         return emoticons;
@@ -212,7 +212,7 @@ public class EmojiWindow implements EmoticonsGridAdapter.KeyClickListener {
             try {
                 t = Integer.parseInt(st.nextToken()) - 1;
 
-                if (t < EMOJI_NUM) {
+                if (t < MyApplication.ENUM) {
                     final int finalI = i;
                     Spanned cs = Html.fromHtml("<img src ='" + s[finalI] + "'/>", getImageGetter(t), null);
                     editable.append(cs);
