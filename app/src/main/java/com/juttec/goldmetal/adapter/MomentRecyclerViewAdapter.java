@@ -145,7 +145,6 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
 
         imageLoader.displayImage(MyApplication.ImgBASEURL + entityList.get(position).getUserPhoto(), holder.headPortrait,options);
-        LogUtil.e("图片  " + MyApplication.ImgBASEURL + entityList.get(position).getUserPhoto());
 
         //图片的集合
         final ArrayList<PhotoBean> photoBeanList = entityList.get(position).getDyPhoto();
