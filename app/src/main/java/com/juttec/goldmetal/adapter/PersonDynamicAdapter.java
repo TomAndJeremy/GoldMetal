@@ -5,6 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,7 +145,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        LogUtil.d("PersonDynamicAdapter-----------------getview"+position);
+        LogUtil.d("PersonDynamicAdapter-----------------getview" + position);
         DynamicEntityList dynamicEntityList;
 
         final ViewHolder holder;
@@ -155,7 +161,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
             holder.replyIMB = (ImageButton) convertView.findViewById(R.id.dynamic_item_reply);
 
             holder.gridView = (NoScrollGridView) convertView.findViewById(R.id.gridview);
-            holder. comment = (LinearLayout) convertView.findViewById(R.id.item_comment_content);
+            holder.comment = (LinearLayout) convertView.findViewById(R.id.item_comment_content);
 
             holder.suport = (LinearLayout) convertView.findViewById(R.id.item_support);
             holder.supportName = (LinearLayout) convertView.findViewById(R.id.item_support_name);
@@ -187,12 +193,10 @@ public class PersonDynamicAdapter extends BaseAdapter {
         }
 
 
-
         //动态添加评论和回复的数据
         //现将之前动态添加的view  remove掉
         holder.comment.removeAllViews();
         addCommentView(holder.comment, position);
-
 
 
         //点赞按钮的点击事件
@@ -228,8 +232,6 @@ public class PersonDynamicAdapter extends BaseAdapter {
                 });
             }
         });
-
-
 
 
         //图片的集合
@@ -304,9 +306,6 @@ public class PersonDynamicAdapter extends BaseAdapter {
     }
 
 
-
-
-
     //展示点赞的人名
     private void addSuportView(ImageButton thumb, LinearLayout viewRoot, List<DySupportInfoBean> supportInfoBeans) {
         LogUtil.d("---------------------展示点赞的人名" + supportInfoBeans.toString());
@@ -350,9 +349,6 @@ public class PersonDynamicAdapter extends BaseAdapter {
     }
 
 
-
-
-
     //点击点赞人 名字 跳转至个人主页  ：如果当前在个人主页  点击自己不跳转
     private void clickName(View v, final String userID, final String userName) {
         v.setOnClickListener(new View.OnClickListener() {
@@ -362,45 +358,40 @@ public class PersonDynamicAdapter extends BaseAdapter {
                 if (currentUserId != null && userID.equals(currentUserId)) {
                     return;
                 }
-                Intent intent = new Intent(mContext, MomentPersonalActivity.class);
-                intent.putExtra("userId", userID);
-                intent.putExtra("userName", userName);
-                mContext.startActivity(intent);
+                startActivity(userID, userName);
             }
         });
     }
 
 
-
+    private void startActivity(String userID, String userName) {
+        Intent intent = new Intent(mContext, MomentPersonalActivity.class);
+        intent.putExtra("userId", userID);
+        intent.putExtra("userName", userName.replace(":", ""));
+        mContext.startActivity(intent);
+    }
 
 
     /**
      * 动态添加评论 回复 数据
      */
     private void addCommentView(LinearLayout viewRoot, final int position) {
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         for (int i = 0; i < mLists.get(position).getDyCommentReply().size(); i++) {
-            View commentMsg = LayoutInflater.from(mContext).inflate(R.layout.comment_item, null);
-            commentMsg.setLayoutParams(lp);
-
-            final TextView tvCommentName = (TextView) commentMsg.findViewById(R.id.tv_comment);
-            TextView tvCommentContent = (TextView) commentMsg.findViewById(R.id.tv_comment_content);
+            TextView commentMsg = (TextView) LayoutInflater.from(mContext).inflate(R.layout.item_comment_msg, null);
 
             //获得评论人的姓名与评论内容并设置显示
             String commentName = mLists.get(position).getDyCommentReply().get(i).getDiscussantName();
             String commentContent = mLists.get(position).getDyCommentReply().get(i).getCommentContent();
-            tvCommentName.setText(commentName+" ");
-            tvCommentContent.setText(readEmoji.getEditable(commentContent));
 
+            SpannableString string = new SpannableString(commentName+":");
+            setPartClick(string, mLists.get(position).getDyCommentReply().get(i).getDiscussantId(), commentName, 0, commentName.length());
 
+            commentMsg.setText(string);
+            commentMsg.setMovementMethod(LinkMovementMethod.getInstance());
 
-            //点击昵称跳转到用户个人界面
-            clickName(tvCommentName, mLists.get(position).getDyCommentReply().get(i).getDiscussantId(), commentName);
+            commentMsg.append(readEmoji.getEditable(commentContent));
 
             final int finalI = i;
-
-
             //评论的点击事件
             commentMsg.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -430,22 +421,31 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
             for (int j = 0; j < size; j++) {
 
-                View replyMsg = LayoutInflater.from(mContext).inflate(R.layout.reply_item, null);
-                replyMsg.setLayoutParams(lp);
-                TextView tvReplyName = (TextView) replyMsg.findViewById(R.id.tv_reply);
-                TextView tvRepliedName = (TextView) replyMsg.findViewById(R.id.tv_replyed);
-                TextView tvReplyContent = (TextView) replyMsg.findViewById(R.id.tv_reply_content);
+                TextView replyMsg = (TextView) LayoutInflater.from(mContext).inflate(R.layout.item_comment_msg, null);
 
 
-                tvReplyName.setText(mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName());
-                tvRepliedName.setText(mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName() );
-                tvReplyContent.setText(readEmoji.getEditable(mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent()));
+                String replyName = mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName();
+                String repliedName = mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName();
+                String replyContent = mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent();
+
+                String userId = mLists.get(position).getDyCommentReply().get(finalI).getDyReply().get(j).getUserId();
+                String repliedId = mLists.get(position).getDyCommentReply().get(finalI).getDyReply().get(j).getRepliedId();
+
+
                 replyRoot.addView(replyMsg);
 
+                SpannableString userReply = new SpannableString(replyName);
+                setPartClick(userReply, userId, replyName, 0, replyName.length());
 
-                clickName(tvReplyName, mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserId(), mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName());
-                clickName(tvRepliedName, mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedId(), mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName());
+                SpannableString userReplied = new SpannableString(repliedName + ":");
+                setPartClick(userReplied, repliedId, repliedName, 0, repliedName.length());
 
+                replyMsg.setText(userReply);
+                replyMsg.append("回复");
+                replyMsg.append(userReplied);
+
+                replyMsg.setMovementMethod(LinkMovementMethod.getInstance());
+                replyMsg.append(readEmoji.getEditable(replyContent));
 
                 final int finalJ = j;
                 replyMsg.setOnClickListener(new View.OnClickListener() {
@@ -475,10 +475,6 @@ public class PersonDynamicAdapter extends BaseAdapter {
         }
 
     }
-
-
-
-
 
 
     /**
@@ -542,6 +538,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
     /**
      * 点赞或者取消赞的接口
+     *
      * @param position
      * @param dyId
      * @param thumb
@@ -641,7 +638,6 @@ public class PersonDynamicAdapter extends BaseAdapter {
     }
 
 
-
     //回复评论
     private void reply(final int position, final int i, final String content) {
         reply(position, i, -1, content);
@@ -695,6 +691,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(HttpException error, String msg) {
                 NetWorkUtils.showMsg(mContext);
@@ -702,6 +699,33 @@ public class PersonDynamicAdapter extends BaseAdapter {
         });
     }
 
+    /**
+     * 设置部分文字的点击事件与颜色
+     *
+     * @param string
+     * @param commentUserId
+     * @param commentName
+     * @param start
+     * @param end
+     */
+    private void setPartClick(SpannableString string, final String commentUserId, final String commentName, int start, int end) {
+        //设置点击事件
+        string.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                startActivity(commentUserId, commentName);
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);//删除下划线
+            }
+        }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //设置颜色
+        string.setSpan(new ForegroundColorSpan(Color.rgb(59, 85, 226)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+    }
 
 }
 
