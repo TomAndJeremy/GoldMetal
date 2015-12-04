@@ -13,6 +13,7 @@ import com.juttec.goldmetal.activity.MomentPersonalActivity;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.DyReplyInfoBean;
 import com.juttec.goldmetal.utils.EmojiWindow;
+import com.juttec.goldmetal.utils.LogUtil;
 
 import java.util.List;
 
@@ -72,6 +73,7 @@ public class ReplyAdapter extends BaseAdapter{
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+        LogUtil.d("ReplyAdapter-----------------getview"+position);
         DyReplyInfoBean dyReplyInfoBean;
 
         ViewHolder holder;

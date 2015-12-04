@@ -25,7 +25,6 @@
         android:textColor="@color/blue_text" />
 
     <TextView
-
         android:gravity="center_vertical"
         android:layout_gravity="center_vertical"
         android:id="@+id/comment_content"

@@ -20,6 +20,7 @@ import com.juttec.goldmetal.customview.listview.NoScrollListView;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
 import com.juttec.goldmetal.utils.EmojiWindow;
+import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -115,6 +116,7 @@ public class CommentAdapter extends BaseAdapter{
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+        LogUtil.d("CommentAdapter-----------------getview"+position);
         DyCommentReplyBean dyCommentReplyBean;
 
         ViewHolder holder;

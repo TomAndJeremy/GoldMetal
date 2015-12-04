@@ -27,7 +27,6 @@ import com.juttec.goldmetal.bean.DynamicEntityList;
 import com.juttec.goldmetal.bean.PhotoBean;
 import com.juttec.goldmetal.customview.CircleImageView;
 import com.juttec.goldmetal.customview.NoScrollGridView;
-import com.juttec.goldmetal.customview.listview.NoScrollListView;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
 import com.juttec.goldmetal.utils.EmojiWindow;
@@ -77,6 +76,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
     private DisplayImageOptions options;
 
+    //关注界面的构造方法
     public PersonDynamicAdapter(Context context, List<DynamicEntityList> list) {
         options = new DisplayImageOptions.Builder()//
                 .cacheInMemory(true)//
@@ -95,6 +95,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
     }
 
+    //个人主页界面的构造方法
     public PersonDynamicAdapter(Context context, List<DynamicEntityList> list, String userid) {
         options = new DisplayImageOptions.Builder()//
                 .cacheInMemory(true)//
@@ -137,6 +138,8 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+
+        LogUtil.d("PersonDynamicAdapter-----------------getview"+position);
         DynamicEntityList dynamicEntityList;
 
         final ViewHolder holder;
@@ -152,12 +155,11 @@ public class PersonDynamicAdapter extends BaseAdapter {
             holder.replyIMB = (ImageButton) convertView.findViewById(R.id.dynamic_item_reply);
 
             holder.gridView = (NoScrollGridView) convertView.findViewById(R.id.gridview);
-            holder.commentListView = (NoScrollListView) convertView.findViewById(R.id.comment_listview);
+            holder. comment = (LinearLayout) convertView.findViewById(R.id.item_comment_content);
 
             holder.suport = (LinearLayout) convertView.findViewById(R.id.item_support);
             holder.supportName = (LinearLayout) convertView.findViewById(R.id.item_support_name);
 
-            holder.comment = (LinearLayout) convertView.findViewById(R.id.item_comment_content);
             holder.relativeLayout = (RelativeLayout) convertView.findViewById(R.id.meg_detail_info);
 
             convertView.setTag(holder);
@@ -185,15 +187,21 @@ public class PersonDynamicAdapter extends BaseAdapter {
         }
 
 
+
+        //动态添加评论和回复的数据
+        //现将之前动态添加的view  remove掉
+        holder.comment.removeAllViews();
+        addCommentView(holder.comment, position);
+
+
+
         //点赞按钮的点击事件
         holder.thumb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 holder.thumb.setClickable(false);
-
                 //点赞或  取消赞 接口
                 if (isLogin()) {
-
                     supportOrCancle(position, mLists.get(position).getId(), holder.thumb, holder.supportName);
                 } else {
                     holder.thumb.setClickable(false);
@@ -222,14 +230,6 @@ public class PersonDynamicAdapter extends BaseAdapter {
         });
 
 
-        //填充评论回复列表
-        if (currentUserId != null) {
-            //判断是否在个人主页   若在个人主页
-            holder.commentListView.setAdapter(new CommentAdapter(mContext, create(), dynamicEntityList.getDyCommentReply(), mLists.get(position).getId(), currentUserId));
-        } else {
-            //关注界面
-            holder.commentListView.setAdapter(new CommentAdapter(mContext, create(), dynamicEntityList.getDyCommentReply(), mLists.get(position).getId()));
-        }
 
 
         //图片的集合
@@ -301,10 +301,10 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
         //展示图片的 GridView
         NoScrollGridView gridView;
-
-        //显示 评论 回复 的Listview
-        NoScrollListView commentListView;
     }
+
+
+
 
 
     //展示点赞的人名
@@ -350,12 +350,18 @@ public class PersonDynamicAdapter extends BaseAdapter {
     }
 
 
+
+
+
     //点击点赞人 名字 跳转至个人主页  ：如果当前在个人主页  点击自己不跳转
     private void clickName(View v, final String userID, final String userName) {
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //判断是否在个人主页  并且是否点击的本人  若是本人则不跳转
+                if (currentUserId != null && userID.equals(currentUserId)) {
+                    return;
+                }
                 Intent intent = new Intent(mContext, MomentPersonalActivity.class);
                 intent.putExtra("userId", userID);
                 intent.putExtra("userName", userName);
@@ -365,21 +371,114 @@ public class PersonDynamicAdapter extends BaseAdapter {
     }
 
 
-    /**
-     * unicode 转字符串
-     */
-    private String unicode2String(String unicode) {
-        StringBuffer string = new StringBuffer();
-        String[] hex = unicode.split("\\\\u");
-        for (int i = 1; i < hex.length; i++) {
-            // 转换出每一个代码点
-            int data = Integer.parseInt(hex[i], 16);
 
-            // 追加成string
-            string.append((char) data);
+
+
+    /**
+     * 动态添加评论 回复 数据
+     */
+    private void addCommentView(LinearLayout viewRoot, final int position) {
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        for (int i = 0; i < mLists.get(position).getDyCommentReply().size(); i++) {
+            View commentMsg = LayoutInflater.from(mContext).inflate(R.layout.comment_item, null);
+            commentMsg.setLayoutParams(lp);
+
+            final TextView tvCommentName = (TextView) commentMsg.findViewById(R.id.tv_comment);
+            TextView tvCommentContent = (TextView) commentMsg.findViewById(R.id.tv_comment_content);
+
+            //获得评论人的姓名与评论内容并设置显示
+            String commentName = mLists.get(position).getDyCommentReply().get(i).getDiscussantName();
+            String commentContent = mLists.get(position).getDyCommentReply().get(i).getCommentContent();
+            tvCommentName.setText(commentName+" ");
+            tvCommentContent.setText(readEmojiWindow.getEditable(commentContent));
+
+
+
+            //点击昵称跳转到用户个人界面
+            clickName(tvCommentName, mLists.get(position).getDyCommentReply().get(i).getDiscussantId(), commentName);
+
+            final int finalI = i;
+
+
+            //评论的点击事件
+            commentMsg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!mLists.get(position).getDyCommentReply().get(finalI).getDiscussantId().equals(app.getUserInfoBean().getUserId())) {
+                        popupWindow.create().show(v);
+                        popupWindow.setHint(1, mLists.get(position).getDyCommentReply().get(finalI).getDiscussantName());
+                        popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
+                            @Override
+                            public void onClickSend(String content) {
+                                reply(position, finalI, content);
+                            }
+                        });
+                    }
+                }
+            });
+
+
+            //将一条评论添加到父布局中
+            viewRoot.addView(commentMsg);
+
+
+            //添加评论中的回复
+            int size = mLists.get(position).getDyCommentReply().get(i).getDyReply().size();
+            final LinearLayout replyRoot = new LinearLayout(mContext);
+            replyRoot.setOrientation(LinearLayout.VERTICAL);
+
+            for (int j = 0; j < size; j++) {
+
+                View replyMsg = LayoutInflater.from(mContext).inflate(R.layout.reply_item, null);
+                replyMsg.setLayoutParams(lp);
+                TextView tvReplyName = (TextView) replyMsg.findViewById(R.id.tv_reply);
+                TextView tvRepliedName = (TextView) replyMsg.findViewById(R.id.tv_replyed);
+                TextView tvReplyContent = (TextView) replyMsg.findViewById(R.id.tv_reply_content);
+
+
+                tvReplyName.setText(mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName());
+                tvRepliedName.setText(mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName() );
+                tvReplyContent.setText(readEmojiWindow.getEditable(mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent()));
+                replyRoot.addView(replyMsg);
+
+
+                clickName(tvReplyName, mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserId(), mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName());
+                clickName(tvRepliedName, mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedId(), mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName());
+
+
+                final int finalJ = j;
+                replyMsg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (!app.getUserInfoBean().getUserId().equals(mLists.get(position).getDyCommentReply().get(finalI).getDyReply().get(finalJ).getUserId())) {
+
+                            popupWindow.create().show(v);
+                            popupWindow.setHint(1, mLists.get(position).getDyCommentReply().get(finalI).getDyReply().get(finalJ).getUserName());
+
+                            popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
+                                @Override
+                                public void onClickSend(String content) {
+                                    reply(position, finalI, finalJ, content);
+                                }
+                            });
+                        }
+                    }
+
+
+                });
+
+
+            }
+            viewRoot.addView(replyRoot);
         }
-        return string.toString();
+
     }
+
+
+
+
 
 
     /**
@@ -394,6 +493,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
         dialog.builder().setMessage("正在提交~").show();
         RequestParams param = new RequestParams();
         param.addBodyParameter("dyId", dyId);
+
         param.addBodyParameter("discussantId", app.getUserInfoBean().getUserId());
         param.addBodyParameter("discussantName", app.getUserInfoBean().getUserNickName());
         param.addBodyParameter("commentContent", content);
@@ -422,7 +522,6 @@ public class PersonDynamicAdapter extends BaseAdapter {
                         intent.putExtra("comment", dyCommentReplyBean);
 
                         mContext.sendBroadcast(intent);
-
                         mLists.get(position).getDyCommentReply().add(dyCommentReplyBean);
                         notifyDataSetChanged();
                     }
@@ -441,6 +540,13 @@ public class PersonDynamicAdapter extends BaseAdapter {
     }
 
 
+    /**
+     * 点赞或者取消赞的接口
+     * @param position
+     * @param dyId
+     * @param thumb
+     * @param viewRoot
+     */
     private void supportOrCancle(final int position, String dyId, final ImageButton thumb, final LinearLayout viewRoot) {
         //dialog.builder().setMessage("").show();
         RequestParams params = new RequestParams();
@@ -493,6 +599,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
                         }
 
+
                         notifyDataSetChanged();
 
 
@@ -532,6 +639,70 @@ public class PersonDynamicAdapter extends BaseAdapter {
         }
         return true;
     }
+
+
+
+    //回复评论
+    private void reply(final int position, final int i, final String content) {
+        reply(position, i, -1, content);
+    }
+
+    //回复回复
+    private void reply(final int position, final int i, final int j, final String content) {
+        RequestParams param = new RequestParams();
+
+        String dyId = mLists.get(position).getId();
+        final String commentId = mLists.get(position).getDyCommentReply().get(i).getId();
+        final String userId = app.getUserInfoBean().getUserId();
+        final String userName = app.getUserInfoBean().getUserNickName();
+        final String repliedId;
+        final String repliedName;
+        if (j == -1) {
+            repliedId = mLists.get(position).getDyCommentReply().get(i).getDiscussantId();
+            repliedName = mLists.get(position).getDyCommentReply().get(i).getDiscussantName();
+        } else {
+            repliedId = mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserId();
+            repliedName = mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName();
+        }
+
+
+        param.addBodyParameter("dyId", dyId);
+        param.addBodyParameter("commentId", commentId);
+        param.addBodyParameter("userId", userId);
+        param.addBodyParameter("userName", userName);
+        param.addBodyParameter("repliedId", repliedId);
+        param.addBodyParameter("repliedName", repliedName);
+        param.addBodyParameter("replyContent", content);
+
+        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getReplyUrl(), param, new RequestCallBack<String>() {
+
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                try {
+                    JSONObject object = new JSONObject(responseInfo.result.toString());
+
+                    ToastUtil.showShort(mContext, object.getString("promptInfor"));
+
+                    if ("1".equals(object.getString("status"))) {
+                        DyReplyInfoBean dyReplyInfoBean = new DyReplyInfoBean(userId, userName, repliedId, repliedName, content);
+                        ArrayList<DyReplyInfoBean> dyReplyInfoBeans = (ArrayList<DyReplyInfoBean>) mLists.get(position).getDyCommentReply().get(i).getDyReply();
+                        dyReplyInfoBeans.add(dyReplyInfoBean);
+                        mLists.get(position).getDyCommentReply().get(i).setDyReply(dyReplyInfoBeans);
+                        notifyDataSetChanged();
+                        popupWindow.dismiss();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                NetWorkUtils.showMsg(mContext);
+            }
+        });
+    }
+
+
 }
 
 

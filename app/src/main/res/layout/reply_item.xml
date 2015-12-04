@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/comment_click_background"
     android:orientation="horizontal"
+    android:baselineAligned="false"
     android:layout_marginTop="5dp">
 
 
@@ -46,6 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        android:layout_gravity="center_vertical"
         android:textSize="@dimen/small_size"
         android:textColor="@color/black"/>
 

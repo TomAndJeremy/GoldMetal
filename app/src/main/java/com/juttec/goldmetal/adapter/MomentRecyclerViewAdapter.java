@@ -31,7 +31,6 @@ import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
 import com.juttec.goldmetal.utils.EmojiWindow;
-import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;

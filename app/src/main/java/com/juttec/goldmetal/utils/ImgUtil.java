@@ -34,4 +34,7 @@ public class ImgUtil {
         bm = BitmapFactory.decodeFile(path, ops);
         return bm;
     }
+
+
+
 }

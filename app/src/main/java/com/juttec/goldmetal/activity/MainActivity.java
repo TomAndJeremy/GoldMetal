@@ -1,7 +1,6 @@
 package com.juttec.goldmetal.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -34,15 +33,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         //MyTag可以随便写,可以写应用名称等
         mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "MyTag");
-
         //在释放之前，屏幕一直亮着（有可能会变暗,但是还可以看到屏幕内容,换成PowerManager.SCREEN_BRIGHT_WAKE_LOCK不会变暗）
 
-
-        //退出当前账号
-        if (getIntent().getFlags() == Intent.FLAG_ACTIVITY_CLEAR_TOP && getIntent().getStringExtra("from").equals("AccountActivity")) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        }
 
         init();
 

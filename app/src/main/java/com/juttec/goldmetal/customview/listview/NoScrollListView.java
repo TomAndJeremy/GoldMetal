@@ -29,7 +29,7 @@ public class NoScrollListView extends ListView {
 
 
 	private void init(){
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
 		this.setLayoutParams(layoutParams);
 	}
 
@@ -37,7 +37,7 @@ public class NoScrollListView extends ListView {
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
 		super.onMeasure(widthMeasureSpec, expandSpec);
-
 	}
+
 
 }

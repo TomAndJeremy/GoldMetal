@@ -203,7 +203,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         refreshLayout.post(new Runnable() {
             @Override
             public void run() {
-
                 refreshLayout.setRefreshing(true);
                 getInfo(1, MyApplication.DYNAMIC_TYPE_ALL);
             }

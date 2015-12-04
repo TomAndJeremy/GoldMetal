@@ -162,7 +162,6 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
         }else{
             mAdapter.notifyDataSetChanged();
         }
-
         mListView.setState(LoadingFooter.State.Idle);
     }
 

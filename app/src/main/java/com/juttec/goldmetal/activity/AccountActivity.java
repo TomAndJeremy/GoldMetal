@@ -254,14 +254,15 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.btn_exit:
-                //退出当前账号
+                //退出当前账号    将当前账号的密码清除
                 SharedPreferencesUtil.clearParam(AccountActivity.this, "pwd");
-                //先跳转到MainActivity 接收后判断 在跳转到LoginActivity
-                Intent intent = new Intent(AccountActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("from","AccountActivity");
-                startActivity(intent);
+                //将个人信息实体类置空
                 app.setUserInfoBean(null);
+                //跳转到LoginActivity
+                Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+                startActivity(intent);
+                //将自己finish()掉
+                finish();
                 break;
         }
     }
