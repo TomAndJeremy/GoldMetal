@@ -325,7 +325,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                             LogUtil.d("MotionEvent.ACTION_UP======" + page + ":" + firstVisibleItem + ":" + (firstY - event.getY()));
                             //下拉 加载上一页数据
                             //当前不是第一页数据 当前显示的第一条数据的position为0  向下滑动的手势距离大于20
-                            if (page != 1 && firstY - event.getY() < -100) {
+                            if (page != 1 && firstY - event.getY() < -200) {
                                 //下拉  加载上一页数据
                                 if (!isLoadingMore) {
                                     LogUtil.d("下拉  加载上一页数据-----");
@@ -339,7 +339,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
                             //上拉 加载下一页数据
                             //当前显示的最后一条数据的position==totalItemCount的position  向上滑动的手势距离大于30
-                            if (firstY - event.getY() > 100) {
+                            if (firstY - event.getY() > 200) {
                                 //上拉 加载下一页数据
                                 if (!isLoadingMore) {
                                     if (!isNoMore) {

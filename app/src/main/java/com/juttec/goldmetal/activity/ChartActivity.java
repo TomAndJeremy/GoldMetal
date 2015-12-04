@@ -104,6 +104,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
+        LogUtil.e("onCreate   onCreate   onCreate   onCreate   onCreate   onCreate   ");
         symbol = getIntent().getStringExtra("symbol");
         name = getIntent().getStringExtra("name");
 
@@ -126,6 +127,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         LogUtil.d("分时图TIME_URL-------------" + TIME_URL);
+
 
         timesFragment =  MarketTimesFragment.newInstance(TIME_URL);
         transaction.replace(R.id.fragment_container, timesFragment).commit();
@@ -344,6 +346,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
             case R.id.btn_free_remind:
                 //免费提醒
                 Intent intent = new Intent(ChartActivity.this, FreeRemindActivity.class);
+                intent.putExtra("symbol", symbol);
                 startActivity(intent);
                 break;
         }
@@ -431,15 +434,12 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
             return High;
         }
-
         public String getLow() {
             return Low;
         }
-
         public String getOpen() {
             return Open;
         }
-
         public String getLastClose() {
             return LastClose;
         }

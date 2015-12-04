@@ -32,6 +32,7 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.EmoticonsGridAdapter;
 import com.juttec.goldmetal.adapter.EmoticonsPagerAdapter;
 import com.juttec.goldmetal.application.MyApplication;
+import com.juttec.goldmetal.utils.EmojiUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 
 import java.io.InputStream;
@@ -67,7 +68,7 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
     private int keyboardHeight;
 
 
-    private Map<Integer, String> map = new HashMap<>();
+    private Map<Integer, Integer> map = new HashMap<>();
 
     public ReplyPopupWindow(Context context) {
 
@@ -170,10 +171,10 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
                 for (Map.Entry entry : map.entrySet()) {
 
                     Integer key = (Integer) entry.getKey();
-                    String value = (String) entry.getValue();
+                    Integer value = (Integer) entry.getValue();
 
-                    content = content.replaceFirst("￼", "`" + value + "`");
-//             mContent.getText().replace(key, key + 1, "`" + value+"`" );
+                    content = content.replaceFirst("￼", EmojiUtil.getEmojiText(value));//图片在字符串中会变为￼，每次都把第一个￼字符替换掉
+
 
                 }
                 if (TextUtils.isEmpty(content) || "".equals(content) || content.trim().length() <= 0) {
@@ -253,8 +254,8 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
 
         int cursorPosition = mEditText.getSelectionStart();
         mEditText.getText().insert(cursorPosition, cs);
-
-        map.put(cursorPosition, index);
+        String position = index.replace(".png", "");//将X.png转变为X
+        map.put(cursorPosition, Integer.parseInt(position));
     }
 
 

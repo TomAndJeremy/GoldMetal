@@ -1,6 +1,7 @@
 package com.juttec.goldmetal.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -13,6 +14,7 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.adapter.MyFragmentPagerAdapter;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.fragment.BaseFragment;
+import com.juttec.goldmetal.service.RemindService;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.SharedPreferencesUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -29,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = new Intent(this, RemindService.class);
+        startService(intent);
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         //MyTag可以随便写,可以写应用名称等
@@ -48,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
             acquireWakeLock();
             LogUtil.d("----------mWakeLock.acquire()");
         }
+
+
         super.onResume();
     }
 

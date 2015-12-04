@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -12,16 +13,18 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
@@ -29,17 +32,23 @@ import com.juttec.goldmetal.adapter.EmoticonsGridAdapter;
 import com.juttec.goldmetal.adapter.EmoticonsPagerAdapter;
 import com.juttec.goldmetal.application.MyApplication;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by jeremy on 2015/10/22.
  */
-public class EmojiWindow implements EmoticonsGridAdapter.KeyClickListener {
+public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
 
 
-    private View popUpView;
+    //private View popUpView;
 
     private LinearLayout emoticonsCover;
     private PopupWindow popupWindow;
@@ -54,94 +63,14 @@ public class EmojiWindow implements EmoticonsGridAdapter.KeyClickListener {
     private Bitmap[] emoticons;
 
 
+    private static Context context;
 
-
-    Context context;
-
-    public EmojiWindow(Context context) {
+    public EmojiUtil(Context context) {
 
         this.context = context;
     }
 
-
-
-    public EmojiWindow enablePopUpView(final EditText edit, View parent, LinearLayout cover) {
-
-
-        parentLayout = parent;
-        emoticonsCover = cover;
-        content = edit;
-
-
-        final float popUpheight = context.getResources().getDimension(
-                R.dimen.keyboard_height);
-        changeKeyboardHeight((int) popUpheight);
-
-
-
-        popUpView = ((Activity) context).getLayoutInflater().inflate(R.layout.emoticons_popup, null);
-        ViewPager pager = (ViewPager) popUpView.findViewById(R.id.emoticons_pager);
-        pager.setOffscreenPageLimit(3);
-        ArrayList<String> paths = new ArrayList<String>();
-
-        for (short i = 1; i <= MyApplication.ENUM; i++) {
-            paths.add(i + ".png");
-        }
-        EmoticonsPagerAdapter adapter = new EmoticonsPagerAdapter((FragmentActivity) context, paths, this);
-        pager.setAdapter(adapter);
-
-
-        // Creating a pop window for emoticons keyboard
-        popupWindow = new PopupWindow(popUpView, LinearLayout.LayoutParams.MATCH_PARENT,
-                keyboardHeight, false);
-        popupWindow.setOutsideTouchable(false);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
-        TextView backSpace;
-        backSpace = (TextView) popUpView.findViewById(R.id.back);
-        backSpace.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                KeyEvent event = new KeyEvent(0, 0, 0, KeyEvent.KEYCODE_DEL, 0, 0, 0, 0, KeyEvent.KEYCODE_ENDCALL);
-                content.dispatchKeyEvent(event);
-            }
-        });
-
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-
-            @Override
-            public void onDismiss() {
-                emoticonsCover.setVisibility(LinearLayout.GONE);
-            }
-        });
-
-        return this;
-    }
-    public void showOrHide(View parent) {
-        InputMethodManager inputMethodManager = (InputMethodManager) context.getApplicationContext().
-                getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        inputMethodManager.hideSoftInputFromWindow(content.getWindowToken(), 0); //隐藏
-
-        if (!popupWindow.isShowing()) {
-
-            popupWindow.setHeight(keyboardHeight);
-
-            if (isKeyBoardVisible) {
-                emoticonsCover.setVisibility(View.GONE);
-            } else {
-                emoticonsCover.setVisibility(View.VISIBLE);
-            }
-
-
-            popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, 0);
-
-        } else {
-            popupWindow.dismiss();
-        }
-    }
-
-    public  Bitmap[] readEmojiIcons( ) {
+    public Bitmap[] readEmojiIcons() {
         emoticons = new Bitmap[MyApplication.ENUM];
         for (short i = 0; i < MyApplication.ENUM; i++) {
             emoticons[i] = getImage((i + 1) + ".png");
@@ -166,14 +95,14 @@ public class EmojiWindow implements EmoticonsGridAdapter.KeyClickListener {
     }
 
 
-    private void changeKeyboardHeight(int height) {
+   /* private void changeKeyboardHeight(int height) {
         if (height > 100) {
             keyboardHeight = height;
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, keyboardHeight);
             emoticonsCover.setLayoutParams(params);
         }
-    }
+    }*/
 
     @Override
     public void keyClickedIndex(final String index) {
@@ -197,10 +126,33 @@ public class EmojiWindow implements EmoticonsGridAdapter.KeyClickListener {
 
     }
 
+    private List<String> getMatcher(String regex, String source) {
+        String result = "";
+
+        List<String> list = new ArrayList<String>();
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(source);
+        while (matcher.find()) {
+            list.add(matcher.group());
+        }
+        return list;
+    }
+
     public Editable getEditable(String content) {
         //String content = unicode2String(contentUnicode);
-
         Editable editable = new Editable.Factory().newEditable("");
+
+
+/***************************************************************************/
+        String regex = "\\[[\\u4e00-\\u9fa5]+\\]";//匹配“[‘汉字’]”
+        List<String> emojis = getMatcher(regex, content);
+        for (String s : emojis
+                ) {
+          content=  content.replace(s, covert(s));
+        }
+
+        //之前表情的协议是`x.png`,现在的协议是[‘汉字’],此段代码将其转换为原先的协议
+/***************************************************************************/
         final String[] s = content.split("`");
         for (int i = 0; i < s.length; i++) {
 
@@ -235,6 +187,7 @@ public class EmojiWindow implements EmoticonsGridAdapter.KeyClickListener {
 
         return editable;
     }
+
     private Html.ImageGetter getImageGetter(final int t) {
         return new Html.ImageGetter() {
             @Override
@@ -246,6 +199,7 @@ public class EmojiWindow implements EmoticonsGridAdapter.KeyClickListener {
             }
         };
     }
+
     /**
      * unicode 转字符串
      */
@@ -266,6 +220,64 @@ public class EmojiWindow implements EmoticonsGridAdapter.KeyClickListener {
 
         return string.toString();
     }
+
+
+    private String covert(String s) {
+
+
+        try {
+            InputStream stream = context.getResources().getAssets().open("emojimap.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+            String s1 = null;
+            int i = 0;
+            while ((s1 = reader.readLine()) != null) {
+                i++;
+                if (s1.equals(s)) {
+                    reader.close();
+
+                    return "`"+i+".png`";
+
+
+                }
+            }
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return "";
+    }
+
+    public static String getEmojiText(int i) {
+        try {
+            InputStream stream = context.getResources().getAssets().open("emojimap.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+            String s1 = null;
+            int j = 0;
+            while ((s1 = reader.readLine()) != null) {
+                j++;
+                if (i == j) {
+
+                    reader.close();
+
+                    return s1;
+
+
+                }
+            }
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
+
+
 
 
 }

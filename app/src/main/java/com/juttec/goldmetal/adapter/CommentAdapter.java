@@ -19,8 +19,7 @@ import com.juttec.goldmetal.bean.DyReplyInfoBean;
 import com.juttec.goldmetal.customview.listview.NoScrollListView;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
-import com.juttec.goldmetal.utils.EmojiWindow;
-import com.juttec.goldmetal.utils.LogUtil;
+import com.juttec.goldmetal.utils.EmojiUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -63,7 +62,7 @@ public class CommentAdapter extends BaseAdapter{
     private ReplyAdapter replyAdapter;
 
     private PersonDynamicAdapter adapter;
-    private EmojiWindow readEmojiWindow;
+    private EmojiUtil readEmoji;
 
     //关注界面  的构造方法
     public CommentAdapter(Context context,PersonDynamicAdapter adapter, List<DyCommentReplyBean> list,String dyId){
@@ -76,8 +75,8 @@ public class CommentAdapter extends BaseAdapter{
         popupWindow = new ReplyPopupWindow(context);
         dialog = new MyProgressDialog(context);
 
-        readEmojiWindow = new EmojiWindow(context);
-        readEmojiWindow.readEmojiIcons();
+        readEmoji = new EmojiUtil(context);
+        readEmoji.readEmojiIcons();
     }
 
     //个人主页 的构造方法
@@ -92,8 +91,8 @@ public class CommentAdapter extends BaseAdapter{
         popupWindow = new ReplyPopupWindow(context);
         dialog = new MyProgressDialog(context);
 
-        readEmojiWindow = new EmojiWindow(context);
-        readEmojiWindow.readEmojiIcons();
+        readEmoji = new EmojiUtil(context);
+        readEmoji.readEmojiIcons();
     }
 
 
@@ -116,7 +115,6 @@ public class CommentAdapter extends BaseAdapter{
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        LogUtil.d("CommentAdapter-----------------getview"+position);
         DyCommentReplyBean dyCommentReplyBean;
 
         ViewHolder holder;
@@ -136,7 +134,7 @@ public class CommentAdapter extends BaseAdapter{
 
         dyCommentReplyBean = mLists.get(position);
         holder.tv_comment.setText(dyCommentReplyBean.getDiscussantName());
-        holder.tv_content.setText(readEmojiWindow.getEditable(dyCommentReplyBean.getCommentContent()));
+        holder.tv_content.setText(readEmoji.getEditable(dyCommentReplyBean.getCommentContent()));
 
         //填充回复数据
         if(currentUserId!=null){

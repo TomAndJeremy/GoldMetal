@@ -457,7 +457,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
             startActivityForResult(new Intent(getActivity(), LoginActivity.class), LOGIN);
             return false;
         }
-        if ("".equals(app.getUserInfoBean().getUserNickName())) {
+        if ("".equals(app.getUserInfoBean().getUserNickName()) || null == (app.getUserInfoBean().getUserNickName())) {
+
             //设置昵称
             mDialog.builder()
                     .setTitle("提示").setMsg("您还没有昵称，请至账号界面设置后再操作，谢谢！")

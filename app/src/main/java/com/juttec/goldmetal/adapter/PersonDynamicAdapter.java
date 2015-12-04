@@ -29,7 +29,7 @@ import com.juttec.goldmetal.customview.CircleImageView;
 import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
-import com.juttec.goldmetal.utils.EmojiWindow;
+import com.juttec.goldmetal.utils.EmojiUtil;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -72,7 +72,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
     private MyProgressDialog dialog;//加载时的 进度框
 
     //    private boolean isSupported = false;//自己是否点赞  默认为false
-    private EmojiWindow readEmojiWindow;
+    private EmojiUtil readEmoji;
 
     private DisplayImageOptions options;
 
@@ -90,8 +90,8 @@ public class PersonDynamicAdapter extends BaseAdapter {
         mInflater = LayoutInflater.from(context);
         popupWindow = new ReplyPopupWindow(context);
         dialog = new MyProgressDialog(context);
-        readEmojiWindow = new EmojiWindow(context);
-        readEmojiWindow.readEmojiIcons();
+        readEmoji = new EmojiUtil(context);
+        readEmoji.readEmojiIcons();
 
     }
 
@@ -110,8 +110,8 @@ public class PersonDynamicAdapter extends BaseAdapter {
         currentUserId = userid;
         popupWindow = new ReplyPopupWindow(context);
         dialog = new MyProgressDialog(context);
-        readEmojiWindow = new EmojiWindow(context);
-        readEmojiWindow.readEmojiIcons();
+        readEmoji = new EmojiUtil(context);
+        readEmoji.readEmojiIcons();
 
     }
 
@@ -170,7 +170,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
         dynamicEntityList = mLists.get(position);
         holder.name.setText(dynamicEntityList.getUserName());//设置用户名
         holder.time.setText(dynamicEntityList.getAddTime());//时间
-        holder.content.setText(readEmojiWindow.getEditable(dynamicEntityList.getDyContent()));//正文
+        holder.content.setText(readEmoji.getEditable(dynamicEntityList.getDyContent()));//正文
         //设置头像
         ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + dynamicEntityList.getUserPhoto(), holder.headPortrait, options);
 
@@ -391,7 +391,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
             String commentName = mLists.get(position).getDyCommentReply().get(i).getDiscussantName();
             String commentContent = mLists.get(position).getDyCommentReply().get(i).getCommentContent();
             tvCommentName.setText(commentName+" ");
-            tvCommentContent.setText(readEmojiWindow.getEditable(commentContent));
+            tvCommentContent.setText(readEmoji.getEditable(commentContent));
 
 
 
@@ -439,7 +439,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
                 tvReplyName.setText(mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName());
                 tvRepliedName.setText(mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName() );
-                tvReplyContent.setText(readEmojiWindow.getEditable(mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent()));
+                tvReplyContent.setText(readEmoji.getEditable(mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent()));
                 replyRoot.addView(replyMsg);
 
 

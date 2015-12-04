@@ -44,10 +44,12 @@ import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.PhotoBean;
 import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
+import com.juttec.goldmetal.utils.EmojiUtil;
 import com.juttec.goldmetal.utils.FileUtil;
 import com.juttec.goldmetal.utils.GetContentUrl;
 import com.juttec.goldmetal.utils.ImgUtil;
 import com.juttec.goldmetal.utils.LogUtil;
+import com.juttec.goldmetal.utils.SnackbarUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -118,7 +120,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
     private MyProgressDialog dialog_progress;//正在加载的  进度框
 
-    private Map<Integer, String> map = new HashMap<>();
+    private Map<Integer, Integer> map = new HashMap<>();//标志文字中的第X位置上的图片为第Y张
 
 
 //    private HeadLayout mHeadLayout;//标题栏
@@ -347,7 +349,8 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         int cursorPosition = mContent.getSelectionStart();
         mContent.getText().insert(cursorPosition, cs);
 
-        map.put(cursorPosition, index);
+        String position = index.replace(".png", "");//将X.png转变为X
+        map.put(cursorPosition, Integer.parseInt(position));
     }
 
 
@@ -394,6 +397,8 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
 
             case R.id.publis_topic_bt_push:
+
+
                 //发表话题 按钮
                 String content = mContent.getText().toString();
                 if (TextUtils.isEmpty(content) || "".equals(content) || content.trim().length() <= 0) {
@@ -610,10 +615,10 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         for (Map.Entry entry : map.entrySet()) {
 
             Integer key = (Integer) entry.getKey();
-            String value = (String) entry.getValue();
+            Integer value = (Integer) entry.getValue();
 
-            content = content.replaceFirst("￼", "`" + value + "`");
-//             mContent.getText().replace(key, key + 1, "`" + value+"`" );
+            content = content.replaceFirst("￼", EmojiUtil.getEmojiText(value));//图片在字符串中会变为￼，每次都把第一个￼字符替换掉
+
 
         }
         params.addBodyParameter("dyContent",content);

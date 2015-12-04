@@ -6,6 +6,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +37,8 @@ import com.juttec.goldmetal.customview.CircleImageView;
 import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
-import com.juttec.goldmetal.utils.EmojiWindow;
+import com.juttec.goldmetal.utils.EmojiUtil;
+import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -67,7 +75,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
     private MyAlertDialog mDialog;//对话框
 
-    private EmojiWindow readEmojiWindow;
+    private EmojiUtil readEmoji;
 
     private Fragment mFragment;
 
@@ -75,7 +83,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     private DisplayImageOptions options;//
 
     //初始化
-    public MomentRecyclerViewAdapter(ArrayList<DynamicEntityList> entityList, Context context, MyApplication app,Fragment mFragment) {
+    public MomentRecyclerViewAdapter(ArrayList<DynamicEntityList> entityList, Context context, MyApplication app, Fragment mFragment) {
         super();
         imageLoader = ImageLoader.getInstance();
         options = new DisplayImageOptions.Builder()
@@ -91,8 +99,9 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         this.app = app;
         replyPopupWindow = new ReplyPopupWindow(context);
         mDialog = new MyAlertDialog(context);
-        readEmojiWindow = new EmojiWindow(context);
-        readEmojiWindow.readEmojiIcons();
+        //表情显示的工具
+        readEmoji = new EmojiUtil(context);
+        readEmoji.readEmojiIcons();
 
     }
 
@@ -109,6 +118,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
@@ -138,12 +148,12 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         holder.name.setText(entityList.get(position).getUserName());//设置用户名
         holder.time.setText(entityList.get(position).getAddTime());//时间
         if (entityList.get(position).getDyContent() != null) {
-            holder.content.setText(readEmojiWindow.getEditable(entityList.get(position).getDyContent()));// 正文
+            holder.content.setText(readEmoji.getEditable(entityList.get(position).getDyContent()));// 正文
 
         }
 
 
-        imageLoader.displayImage(MyApplication.ImgBASEURL + entityList.get(position).getUserPhoto(), holder.headPortrait,options);
+        imageLoader.displayImage(MyApplication.ImgBASEURL + entityList.get(position).getUserPhoto(), holder.headPortrait, options);
 
         //图片的集合
         final ArrayList<PhotoBean> photoBeanList = entityList.get(position).getDyPhoto();
@@ -435,46 +445,28 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
     //添加评论布局
     private void addCommentView(LinearLayout viewRoot, final int position) {
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         for (int i = 0; i < entityList.get(position).getDyCommentReply().size(); i++) {
-            View commentMsg = LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
-            commentMsg.setLayoutParams(lp);
-
-            final TextView tvCommentName = (TextView) commentMsg.findViewById(R.id.comment_name);
-            TextView tvCommentContent = (TextView) commentMsg.findViewById(R.id.comment_content);
-
             //获得评论人的姓名与评论内容并设置显示
-            String commentName = entityList.get(position).getDyCommentReply().get(i).getDiscussantName() + ":";//
+            final String commentName = entityList.get(position).getDyCommentReply().get(i).getDiscussantName() + ":";//
             String commentContent = entityList.get(position).getDyCommentReply().get(i).getCommentContent();
-            tvCommentName.setText(commentName+" ");
-            tvCommentContent.setText(readEmojiWindow.getEditable(commentContent));
 
-            //点击昵称跳转到用户个人界面
-            clickName(tvCommentName, entityList.get(position).getDyCommentReply().get(i).getDiscussantId(), commentName);
-
-
-            //将一条评论添加到父布局中
-            viewRoot.addView(commentMsg);
-
-
-            //添加评论中的回复
-            int size = entityList.get(position).getDyCommentReply().get(i).getDyReply().size();
-            final LinearLayout replyRoot = new LinearLayout(context);
-            replyRoot.setOrientation(LinearLayout.VERTICAL);
+            TextView comment = (TextView) LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
+            SpannableString string = new SpannableString(commentName);
+            final String commentUserId = entityList.get(position).getDyCommentReply().get(i).getDiscussantId();
+            setPartClick(string, commentUserId, commentName, 0, commentName.length());
+            comment.setText(string);
+            comment.setMovementMethod(LinkMovementMethod.getInstance());
+            comment.append(readEmoji.getEditable(commentContent));
 
             final int finalI = i;
-
-
-            final int finalI1 = i;
-            commentMsg.setOnClickListener(new View.OnClickListener() {
+            comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //检查个人信息是否完善
                     if (!checkNameAndPhoto()) {
                         return;
                     }
-                    if (!entityList.get(position).getDyCommentReply().get(finalI1).getDiscussantId().equals(app.getUserInfoBean().getUserId())) {
+                    if (!entityList.get(position).getDyCommentReply().get(finalI).getDiscussantId().equals(app.getUserInfoBean().getUserId())) {
                         replyPopupWindow.create().show(v);
                         replyPopupWindow.setHint(1, entityList.get(position).getDyCommentReply().get(finalI).getDiscussantName());
                         replyPopupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
@@ -487,11 +479,69 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 }
             });
 
+            //将一条评论添加到父布局中
+            viewRoot.addView(comment);
 
+
+            //添加评论中的回复
+            int size = entityList.get(position).getDyCommentReply().get(i).getDyReply().size();
+            final LinearLayout replyRoot = new LinearLayout(context);
+            replyRoot.setOrientation(LinearLayout.VERTICAL);
             for (int j = 0; j < size; j++) {
+                final String userName = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName();
+                String repliedName = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName();
+
+                final String userId = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserId();
+                String repliedId = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedId();
+
+                String replyContent = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent();
 
 
-                View replyMsg = LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
+                TextView tvReply = (TextView) LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
+
+
+                SpannableString userReply = new SpannableString(userName);
+                setPartClick(userReply, userId, userName, 0, userName.length());
+
+                SpannableString userReplied = new SpannableString(repliedName + ":");
+                setPartClick(userReplied, repliedId, repliedName, 0, repliedName.length());
+
+                tvReply.setText(userReply);
+                tvReply.append("回复");
+                tvReply.append(userReplied);
+
+                tvReply.setMovementMethod(LinkMovementMethod.getInstance());
+                tvReply.append(readEmoji.getEditable(replyContent));
+                replyRoot.addView(tvReply);
+
+                final int finalJ = j;
+                tvReply.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        //检查个人信息是否完善
+                        if (!checkNameAndPhoto()) {
+                            return;
+                        }
+
+                        if (!app.getUserInfoBean().getUserId().equals(userId)) {
+
+                            replyPopupWindow.create().show(v);
+                            replyPopupWindow.setHint(1, userName);
+
+                            replyPopupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
+                                @Override
+                                public void onClickSend(String content) {
+                                    reply(position, finalI, finalJ, content);
+                                }
+                            });
+                        }
+                    }
+
+
+                });
+
+                /*View replyMsg = LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
                 replyMsg.setLayoutParams(lp);
 
                 TextView tvReplyName = (TextView) replyMsg.findViewById(R.id.reply_name);
@@ -503,7 +553,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
                 tvReplyName.setText(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName());
                 tvRepliedName.setText(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName() + ": ");
-                tvReplyContent.setText(readEmojiWindow.getEditable(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent()));
+                tvReplyContent.setText(readEmoji.getEditable(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent()));
                 replyRoot.addView(replyMsg);
 
                 clickName(tvReplyName, entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserId(), entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName());
@@ -534,8 +584,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                     }
 
 
-                });
-
+                });*/
 
             }
             viewRoot.addView(replyRoot);
@@ -598,14 +647,17 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MomentPersonalActivity.class);
-                intent.putExtra("userId", userID);
-                intent.putExtra("userName", userName.replace(":", ""));
-                context.startActivity(intent);
+                startActivity(userID, userName);
             }
         });
     }
 
+    private void startActivity(String userID, String userName) {
+        Intent intent = new Intent(context, MomentPersonalActivity.class);
+        intent.putExtra("userId", userID);
+        intent.putExtra("userName", userName.replace(":", ""));
+        context.startActivity(intent);
+    }
 
 
     //发送评论
@@ -712,11 +764,41 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(HttpException error, String msg) {
                 NetWorkUtils.showMsg(context);
             }
         });
+    }
+
+
+    /**
+     * 设置部分文字的点击事件与颜色
+     *
+     * @param string
+     * @param commentUserId
+     * @param commentName
+     * @param start
+     * @param end
+     */
+    private void setPartClick(SpannableString string, final String commentUserId, final String commentName, int start, int end) {
+        //设置点击事件
+        string.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                startActivity(commentUserId, commentName);
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);//删除下划线
+            }
+        }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //设置颜色
+        string.setSpan(new ForegroundColorSpan(Color.rgb(59, 85, 226)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
     }
 }
 
