@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -18,6 +19,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -64,10 +66,19 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
 
 
     private static Context context;
-
+    DisplayMetrics dm;
+    private static final double STANDWIDTH = 1080;
+    private static final double STANDHEIGHT = 1920;
+    double imgWidthRate,imgHeightRate;
     public EmojiUtil(Context context) {
 
         this.context = context;
+
+        // 方法2
+        dm = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
+        imgWidthRate = dm.widthPixels / STANDWIDTH;
+        imgHeightRate = dm.heightPixels / STANDHEIGHT;
     }
 
     public Bitmap[] readEmojiIcons() {
@@ -148,7 +159,7 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
         List<String> emojis = getMatcher(regex, content);
         for (String s : emojis
                 ) {
-          content=  content.replace(s, covert(s));
+            content = content.replace(s, covert(s));
         }
 
         //之前表情的协议是`x.png`,现在的协议是[‘汉字’],此段代码将其转换为原先的协议
@@ -167,6 +178,7 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
                 if (t < MyApplication.ENUM) {
                     final int finalI = i;
                     Spanned cs = Html.fromHtml("<img src ='" + s[finalI] + "'/>", getImageGetter(t), null);
+                    editable.append(" ");
                     editable.append(cs);
                     i++;
 
@@ -188,13 +200,15 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
         return editable;
     }
 
+
     private Html.ImageGetter getImageGetter(final int t) {
         return new Html.ImageGetter() {
             @Override
             public Drawable getDrawable(String source) {
 
                 Drawable d = new BitmapDrawable(context.getResources(), emoticons[t]);
-                d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+
+                d.setBounds(0, 0, (int)(d.getIntrinsicWidth()*imgWidthRate), (int)(d.getIntrinsicHeight()*imgHeightRate));
                 return d;
             }
         };
@@ -235,7 +249,7 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
                 if (s1.equals(s)) {
                     reader.close();
 
-                    return "`"+i+".png`";
+                    return "`" + i + ".png`";
 
 
                 }
@@ -276,8 +290,6 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
 
         return null;
     }
-
-
 
 
 }

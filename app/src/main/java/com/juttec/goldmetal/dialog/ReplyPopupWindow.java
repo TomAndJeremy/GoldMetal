@@ -33,6 +33,7 @@ import com.juttec.goldmetal.adapter.EmoticonsGridAdapter;
 import com.juttec.goldmetal.adapter.EmoticonsPagerAdapter;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.utils.EmojiUtil;
+import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 
 import java.io.InputStream;
@@ -134,9 +135,6 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
                 return false;
             }
         });
-
-
-
         mImageButton = (ImageButton) contentview.findViewById(R.id.comment_ib_emoji);
         readEmojiIcons();//读取表情
         enablePopUpView(popupLayout);
@@ -167,6 +165,8 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
         mSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mSend.setClickable(false);
+
                 String content = mEditText.getText().toString();
                 for (Map.Entry entry : map.entrySet()) {
 
@@ -178,6 +178,7 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
 
                 }
                 if (TextUtils.isEmpty(content) || "".equals(content) || content.trim().length() <= 0) {
+                    mSend.setClickable(true);
                     ToastUtil.showShort(mContext, "内容不能为空");
                     return;
                 }
@@ -221,6 +222,7 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
 
     //popupwindowde 的消失
     public void dismiss() {
+        mSend.setClickable(true);
         popupWindow.dismiss();
     }
 

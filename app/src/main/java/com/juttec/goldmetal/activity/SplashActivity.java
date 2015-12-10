@@ -22,7 +22,6 @@ import org.json.JSONObject;
 
 /**
  * 启动页
- *
  */
 public class SplashActivity extends AppCompatActivity {
 
@@ -30,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
     private String mPwd;//密码
     private String mCID;//推送用的cid
 
-    private MyApplication app ;
+    private MyApplication app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,36 +40,35 @@ public class SplashActivity extends AppCompatActivity {
 
 
         mUserName = (String) SharedPreferencesUtil.getParam(this, "username", "");
-        mPwd = (String) SharedPreferencesUtil.getParam(this,"pwd","");
-        mCID =  (String)SharedPreferencesUtil.getParam(this, "CID", "");
+        mPwd = (String) SharedPreferencesUtil.getParam(this, "pwd", "");
+        mCID = (String) SharedPreferencesUtil.getParam(this, "CID", "");
 
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if("".equals(mUserName)||"".equals(mPwd)||"".equals(mCID)){
-                    startActivity(new Intent(SplashActivity.this,MainActivity.class));
+                if ("".equals(mUserName) || "".equals(mPwd) || "".equals(mCID)) {
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
                     finish();
-                }else{
+                } else {
                     //执行登录
                     login();
-                    LogUtil.d("login------------------------"+mUserName+mPwd+mCID);
+                    LogUtil.d("login------------------------" + mUserName + mPwd + mCID);
                 }
             }
-        },2000);
+        }, 2000);
 
     }
 
 
-
     //登录接口
-    private void login(){
+    private void login() {
 
         RequestParams params = new RequestParams();
 
         params.addBodyParameter("userMobile", mUserName);
-        params.addBodyParameter("password",mPwd);
+        params.addBodyParameter("password", mPwd);
         params.addBodyParameter("cId", mCID);
 
         HttpUtils httpUtils = new HttpUtils();
@@ -96,7 +94,7 @@ public class SplashActivity extends AppCompatActivity {
                         userInfoBean.setUserPhoto(userObject.getString("userPhoto"));
                         app.setUserInfoBean(userInfoBean);
 
-                    }else{
+                    } else {
                     }
 
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
