@@ -57,7 +57,7 @@ public class SplashActivity extends AppCompatActivity {
                     LogUtil.d("login------------------------" + mUserName + mPwd + mCID);
                 }
             }
-        }, 2000);
+        }, 500);
 
     }
 
@@ -71,7 +71,7 @@ public class SplashActivity extends AppCompatActivity {
         params.addBodyParameter("password", mPwd);
         params.addBodyParameter("cId", mCID);
 
-        HttpUtils httpUtils = new HttpUtils();
+        HttpUtils httpUtils = new HttpUtils(3000);//设置 3秒超时
         httpUtils.send(HttpRequest.HttpMethod.POST, app.getUserLoginUrl(), params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

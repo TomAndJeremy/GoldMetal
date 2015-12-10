@@ -174,6 +174,13 @@ public class FollowActivity extends Activity implements View.OnClickListener, Sw
     }
 
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mListView.stopFooterAnimition();
+
+    }
+
     /**
      * 获取动态的接口
      * <p/>

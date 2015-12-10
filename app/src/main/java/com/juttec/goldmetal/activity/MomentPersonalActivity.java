@@ -194,6 +194,12 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
     }
 
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mListView.stopFooterAnimition();
+
+    }
 
     //点击事件
     @Override
