@@ -793,12 +793,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);
+                ds.setColor(Color.rgb(59, 85, 226));    //设置颜色
                 ds.setUnderlineText(false);//删除下划线
             }
         }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        //设置颜色
-        string.setSpan(new ForegroundColorSpan(Color.rgb(59, 85, 226)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
     }
 }
 

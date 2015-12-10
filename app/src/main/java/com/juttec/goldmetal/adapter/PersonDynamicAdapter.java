@@ -267,8 +267,6 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
             }
         });
-
-
         return convertView;
     }
 
@@ -451,12 +449,9 @@ public class PersonDynamicAdapter extends BaseAdapter {
                 replyMsg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         if (!app.getUserInfoBean().getUserId().equals(mLists.get(position).getDyCommentReply().get(finalI).getDyReply().get(finalJ).getUserId())) {
-
                             popupWindow.create().show(v);
                             popupWindow.setHint(1, mLists.get(position).getDyCommentReply().get(finalI).getDyReply().get(finalJ).getUserName());
-
                             popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
                                 @Override
                                 public void onClickSend(String content) {
@@ -468,12 +463,9 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
 
                 });
-
-
             }
             viewRoot.addView(replyRoot);
         }
-
     }
 
 
@@ -719,11 +711,11 @@ public class PersonDynamicAdapter extends BaseAdapter {
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);
+                ds.setColor(Color.rgb(59, 85, 226));    //设置颜色
                 ds.setUnderlineText(false);//删除下划线
             }
         }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        //设置颜色
-        string.setSpan(new ForegroundColorSpan(Color.rgb(59, 85, 226)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
 
     }
 
