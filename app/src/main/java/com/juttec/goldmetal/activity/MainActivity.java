@@ -1,7 +1,9 @@
 package com.juttec.goldmetal.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
 
     private PowerManager.WakeLock mWakeLock;//设置屏幕常亮
 
+    private MyReceiver myReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +44,11 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "MyTag");
         //在释放之前，屏幕一直亮着（有可能会变暗,但是还可以看到屏幕内容,换成PowerManager.SCREEN_BRIGHT_WAKE_LOCK不会变暗）
 
+        //注册广播
+        myReceiver = new MyReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.intent.action.releaseWakeLock");
+        this.registerReceiver(myReceiver,filter);
 
         init();
 
@@ -53,16 +62,29 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
             acquireWakeLock();
             LogUtil.d("----------mWakeLock.acquire()");
         }
-
-
         super.onResume();
     }
 
+
+
     @Override
     protected void onDestroy() {
-        LogUtil.d("----------mWakeLock.release()");
         releaseWakeLock();
+        unregisterReceiver(myReceiver);
         super.onDestroy();
+    }
+
+
+
+    class MyReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            LogUtil.d("----------onReceive");
+            //取消屏幕常亮的广播
+            if("com.intent.action.releaseWakeLock".equals(intent.getAction())){
+                releaseWakeLock();
+            }
+        }
     }
 
     /*
@@ -129,14 +151,16 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         if (mWakeLock == null) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "MyTag");
+            mWakeLock.setReferenceCounted(false);
         }
-        mWakeLock.setReferenceCounted(false);
         mWakeLock.acquire();
 
     }
 
 
     private void releaseWakeLock() {
+        //
+        LogUtil.d("----------mWakeLock.release()");
         if (mWakeLock != null && mWakeLock.isHeld()) {
             mWakeLock.release();
             mWakeLock = null;

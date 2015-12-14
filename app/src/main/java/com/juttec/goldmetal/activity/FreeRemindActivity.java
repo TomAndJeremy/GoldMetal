@@ -31,7 +31,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 /**
- * 现货白银免费提醒
+ * 免费提醒界面
  */
 public class FreeRemindActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -58,12 +58,8 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
     private MyAlertDialog dialog;//添加点位提醒的dialog
 
 
-    String symbol;//当前股票号码
-
-
-    //isFloatingAlert 浮动提醒开关是否打开  boolean
-    //ReferencePrice 基准价 float
-    //FloatingValue  浮动值 float
+    private String symbol;//当前股票号码 由前个界面传递过来的  作为sharepreference的key值  value为boolean型代表浮动开关是否打开
+    private String currentValueBase;//此股票的当前价  由前个界面传递过来的
 
 
     private ReminderDao reminderDao;
@@ -80,6 +76,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
 
         Intent intent = getIntent();
         symbol = intent.getStringExtra("symbol");
+        currentValueBase = intent.getStringExtra("currentValue");
 
         initView();
         initEnent();
@@ -100,31 +97,33 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
         etBase = (EditText) this.findViewById(R.id.et_base_value);
         etFloat = (EditText) this.findViewById(R.id.et_float_value);
 
-     /*   //设置基准价和 浮动值 的值
-        etBase.setText("" + (Float) SharedPreferencesUtil.getParam(this, "ReferencePrice", (float) 100.01));
-        etFloat.setText("" + (Float) SharedPreferencesUtil.getParam(this, "FloatingValue", (float) 10.01));
-*/
 
         valueRemind = (TextView) this.findViewById(R.id.value_remind);
 
         switchCompat = (SwitchCompat) this.findViewById(R.id.switch_remind);
         //浮动提醒开关 默认为false
-      //  switchCompat.setChecked((Boolean) SharedPreferencesUtil.getParam(this, "isFloatingAlert", false));
+        switchCompat.setChecked((Boolean) SharedPreferencesUtil.getParam(this, symbol, false));//当前的股票代码为key值
         if (switchCompat.isChecked()) {
+            //此股票设置了浮动提醒
+            //从数据库中取出 此股票的基准价和浮动值
+            isSetedFloat(reminderDao.getAllFloatDate());
+            //提醒值显示
             valueRemind.setVisibility(View.VISIBLE);
             valueRemind.setText(getTextValue(etBase.getText().toString(), etFloat.getText().toString()));
-
+            //保存按钮设置为可点击状态
             save.setSelected(true);
             save.setClickable(true);
 
         } else {
+            //此股票没有设置浮动提醒
             save.setSelected(false);
             save.setClickable(false);
+            //设置基准价(股票的当前价)和 浮动值 （默认的值）
+            etBase.setText("" + currentValueBase);
+            etFloat.setText("" +1.0);
 
         }
 
-
-        isSetedFloat(reminderDao.getAllFloatDate());
         showPointReminder(reminderDao.getAllPointDate());
     }
 
@@ -158,8 +157,6 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                 String base = etBase.getText().toString().trim();
                 String floatvalue = etFloat.getText().toString().trim();
                 valueRemind.setText(getTextValue(base, floatvalue));
-
-
             }
         });
 
@@ -189,8 +186,6 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                 String base = etBase.getText().toString().trim();
                 String floatvalue = etFloat.getText().toString().trim();
                 valueRemind.setText(getTextValue(base, floatvalue));
-
-
             }
         });
 
@@ -200,15 +195,18 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 LogUtil.d("switchCompat.setOnCheckedChange:" + isChecked);
+                //将浮动开关的状态保存  key为此股票代码
+                SharedPreferencesUtil.setParam(FreeRemindActivity.this,symbol,isChecked);
                 if (isChecked) {
+                    //打开浮动开关
                     valueRemind.setVisibility(View.VISIBLE);
                     valueRemind.setText(getTextValue(etBase.getText().toString(), etFloat.getText().toString()));
                     save.setSelected(true);
                     save.setClickable(true);
-
-
-
+                    //设置浮动提醒
+                    setFloatValue();
                 } else {
+                    //关闭浮动开关
                     save.setSelected(false);
                     save.setClickable(false);
                     valueRemind.setVisibility(View.GONE);
@@ -217,8 +215,6 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                     reminderDao.deleteFloat(symbol);
 
                 }
-                //将设置的值存起来
-                SharedPreferencesUtil.setParam(FreeRemindActivity.this, "isFloatingAlert", isChecked);
             }
         });
 
@@ -296,18 +292,31 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
 
                 break;
             case R.id.tv_save_ar:
-
-                ContentValues contentValues = new ContentValues();
-                contentValues.put("StockSymbol", symbol);
-                String base = etBase.getText().toString().trim();
-                String floatvalue = etFloat.getText().toString().trim();
-                contentValues.put("BasePrice", base);
-                contentValues.put("FloatPrice", floatvalue);
-
-                reminderDao.insert(contentValues, 1);
+                //保存按钮  设置浮动提醒
+                setFloatValue();
                 break;
         }
     }
+
+
+
+
+    /**
+     * 设置浮动提醒
+     * 将数据存入数据库 若已存在该股票 则执行更新操作
+     */
+    private void setFloatValue(){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("StockSymbol", symbol);
+        String base = etBase.getText().toString().trim();
+        String floatvalue = etFloat.getText().toString().trim();
+        contentValues.put("BasePrice", Float.parseFloat(mDecimalFormat.format(Float.parseFloat(base))));
+        contentValues.put("FloatPrice", Float.parseFloat(mDecimalFormat.format(Float.parseFloat(floatvalue))));
+        reminderDao.insert(contentValues, 1);
+        ToastUtil.showShort(FreeRemindActivity.this,"浮动提醒值设置成功");
+    }
+
+
 
     private void addView(final String s) {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -360,7 +369,14 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
 
         if ("".equals(base) || "".equals(index)) {
             ToastUtil.showShort(FreeRemindActivity.this, "基准价或浮动值不能为空");
+            //关闭浮动开关
+            save.setSelected(false);
+            save.setClickable(false);
             return "";
+        }else{
+            //打开浮动开关
+            save.setSelected(true);
+            save.setClickable(true);
         }
 
         if (switchCompat.isChecked()) {
@@ -375,16 +391,12 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                 return "";
             }
 
-            if (lowBoard <= 0) {
+            if (lowBoard < 0) {
                 ToastUtil.showShort(this, "基准价不能小于浮动值");
                 return "";
             }
-            //将基准价保存
-            SharedPreferencesUtil.setParam(FreeRemindActivity.this, "ReferencePrice", Float.parseFloat(mDecimalFormat.format(Float.parseFloat(base))));
-            //将设置的浮动值存起来
-            SharedPreferencesUtil.setParam(FreeRemindActivity.this, "FloatingValue", Float.parseFloat(mDecimalFormat.format(Float.parseFloat(index))));
 
-            return "报价>=" + mDecimalFormat.format(lowBoard) + "或报价<=" + mDecimalFormat.format(highBoard);
+            return "报价>=" + mDecimalFormat.format(highBoard) + "或报价<=" + mDecimalFormat.format(lowBoard);
         }
         return "";
     }
@@ -400,9 +412,9 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
         for (ReminderFloatBeen been :
                 floatBeens) {
             if (symbol.equals(been.getStock())) {
-                switchCompat.setChecked(true);
-                save.setSelected(true);
-                save.setClickable(true);
+//                switchCompat.setChecked(true);
+//                save.setSelected(true);
+//                save.setClickable(true);
 
                 etBase.setText(been.getBasePrice());
                 etFloat.setText(been.getFloatPrice());

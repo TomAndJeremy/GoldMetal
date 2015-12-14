@@ -125,6 +125,10 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 }else{
                     SharedPreferencesUtil.setParam(SettingActivity.this,"isScreenLight",false);
                     releaseWakeLock();
+                    //发送广播 让mainactivity同样releaseWakeLock()
+                    Intent intent = new Intent();
+                    intent.setAction("com.intent.action.releaseWakeLock");
+                    SettingActivity.this.sendBroadcast(intent);
                 }
 
                 LogUtil.d("SwitchCompat----------------onClick");
@@ -201,8 +205,8 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         if (mWakeLock == null) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "MyTag");
+            mWakeLock.setReferenceCounted(false);
         }
-        mWakeLock.setReferenceCounted(false);
         mWakeLock.acquire();
 
     }

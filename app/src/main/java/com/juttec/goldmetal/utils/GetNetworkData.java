@@ -1,6 +1,5 @@
 package com.juttec.goldmetal.utils;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -10,7 +9,6 @@ import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.MyEntity;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
@@ -71,14 +69,14 @@ public class GetNetworkData {
                                             str = "{\"result\":" + responseInfo.result.toString() + "}";
                                         }
 
-                                        LogUtil.d("自选数据:---------" + str);
+                                        LogUtil.d("股票数据:---------" + str);
 
                                         try {
 
                                             myEntity.setObject(JSON.parseObject(str, myEntity.getObject().getClass()));
                                             Message message = new Message();
                                             message.what = flag;
-                                            LogUtil.d("发消息通知---------");
+                                            LogUtil.d("发消息通知页面更新数据---------");
                                             handler.sendMessage(message);
 
                                         } catch (Exception e) {

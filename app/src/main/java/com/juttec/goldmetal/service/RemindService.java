@@ -8,11 +8,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.app.NotificationCompat.InboxStyle;
 import android.support.v7.app.NotificationCompat;
-
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.MainActivity;
@@ -32,7 +29,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class RemindService extends Service {
@@ -258,7 +254,7 @@ public class RemindService extends Service {
     private void showNotigication(int type, String stockName, String symbol, String content) {
 
         //type>0 浮动提醒，else 点位提醒
-        String title = type > 0 ? "浮动提醒：" : "点位提醒：" +
+        String title = type > 0 ? "浮动提醒" : "点位提醒" +
                 "";
         NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_launcher)

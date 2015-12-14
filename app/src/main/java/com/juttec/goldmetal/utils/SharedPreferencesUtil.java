@@ -18,9 +18,7 @@ public class SharedPreferencesUtil {
     //refreshTime  刷新时间  int
 
 
-    //isFloatingAlert 浮动提醒开关是否打开  boolean
-    //ReferencePrice 基准价 float
-    //FloatingValue  浮动值 float
+
 
 
 

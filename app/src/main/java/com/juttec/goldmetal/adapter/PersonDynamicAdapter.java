@@ -10,7 +10,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -176,7 +175,9 @@ public class PersonDynamicAdapter extends BaseAdapter {
         dynamicEntityList = mLists.get(position);
         holder.name.setText(dynamicEntityList.getUserName());//设置用户名
         holder.time.setText(dynamicEntityList.getAddTime());//时间
-        holder.content.setText(readEmoji.getEditable(dynamicEntityList.getDyContent()));//正文
+        if(dynamicEntityList.getDyContent()!=null){
+            holder.content.setText(readEmoji.getEditable(dynamicEntityList.getDyContent()));//正文
+        }
         //设置头像
         ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + dynamicEntityList.getUserPhoto(), holder.headPortrait, options);
 

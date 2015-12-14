@@ -13,6 +13,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.method.DigitsKeyListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -56,8 +57,6 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     //自选接口路径   symbol=OSXAU,OSXAG,OZAG20,OZAG50,OZAG100,OYXAG50KG,OYXAG150KG,NECLI0,OSUDI&u=qq3585&p=qq3771
     private String OPTIONAL_URL = "http://db2015.wstock.cn/wsDB_API/stock.php?r_type=2&symbol=";
 
-    //返回某一市场全字段行情  默认返回50行
-    //http://db2015.wstock.cn/wsDB_API/stock.php?market=SH&q_type=1
 
     //上证A股 接口 路径
     private String SHA_URL = "http://db2015.wstock.cn/wsDB_API/stock.php?market=SH6&r_type=2&num=20&page=";
@@ -208,6 +207,8 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                     case 6:
                         //搜索个股模块
                         datas.clear();
+                        //将resetURL置空
+                        resetURL = "";
                         //停止网络访问
                         getNetWorkData.stop();
                         if (adapter != null) {
@@ -243,8 +244,6 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         //将 标志设置为：自选股
         isOptional = true;
         isSearch = false;
-
-
         //查数据库  将股票代码放入list中
         queryData();
         //判断是否有自选股
@@ -252,8 +251,11 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
             ToastUtil.showShort(getActivity(),"您还没有自选股，快去添加吧");
             //将股票数据清空
             datas.clear();
+            //将resetURL置空
+            resetURL = "";
             //停止网络访问
             getNetWorkData.stop();
+
             if(adapter!=null){
                 adapter.notifyDataSetChanged();
             }
@@ -543,7 +545,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     private void getData(String url) {
         LogUtil.d("股票URL-------------" + url);
 
-        if (url != null) {
+        if (url != null&& !TextUtils.isEmpty(url)) {
             resetURL = url;
             if (getNetWorkData.isAlive()) {
                 getNetWorkData.setUrl(url);
@@ -569,15 +571,13 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                 case NEWEST:
                     //加载完数据  将标志更改为false
                     isLoadingMore = false;
-
                     if (marketFormInfo.getResult().size() == 0)
                     {
                         //没有更多数据
                         isNoMore = true;
                         //将page页数减1
                         page--;
-
-                        ToastUtil.showShort(getActivity(), "没有数据...");
+                        ToastUtil.showShort(getActivity(), "数据已全部加载...");
                         break;
                     } else {
                         datas = marketFormInfo.getResult();
@@ -706,7 +706,6 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     private void deleteData(String symbol_del){
 
         myRealm.beginTransaction();
-
         RealmResults<OptionalStockBean> results =
                 myRealm.where(OptionalStockBean.class).findAll();
 
@@ -715,6 +714,11 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                 results.remove(i);
                 //同时将list中的数据删除
                 mLists.remove(i);
+                if(mLists.size()==0){
+                    //将resetURL置空
+                    resetURL = "";
+                    getNetWorkData.stop();//停止网络访问
+                }
             }
         }
         myRealm.commitTransaction();

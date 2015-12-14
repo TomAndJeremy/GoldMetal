@@ -111,6 +111,7 @@ public class  ReminderDao {
             }
         }
     }
+
  //删除浮动提醒提醒
     public void deleteFloat(String stocksymbol) {
         SQLiteDatabase db = null;
@@ -205,8 +206,10 @@ public class  ReminderDao {
                 new String[]{name},
                 null, null, null);
         if (cursor.getCount() > 0) {
+            cursor.close();
             return true;
         } else {
+            cursor.close();
             return false;
         }
 

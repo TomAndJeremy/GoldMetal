@@ -768,7 +768,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
                     * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM + DEFAULT_AXIS_TITLE_SIZE, textPaint);
 
             canvas.drawText(
-                    String.valueOf(mOHLCData.get(mDataStartIndext + mShowDataNum / 2).getDate()),
+                    DateUtil.formatDate(mOHLCData.get(mDataStartIndext + mShowDataNum / 2).getDate()),
                     getWidth() / 2 - 2.5f * DEFAULT_AXIS_TITLE_SIZE, UPER_CHART_BOTTOM
                             + DEFAULT_AXIS_TITLE_SIZE, textPaint);
             canvas.drawText(DateUtil.formatDate(mOHLCData.get(mDataStartIndext + (int) (mShowDataNum * 1.0 / (DEFAULT_LOGITUDE_NUM + 1) * 4)).getDate()), getWidth() - p * 4 - 4 - 2.5f
