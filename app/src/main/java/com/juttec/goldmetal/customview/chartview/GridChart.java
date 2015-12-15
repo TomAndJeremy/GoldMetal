@@ -11,8 +11,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.juttec.goldmetal.R;
-
 
 /**
  * 坐标轴使用的View
@@ -24,10 +22,10 @@ public class GridChart extends View {
 
 	// ////////////默认值////////////////
 	/** 默认背景色 */
-	public static final int DEFAULT_BACKGROUD =R.color.black /*R.mipmap.bg_chart*/;
+	public static final int DEFAULT_BACKGROUD =  Color.BLACK;
 
 	/** 默认XY轴字体大小 **/
-	public static final int DEFAULT_AXIS_TITLE_SIZE = 22;
+	public static final int DEFAULT_AXIS_TITLE_SIZE = 18;
 
 	/** 默认XY坐标轴颜色 */
 	private static final int DEFAULT_AXIS_COLOR = Color.TRANSPARENT;
@@ -49,7 +47,7 @@ public class GridChart extends View {
 
 	/** 默认虚线效果
 	 *  DashPathEffect  可以使用DashPathEffect来创建一个虚线的轮廓(短横线/小圆点)，而不是使用实线 */
-	private static final PathEffect DEFAULT_DASH_EFFECT = new DashPathEffect(new float[] { 10,6,24,21}, 1);
+	private static final PathEffect DEFAULT_DASH_EFFECT = new DashPathEffect(new float[] { 5, 5, 5,5 }, 1);
 
 	/** 下表的顶部 */
 	public static float LOWER_CHART_TOP;
@@ -139,7 +137,7 @@ public class GridChart extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		setBackgroundResource(mBackGround);
+		setBackgroundColor(mBackGround);
 		int viewHeight = getHeight();
 		int viewWidth = getWidth();
 		mLowerChartHeight = viewHeight - 2 - LOWER_CHART_TOP;
