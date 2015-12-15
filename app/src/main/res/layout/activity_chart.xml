@@ -79,33 +79,32 @@
                     android:layout_marginRight="6sp"
                     android:text="最高"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="@dimen/normal_size" />
 
                 <TextView
                     android:id="@+id/ca_tv_high"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1167.84"
                     android:textColor="@color/red"
-                    android:textSize="20sp" />
+                    android:text="    "
+                    android:textSize="@dimen/normal_size" />
 
                 <TextView
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="6sp"
                     android:text="今开"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="@dimen/normal_size" />
 
                 <TextView
                     android:id="@+id/ca_tv_open"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1167.84"
                     android:textColor="@color/red"
-                    android:textSize="20sp" />
+                    android:textSize="@dimen/normal_size" />
             </LinearLayout>
 
             <LinearLayout
@@ -123,32 +122,31 @@
                     android:layout_marginRight="6sp"
                     android:text="最低"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="@dimen/normal_size" />
 
                 <TextView
                     android:id="@+id/ca_tv_low"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1167.84"
                     android:textColor="#01F301"
-                    android:textSize="20sp" />
+                    android:text="    "
+                    android:textSize="@dimen/normal_size" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="6sp"
-                    android:text="作收"
+                    android:text="昨收"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="@dimen/normal_size" />
 
                 <TextView
                     android:id="@+id/ca_tv_lastclose"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1167.84"
                     android:textColor="#01F301"
-                    android:textSize="20sp" />
+                    android:textSize="@dimen/normal_size" />
             </LinearLayout>
 
         </LinearLayout>
@@ -158,15 +156,15 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="0.5dp"
             android:background="@color/colorPrimaryDark"
-            android:padding="5dp">
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
 
             <TextView
                 android:id="@+id/tv_current"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1167.38"
                 android:textColor="@color/red"
-                android:textSize="23sp" />
+                android:textSize="@dimen/large_size" />
 
             <TextView
                 android:id="@+id/tv_total"
@@ -174,9 +172,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="5dp"
-                android:text="1167.38"
                 android:textColor="@color/red"
-                android:textSize="17sp" />
+                android:textSize="@dimen/normal_size" />
         </RelativeLayout>
 
     </LinearLayout>

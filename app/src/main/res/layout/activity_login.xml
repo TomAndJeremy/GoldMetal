@@ -29,6 +29,7 @@
             android:drawableLeft="@mipmap/content_account_icon_user"
             android:hint="@string/hint_name"
             android:inputType="phone"
+            android:singleLine="true"
             android:maxLength="11"/>
 
 
@@ -43,6 +44,7 @@
             android:background="@null"
             android:drawableLeft="@mipmap/content_account_icon_password"
             android:hint="@string/hint_password"
+            android:singleLine="true"
             android:password="true" />
 
 

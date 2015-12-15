@@ -42,39 +42,42 @@ public class SplashActivity extends AppCompatActivity {
         mUserName = (String) SharedPreferencesUtil.getParam(this, "username", "");
         mPwd = (String) SharedPreferencesUtil.getParam(this, "pwd", "");
         mCID = (String) SharedPreferencesUtil.getParam(this, "CID", "");
-
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if ("".equals(mUserName) || "".equals(mPwd) || "".equals(mCID)) {
-                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                    finish();
-                } else {
-                    //执行登录
-                    login();
-                    LogUtil.d("login------------------------" + mUserName + mPwd + mCID);
-                }
-            }
-        }, 500);
-
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Handler handler = new Handler();
+        if ("".equals(mUserName) || "".equals(mPwd) || "".equals(mCID)) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    enterMain();
+                }
+            }, 2000);
+
+        } else {
+            //执行登录
+            login();
+            LogUtil.d("login------------------------" + mUserName + mPwd + mCID);
+        }
+    }
+
     //登录接口
     private void login() {
-
+        final long timeStart = System.currentTimeMillis();
         RequestParams params = new RequestParams();
 
         params.addBodyParameter("userMobile", mUserName);
         params.addBodyParameter("password", mPwd);
         params.addBodyParameter("cId", mCID);
 
-        HttpUtils httpUtils = new HttpUtils(3000);//设置 3秒超时
+        HttpUtils httpUtils = new HttpUtils(2000);//设置 2秒超时
         httpUtils.send(HttpRequest.HttpMethod.POST, app.getUserLoginUrl(), params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+
                 LogUtil.d(responseInfo.result.toString());
 
                 JSONObject object = null;
@@ -97,23 +100,39 @@ public class SplashActivity extends AppCompatActivity {
                     } else {
                     }
 
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    long timeEnd = System.currentTimeMillis();
+                    if(timeEnd-timeStart<2000){
+                        new Handler().postDelayed(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        enterMain();
+                                    }
+                                },(2000-(timeEnd-timeStart))
+                        );
+                    }else{
+                        enterMain();
+                    }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                enterMain();
             }
         });
+    }
+
+
+    //跳转到主界面
+    private void enterMain(){
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }

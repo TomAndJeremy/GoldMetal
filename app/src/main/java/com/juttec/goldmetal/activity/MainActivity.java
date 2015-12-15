@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "MyTag");
         //在释放之前，屏幕一直亮着（有可能会变暗,但是还可以看到屏幕内容,换成PowerManager.SCREEN_BRIGHT_WAKE_LOCK不会变暗）
 
-        //注册广播
+        //注册广播   当在设置里将设置屏幕常亮的开关关闭时 发送广播
         myReceiver = new MyReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.intent.action.releaseWakeLock");
