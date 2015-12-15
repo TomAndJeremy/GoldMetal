@@ -25,7 +25,7 @@ import com.juttec.goldmetal.utils.ToastUtil;
  */
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private static final int MIN_REFRESH_TIME = 5; //刷新时间  最低限制：5s
+    private static final int MIN_REFRESH_TIME = 10; //刷新时间  最低限制：10s
     private static final int MAX_REFRESH_TIME = 3*60*60;//最大限制  3小时
 
 

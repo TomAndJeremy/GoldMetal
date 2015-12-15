@@ -29,24 +29,32 @@ public class GetNetworkData {
     private boolean shouldConnect;//是否执行循环
     HttpUtils httpUtils;
 
+    public void getKLineData(final String sUrl, final MyEntity sMyEntity, final Context sContext,
+                             final Handler sHandler, final int flag) {
+        getKLineData(sUrl, sMyEntity, sContext,
+                sHandler, flag, null);
+    }
+
     /**
      * 获取接口数据
      *
-     * @param sUrl
-     * @param sMyEntity
-     * @param sContext
-     * @param sHandler
-     * @param flag
+     * @param sUrl        链接
+     * @param sMyEntity   实体
+     * @param sContext    上下文
+     * @param sHandler    handle
+     * @param flag        消息标志
+     * @param refreshTime 数据刷新时间（null 从设置中读取时间（默认60秒），小于0不刷新，大于0直接将值设为睡眠时间）
      */
     public void getKLineData(final String sUrl, final MyEntity sMyEntity, final Context sContext,
-                             final Handler sHandler, final int flag) {
+                             final Handler sHandler, final int flag, final Integer refreshTime) {
+
 
         url = sUrl;
         myEntity = sMyEntity;
         context = sContext;
         handler = sHandler;
 
-         httpUtils = new HttpUtils();
+        httpUtils = new HttpUtils();
         httpUtils.configCurrentHttpCacheExpiry(1000);
         thread = new Thread(new Runnable() {
             @Override
@@ -55,52 +63,69 @@ public class GetNetworkData {
 
                 //给实体类加锁
                 synchronized (myEntity) {
-                        do {
+                    do {
 
-                            if (MyApplication.canCycle) {
-                                httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
-                                    @Override
-                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                        if (MyApplication.canCycle) {
+                            httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
+                                @Override
+                                public void onSuccess(ResponseInfo<String> responseInfo) {
 
-                                        String str;
-                                        if (responseInfo.result.toString().equals("unkown user")) {
-                                            str = "{\"result\":[]}";
-                                        } else {
-                                            str = "{\"result\":" + responseInfo.result.toString() + "}";
-                                        }
-
-                                        LogUtil.d("股票数据:---------" + str);
-
-                                        try {
-
-                                            myEntity.setObject(JSON.parseObject(str, myEntity.getObject().getClass()));
-                                            Message message = new Message();
-                                            message.what = flag;
-                                            LogUtil.d("发消息通知页面更新数据---------");
-                                            handler.sendMessage(message);
-
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-
-                                            ToastUtil.showShort(context, responseInfo.result.toString());
-
-                                        }
+                                    String str;
+                                    if (responseInfo.result.toString().equals("unkown user")) {
+                                        str = "{\"result\":[]}";
+                                    } else {
+                                        str = "{\"result\":" + responseInfo.result.toString() + "}";
                                     }
 
-                                    @Override
-                                    public void onFailure(HttpException e, String s) {
-                                        NetWorkUtils.showMsg(context);
+                                    LogUtil.d("股票数据:---------" + str);
+
+                                    try {
+
+                                        myEntity.setObject(JSON.parseObject(str, myEntity.getObject().getClass()));
+                                        Message message = new Message();
+                                        message.what = flag;
+                                        LogUtil.d("发消息通知页面更新数据---------");
+                                        handler.sendMessage(message);
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+
+                                        ToastUtil.showShort(context, responseInfo.result.toString());
+
                                     }
-                                });
-                            }
-                            LogUtil.e("url  " + url);
-                            try {
-                                myEntity.wait(10000);//每10秒钟执行一次
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                                }
+
+                                @Override
+                                public void onFailure(HttpException e, String s) {
+                                    NetWorkUtils.showMsg(context);
+                                }
+                            });
+                        }
+
+                        LogUtil.e("url  " + url);
+                        try {
+                            int sleepTime = 60 * 1000;//默认1分钟
+                            if (refreshTime == null) {
+                                sleepTime = (int)(SharedPreferencesUtil.getParam(context, "refreshTime", 10))*1000;
+
+
+                                LogUtil.e("sleeptime  " + sleepTime);
+                            } else {
+                                sleepTime = refreshTime;
                             }
 
-                        } while (shouldConnect);
+
+                            if (sleepTime < 0) {
+                                shouldConnect = false;//不循环
+                            } else {
+                                myEntity.wait(sleepTime);
+                            }
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    } while (shouldConnect);
 
                 }
             }
@@ -110,9 +135,9 @@ public class GetNetworkData {
     }
 
 
-
     /**
      * 重置url
+     *
      * @param sUrl
      */
     public void setUrl(String sUrl) {
@@ -131,7 +156,6 @@ public class GetNetworkData {
         this.shouldConnect = shouldConnect;
 
     }
-
 
 
     //停止
