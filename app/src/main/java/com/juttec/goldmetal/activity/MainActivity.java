@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
             TabLayout.Tab tab = tabLayout.getTabAt(i);
             if (tab != null) {
                 tab.setCustomView(myFragmentPagerAdapter.getTabView(i));
+
             }
         }
 

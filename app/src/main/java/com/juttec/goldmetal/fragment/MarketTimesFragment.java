@@ -72,7 +72,7 @@ public class MarketTimesFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		getNetworkData = new GetNetworkData();
-		getNetworkData.getKLineData(TIME_URL, myEntity, mContext, handler, NEWEST);
+		getNetworkData.getKLineData(TIME_URL, myEntity, mContext, handler, NEWEST,60*1000);//60秒刷新一次
 	}
 
 	/**

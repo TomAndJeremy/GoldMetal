@@ -82,7 +82,7 @@ public class MarketKChartsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getNetworkData = new GetNetworkData();
-        getNetworkData.getKLineData(url, myEntity, getActivity(), handler, NEWEST);
+        getNetworkData.getKLineData(url, myEntity, getActivity(), handler, NEWEST,-1);//k线图不刷新
     }
 
     /**

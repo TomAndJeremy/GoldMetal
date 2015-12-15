@@ -93,7 +93,6 @@ public class RemindService extends Service {
         }
         //每次循还要重置url
         url = "http://db2015.wstock.cn/wsDB_API/stock.php?r_type=2&query=Name,NewPrice&symbol=";
-
         /*去除重复的股票号，得到所有股票号*/
         List<String> tmpNames = new ArrayList<>();
         for (ReminderFloatBeen been :
@@ -164,10 +163,7 @@ public class RemindService extends Service {
 
                     }
                 }
-
         );
-
-
     }
 
 
