@@ -51,6 +51,15 @@ public class KChartInfo {
         private String Open;
         private String High;
         private String Low;
+        private String Volume;
+
+        public String getVolume() {
+            return Volume;
+        }
+
+        public void setVolume(String Volume) {
+            this.Volume = Volume;
+        }
 
         public void setDate(String Date) {
             this.Date = Date;

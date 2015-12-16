@@ -80,12 +80,13 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     //K线图指标
     private String indexs[] = new String[]{
             "SMA指标",
-            "EMA指标",
             "BOLL指标",
             "MACD指标",
             "KDJ指标",
             "RSI指标",
-            "DMA指标"
+            "DMA指标",
+            "FS指标",
+            "MTM指标"
     };
 
     private boolean isKLine = false;//是否显示的是K线图  默认为False
@@ -303,7 +304,8 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
                         LogUtil.e(ChartActivity.this, 145, "index   " + index);
                         if (kChartsFragment != null) {
-                            if (index.equals("MACD") || index.equals("KDJ") || index.equals("RSI") || index.equals("DMA")) {
+                            if (index.equals("MACD") || index.equals("KDJ") || index.equals("RSI") || index.equals("DMA")
+                                    || index.equals("FS")|| index.equals("MTM")) {
                                 kChartsFragment.setIndex(index);
                             } else {
                                 kChartsFragment.setUpIndex(index);

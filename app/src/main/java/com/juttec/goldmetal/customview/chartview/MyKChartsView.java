@@ -10,10 +10,12 @@ import android.view.MotionEvent;
 
 import com.juttec.goldmetal.bean.chartentity.BOLLEntity;
 import com.juttec.goldmetal.bean.chartentity.DMAEntity;
+import com.juttec.goldmetal.bean.chartentity.FsEntity;
 import com.juttec.goldmetal.bean.chartentity.KChartInfo;
 import com.juttec.goldmetal.bean.chartentity.KDJEntity;
 import com.juttec.goldmetal.bean.chartentity.MACDEntity;
 import com.juttec.goldmetal.bean.chartentity.MALineEntity;
+import com.juttec.goldmetal.bean.chartentity.MtmEntity;
 import com.juttec.goldmetal.bean.chartentity.RSIEntity;
 import com.juttec.goldmetal.utils.DateUtil;
 
@@ -120,6 +122,8 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
     KDJEntity mKDJData;
     RSIEntity mRSIData;
     DMAEntity mDMAEntity;
+    FsEntity mFsEntity;
+    MtmEntity mtmEntity;
 
     public MyKChartsView(Context context) {
         super(context);
@@ -420,7 +424,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
             }
             rate = lowerHight / (high - low);
 
-            // 绘制白、黄、紫线
+            // 绘制白、绿线
             float line1 = 0.0f;
             float line2 = 0.0f;
             for (int i = mDataStartIndext; i < mDataStartIndext + mShowDataNum && i < DIF.size(); i++) {
@@ -459,9 +463,98 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
 
             canvas.drawText(new DecimalFormat("#.##").format(low), 2, lowertop
                     + lowerHight, textPaint);
+        }else if (mTabTitle.trim().equalsIgnoreCase("FS")) {
+            List<Double> averagePrices = mFsEntity.getAveragePrices();
+            List<Double> stockPrices = mFsEntity.getStockPrices();
 
+            double low = averagePrices.get(mDataStartIndext);
+            double high = low;
+            double rate = 0.0;
+            for (int i = mDataStartIndext; i < mDataStartIndext + mShowDataNum && i < averagePrices.size(); i++) {
+                low = low < averagePrices.get(i) ? low : averagePrices.get(i);
+                low = low < stockPrices.get(i) ? low : stockPrices.get(i);
+
+                high = high > averagePrices.get(i) ? high : averagePrices.get(i);
+                high = high > stockPrices.get(i) ? high : stockPrices.get(i);
+            }
+            rate = lowerHight / (high - low);
+
+            // 绘制线  均价线由黄色线表示，分时股价线由白色线表示。
+            float line1 = 0.0f;
+            float line2 = 0.0f;
+            for (int i = mDataStartIndext; i < mDataStartIndext + mShowDataNum && i < averagePrices.size(); i++) {
+                if (i != mDataStartIndext) {
+                        canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
+                                        * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
+                                (float) ((high - averagePrices.get(i)) * rate) + lowertop, viewWidth - 2
+                                        - (float) mCandleWidth * (i - mDataStartIndext)
+                                        + (float) mCandleWidth / 2, line1, yellowPaint);
+
+
+                        canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
+                                        * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
+                                (float) ((high - stockPrices.get(i)) * rate) + lowertop, viewWidth - 2
+                                        - (float) mCandleWidth * (i - mDataStartIndext)
+                                        + (float) mCandleWidth / 2, line2, whitePaint);
+                }
+                line1 = (float) ((high - averagePrices.get(i)) * rate) + lowertop;
+                line2 = (float) ((high - stockPrices.get(i)) * rate) + lowertop;
+
+            }
+
+            canvas.drawText(new DecimalFormat("#.##").format(high), 2, lowertop
+                    + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
+            canvas.drawText(new DecimalFormat("#.##").format((high + low) / 2), 2, lowertop
+                    + lowerHight / 2 + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
+
+            canvas.drawText(new DecimalFormat("#.##").format(low), 2, lowertop
+                    + lowerHight, textPaint);
+        }else if (mTabTitle.trim().equalsIgnoreCase("MTM")) {
+            List<Double> MTMs = mtmEntity.getMTMs();
+            List<Double>MTMMAs = mtmEntity.getMTMMAs();
+
+            double low = MTMs.get(mDataStartIndext);
+            double high = low;
+            double rate = 0.0;
+            for (int i = mDataStartIndext; i < mDataStartIndext + mShowDataNum && i < MTMs.size(); i++) {
+                low = low < MTMs.get(i) ? low : MTMs.get(i);
+                low = low < MTMMAs.get(i) ? low : MTMMAs.get(i);
+
+                high = high > MTMs.get(i) ? high : MTMs.get(i);
+                high = high > MTMMAs.get(i) ? high : MTMMAs.get(i);
+            }
+            rate = lowerHight / (high - low);
+
+            // 绘制线  MTM白色的线    MTMMA黄色的线
+            float line1 = 0.0f;
+            float line2 = 0.0f;
+            for (int i = mDataStartIndext; i < mDataStartIndext + mShowDataNum && i < MTMs.size(); i++) {
+                if (i != mDataStartIndext) {
+                    canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
+                                    * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
+                            (float) ((high - MTMs.get(i)) * rate) + lowertop, viewWidth - 2
+                                    - (float) mCandleWidth * (i - mDataStartIndext)
+                                    + (float) mCandleWidth / 2, line1, whitePaint);
+
+
+                    canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
+                                    * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
+                            (float) ((high - MTMMAs.get(i)) * rate) + lowertop, viewWidth - 2
+                                    - (float) mCandleWidth * (i - mDataStartIndext)
+                                    + (float) mCandleWidth / 2, line2, yellowPaint);
+                }
+                line1 = (float) ((high - MTMs.get(i)) * rate) + lowertop;
+                line2 = (float) ((high - MTMMAs.get(i)) * rate) + lowertop;
+            }
+
+            canvas.drawText(new DecimalFormat("#.##").format(high), 2, lowertop
+                    + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
+            canvas.drawText(new DecimalFormat("#.##").format((high + low) / 2), 2, lowertop
+                    + lowerHight / 2 + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
+
+            canvas.drawText(new DecimalFormat("#.##").format(low), 2, lowertop
+                    + lowerHight, textPaint);
         }
-
 
         }
 
@@ -655,6 +748,9 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
         mKDJData = new KDJEntity(mOHLCData);
         mRSIData = new RSIEntity(mOHLCData);
         mDMAEntity = new DMAEntity(mOHLCData);
+        mFsEntity = new FsEntity(mOHLCData);
+        mtmEntity = new MtmEntity(mOHLCData);
+
         setCurrentData();
         postInvalidate();
     }
