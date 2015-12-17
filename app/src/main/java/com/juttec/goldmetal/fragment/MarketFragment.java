@@ -435,7 +435,8 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                                 String et = dialog.getResult().trim();
                                 if (et.length() == 8) {
                                     //开始搜素
-                                    getNetWorkData.setUrl(SEARCH_URL + "&symbol=" + et);
+                                    getData(SEARCH_URL + "&symbol=" + et);
+//                                    getNetWorkData.setUrl(SEARCH_URL + "&symbol=" + et);
                                     tabLayout.getTabAt(5).select();
                                     isSearch = true;
                                     isOptional = false;

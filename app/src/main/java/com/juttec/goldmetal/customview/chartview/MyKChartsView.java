@@ -17,6 +17,7 @@ import com.juttec.goldmetal.bean.chartentity.MACDEntity;
 import com.juttec.goldmetal.bean.chartentity.MALineEntity;
 import com.juttec.goldmetal.bean.chartentity.MtmEntity;
 import com.juttec.goldmetal.bean.chartentity.RSIEntity;
+import com.juttec.goldmetal.bean.chartentity.WrEntity;
 import com.juttec.goldmetal.utils.DateUtil;
 
 import java.io.BufferedReader;
@@ -124,6 +125,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
     DMAEntity mDMAEntity;
     FsEntity mFsEntity;
     MtmEntity mtmEntity;
+    WrEntity mWrEntity;
 
     public MyKChartsView(Context context) {
         super(context);
@@ -554,6 +556,51 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
 
             canvas.drawText(new DecimalFormat("#.##").format(low), 2, lowertop
                     + lowerHight, textPaint);
+        }else if (mTabTitle.trim().equalsIgnoreCase("WR")) {
+            List<Double> WR1s = mWrEntity.getWr1s();
+            List<Double> WR2s = mWrEntity.getWr2s();
+
+            double low = WR1s.get(mDataStartIndext);
+            double high = low;
+            double rate = 0.0;
+            for (int i = mDataStartIndext; i < mDataStartIndext + mShowDataNum && i < WR1s.size(); i++) {
+                low = low < WR1s.get(i) ? low : WR1s.get(i);
+                low = low < WR2s.get(i) ? low : WR2s.get(i);
+
+                high = high > WR1s.get(i) ? high : WR1s.get(i);
+                high = high > WR2s.get(i) ? high : WR2s.get(i);
+            }
+            rate = lowerHight / (high - low);
+
+            // 绘制线  MTM白色的线    MTMMA黄色的线
+            float line1 = 0.0f;
+            float line2 = 0.0f;
+            for (int i = mDataStartIndext; i < mDataStartIndext + mShowDataNum && i < WR1s.size(); i++) {
+                if (i != mDataStartIndext) {
+                    canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
+                                    * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
+                            (float) ((high - WR1s.get(i)) * rate) + lowertop, viewWidth - 2
+                                    - (float) mCandleWidth * (i - mDataStartIndext)
+                                    + (float) mCandleWidth / 2, line1, whitePaint);
+
+
+                    canvas.drawLine(viewWidth - 1 - (float) mCandleWidth
+                                    * (i + 1 - mDataStartIndext) + (float) mCandleWidth / 2,
+                            (float) ((high - WR2s.get(i)) * rate) + lowertop, viewWidth - 2
+                                    - (float) mCandleWidth * (i - mDataStartIndext)
+                                    + (float) mCandleWidth / 2, line2, yellowPaint);
+                }
+                line1 = (float) ((high - WR1s.get(i)) * rate) + lowertop;
+                line2 = (float) ((high - WR2s.get(i)) * rate) + lowertop;
+            }
+
+            canvas.drawText(new DecimalFormat("#.##").format(high), 2, lowertop
+                    + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
+            canvas.drawText(new DecimalFormat("#.##").format((high + low) / 2), 2, lowertop
+                    + lowerHight / 2 + DEFAULT_AXIS_TITLE_SIZE - 2, textPaint);
+
+            canvas.drawText(new DecimalFormat("#.##").format(low), 2, lowertop
+                    + lowerHight, textPaint);
         }
 
         }
@@ -750,6 +797,7 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
         mDMAEntity = new DMAEntity(mOHLCData);
         mFsEntity = new FsEntity(mOHLCData);
         mtmEntity = new MtmEntity(mOHLCData);
+        mWrEntity = new WrEntity(mOHLCData);
 
         setCurrentData();
         postInvalidate();

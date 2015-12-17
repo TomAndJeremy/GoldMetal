@@ -36,14 +36,20 @@ public class MarketKChartsFragment extends Fragment {
     private String index;
     private GetNetworkData getNetworkData;
 
+    private static String upIndex_kline;
+    private static String tabIndex_kline;
+
     /**
      * 静态工厂方法需要一个int型的值来初始化fragment的参数，
      * 然后返回新的fragment到调用者
      */
-    public static MarketKChartsFragment newInstance(String myurl) {
+    public static MarketKChartsFragment newInstance(String myurl,String upIndex,String tabIndex) {
 
         kChartsFragment = new MarketKChartsFragment();
         url = myurl;
+        upIndex_kline = upIndex;
+        tabIndex_kline = tabIndex;
+
         return kChartsFragment;
     }
 
@@ -67,8 +73,8 @@ public class MarketKChartsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_kcharts, null);
         mMyChartsView = (MyKChartsView) view.findViewById(R.id.my_charts_view);
-        mMyChartsView.setTabTitle("MACD");
-        mMyChartsView.setUpTitle("SMA");
+        mMyChartsView.setTabTitle(tabIndex_kline);
+        mMyChartsView.setUpTitle(upIndex_kline);
         handler = new MyHandler();
         datas = new ArrayList<KChartInfo.ResultEntity>();
         kChartInfo = new KChartInfo();
@@ -119,6 +125,8 @@ public class MarketKChartsFragment extends Fragment {
         super.onDestroy();
         LogUtils.e("onDestroy");
         kChartsFragment = null;
+        upIndex_kline = null;
+        tabIndex_kline = null;
     }
 
     //从assets 文件夹中获取文件并读取数据

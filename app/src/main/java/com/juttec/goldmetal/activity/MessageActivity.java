@@ -318,7 +318,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             pw.setOutsideTouchable(false);
 
         }
-        pw.showAsDropDown(view, view.getWidth() / 2, -20);
+        pw.showAsDropDown(view, view.getWidth() / 2, -30);
 
 
         //删除消息

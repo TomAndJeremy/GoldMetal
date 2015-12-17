@@ -47,8 +47,11 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     private String name;//名称
     private String symbol;//代码
 
-    private String name_cycle_kline = " -15分钟";//k线图的周期
-    private String name_cycle_time=" -24小时";//分时图的周期
+    private String name_cycle_kline = "15分钟";//k线图的周期
+    private String name_cycle_time="24小时";//分时图的周期
+
+    private String upIndex_kline = "SMA";//k线图的上面显示的指标
+    private String tabIndex_kline = "MACD";//k线图下面显示的指标
 
     private FragmentManager fragmentManager;
 
@@ -86,6 +89,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
             "RSI指标",
             "DMA指标",
             "FS指标",
+            "WR指标",
             "MTM指标"
     };
 
@@ -142,7 +146,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
         mHeadLayout = (HeadLayout) findViewById(R.id.head_layout);
         tv_title = (TextView) mHeadLayout.findViewById(R.id.head_title);
         //设置标题
-        tv_title.setText(name+name_cycle_time);
+        tv_title.setText(name+" -"+name_cycle_time);
         tv_cycle = (TextView) mHeadLayout.findViewById(R.id.left_text);
         tv_cycle.setOnClickListener(this);
 
@@ -255,7 +259,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                                     break;
                             }
                             tv_title.setText(name + " -" + name_cycle_kline);
-                            kChartsFragment = MarketKChartsFragment.newInstance(KLINES_URL + "&return_t=" + return_t + "&qt_type=" + qt_type);
+                            kChartsFragment = MarketKChartsFragment.newInstance(KLINES_URL + "&return_t=" + return_t + "&qt_type=" + qt_type,upIndex_kline,tabIndex_kline);
                             LogUtil.d("KLINES_URL-------------" + KLINES_URL + "&return_t=" + return_t + "&qt_type=" + qt_type);
                             transaction.replace(R.id.fragment_container, kChartsFragment).commit();
                         } else {
@@ -299,15 +303,17 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                 builder.setItems(indexs, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String index = indexs[which].replace("指标", "");
+                        String index = indexs[which].replace("指标","");
 
 
                         LogUtil.e(ChartActivity.this, 145, "index   " + index);
                         if (kChartsFragment != null) {
                             if (index.equals("MACD") || index.equals("KDJ") || index.equals("RSI") || index.equals("DMA")
-                                    || index.equals("FS")|| index.equals("MTM")) {
+                                    || index.equals("FS")|| index.equals("MTM")|| index.equals("WR")) {
+                                tabIndex_kline = index;
                                 kChartsFragment.setIndex(index);
                             } else {
+                                upIndex_kline = index;
                                 kChartsFragment.setUpIndex(index);
                             }
                         }
@@ -328,16 +334,16 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                 LogUtil.d("分时图TIME_URL-------------" + TIME_URL);
                 timesFragment = MarketTimesFragment.newInstance(TIME_URL);
                 transaction.replace(R.id.fragment_container, timesFragment).commit();
-                tv_title.setText(name + name_cycle_time);
+                tv_title.setText(name + " -"+name_cycle_time);
                 break;
             case R.id.btn_k_line:
                 //K线图
                 isKLine = true;
                 setCycle();
-                kChartsFragment = MarketKChartsFragment.newInstance(KLINES_URL + "&return_t=" + return_t + "&qt_type=" + qt_type);
+                kChartsFragment = MarketKChartsFragment.newInstance(KLINES_URL + "&return_t=" + return_t + "&qt_type=" + qt_type,upIndex_kline,tabIndex_kline);
                 LogUtil.d("KLINES_URL-------------" + KLINES_URL + "&return_t=" + return_t + "&qt_type=" + qt_type);
                 transaction.replace(R.id.fragment_container, kChartsFragment).commit();
-                tv_title.setText(name + name_cycle_kline);
+                tv_title.setText(name +  " -"+name_cycle_kline);
                 break;
 
             case R.id.btn_free_remind:
@@ -366,7 +372,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                             tvOpen.setText(d.getOpen());
                             tvLow.setText(d.getLow());
                             tvHigh.setText(d.getHigh());
-                            LogUtil.d("height------newprice:"+d.getHigh()+"-------"+d.getNewPrice());
+//                            LogUtil.d("height------newprice:"+d.getHigh()+"-------"+d.getNewPrice());
                             tvCurrent.setText(d.getNewPrice());
                             tvAmount.setText(d.getAmount());
                         }
