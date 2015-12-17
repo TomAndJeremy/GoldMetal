@@ -180,6 +180,8 @@ public class TimesView extends GridChart {
 
     private void drawTitles(Canvas canvas) {
         // 绘制Y轴titles
+
+
         float viewWidth = getWidth();
         Paint paint = new Paint();
         paint.setTextSize(DEFAULT_AXIS_TITLE_SIZE);

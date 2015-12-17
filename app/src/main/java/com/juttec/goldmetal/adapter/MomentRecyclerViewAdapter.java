@@ -6,13 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +36,6 @@ import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
 import com.juttec.goldmetal.utils.EmojiUtil;
-import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
@@ -453,7 +450,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             TextView comment = (TextView) LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
             SpannableString string = new SpannableString(commentName);
             final String commentUserId = entityList.get(position).getDyCommentReply().get(i).getDiscussantId();
-            setPartClick(string, commentUserId, commentName, 0, commentName.length());
+            setPartClick(string, commentUserId, commentName, 0, commentName.length(),comment);
             comment.setText(string);
             comment.setMovementMethod(LinkMovementMethod.getInstance());
             comment.append(readEmoji.getEditable(commentContent));
@@ -501,10 +498,10 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
 
                 SpannableString userReply = new SpannableString(userName);
-                setPartClick(userReply, userId, userName, 0, userName.length());
+                setPartClick(userReply, userId, userName, 0, userName.length(),tvReply);
 
                 SpannableString userReplied = new SpannableString(repliedName + ":");
-                setPartClick(userReplied, repliedId, repliedName, 0, repliedName.length());
+                setPartClick(userReplied, repliedId, repliedName, 0, repliedName.length(),tvReply);
 
                 tvReply.setText(userReply);
                 tvReply.append("回复");
@@ -782,11 +779,15 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
      * @param start
      * @param end
      */
-    private void setPartClick(SpannableString string, final String commentUserId, final String commentName, int start, int end) {
+    private void setPartClick(SpannableString string, final String commentUserId, final String commentName, int start, int end,View view) {
         //设置点击事件
         string.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View view) {
+                //取消textview的点击事件  避免点击昵称时调起回复的操作
+                view.setOnClickListener(null);
+
+                //跳转到个人主页
                 startActivity(commentUserId, commentName);
             }
 

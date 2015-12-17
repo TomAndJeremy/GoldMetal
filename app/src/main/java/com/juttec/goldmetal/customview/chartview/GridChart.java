@@ -11,6 +11,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.juttec.goldmetal.utils.ImgUtil;
+import com.juttec.goldmetal.utils.LogUtil;
+
 
 /**
  * 坐标轴使用的View
@@ -25,7 +28,7 @@ public class GridChart extends View {
 	public static final int DEFAULT_BACKGROUD =  Color.BLACK;
 
 	/** 默认XY轴字体大小 **/
-	public static final int DEFAULT_AXIS_TITLE_SIZE = 18;
+	public static int DEFAULT_AXIS_TITLE_SIZE ;
 
 	/** 默认XY坐标轴颜色 */
 	private static final int DEFAULT_AXIS_COLOR = Color.TRANSPARENT;
@@ -105,20 +108,26 @@ public class GridChart extends View {
 
 	public GridChart(Context context) {
 		super(context);
-		init();
+		init(context);
 	}
 
 	public GridChart(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		init();
+		init(context);
 	}
 
 	public GridChart(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
+		init(context);
 	}
 
-	private void init() {
+
+
+
+	private void init(Context context) {
+		DEFAULT_AXIS_TITLE_SIZE = ImgUtil.dip2px(context,10);
+		LogUtil.d("DEFAULT_AXIS_TITLE_SIZE:"+DEFAULT_AXIS_TITLE_SIZE);
+
 		mBackGround = DEFAULT_BACKGROUD;
 		mAxisColor = DEFAULT_AXIS_COLOR;
 		mLongiLatitudeColor = DEFAULT_LONGI_LAITUDE_COLOR;
