@@ -148,7 +148,7 @@ public class GetNetworkData {
     public void setUrl(String sUrl, boolean shouldConnect) {
         url = sUrl;
         if (myEntity != null) {
-            synchronized (myEntity) {
+                synchronized (myEntity) {
                 myEntity.notifyAll();//唤醒线程
             }
         }

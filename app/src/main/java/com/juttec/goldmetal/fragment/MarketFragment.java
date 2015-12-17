@@ -330,15 +330,13 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                             if (page != 1 && firstY - event.getY() < -200) {
                                 //下拉  加载上一页数据
                                 if (!isLoadingMore) {
-                                    LogUtil.d("下拉  加载上一页数据-----");
                                     page--;
+                                    LogUtil.d("下拉  加载上一页数据-----page:"+page);
                                     //
                                     isNoMore = false;
                                     loadData(page);
                                 }
                             }
-
-
                             //上拉 加载下一页数据
                             //当前显示的最后一条数据的position==totalItemCount的position  向上滑动的手势距离大于30
                             if (firstY - event.getY() > 200) {
@@ -346,6 +344,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                                 if (!isLoadingMore) {
                                     if (!isNoMore) {
                                         page++;
+                                        LogUtil.d("上拉 加载下一页数据-----page:"+page);
                                         loadData(page);
                                     }
                                 }
@@ -388,8 +387,6 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                 break;
 
         }
-
-        isLoadingMore = true;
     }
 
 
@@ -545,8 +542,8 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     //根据制定URL  获取股票数据
     private void getData(String url) {
         LogUtil.d("股票URL-------------" + url);
-
         if (url != null&& !TextUtils.isEmpty(url)) {
+            isLoadingMore = true;
             resetURL = url;
             if (getNetWorkData.isAlive()) {
                 getNetWorkData.setUrl(url);
@@ -578,6 +575,8 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                         isNoMore = true;
                         //将page页数减1
                         page--;
+                        loadData(page);
+                        LogUtil.d("当前页：-----------"+page);
                         ToastUtil.showShort(getActivity(), "数据已全部加载...");
                         break;
                     } else {
