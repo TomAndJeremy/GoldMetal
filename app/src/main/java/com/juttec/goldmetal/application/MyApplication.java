@@ -3,6 +3,7 @@ package com.juttec.goldmetal.application;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Paint;
 
 import com.igexin.sdk.PushManager;
 import com.juttec.goldmetal.bean.UserInfoBean;
@@ -288,4 +289,39 @@ public class MyApplication extends Application {
     // 股票数据刷新：判断是否循环 获取股票数据
     public static boolean canCycle = true;
 
+
+    /**
+     * 半角转换为全角
+     *
+     * @param input
+     * @return
+     */
+    public static String ToDBC(String input) {
+        char[] c = input.toCharArray();
+        for (int i = 0; i < c.length; i++) {
+            if (c[i] == 12288) {
+                c[i] = (char) 32;
+                continue;
+            }
+            if (c[i] > 65280 && c[i] < 65375)
+                c[i] = (char) (c[i] - 65248);
+        }
+        return new String(c);
+    }
+
+
+    //将字符串替换成相等长度的空格
+    public static String  getBlank(String s){
+
+        Paint paint = new Paint();
+        float sLength = paint.measureText(s);
+        float blankLengtn = paint.measureText(" ");
+
+        int num = (int) (sLength / blankLengtn);
+        String rs = " ";
+        for (int i = 0; i < num; i++) {
+            rs += " ";
+        }
+        return rs;
+    }
 }
