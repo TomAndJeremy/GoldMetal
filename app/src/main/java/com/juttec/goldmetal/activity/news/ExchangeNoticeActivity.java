@@ -1,12 +1,11 @@
 package com.juttec.goldmetal.activity.news;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -33,6 +32,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+/**
+ * 交易所公告详情界面
+ */
 
 public class ExchangeNoticeActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     LoadMoreListView listView;
@@ -103,8 +106,8 @@ public class ExchangeNoticeActivity extends AppCompatActivity implements SwipeRe
 
     @Override
     public void onRefresh() {
-
         pageIndex = 1;
+        listView.setState(LoadingFooter.State.Idle);
         getData(pageIndex);
 
     }

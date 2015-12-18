@@ -15,6 +15,7 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.customview.listview.AutoLoadListView;
 import com.juttec.goldmetal.customview.listview.LoadingFooter;
+import com.juttec.goldmetal.fragment.NewsFragment;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -97,7 +98,7 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
                 intent.putExtra("title", maps.get(i).get("title"));
                 intent.putExtra("time", maps.get(i).get("time"));
                 intent.putExtra("id", maps.get(i).get("id"));
-                intent.putExtra("type", "analysis");
+                intent.putExtra("type", NewsFragment.ANALYSIS);
                 startActivity(intent);
             }
         });
@@ -173,8 +174,6 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
 
             @Override
@@ -259,6 +258,7 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
     public void onRefresh() {
 
         pageIndex=1;
+        listView.setState(LoadingFooter.State.Idle);
         getData(pageIndex);
 
     }

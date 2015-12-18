@@ -454,6 +454,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
             case R.id.left_img:
                 //公告
                 startActivity(new Intent(getActivity(), AnnouncementActivity.class));
+                LogUtil.d("trim:"+"   111    111   ".trim());
                 break;
 
 
@@ -481,7 +482,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
             case R.id.fragment_market_strategy:
                 //今日策略
                 intent = new Intent(getActivity(), TodayStrategyActivity.class);
-
+                intent.putExtra(NewsFragment.HEADTITLE,"今日策略");
                 startActivity(intent);
                 break;
         }

@@ -178,9 +178,9 @@ public class NetWorkUtils {
     }*/
     public static void showMsg(Context context){
         if (NET_CNNT_BAIDU_OK == getNetState(context)) {
-            ToastUtil.showShort(context, "请检查网络连接");
+            ToastUtil.showShort(context, "请检查网络是否正常连接");
         } else {
-            ToastUtil.showShort(context, "服务器异常");
+            ToastUtil.showShort(context, "获取数据出错了，请稍候重试");
         }
 
     }

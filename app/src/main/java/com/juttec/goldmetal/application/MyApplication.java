@@ -209,6 +209,22 @@ public class MyApplication extends Application {
         return BASEURL + "App_Consulting/GetOrgReview";
     }
 
+    //获取财经头条接口
+    public String getGetFinanceInforUrl() {
+        return BASEURL + "App_Consulting/GetFinanceInfor";
+    }
+
+    //获取获取财经头条详情接口
+    public String getGetFinanceInforDetailsUrl() {
+        return BASEURL + "App_Consulting/GetFinanceInforDetails";
+    }
+
+    //获取快讯直播接口
+    public String getGetNewsFlashUrl() {
+        return BASEURL + "App_Consulting/GetNewsFlash";
+    }
+
+
     //获取机构详情
     public String getGetOrgReviewDetailsUrl() {
         return BASEURL + "App_Consulting/GetOrgReviewDetails";

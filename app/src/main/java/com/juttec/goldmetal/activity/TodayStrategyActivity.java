@@ -13,6 +13,7 @@ import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.customview.HeadLayout;
 import com.juttec.goldmetal.customview.listview.LoadMoreListView;
 import com.juttec.goldmetal.customview.listview.LoadingFooter;
+import com.juttec.goldmetal.fragment.NewsFragment;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -33,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 今日策略 界面
+ * 今日策略   快讯直播  界面
  */
 
 public class TodayStrategyActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
@@ -53,8 +54,9 @@ public class TodayStrategyActivity extends AppCompatActivity implements SwipeRef
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.general_listview_layout);
-
         app = (MyApplication) getApplication();
+
+        head_title = getIntent().getStringExtra(NewsFragment.HEADTITLE);
         init();
     }
 
@@ -100,36 +102,38 @@ public class TodayStrategyActivity extends AppCompatActivity implements SwipeRef
     }
 
     public void getData(int i) {
+        String url = null;
+        if (head_title.equals(NewsFragment.BROADCAST)) {
+            //快讯直播
+            url = app.getGetNewsFlashUrl();
+        } else if (head_title.equals("今日策略")) {
+            url = app.getGetTodayStrategyUrl();
+        }
 
         RequestParams requestParams = new RequestParams();
         requestParams.addBodyParameter("pageIndex", i + "");
-        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetTodayStrategyUrl(), requestParams, new RequestCallBack<String>() {
+        new HttpUtils().send(HttpRequest.HttpMethod.POST, url, requestParams, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-
                 swipeLayout.setRefreshing(false);
-
                 Map<String, String> map;
                 try {
                     JSONObject object = new JSONObject(responseInfo.result.toString());
                     LogUtil.e(responseInfo.result.toString());
                     int pageNum = Integer.parseInt(object.getString("message1"));
+                    if(pageNum==0){
+                        ToastUtil.showShort(TodayStrategyActivity.this,"还没有数据，请再等等");
+                    }
                     if ("1".equals(object.getString("status"))) {
-
                         JSONArray jsonArray = object.getJSONArray("entityList");
-
-
                         if (pageIndex == 1) {
                             maps.clear();
                         }
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject object1 = jsonArray.getJSONObject(i);
                             map = new HashMap<String, String>();
-
-
                             map.put("id", object1.getString("id"));
                             map.put("title", object1.getString("title"));
-                            map.put("details", object1.getString("details"));
                             String time = object1.getString("addTime");
                           time=  time.replace(" ", "\n");
                             map.put("time", time);
@@ -172,6 +176,7 @@ public class TodayStrategyActivity extends AppCompatActivity implements SwipeRef
     @Override
     public void onRefresh() {
         pageIndex = 1;
+        listView.setState(LoadingFooter.State.Idle);
         getData(pageIndex);
 
     }
@@ -218,10 +223,13 @@ public class TodayStrategyActivity extends AppCompatActivity implements SwipeRef
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            viewHolder.tvContent.setText(maps.get(position).get("details"));
+            if(head_title.equals(NewsFragment.BROADCAST)){
+                //快讯直播  设置内容的背景
+                viewHolder.tvContent.setBackgroundResource(R.drawable.exchange_notice_textview_bg);
+            }
+            viewHolder.tvContent.setText(maps.get(position).get("title"));
             viewHolder.tvTime.setText(maps.get(position).get("time"));
             return convertView;
-
         }
 
         private class ViewHolder {

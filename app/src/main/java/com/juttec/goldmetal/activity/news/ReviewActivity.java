@@ -15,6 +15,7 @@ import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.customview.HeadLayout;
 import com.juttec.goldmetal.customview.listview.LoadMoreListView;
 import com.juttec.goldmetal.customview.listview.LoadingFooter;
+import com.juttec.goldmetal.fragment.NewsFragment;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -36,7 +37,7 @@ import java.util.Map;
 
 /**
  * Created by Jeremy on 2015/10/15.
- * 评论机构界面
+ * 机构评论界面
  */
 public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     LoadMoreListView listView;
@@ -46,20 +47,21 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
     List<Map<String, String>> maps;
     MyAdapter myAdapter;
 
-    @Override
+    private String headtitle;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.general_listview_layout);
 
-        HeadLayout headLayout = (HeadLayout) findViewById(R.id.head_layout);
-        headLayout.setHeadTitle(getResources().getString(R.string.news_review));
-
         app = (MyApplication) getApplication();
+        headtitle = getIntent().getStringExtra(NewsFragment.HEADTITLE);
         init();
     }
 
     private void init() {
+        HeadLayout headLayout = (HeadLayout) findViewById(R.id.head_layout);
+        headLayout.setHeadTitle(headtitle);
 
         swipeLayout = (SwipeRefreshLayout) this
                 .findViewById(R.id.refreshlayout);
@@ -81,7 +83,8 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
                 intent.putExtra("title", maps.get(position).get("title"));
                 intent.putExtra("time", maps.get(position).get("time"));
                 intent.putExtra("id", maps.get(position).get("id"));
-                intent.putExtra("type", "review");
+                intent.putExtra("type", headtitle);
+
                 startActivity(intent);
             }
         });
@@ -113,15 +116,24 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
     public void onRefresh() {
 
         pageIndex = 1;
+        listView.setState(LoadingFooter.State.Idle);
         getData(pageIndex);
         LogUtil.d("onRefresh()----------");
     }
 
     public void getData(int i) {
+        String url = null;
+        if(headtitle.equals(NewsFragment.HEADTLINES)){
+            //财经头条接口
+            url = app.getGetFinanceInforUrl();
 
+        }else if(headtitle.equals(NewsFragment.REVIEW)){
+            //机构评论接口
+            url = app.getGetOrgReviewUrl();
+        }
         RequestParams requestParams = new RequestParams();
         requestParams.addBodyParameter("pageIndex", i + "");
-        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetOrgReviewUrl(), requestParams, new RequestCallBack<String>() {
+        new HttpUtils().send(HttpRequest.HttpMethod.POST, url, requestParams, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 
@@ -135,8 +147,6 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
                     if ("1".equals(object.getString("status"))) {
 
                         JSONArray jsonArray = object.getJSONArray("entityList");
-
-
                         if (pageIndex == 1) {
                             maps.clear();
                         }
@@ -218,21 +228,34 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
 
                 viewHolder = new ViewHolder();
                 viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.news_review_item_title);
-                viewHolder.tvTime = (TextView) convertView.findViewById(R.id.news_review_item_time);
+                viewHolder.tvTimeHead = (TextView) convertView.findViewById(R.id.tv_time_headlines);
+                viewHolder.tvTimeReview= (TextView) convertView.findViewById(R.id.tv_time_review);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
             viewHolder.tvTitle.setText(maps.get(position).get("title"));
-            viewHolder.tvTime.setText(maps.get(position).get("time"));
+            if(headtitle.equals(NewsFragment.HEADTLINES)){
+                //财经头条界面
+                viewHolder.tvTimeReview.setVisibility(View.GONE);
+                viewHolder.tvTimeHead.setText(maps.get(position).get("time"));
+
+            }else if(headtitle.equals(NewsFragment.REVIEW)){
+                //机构评论界面
+                viewHolder.tvTimeHead.setVisibility(View.GONE);
+                viewHolder.tvTimeReview.setText(maps.get(position).get("time"));
+            }
+
             return convertView;
 
         }
 
         private class ViewHolder {
             TextView tvTitle;
-            TextView tvTime;
+            TextView tvTimeHead;//财经头条的时间
+            TextView tvTimeReview;//机构评论的时间
+
         }
     }
     @Override

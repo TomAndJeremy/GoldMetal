@@ -175,6 +175,7 @@ public class ExchangeInforActivity extends AppCompatActivity implements SwipeRef
     @Override
     public void onRefresh() {
         pageIndex = 1;
+        listView.setState(LoadingFooter.State.Idle);
         getData(pageIndex);
 
     }

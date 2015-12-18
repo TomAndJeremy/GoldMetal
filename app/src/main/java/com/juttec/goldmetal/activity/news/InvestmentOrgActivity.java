@@ -1,15 +1,14 @@
 package com.juttec.goldmetal.activity.news;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
@@ -17,6 +16,7 @@ import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.customview.HeadLayout;
 import com.juttec.goldmetal.customview.listview.LoadMoreListView;
 import com.juttec.goldmetal.customview.listview.LoadingFooter;
+import com.juttec.goldmetal.fragment.NewsFragment;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -92,7 +92,7 @@ public class InvestmentOrgActivity extends AppCompatActivity implements SwipeRef
                 Intent intent = new Intent(getApplicationContext(), NewsDetailActivity.class);
 
                 intent.putExtra("id", maps.get(position).get("id"));
-                intent.putExtra("type", "institution");
+                intent.putExtra("type", NewsFragment.INSTITUTION);
                 startActivity(intent);
             }
         });
@@ -180,6 +180,7 @@ public class InvestmentOrgActivity extends AppCompatActivity implements SwipeRef
     @Override
     public void onRefresh() {
         pageIndex = 1;
+        listView.setState(LoadingFooter.State.Idle);
         getData(pageIndex);
     }
 

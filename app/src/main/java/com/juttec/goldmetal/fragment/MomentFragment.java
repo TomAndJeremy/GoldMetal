@@ -262,7 +262,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                 // dy>0 表示上拉
                 if (lastVisibleItem >= totalItemCount - 1 && dy > 0) {
                     if (!isLoadingMore) {
-
                         getInfo(i, MyApplication.DYNAMIC_TYPE_ALL);
                         isLoadingMore = true;
                     }
@@ -572,6 +571,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
      * @param type 类型 all：所有 attention：关注 personal：个人
      */
     private void getInfo(int page, String type) {
+        LogUtil.d("交易圈 首页  current page:"+page);
         RequestParams params = new RequestParams();
 
 
@@ -590,13 +590,18 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                     @Override
                     public void onSuccess(ResponseInfo<String> responseInfo) {
 
+//                        try {
+//                            JSONObject object = new JSONObject(responseInfo.result.toString());
+//                            LogUtil.d("交易圈 首页  total page:"+object.getString("message1"));//message1
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+
 
                         refreshLayout.setRefreshing(false);
 
 
                         DynamicMsgBean dynamicMsgBean = gson.fromJson(responseInfo.result.toString(), DynamicMsgBean.class);//解析数据
-
-
                         if (i == 1) {
                             entityList.clear();//刷新时先清空集合
                         }
@@ -608,6 +613,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                             i++;//每次加载后页数加一
                         } catch (Exception e) {
                             e.printStackTrace();
+                            LogUtil.e("");
                         }
                         if (adapter == null) {
                             adapter = new MomentRecyclerViewAdapter(entityList, getActivity(), app, MomentFragment.this);

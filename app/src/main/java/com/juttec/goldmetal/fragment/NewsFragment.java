@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.CalendarActivity;
+import com.juttec.goldmetal.activity.TodayStrategyActivity;
 import com.juttec.goldmetal.activity.news.AnalysisActivity;
 import com.juttec.goldmetal.activity.news.ExchangeInforActivity;
 import com.juttec.goldmetal.activity.news.InvestmentOrgActivity;
@@ -21,6 +22,15 @@ import com.juttec.goldmetal.activity.news.ReviewActivity;
 
 public class NewsFragment extends BaseFragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
+
+    //机构评论详情   深度解析详情  投资结构详情  财经头条详情
+    public static final String HEADTITLE = "headtitle";//标题栏中的标题
+    public static final String HEADTLINES = "财经头条";//财经头条
+    public static final String REVIEW = "评论机构";//机构评论
+    public static final String ANALYSIS = "深度解析";//深度解析
+    public static final String INSTITUTION = "投资机构";//投资机构
+    public static final String BROADCAST = "快讯直播";//快讯直播
+
 
     private String mParam1;
 
@@ -96,7 +106,9 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
 
             case R.id.tv_headlines:
                 //财经头条
-
+                intent = new Intent(getActivity(), ReviewActivity.class);
+                intent.putExtra(HEADTITLE,HEADTLINES);
+                startActivity(intent);
 
                 break;
             case R.id.tv_calendar:
@@ -107,11 +119,14 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.tv_broadcast:
                 //快讯直播
-
+                intent = new Intent(getActivity(), TodayStrategyActivity.class);
+                intent.putExtra(HEADTITLE,BROADCAST);
+                startActivity(intent);
                 break;
             case R.id.tv_review:
-                //评论机构
+                //机构评论
                 intent = new Intent(getActivity(), ReviewActivity.class);
+                intent.putExtra(HEADTITLE,REVIEW);
                 startActivity(intent);
                 break;
             case R.id.tv_analysis:

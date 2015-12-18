@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.customview.HeadLayout;
+import com.juttec.goldmetal.fragment.NewsFragment;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.lidroid.xutils.HttpUtils;
@@ -23,7 +24,7 @@ import org.json.JSONObject;
 
 /**
  * Created by Jeremy on 2015/10/16.
- * 机构评论详情 界面
+ * 机构评论详情   深度解析详情  投资结构详情  财经头条详情  界面
  */
 public class NewsDetailActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
@@ -31,6 +32,8 @@ public class NewsDetailActivity extends AppCompatActivity {
     TextView content;
     TextView tvTitle, tvTime;
     String url;
+
+    String headTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,19 +49,21 @@ public class NewsDetailActivity extends AppCompatActivity {
         String title = intent.getStringExtra("title");
         String time = intent.getStringExtra("time");
 
-        String type = intent.getStringExtra("type");
+        headTitle = intent.getStringExtra("type");
 
 
-        if ("review".equals(type)) {
-            headLayout.setHeadTitle(getResources().getString(R.string.detail_news_review));
+        if (headTitle.equals(NewsFragment.REVIEW)) {
+            headLayout.setHeadTitle(headTitle+"详情");
             url = app.getGetOrgReviewDetailsUrl();
-
-        } else if ("analysis".equals(type)) {
-            headLayout.setHeadTitle(getResources().getString(R.string.detail_news_analysis));
+        } else if (headTitle.equals(NewsFragment.ANALYSIS)) {
+            headLayout.setHeadTitle(headTitle+"详情");
             url = app.getGetDepthAnalysisDetailsUrl();
-        } else if ("institution".equals(type)) {
-            headLayout.setHeadTitle(getResources().getString(R.string.detail_news_institution));
+        } else if (headTitle.equals(NewsFragment.INSTITUTION)) {
+            headLayout.setHeadTitle(headTitle+"详情");
             url = app.getGetInvestmentOrgDetailsUrl();
+        }else if (headTitle.equals(NewsFragment.HEADTLINES)) {
+            headLayout.setHeadTitle("");
+            url = app.getGetFinanceInforDetailsUrl();
         }
 
 
@@ -81,7 +86,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                     public void onSuccess(ResponseInfo<String> responseInfo) {
                         swipeRefreshLayout.setRefreshing(false);
                         try {
-
+                            LogUtil.d(headTitle+"详情为："+responseInfo.result.toString());
                             JSONObject object = new JSONObject(responseInfo.result.toString());
                             if ("1".equals(object.getString("status"))) {
 

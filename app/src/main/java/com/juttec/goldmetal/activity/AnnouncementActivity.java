@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
-import com.juttec.goldmetal.customview.AlignTextView;
 import com.juttec.goldmetal.customview.CBAlignTextView;
 import com.juttec.goldmetal.customview.listview.LoadMoreListView;
 import com.juttec.goldmetal.customview.listview.LoadingFooter;
@@ -32,8 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import me.biubiubiu.justifytext.library.JustifyTextView;
 
 /**
  * Created by Jeremy on 2015/10/16.
@@ -100,7 +97,9 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
     public void onRefresh() {
 
         pageIndex = 1;
+        listView.setState(LoadingFooter.State.Idle);
         getData(pageIndex);
+
 
     }
 
@@ -217,7 +216,7 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
 
         viewHolder.tvTitle.setText(maps.get(position).get("title"));
         viewHolder.tvTime.setText(maps.get(position).get("time"));
-        viewHolder.tvContent.setText(maps.get(position).get("details"));
+        viewHolder.tvContent.setText(maps.get(position).get("details").trim());
 
         return convertView;
 

@@ -44,7 +44,7 @@
 
 
     <!-- 资讯、 服务 、更多 Fragment中  RelativeLayout 点击时的背景颜色-->
-    <color name="more_rela_pressed">#A3A3A3</color>
+    <color name="more_rela_pressed">#EDEDED</color>
     <!-- 资讯、 服务 、更多 Fragment的背景颜色   以及Fragment 中  RelativeLayout 正常时的背景颜色-->
     <color name="more_rela_normal">#F8F8F8</color>
 

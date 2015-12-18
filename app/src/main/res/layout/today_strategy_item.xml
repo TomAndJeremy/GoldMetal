@@ -28,6 +28,7 @@
         android:background="#E6E6E6"
         android:layout_width="1dp"
         android:layout_height="match_parent" />
+
     <TextView
         android:id="@+id/today_strategy_item_content"
         android:layout_margin="10dp"
