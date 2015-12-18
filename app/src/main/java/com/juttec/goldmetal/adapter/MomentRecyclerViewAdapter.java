@@ -447,7 +447,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         for (int i = 0; i < entityList.get(position).getDyCommentReply().size(); i++) {
             //获得评论人的姓名与评论内容并设置显示
             final String commentName = entityList.get(position).getDyCommentReply().get(i).getDiscussantName() + ":";//
-            String commentContent = entityList.get(position).getDyCommentReply().get(i).getCommentContent();
+            String commentContent =MyApplication.ToDBC(entityList.get(position).getDyCommentReply().get(i).getCommentContent());
             final int finalI = i;
           /*  TextView comment = (TextView) LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
             SpannableString string = new SpannableString(commentName);
@@ -485,14 +485,15 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 */
             String commentUserId = entityList.get(position).getDyCommentReply().get(i).getDiscussantId();
 
-            View commentView =  LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
+            View commentView = LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
             TextView tvCommentName = (TextView) commentView.findViewById(R.id.comment_name);
             TextView tvCommentContent = (TextView) commentView.findViewById(R.id.comment_content);
+
             tvCommentName.setText(commentName);
-            clickName(tvCommentName,commentUserId,commentName);
+            clickName(tvCommentName, commentUserId, commentName);
 
             //填补空格
-            tvCommentContent.append(MyApplication.getBlank(commentName));
+            tvCommentContent.append(MyApplication.getBlank(commentName + " ", tvCommentName.getTextSize()));
 
             tvCommentContent.append(readEmoji.getEditable(commentContent));
 
@@ -594,9 +595,16 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 tvReplyName.setText(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName());
                 tvRepliedName.setText(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName() + ": ");
 
-                String toBlank=MyApplication.getBlank(tvRepliedName.getText().toString() + hint.getText().toString() + tvRepliedName.getText().toString()+" ");
-                tvReplyContent.append(MyApplication.getBlank(tvRepliedName.getText().toString() + hint.getText().toString() + tvRepliedName.getText().toString()));
+
+
+                //得到对应长度的空格
+                String toBlank = MyApplication.getBlank(tvReplyName.getText().toString(),tvReplyName.getTextSize());
+                toBlank += MyApplication.getBlank(hint.getText().toString(),hint.getTextSize());
+                toBlank += MyApplication.getBlank(tvRepliedName.getText().toString(), tvRepliedName.getTextSize());
+
+                tvReplyContent.append(toBlank);
                 tvReplyContent.append(readEmoji.getEditable(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent()));
+
 
                 replyRoot.addView(replyMsg);
 

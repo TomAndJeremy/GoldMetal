@@ -327,17 +327,20 @@ public class MyApplication extends Application {
 
 
     //将字符串替换成相等长度的空格
-    public static String  getBlank(String s){
+    public static String  getBlank(String s,float textSize){
 
         Paint paint = new Paint();
+        paint.setTextSize(textSize);
         float sLength = paint.measureText(s);
         float blankLengtn = paint.measureText(" ");
 
-        int num = (int) (sLength / blankLengtn);
-        String rs = " ";
+        float ff = (float) (sLength / blankLengtn+0.5);
+        int num = (int)ff;
+        String rs = "";
         for (int i = 0; i < num; i++) {
             rs += " ";
         }
+
         return rs;
     }
 }

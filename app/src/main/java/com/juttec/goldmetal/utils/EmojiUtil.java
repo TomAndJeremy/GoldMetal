@@ -178,7 +178,7 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
                 if (t < MyApplication.ENUM) {
                     final int finalI = i;
                     Spanned cs = Html.fromHtml("<img src ='" + s[finalI] + "'/>", getImageGetter(t), null);
-                    //editable.append(" ");
+//                    editable.append("\u2000");
                     editable.append(cs);
                     i++;
 

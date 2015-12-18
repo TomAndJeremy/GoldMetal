@@ -53,11 +53,6 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
     int pageIndex = 1;
     List<Map<String, String>> maps;
     MyAdapter myAdapter;
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

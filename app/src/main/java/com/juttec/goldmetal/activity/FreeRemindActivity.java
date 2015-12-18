@@ -343,8 +343,6 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                                     remindContent.removeView(addview);
                                     ToastUtil.showShort(FreeRemindActivity.this, "删除成功");
                                 }
-
-
                             }
                         }).setNegativeButton("取消", new View.OnClickListener() {
                     @Override

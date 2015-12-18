@@ -37,7 +37,7 @@ public class BOLLEntity {
     private int k = 2; //影响BOLL指标变化的 变量 默认值为：2（范围：2-99）
     private int N = 20;//N日内的收盘价之和中的N  默认值为20
 
-    private int M=N-1;//中线=MA(N_1)
+    private int M = N - 1;//中线=MA(N_1)
 
     public BOLLEntity(List<KChartInfo.ResultEntity> OHLCData) {
 
@@ -68,18 +68,23 @@ public class BOLLEntity {
                 avedev = avedev + Math.abs(closes.get(p) - ma);
                 devsq = devsq + (closes.get(p) - ma) * (closes.get(p) - ma);//平方和
 
+
             }
 
             list.add(Math.sqrt(devsq / (M - 1)));//方差
 
             if (i == M) {
                 for (int q = M - 1; q > -1; q--) {
-                    list.add(0, list.get(list.size()-1));//补全之前的数据
+                    list.add(0, list.get(list.size() - 1));//补全之前的数据
                 }
             }
 
         }
 
+        for (Double d : list
+                ) {
+            LogUtil.e("方差 "+d);
+        }
         for (int i = 0; i < MBs.size(); i++) {
 
 
@@ -89,11 +94,27 @@ public class BOLLEntity {
         }
 
 
-
         //将数据反转
         Collections.reverse(MBs);
         Collections.reverse(UPs);
         Collections.reverse(DNs);
+
+
+       /* for (Double b : MBs
+                ) {
+            LogUtil.e("MBs " + b);
+        }
+        LogUtil.e("---------------------------------------------------------");
+        for (Double b : UPs
+                ) {
+            LogUtil.e("UPs " + b);
+        }
+        LogUtil.e("---------------------------------------------------------");
+        for (Double b : DNs
+                ) {
+            LogUtil.e("DN " + b);
+        }*/
+
     }
 
     public List<Double> getUPs() {
@@ -108,7 +129,6 @@ public class BOLLEntity {
     public List<Double> getDNs() {
         return DNs;
     }
-
 
 
 }
