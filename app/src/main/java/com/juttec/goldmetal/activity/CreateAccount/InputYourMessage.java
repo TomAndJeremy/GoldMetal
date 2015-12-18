@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.utils.LogUtil;
@@ -17,7 +18,6 @@ import com.juttec.goldmetal.utils.ToastUtil;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.utils.NetWorkUtils;
-import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
@@ -27,6 +27,9 @@ import com.lidroid.xutils.http.client.HttpRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 开户基本信息界面
@@ -97,15 +100,42 @@ public class InputYourMessage extends AppCompatActivity {
                 ToastUtil.showShort(this,"请填写手机号");
                 return false;
             }else{
-                if(money==null){
-                    ToastUtil.showShort(this,"请选择投资资金");
-                    return false;
-                }else{
-                    return true;
+                if(checkMobile(phoneContent)){
+                    if(money==null){
+                        ToastUtil.showShort(this,"请选择投资资金");
+                        return false;
+                    }else{
+                        return true;
+                    }
                 }
+                return false;
             }
         }
     }
+
+
+    //检查手机号 是否正确
+    private boolean checkMobile(String phoneNum){
+        if(!TextUtils.isEmpty(phoneNum)){
+            Pattern pattern = Pattern.compile("^[0-9]{11}$");
+            Matcher matcher = pattern.matcher(phoneNum);
+            boolean isMatcher = matcher.find();
+            if (!isMatcher) {
+                Toast.makeText(InputYourMessage.this, "手机号有错误", Toast.LENGTH_SHORT)
+                        .show();
+                return false;
+            }
+
+        }else{
+            Toast.makeText(InputYourMessage.this, "请填写手机号", Toast.LENGTH_SHORT)
+                    .show();
+            return false;
+        }
+        return true;
+    }
+
+
+
 
     //初始化控件
     private void initView(){
