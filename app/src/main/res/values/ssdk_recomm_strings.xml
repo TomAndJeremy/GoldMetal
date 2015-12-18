@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="ssdk_recomm_share_share_to_another_plats">分享到更多平台</string>
     <string name="ssdk_recomm_app_friends_title">您有&lt;font color="#ed4456"&gt;%1$s&lt;/font&gt;位好友正在使用这个应用</string>
     <string name="ssdk_recomm_download">立即下载</string>

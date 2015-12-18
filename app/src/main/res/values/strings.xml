@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">GoldMetal</string>
     <string name="action_settings">Settings</string>
 
@@ -166,8 +166,6 @@
     <string name="chart_real_trading">实盘交易</string>
 
 
-
-
     <!-- FreeRemindActivity-->
     <string name="head_title_freeremaind">现货白银免费提醒</string>
     <string name="floating_remind">浮动提醒</string>
@@ -178,7 +176,6 @@
     <string name="add">添加</string>
 
 
-
     <!-- PublishTopicActivity-->
     <string name="publish_topic_title">发表话题</string>
     <string name="publish">发表</string>
@@ -187,7 +184,7 @@
     <string name="follow">关注</string>
 
 
-   <!--MessageDetailActivity-->
+    <!--MessageDetailActivity-->
     <string name="msg_title">消息详情</string>
 
 
@@ -204,14 +201,10 @@
     <string name="splash_introduce">欢迎来到国金贵金属</string>
 
 
-
     <string name="title_activity_search_stock">SearchStockActivity</string>
 
 
-
     <string name="only_can_input">QWERTYUIOPLKJHGFDSAZXCVBNM1234567890</string>
-
-
 
 
 </resources>

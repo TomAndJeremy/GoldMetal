@@ -490,7 +490,24 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
             case R.id.fragment_market_bt_createaccount:
                 //开户界面
-                startActivity(new Intent(getActivity(), AccountNoticeActivity.class));
+                if (app.isLogin()) {
+                    startActivity(new Intent(getActivity(), AccountNoticeActivity.class));
+                } else {
+                    //如果没有登录
+                    final MyAlertDialog mdialog = new MyAlertDialog(getActivity());
+                    mdialog.builder().setTitle("提示")
+                            .setMsg("您还没有登录，请先登录后再执行操作！")
+                            .setSingleButton("前去登录", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                    startActivity(intent);
+                                    mdialog.dismiss();
+                                }
+                            }).show();
+
+                }
+
                 break;
             case R.id.fragment_market_strategy:
                 //今日策略

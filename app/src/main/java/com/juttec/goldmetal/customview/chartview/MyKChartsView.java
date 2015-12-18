@@ -937,6 +937,9 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
 
 
 
+
+
+        //但选中BOll线是，求出相应的最大值最小值以及缩放比例
         if (mUpTitle.trim().equalsIgnoreCase("BOLL")) {
             BOLLEntity bollEntity = new BOLLEntity(mOHLCData);
             List<Double> lows = bollEntity.getDNs();
@@ -959,6 +962,8 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
 
 
 
+
+        //绘制蜡烛线
         for (int i = 0; i < mShowDataNum && mDataStartIndext + i < mOHLCData.size(); i++) {
             KChartInfo.ResultEntity entity = mOHLCData.get(mDataStartIndext + i);
             float open = (float) ((mMaxPrice - Double.parseDouble(entity.getOpen())) * rate + DEFAULT_AXIS_TITLE_SIZE + 4);

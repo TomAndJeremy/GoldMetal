@@ -13,6 +13,7 @@ import com.juttec.goldmetal.bean.MyEntity;
 import com.juttec.goldmetal.bean.chartentity.KChartInfo;
 import com.juttec.goldmetal.customview.chartview.MyKChartsView;
 import com.juttec.goldmetal.utils.GetNetworkData;
+import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.util.LogUtils;
 
@@ -111,6 +112,7 @@ public class MarketKChartsFragment extends Fragment {
                         ToastUtil.showShort(getActivity(), "没有数据...");
                         break;
                     } else {
+                        LogUtil.e("1111111111111   " + datas.size());
                         mMyChartsView.setOHLCData(datas);
 
                         mMyChartsView.postInvalidate();

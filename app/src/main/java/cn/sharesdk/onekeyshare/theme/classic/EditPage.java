@@ -183,7 +183,7 @@ public class EditPage extends EditPageFakeActivity implements OnClickListener, T
 	// title bar
 	private TitleLayout getPageTitle() {
 		llTitle = new TitleLayout(getContext());
-		llTitle.setId(1);
+		//llTitle.setId(1);
 //		int resId = getBitmapRes(activity, "title_back");
 //		if (resId > 0) {
 //			llTitle.setBackgroundResource(resId);
@@ -212,7 +212,7 @@ public class EditPage extends EditPageFakeActivity implements OnClickListener, T
 	// page body
 	private LinearLayout getPageBody() {
 		llBody = new LinearLayout(getContext());
-		llBody.setId(2);
+		//llBody.setId(2);
 		int resId = getBitmapRes(activity, "edittext_back");
 		if (resId > 0) {
 			llBody.setBackgroundResource(resId);
@@ -274,7 +274,7 @@ public class EditPage extends EditPageFakeActivity implements OnClickListener, T
 	// shared image container
 	private RelativeLayout getThumbView() {
 		rlThumb = new RelativeLayout(getContext());
-		rlThumb.setId(1);
+		//rlThumb.setId(1);
 		int dp_82 = dipToPx(getContext(), 82);
 		int dp_98 = dipToPx(getContext(), 98);
 		LayoutParams lpThumb

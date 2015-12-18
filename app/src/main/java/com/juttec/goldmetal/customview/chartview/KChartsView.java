@@ -36,6 +36,10 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
     private final static int MOVE = 2;
     private final static int ZOOM = 3;
 
+    private int mode;//手指数
+
+    private float oldDist;//上次双指距离
+
     /**
      * 默认Y轴字体颜色
      **/
@@ -137,9 +141,11 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
     public void setTabTitle(String mTabTitle) {
         this.mTabTitle = mTabTitle;
     }
+
     public void setUpTitle(String mUpTitle) {
         this.mUpTitle = mUpTitle;
     }
+
     private void init() {
         //super.setOnTabClickListener(this);
         mShowDataNum = DEFAULT_CANDLE_NUM;
@@ -426,7 +432,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
                 }
             }
         } else if (mUpTitle.trim().equalsIgnoreCase("BOLL")) {
-            String [] fileName=new String[]{"mid","upper","lower"};//白，黄，红
+            String[] fileName = new String[]{"mid", "upper", "lower"};//白，黄，红
             int[] color = new int[]{Color.WHITE, Color.YELLOW, Color.RED};
 
             for (int j = 0; j < fileName.length; j++) {
@@ -448,7 +454,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
                 for (int i = 0; i < mShowDataNum
                         && mDataStartIndext + i < list.size(); i++) {
 
-                    LogUtil.e(fileName[j]+"---------"+list.get(i));
+                    LogUtil.e(fileName[j] + "---------" + list.get(i));
                     if (i != 0) {
                         canvas.drawLine(
                                 startX,
@@ -695,6 +701,7 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
     }
 
 
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
@@ -703,8 +710,11 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
                 TOUCH_MODE = DOWN;
                 mStartX = event.getRawX();
                 mStartY = event.getRawY();
+                mode = 1;
                 break;
             case MotionEvent.ACTION_UP:
+                mode = 0;
+                break;
             case MotionEvent.ACTION_POINTER_UP:
                 if (TOUCH_MODE == DOWN) {
                     TOUCH_MODE = NONE;
@@ -717,10 +727,16 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
                 } else {
                     TOUCH_MODE = NONE;
                 }
+                mode -= 1;
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                oldDist = spacing(event);
+                mode += 1;
                 break;
             case MotionEvent.ACTION_CANCEL:
                 TOUCH_MODE = NONE;
                 break;
+
             case MotionEvent.ACTION_MOVE:
                 if (mOHLCData == null || mOHLCData.size() <= 0) {
                     return true;
@@ -767,6 +783,58 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         return true;
     }
 
+
+ /*   @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                mode = 1;
+                break;
+            case MotionEvent.ACTION_UP:
+                mode = 0;
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                mode -= 1;
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                oldDist = spacing(event);
+                mode += 1;
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                if (mode >= 2) {
+                    float newDist = spacing(event);
+                    if (newDist > oldDist + 1) {
+
+                        oldDist = newDist;
+                    }
+                    if (newDist < oldDist - 1) {
+
+                        oldDist = newDist;
+                    }
+                } else {
+                    float horizontalSpacing = event.getRawX() - mStartX;
+                    if (Math.abs(horizontalSpacing) < MIN_MOVE_DISTANCE) {
+                        return true;
+                    }
+                    mStartX = event.getRawX();
+                    mStartY = event.getRawY();
+                    if (horizontalSpacing < 0) {
+                        mDataStartIndext--;
+                        if (mDataStartIndext < 0) {
+                            mDataStartIndext = 0;
+                        }
+                    } else if (horizontalSpacing > 0) {
+                        mDataStartIndext++;
+                    }
+                    setCurrentData();
+                    postInvalidate();
+                }
+                break;
+        }
+        return true;
+    }
+*/
     private void setCurrentData() {
         if (mShowDataNum > mOHLCData.size()) {
             mShowDataNum = mOHLCData.size();
@@ -802,7 +870,10 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
     }
 
     private void zoomIn() {
-        mShowDataNum++;
+
+        int x = (int) (100 / mCandleWidth);
+        LogUtil.e("xxxxx ++++++++ " + x);
+        mShowDataNum += x;
         if (mShowDataNum > mOHLCData.size()) {
             mShowDataNum = MIN_CANDLE_NUM > mOHLCData.size() ? MIN_CANDLE_NUM : mOHLCData.size();
         }
@@ -810,7 +881,9 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
     }
 
     private void zoomOut() {
-        mShowDataNum--;
+        int x = (int) (100 / mCandleWidth);
+        LogUtil.e("xxxxx -------------- " + x);
+        mShowDataNum -= x;
         if (mShowDataNum < MIN_CANDLE_NUM) {
             mShowDataNum = MIN_CANDLE_NUM;
         }
@@ -996,5 +1069,10 @@ public class KChartsView extends GridChart /*implements GridChart.OnTabClickList
         return list;
     }
 
-
+    //双指缩放距离
+    private float spacing(MotionEvent event) {
+        float x = event.getX(0) - event.getX(1);
+        float y = event.getY(0) - event.getY(1);
+        return FloatMath.sqrt(x * x + y * y);
+    }
 }

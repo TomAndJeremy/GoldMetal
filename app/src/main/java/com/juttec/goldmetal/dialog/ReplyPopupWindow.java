@@ -39,6 +39,7 @@ import com.juttec.goldmetal.utils.ToastUtil;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -69,7 +70,8 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
     private int keyboardHeight;
 
 
-    private Map<Integer, Integer> map = new HashMap<>();
+    //private Map<Integer, Integer> map = new HashMap<>();
+    private List<Integer> list = new ArrayList<>();//顺序存储图片编号
 
     public ReplyPopupWindow(Context context) {
 
@@ -168,7 +170,7 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
                 mSend.setClickable(false);
 
                 String content = mEditText.getText().toString();
-                for (Map.Entry entry : map.entrySet()) {
+                /*for (Map.Entry entry : map.entrySet()) {
 
                     Integer key = (Integer) entry.getKey();
                     Integer value = (Integer) entry.getValue();
@@ -176,7 +178,12 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
                     content = content.replaceFirst("￼", EmojiUtil.getEmojiText(value));//图片在字符串中会变为￼，每次都把第一个￼字符替换掉
 
 
+                }*/
+                for (int i = 0; i < list.size(); i++) {
+                    content = content.replaceFirst("￼", EmojiUtil.getEmojiText(list.get(i)));//图片在字符串中会变为￼，每次都把第一个￼字符替换掉
+
                 }
+                list.clear();//发送完成清除数据，防止影响下一次
                 if (TextUtils.isEmpty(content) || "".equals(content) || content.trim().length() <= 0) {
                     mSend.setClickable(true);
                     ToastUtil.showShort(mContext, "内容不能为空");
@@ -257,7 +264,8 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
         int cursorPosition = mEditText.getSelectionStart();
         mEditText.getText().insert(cursorPosition, cs);
         String position = index.replace(".png", "");//将X.png转变为X
-        map.put(cursorPosition, Integer.parseInt(position));
+       // map.put(cursorPosition, Integer.parseInt(position));
+        list.add( Integer.parseInt(position));
     }
 
 

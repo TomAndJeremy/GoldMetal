@@ -22,12 +22,18 @@
         android:textColor="@color/secondary_dark"
         android:textSize="12sp" />
 
-    <TextView
+   <!-- <TextView
         android:id="@+id/announcement_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/announcement_time"
         android:textSize="15sp"
-
+        />-->
+    <me.biubiubiu.justifytext.library.JustifyTextView
+        android:id="@+id/announcement_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/announcement_time"
+        android:textSize="15sp"
         />
 </RelativeLayout>

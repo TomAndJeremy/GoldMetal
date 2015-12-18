@@ -31,6 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import me.biubiubiu.justifytext.library.JustifyTextView;
+
 /**
  * Created by Jeremy on 2015/10/16.
  */
@@ -204,7 +206,7 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
                 viewHolder = new ViewHolder();
                 viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.announcement_title);
                 viewHolder.tvTime = (TextView) convertView.findViewById(R.id.announcement_time);
-                viewHolder.tvContent = (TextView) convertView.findViewById(R.id.announcement_content);
+                viewHolder.tvContent = (JustifyTextView) convertView.findViewById(R.id.announcement_content);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -221,7 +223,7 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
         private class ViewHolder {
             TextView tvTitle;
             TextView tvTime;
-            TextView tvContent;
+            JustifyTextView tvContent;
         }
     }
 

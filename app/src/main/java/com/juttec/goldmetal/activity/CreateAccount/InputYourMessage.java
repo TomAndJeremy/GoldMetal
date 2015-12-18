@@ -12,6 +12,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
@@ -142,6 +143,7 @@ public class InputYourMessage extends AppCompatActivity {
                 JSONObject object = null;
                 try {
                     object = new JSONObject(responseInfo.result.toString());
+                    LogUtil.e("111111  " + responseInfo.result.toString());
                     String status = object.getString("status");
                     String promptInfor = object.getString("promptInfor");
                     if ("1".equals(status)) {

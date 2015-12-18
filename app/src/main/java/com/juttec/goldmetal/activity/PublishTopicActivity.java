@@ -93,6 +93,8 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
     private EditText mContent;//发表的内容
 
+    private String contentShow;//用于发送的内容
+
     private RelativeLayout parentLayout;
 
     private Button mBtnPush;//发表按钮
@@ -120,7 +122,8 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
     private MyProgressDialog dialog_progress;//正在加载的  进度框
 
-    private Map<Integer, Integer> map = new HashMap<>();//标志文字中的第X位置上的图片为第Y张
+   // private Map<Integer, Integer> map = new HashMap<>();//标志文字中的第X位置上的图片为第Y张
+    private List<Integer> list = new ArrayList<>();//标志文字中的第X位置上的图片为第Y张
 
 
 //    private HeadLayout mHeadLayout;//标题栏
@@ -349,8 +352,10 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         int cursorPosition = mContent.getSelectionStart();
         mContent.getText().insert(cursorPosition, cs);
 
+
         String position = index.replace(".png", "");//将X.png转变为X
-        map.put(cursorPosition, Integer.parseInt(position));
+       // map.put(cursorPosition, Integer.parseInt(position));
+        list.add( Integer.parseInt(position));
     }
 
 
@@ -607,23 +612,33 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     //发表动态接口
     private void postDynamic() {
 
+
         RequestParams params = new RequestParams();
         params.addBodyParameter("userId", app.getUserInfoBean().getUserId());
         params.addBodyParameter("userName", app.getUserInfoBean().getUserNickName());
 
         String content = mContent.getText().toString();
-        for (Map.Entry entry : map.entrySet()) {
+      /*  for (Map.Entry entry : map.entrySet()) {
 
             Integer key = (Integer) entry.getKey();
             Integer value = (Integer) entry.getValue();
 
+            LogUtil.e("11  " + value);
             content = content.replaceFirst("￼", EmojiUtil.getEmojiText(value));//图片在字符串中会变为￼，每次都把第一个￼字符替换掉
 
+           // LogUtil.e("22  " + content);
+
+        }*/
+        for (int i = 0; i < list.size(); i++) {
+            LogUtil.e("11  " + list.get(i));
+            content = content.replaceFirst("￼", EmojiUtil.getEmojiText(list.get(i)));//图片在字符串中会变为￼，每次都把第一个￼字符替换掉
 
         }
+        list.clear();//发送完成后清除数据
+
         params.addBodyParameter("dyContent",content);
         //params.addBodyParameter("dyContent", string2Unicode(content));
-        // params.addBodyParameter("dyContent", string2Unicode(toSend));
+        //params.addBodyParameter("dyContent", string2Unicode(toSend));
 
         for (int i = 0; i < photoList.size(); i++) {
             if (i == 0) {

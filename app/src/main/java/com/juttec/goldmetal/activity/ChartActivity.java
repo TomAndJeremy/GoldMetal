@@ -122,7 +122,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
         //&u=qq3585&p=qq3771
         KLINES_URL = "http://db2015.wstock.cn/wsDB_API/kline.php?symbol=" + symbol +
-                "&r_type=2&num=100";
+                "&r_type=2&num=200";
 
         TIME_URL = "http://db2015.wstock.cn/wsDB_API/TheTimeTrend.php?r_type=2&symbol=" + symbol;
 

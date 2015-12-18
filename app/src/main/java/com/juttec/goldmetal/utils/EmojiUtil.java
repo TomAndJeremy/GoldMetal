@@ -162,7 +162,7 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
             content = content.replace(s, covert(s));
         }
 
-        //之前表情的协议是`x.png`,现在的协议是[‘汉字’],此段代码将其转换为原先的协议
+        //之前表情的协议是`x.png`,现在的协议是[‘汉字’],此段代码将其转换为原先的协议（这样可以不用修改后面的代码）
 /***************************************************************************/
         final String[] s = content.split("`");
         for (int i = 0; i < s.length; i++) {
