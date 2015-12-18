@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
+import com.juttec.goldmetal.customview.AlignTextView;
+import com.juttec.goldmetal.customview.CBAlignTextView;
 import com.juttec.goldmetal.customview.listview.LoadMoreListView;
 import com.juttec.goldmetal.customview.listview.LoadingFooter;
 import com.juttec.goldmetal.utils.LogUtil;
@@ -199,31 +201,34 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
 
-            if (convertView == null) {
-                convertView = getLayoutInflater().inflate(R.layout.announcement_item,
-                        parent, false);
+        if (convertView == null) {
+            convertView = getLayoutInflater().inflate(R.layout.announcement_item,
+                    parent, false);
 
-                viewHolder = new ViewHolder();
-                viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.announcement_title);
-                viewHolder.tvTime = (TextView) convertView.findViewById(R.id.announcement_time);
-                viewHolder.tvContent = (JustifyTextView) convertView.findViewById(R.id.announcement_content);
-                convertView.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) convertView.getTag();
-            }
-
-            viewHolder.tvTitle.setText(maps.get(position).get("title"));
-            viewHolder.tvTime.setText(maps.get(position).get("time"));
-            viewHolder.tvContent.setText(maps.get(position).get("details"));
-
-            return convertView;
-
+            viewHolder = new ViewHolder();
+            viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.announcement_title);
+            viewHolder.tvTime = (TextView) convertView.findViewById(R.id.announcement_time);
+//                viewHolder.tvContent = (JustifyTextView) convertView.findViewById(R.id.announcement_content);
+            viewHolder.tvContent = (CBAlignTextView) convertView.findViewById(R.id.announcement_content);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
+
+        viewHolder.tvTitle.setText(maps.get(position).get("title"));
+        viewHolder.tvTime.setText(maps.get(position).get("time"));
+        viewHolder.tvContent.setText(maps.get(position).get("details"));
+
+        return convertView;
+
+    }
 
         private class ViewHolder {
             TextView tvTitle;
             TextView tvTime;
-            JustifyTextView tvContent;
+            // JustifyTextView tvContent;
+            CBAlignTextView tvContent;
+           //TextView tvContent;
         }
     }
 

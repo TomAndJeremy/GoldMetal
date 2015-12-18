@@ -1,40 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="2dp"
     android:background="@drawable/comment_click_background"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="2dp">
 
-    <TextView
-        android:id="@+id/reply_name"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/blue_text" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/reply_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue_text" />
+
+        <TextView
+            android:id="@+id/hint_reply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="回复"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/comment_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue_text" />
+    </LinearLayout>
 
     <TextView
-        android:visibility="gone"
-        android:id="@+id/hint_reply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="回复" />
-
-    <TextView
-        android:id="@+id/comment_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/blue_text" />
-
-    <TextView
-        android:gravity="center_vertical"
-        android:layout_gravity="center_vertical"
         android:id="@+id/comment_content"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</LinearLayout>-->
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical" />
+</RelativeLayout><!--
+<com.juttec.goldmetal.customview.CBAlignTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item_comment_content"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/comment_click_background"
-    android:padding="2sp"
-    android:layout_height="wrap_content" />
+    android:padding="2sp" />
+-->

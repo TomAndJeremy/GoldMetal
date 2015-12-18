@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
 
@@ -27,13 +27,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/announcement_time"
-        android:textSize="15sp"
-        />-->
-    <me.biubiubiu.justifytext.library.JustifyTextView
+        android:textSize="15sp" />
+-->
+    <com.juttec.goldmetal.customview.CBAlignTextView
         android:id="@+id/announcement_content"
         android:layout_width="match_parent"
+        android:textIsSelectable="false"
         android:layout_height="wrap_content"
         android:layout_below="@id/announcement_time"
-        android:textSize="15sp"
-        />
+        android:textSize="15sp" />
+    <!--  <me.biubiubiu.justifytext.library.JustifyTextView
+          android:id="@+id/announcement_content"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@id/announcement_time"
+          android:textSize="15sp"
+          />-->
 </RelativeLayout>
