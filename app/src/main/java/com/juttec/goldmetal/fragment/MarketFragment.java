@@ -169,6 +169,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         tabLayout.addTab(tabLayout.newTab().setText("深证B股").setTag(5));
         tabLayout.addTab(tabLayout.newTab().setText("搜索个股").setTag(6));
 
+
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -214,7 +215,8 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                         if (adapter != null) {
                             adapter.notifyDataSetChanged();
                         }
-
+                        //搜索个股
+                        showSearchStock();
                         break;
                 }
             }
@@ -421,40 +423,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         switch (v.getId()){
             case  R.id.market_search:
                 //搜索个股
-                final MyAlertDialog dialog = new MyAlertDialog(getActivity());
-
-                dialog.builder()
-                        .setTitle("搜索个股").setEditText("请输入个股代码 例如SH600016")
-                        .setSingleButton("确定", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.setEditType(EditorInfo.TYPE_CLASS_TEXT);
-                                String et = dialog.getResult().trim();
-                                if (et.length() == 8) {
-                                    //开始搜素
-                                    getData(SEARCH_URL + "&symbol=" + et);
-//                                    getNetWorkData.setUrl(SEARCH_URL + "&symbol=" + et);
-                                    tabLayout.getTabAt(5).select();
-                                    isSearch = true;
-                                    isOptional = false;
-                                    dialog.dismiss();
-                                } else {
-                                    ToastUtil.showShort(getActivity(), "请输入完整正确的个股代码！");
-                                }
-                            }
-                        }).show();
-                //设置Edittext值只能输入 大写字母和数字
-                dialog.getEt().setKeyListener(new DigitsKeyListener() {
-                    @Override
-                    public int getInputType() {
-                        return InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
-                    }
-                    @Override
-                    protected char[] getAcceptedChars() {
-                        char[] data =  getResources().getString(R.string.only_can_input).toCharArray();
-                        return data;
-                    }
-                });
+                showSearchStock();
 
 //                intent = new Intent(getActivity(), SearchStockActivity.class);
 //                startActivity(intent);
@@ -515,10 +484,48 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
                 startActivity(intent);
                 break;
-
         }
+    }
 
 
+    /**
+     * 搜索个股
+     */
+    private void showSearchStock(){
+        final MyAlertDialog dialog = new MyAlertDialog(getActivity());
+
+        dialog.builder()
+                .setTitle("搜索个股").setEditText("请输入个股代码 例如SH600016")
+                .setSingleButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.setEditType(EditorInfo.TYPE_CLASS_TEXT);
+                        String et = dialog.getResult().trim();
+                        if (et.length() == 8) {
+                            //开始搜素
+                            getData(SEARCH_URL + "&symbol=" + et);
+//                                    getNetWorkData.setUrl(SEARCH_URL + "&symbol=" + et);
+                            tabLayout.getTabAt(5).select();
+                            isSearch = true;
+                            isOptional = false;
+                            dialog.dismiss();
+                        } else {
+                            ToastUtil.showShort(getActivity(), "请输入完整正确的个股代码！");
+                        }
+                    }
+                }).show();
+        //设置Edittext值只能输入 大写字母和数字
+        dialog.getEt().setKeyListener(new DigitsKeyListener() {
+            @Override
+            public int getInputType() {
+                return InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
+            }
+            @Override
+            protected char[] getAcceptedChars() {
+                char[] data =  getResources().getString(R.string.only_can_input).toCharArray();
+                return data;
+            }
+        });
     }
 
 
@@ -731,14 +738,28 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                 results.remove(i);
                 //同时将list中的数据删除
                 mLists.remove(i);
-                if(mLists.size()==0){
-                    //将resetURL置空
-                    resetURL = "";
-                    getNetWorkData.stop();//停止网络访问
-                }
             }
         }
         myRealm.commitTransaction();
+
+        if(mLists.size()==0){
+            //将resetURL置空
+            resetURL = "";
+            getNetWorkData.stop();//停止网络访问
+        }else{
+            //将股票代码 拼接成指定url
+            String url = "";
+            //自选
+            for(int j=0;j<mLists.size();j++){
+                if(j!=mLists.size()-1){
+                    url = url+mLists.get(j)+",";
+                }else{
+                    url = url+mLists.get(j);
+                }
+            }
+            //调接口获取自选股数据
+            getData(OPTIONAL_URL + url);
+        }
     }
 
     @Override

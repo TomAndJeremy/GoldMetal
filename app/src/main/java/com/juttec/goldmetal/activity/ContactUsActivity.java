@@ -1,7 +1,5 @@
 package com.juttec.goldmetal.activity;
 
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
-import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -139,9 +136,13 @@ public class ContactUsActivity extends AppCompatActivity {
                         Intent intent=new Intent("android.intent.action.CALL", Uri.parse("tel:" + maps.get(position).get("text")));
                         startActivity(intent);
                     } else {
-                        ClipboardManager cmb = (ClipboardManager)getApplication().getSystemService(Context.CLIPBOARD_SERVICE);
-                        cmb.setText( maps.get(position).get("text"));
-                        ToastUtil.showShort(getApplicationContext(),"已复制到剪切板");
+                        //直接跳转到qq聊天界面
+                        String url11 = "mqqwpa://im/chat?chat_type=wpa&uin="+ maps.get(position).get("text")+"&version=1";
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url11)));
+
+//                        ClipboardManager cmb = (ClipboardManager)getApplication().getSystemService(Context.CLIPBOARD_SERVICE);
+//                        cmb.setText( maps.get(position).get("text"));
+//                        ToastUtil.showShort(getApplicationContext(),"已复制到剪切板");
 
                     }
 
