@@ -1,9 +1,12 @@
 package com.juttec.goldmetal.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
@@ -14,6 +17,7 @@ import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -38,7 +42,9 @@ import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.dialog.ReplyPopupWindow;
 import com.juttec.goldmetal.utils.EmojiUtil;
+import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
+import com.juttec.goldmetal.utils.TextJustification;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -148,7 +154,6 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         holder.time.setText(entityList.get(position).getAddTime());//时间
         if (entityList.get(position).getDyContent() != null) {
             holder.content.setText(readEmoji.getEditable(entityList.get(position).getDyContent()));// 正文
-
         }
 
 
@@ -487,15 +492,26 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
             View commentView = LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
             TextView tvCommentName = (TextView) commentView.findViewById(R.id.comment_name);
-            TextView tvCommentContent = (TextView) commentView.findViewById(R.id.comment_content);
+            final TextView tvCommentContent = (TextView) commentView.findViewById(R.id.comment_content);
 
             tvCommentName.setText(commentName);
             clickName(tvCommentName, commentUserId, commentName);
-
             //填补空格
-            tvCommentContent.append(MyApplication.getBlank(commentName + " ", tvCommentName.getTextSize()));
+            String blank = MyApplication.getBlank(commentName + " ", tvCommentName.getTextSize());
 
-            tvCommentContent.append(readEmoji.getEditable(commentContent));
+           // tvCommentContent.append(blank);
+
+           // String wholeString = blank + TextJustification.justify(commentContent, tvCommentContent);
+
+            String s = "abcdefghigklmndfdfdsfgfghdfghfghdjhghkjjjfdgfdjkjlghhgdfgsfhjklkjjgfgdfhghkjkhdgjhhgkjhkgkhdgfghfg";
+           tvCommentContent.setText(s);
+            tvCommentContent.measure(0, 0);       //must call measure!
+            tvCommentContent.getMeasuredHeight(); //get width
+            float cWidth =  tvCommentContent.getMeasuredWidth();  //get height
+            Paint a = new Paint();
+            float aa = a.measureText(s);
+            tvCommentContent.setText("");
+            tvCommentContent.append(readEmoji.getEditable(blank + commentContent, cWidth));
 
 
             commentView.setOnClickListener(new View.OnClickListener() {
@@ -603,7 +619,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 toBlank += MyApplication.getBlank(tvRepliedName.getText().toString(), tvRepliedName.getTextSize());
 
                 tvReplyContent.append(toBlank);
-                tvReplyContent.append(readEmoji.getEditable(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent()));
+                tvReplyContent.append(readEmoji.getEditable(toBlank + entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent(), tvReplyContent.getWidth()));
 
 
                 replyRoot.addView(replyMsg);
@@ -721,7 +737,11 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         param.addBodyParameter("dyId", dyId);
         param.addBodyParameter("discussantId", discussantId);
         param.addBodyParameter("discussantName", discussantName);
-        param.addBodyParameter("commentContent", content);
+
+
+        String text = content.replace("\n", "");
+        LogUtil.e("text   " + text);
+        param.addBodyParameter("commentContent", text);
 
 
         new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getCommentUrl(), param, new RequestCallBack<String>() {

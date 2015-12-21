@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -69,7 +70,8 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
     DisplayMetrics dm;
     private static final double STANDWIDTH = 1080;
     private static final double STANDHEIGHT = 1920;
-    double imgWidthRate,imgHeightRate;
+    double imgWidthRate, imgHeightRate;
+
     public EmojiUtil(Context context) {
 
         this.context = context;
@@ -137,6 +139,7 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
 
     }
 
+
     private List<String> getMatcher(String regex, String source) {
         String result = "";
 
@@ -150,6 +153,11 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
     }
 
     public Editable getEditable(String content) {
+
+        return getEditable(content, 0L);
+    }
+
+    public Editable getEditable(String content, float width) {
         //String content = unicode2String(contentUnicode);
         Editable editable = new Editable.Factory().newEditable("");
 
@@ -197,6 +205,21 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
 
         }
 
+       /* //if (width!=0L) {
+            Paint paint = new Paint();
+            float f = 0L;
+            for (int i = 0; i <editable.length()-1 ; i++) {
+                f=f+  paint.measureText(String.valueOf(editable.charAt(i)));
+                if (f + paint.measureText(String.valueOf(editable.charAt(i))) > 400) {
+                    f = 0L;
+                    editable.insert(i, "\n");
+                }
+            }
+       // }*/
+
+        if (width != 0L) {
+            editable = autoSplit(editable, new Paint(), width);
+        }
         return editable;
     }
 
@@ -208,7 +231,7 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
 
                 Drawable d = new BitmapDrawable(context.getResources(), emoticons[t]);
 
-                d.setBounds(0, 0, (int)(d.getIntrinsicWidth()*imgWidthRate), (int)(d.getIntrinsicHeight()*imgHeightRate));
+                d.setBounds(0, 0, (int) (d.getIntrinsicWidth() * imgWidthRate), (int) (d.getIntrinsicHeight() * imgHeightRate));
                 return d;
             }
         };
@@ -291,5 +314,46 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
         return null;
     }
 
+    /**
+     * 自动分割文本
+     *
+     * @param content 需要分割的文本
+     * @param p       画笔，用来根据字体测量文本的宽度
+     * @param width   最大的可显示像素（一般为控件的宽度）
+     * @return 一个字符串数组，保存每行的文本
+     */
+    private Editable autoSplit(Editable content, Paint p, float width) {
+        int length = content.length();
+        float textWidth = p.measureText(content.toString());
+        if (textWidth <= width) {
+            return content;
+        }
 
+        int start = 0, end = 1, i = 0;
+        int lines = (int) Math.ceil(textWidth / width); //计算行数
+        Editable lineTexts = null;
+
+        while (start < length) {
+            if ((end - start) == 10) { //文本宽度超出控件宽度时
+                lineTexts = content.insert(end - 1, " ");
+                start = end;
+            }
+            /*if(end == length) { //不足一行的文本
+                lineTexts[i] = (String) content.subSequence(start, end);
+                break;
+            }*/
+            end += 1;
+        }
+        return lineTexts;
+    }
+
+  /*  private Editable subEditabloe(Editable content,int start,int end) {
+
+        Editable editable = new Editable.Factory().newEditable("");
+        editable=content.re
+        editable = content.replace(0, start, "");
+
+
+        return content;
+    }*/
 }

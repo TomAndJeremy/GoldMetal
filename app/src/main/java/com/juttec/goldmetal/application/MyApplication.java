@@ -31,6 +31,7 @@ public class MyApplication extends Application {
     public File cacheDir;
 
     public static final String BASEURL = "http://117.132.8.93:9988/App_Areas/";
+   // public static final String BASEURL = "http://192.168.1.64:8155//App_Areas/";
     public static final String ImgBASEURL = "http://117.132.8.93:9988";
 
     public static final int ENUM=60;//表情图片的数目

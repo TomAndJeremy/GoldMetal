@@ -376,13 +376,13 @@ public class PersonDynamicAdapter extends BaseAdapter {
      */
     private void addCommentView(LinearLayout viewRoot, final int position) {
         for (int i = 0; i < mLists.get(position).getDyCommentReply().size(); i++) {
-            TextView commentMsg = (TextView) LayoutInflater.from(mContext).inflate(R.layout.item_comment_msg, null);
+           // TextView commentMsg = (TextView) LayoutInflater.from(mContext).inflate(R.layout.item_comment_msg, null);
 
             //获得评论人的姓名与评论内容并设置显示
             String commentName = mLists.get(position).getDyCommentReply().get(i).getDiscussantName();
             String commentContent = mLists.get(position).getDyCommentReply().get(i).getCommentContent();
 
-            SpannableString string = new SpannableString(commentName+":");
+          /*  SpannableString string = new SpannableString(commentName+":");
             setPartClick(string, mLists.get(position).getDyCommentReply().get(i).getDiscussantId(), commentName, 0, commentName.length());
 
             commentMsg.setText(string);
@@ -408,9 +408,40 @@ public class PersonDynamicAdapter extends BaseAdapter {
                 }
             });
 
+*/
+            String commentUserId=   mLists.get(position).getDyCommentReply().get(i).getDiscussantId();
+            final int finalI = i;
+            View commentView = LayoutInflater.from(mContext).inflate(R.layout.item_comment_msg, null);
+            TextView tvCommentName = (TextView) commentView.findViewById(R.id.comment_name);
+            TextView tvCommentContent = (TextView) commentView.findViewById(R.id.comment_content);
+
+            tvCommentName.setText(commentName);
+            clickName(tvCommentName, commentUserId, commentName);
+
+            //填补空格
+            tvCommentContent.append(MyApplication.getBlank(commentName + " ", tvCommentName.getTextSize()));
+
+            tvCommentContent.append(readEmoji.getEditable(commentContent));
+
+
+            commentView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!mLists.get(position).getDyCommentReply().get(finalI).getDiscussantId().equals(app.getUserInfoBean().getUserId())) {
+                        popupWindow.create().show(v);
+                        popupWindow.setHint(1, mLists.get(position).getDyCommentReply().get(finalI).getDiscussantName());
+                        popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
+                            @Override
+                            public void onClickSend(String content) {
+                                reply(position, finalI, content);
+                            }
+                        });
+                    }
+                }
+            });
 
             //将一条评论添加到父布局中
-            viewRoot.addView(commentMsg);
+            viewRoot.addView(commentView);
 
 
             //添加评论中的回复
@@ -420,7 +451,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
             for (int j = 0; j < size; j++) {
 
-                TextView replyMsg = (TextView) LayoutInflater.from(mContext).inflate(R.layout.item_comment_msg, null);
+                View replyMsg = LayoutInflater.from(mContext).inflate(R.layout.item_comment_msg, null);
 
 
                 String replyName = mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName();
@@ -433,18 +464,34 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
                 replyRoot.addView(replyMsg);
 
-                SpannableString userReply = new SpannableString(replyName);
+             /*   SpannableString userReply = new SpannableString(replyName);
                 setPartClick(userReply, userId, replyName, 0, replyName.length());
 
                 SpannableString userReplied = new SpannableString(repliedName + ":");
-                setPartClick(userReplied, repliedId, repliedName, 0, repliedName.length());
+                setPartClick(userReplied, repliedId, repliedName, 0, repliedName.length());*/
 
-                replyMsg.setText(userReply);
-                replyMsg.append("回复");
-                replyMsg.append(userReplied);
+                TextView tvReplyName = (TextView) replyMsg.findViewById(R.id.reply_name);
+                TextView hint = (TextView) replyMsg.findViewById(R.id.hint_reply);
+                TextView tvRepliedName = (TextView) replyMsg.findViewById(R.id.comment_name);
+                TextView tvReplyContent = (TextView) replyMsg.findViewById(R.id.comment_content);
+                tvReplyName.setVisibility(View.VISIBLE);
+                hint.setVisibility(View.VISIBLE);
 
-                replyMsg.setMovementMethod(LinkMovementMethod.getInstance());
-                replyMsg.append(readEmoji.getEditable(replyContent));
+                tvReplyName.setText(replyName);
+                tvRepliedName.setText(repliedName);
+
+                clickName(tvReplyName,userId , replyName);
+                clickName(tvRepliedName, repliedId,repliedName);
+
+
+                //得到对应长度的空格
+                String toBlank = MyApplication.getBlank(tvReplyName.getText().toString(),tvReplyName.getTextSize());
+                toBlank += MyApplication.getBlank(hint.getText().toString(),hint.getTextSize());
+                toBlank += MyApplication.getBlank(tvRepliedName.getText().toString(), tvRepliedName.getTextSize());
+
+
+                tvReplyContent.append(toBlank);
+                tvReplyContent.append(readEmoji.getEditable(replyContent));
 
                 final int finalJ = j;
                 replyMsg.setOnClickListener(new View.OnClickListener() {
