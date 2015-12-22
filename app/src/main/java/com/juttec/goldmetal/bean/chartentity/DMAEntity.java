@@ -26,7 +26,7 @@ public class DMAEntity {
     public DMAEntity(List<KChartInfo.ResultEntity> OHLCData) {
 
         List<Double> list = new ArrayList<>();
-        for (int i=OHLCData.size()-1;i>=0;i-- ) {
+        for (int i = OHLCData.size() - 1; i >= 0; i--) {
             list.add(Double.parseDouble(OHLCData.get(i).getClose()));
         }
 
@@ -38,11 +38,11 @@ public class DMAEntity {
         DIF = new ArrayList<>();
         Double NA = Double.MIN_VALUE;//最小正数
         for (int i = 0; i < OHLCData.size(); i++) {
-          double ma10 = MA_10.get(i);
+            double ma10 = MA_10.get(i);
             double ma50 = MA_50.get(i);
 
             if (ma50 != NA) {
-                DIF.add(ma10- ma50);
+                DIF.add(ma10 - ma50);
             } else {
                 DIF.add(NA);
             }
@@ -54,6 +54,16 @@ public class DMAEntity {
 
         Collections.reverse(DIF);
         Collections.reverse(AMA);
+
+
+        for (Double dd : DIF
+                ) {
+            LogUtil.e("DIF " + dd);
+        }
+        for (Double dd : AMA
+                ) {
+            LogUtil.e("AMA " + dd);
+        }
 
     }
 }

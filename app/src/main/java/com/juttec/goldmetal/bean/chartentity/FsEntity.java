@@ -1,5 +1,7 @@
 package com.juttec.goldmetal.bean.chartentity;
 
+import com.juttec.goldmetal.utils.LogUtil;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -83,10 +85,20 @@ public class FsEntity {
 
 
     public List<Double> getAveragePrices() {
+        for (Double dd : averagePrices
+                ) {
+            LogUtil.e("averagePrices  " + dd);
+        }
+
         return averagePrices;
     }
 
     public List<Double> getStockPrices() {
+
+        for (Double dd : stockPrices
+                ) {
+            LogUtil.e("stockPrices  " + dd);
+        }
         return stockPrices;
     }
 

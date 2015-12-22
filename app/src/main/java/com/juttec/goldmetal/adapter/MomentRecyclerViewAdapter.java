@@ -452,7 +452,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         for (int i = 0; i < entityList.get(position).getDyCommentReply().size(); i++) {
             //获得评论人的姓名与评论内容并设置显示
             final String commentName = entityList.get(position).getDyCommentReply().get(i).getDiscussantName() + ":";//
-            String commentContent =MyApplication.ToDBC(entityList.get(position).getDyCommentReply().get(i).getCommentContent());
+            String commentContent = MyApplication.ToDBC(entityList.get(position).getDyCommentReply().get(i).getCommentContent());
             final int finalI = i;
           /*  TextView comment = (TextView) LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
             SpannableString string = new SpannableString(commentName);
@@ -489,7 +489,6 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             viewRoot.addView(comment);
 */
             String commentUserId = entityList.get(position).getDyCommentReply().get(i).getDiscussantId();
-
             View commentView = LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
             TextView tvCommentName = (TextView) commentView.findViewById(R.id.comment_name);
             final TextView tvCommentContent = (TextView) commentView.findViewById(R.id.comment_content);
@@ -501,17 +500,18 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
            // tvCommentContent.append(blank);
 
-           // String wholeString = blank + TextJustification.justify(commentContent, tvCommentContent);
 
-            String s = "abcdefghigklmndfdfdsfgfghdfghfghdjhghkjjjfdgfdjkjlghhgdfgsfhjklkjjgfgdfhghkjkhdgjhhgkjhkgkhdgfghfg";
-           tvCommentContent.setText(s);
-            tvCommentContent.measure(0, 0);       //must call measure!
-            tvCommentContent.getMeasuredHeight(); //get width
-            float cWidth =  tvCommentContent.getMeasuredWidth();  //get height
-            Paint a = new Paint();
-            float aa = a.measureText(s);
-            tvCommentContent.setText("");
-            tvCommentContent.append(readEmoji.getEditable(blank + commentContent, cWidth));
+
+            Paint paint = tvCommentContent.getPaint();//用于测量字符串长度
+            /*float sWidth = paint.measureText(blank + commentContent);
+            float tvWidth = context.getResources().getDisplayMetrics().widthPixels - 2 * 2 * context.getResources().getDisplayMetrics().density;
+            tvCommentContent.setMaxLines((int) (sWidth / tvWidth));
+           */
+
+
+
+            //设置评论
+            tvCommentContent.append(readEmoji.getEditable(blank+commentContent,paint));
 
 
             commentView.setOnClickListener(new View.OnClickListener() {
@@ -534,14 +534,15 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 }
             });
 
+            //添加到父布局中
             viewRoot.addView(commentView);
 
-            //添加评论中的回复
+            //添加评论中的回复（操作与上面基本一致）
             int size = entityList.get(position).getDyCommentReply().get(i).getDyReply().size();
             final LinearLayout replyRoot = new LinearLayout(context);
             replyRoot.setOrientation(LinearLayout.VERTICAL);
             for (int j = 0; j < size; j++) {
-                final String userName = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName();
+               /*   final String userName = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName();
                 String repliedName = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName();
 
                 final String userId = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserId();
@@ -550,7 +551,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 String replyContent = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent();
 
 
-               /* // TextView tvReply = (TextView) LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
+              // TextView tvReply = (TextView) LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
                 CBAlignTextView tvReply = (CBAlignTextView) LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
 
 
@@ -601,6 +602,9 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 View replyMsg = LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
                 replyMsg.setLayoutParams(lp);
 
+
+
+
                 TextView tvReplyName = (TextView) replyMsg.findViewById(R.id.reply_name);
                 TextView hint = (TextView) replyMsg.findViewById(R.id.hint_reply);
                 TextView tvRepliedName = (TextView) replyMsg.findViewById(R.id.comment_name);
@@ -608,24 +612,33 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 tvReplyName.setVisibility(View.VISIBLE);
                 hint.setVisibility(View.VISIBLE);
 
-                tvReplyName.setText(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName());
-                tvRepliedName.setText(entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName() + ": ");
+                final String userName = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName();
+                String repliedName = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName();
 
+                final String userId = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserId();
+                String repliedId = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedId();
+
+                String replyContent = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent();
+
+
+                tvReplyName.setText(userName);
+                tvRepliedName.setText(repliedName+ ": ");
 
 
                 //得到对应长度的空格
-                String toBlank = MyApplication.getBlank(tvReplyName.getText().toString(),tvReplyName.getTextSize());
-                toBlank += MyApplication.getBlank(hint.getText().toString(),hint.getTextSize());
+                String toBlank = MyApplication.getBlank(tvReplyName.getText().toString(), tvReplyName.getTextSize());
+                toBlank += MyApplication.getBlank(hint.getText().toString(), hint.getTextSize());
                 toBlank += MyApplication.getBlank(tvRepliedName.getText().toString(), tvRepliedName.getTextSize());
 
-                tvReplyContent.append(toBlank);
-                tvReplyContent.append(readEmoji.getEditable(toBlank + entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent(), tvReplyContent.getWidth()));
+               /* tvReplyContent.append(toBlank);*/
+                Paint p = tvReplyContent.getPaint();
+                tvReplyContent.append(readEmoji.getEditable(toBlank + entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent(),p));
 
 
                 replyRoot.addView(replyMsg);
 
-                clickName(tvReplyName, entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserId(), entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName());
-                clickName(tvRepliedName, entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedId(), entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName());
+                clickName(tvReplyName,userId, userName);
+                clickName(tvRepliedName,repliedId,repliedName);
 
 
                 final int finalJ = j;

@@ -78,8 +78,10 @@ public class MyProgressDialog {
 
 
     public void dismiss() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
 
-        dialog.dismiss();
     }
 
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -415,13 +416,14 @@ public class PersonDynamicAdapter extends BaseAdapter {
             TextView tvCommentName = (TextView) commentView.findViewById(R.id.comment_name);
             TextView tvCommentContent = (TextView) commentView.findViewById(R.id.comment_content);
 
-            tvCommentName.setText(commentName);
+            tvCommentName.setText(commentName+":");
             clickName(tvCommentName, commentUserId, commentName);
 
             //填补空格
-            tvCommentContent.append(MyApplication.getBlank(commentName + " ", tvCommentName.getTextSize()));
-
-            tvCommentContent.append(readEmoji.getEditable(commentContent));
+          //  tvCommentContent.append(MyApplication.getBlank(commentName + " ", tvCommentName.getTextSize()));
+            String blank = MyApplication.getBlank(commentName + ":", tvCommentName.getTextSize());
+            Paint paint = tvCommentContent.getPaint();
+            tvCommentContent.append(readEmoji.getEditable(blank+commentContent,paint));
 
 
             commentView.setOnClickListener(new View.OnClickListener() {
@@ -478,20 +480,21 @@ public class PersonDynamicAdapter extends BaseAdapter {
                 hint.setVisibility(View.VISIBLE);
 
                 tvReplyName.setText(replyName);
-                tvRepliedName.setText(repliedName);
+                tvRepliedName.setText(repliedName+":");
 
                 clickName(tvReplyName,userId , replyName);
                 clickName(tvRepliedName, repliedId,repliedName);
 
 
                 //得到对应长度的空格
-                String toBlank = MyApplication.getBlank(tvReplyName.getText().toString(),tvReplyName.getTextSize());
+                String toBlank = MyApplication.getBlank(replyName,tvReplyName.getTextSize());
                 toBlank += MyApplication.getBlank(hint.getText().toString(),hint.getTextSize());
-                toBlank += MyApplication.getBlank(tvRepliedName.getText().toString(), tvRepliedName.getTextSize());
+                toBlank += MyApplication.getBlank(repliedName+":", tvRepliedName.getTextSize());
 
 
-                tvReplyContent.append(toBlank);
-                tvReplyContent.append(readEmoji.getEditable(replyContent));
+              //  tvReplyContent.append(toBlank);
+                Paint paint1 = tvReplyContent.getPaint();
+                tvReplyContent.append(toBlank+readEmoji.getEditable(replyContent,paint1));
 
                 final int finalJ = j;
                 replyMsg.setOnClickListener(new View.OnClickListener() {

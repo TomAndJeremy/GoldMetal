@@ -185,10 +185,21 @@ public class RSIEntity {
     }
 
     public List<Double> getRSI2() {
-        return RSI2;
+        int i = 0;
+        for (Double aDouble : RSI2
+                ) {
+            LogUtil.e("RSI2  " + i + " " + aDouble);
+            i++;
+        }return RSI2;
     }
 
     public List<Double> getRSI3() {
+        int i = 0;
+        for (Double aDouble : RSI3
+                ) {
+            LogUtil.e("RSI3  " + i + " " + aDouble);
+            i++;
+        }
         return RSI3;
     }
 

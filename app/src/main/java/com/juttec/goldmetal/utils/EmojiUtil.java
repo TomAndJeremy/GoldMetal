@@ -154,14 +154,14 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
 
     public Editable getEditable(String content) {
 
-        return getEditable(content, 0L);
+        return getEditable(content, null);
     }
 
-    public Editable getEditable(String content, float width) {
+    public Editable getEditable(String content, Paint paint) {
         //String content = unicode2String(contentUnicode);
         Editable editable = new Editable.Factory().newEditable("");
 
-
+        content.replace("\n", "");
 /***************************************************************************/
         String regex = "\\[[\\u4e00-\\u9fa5]+\\]";//匹配“[‘汉字’]”
         List<String> emojis = getMatcher(regex, content);
@@ -186,7 +186,7 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
                 if (t < MyApplication.ENUM) {
                     final int finalI = i;
                     Spanned cs = Html.fromHtml("<img src ='" + s[finalI] + "'/>", getImageGetter(t), null);
-//                    editable.append("\u2000");
+//                  editable.append("\u2000");
                     editable.append(cs);
                     i++;
 
@@ -204,21 +204,10 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
 
 
         }
-
-       /* //if (width!=0L) {
-            Paint paint = new Paint();
-            float f = 0L;
-            for (int i = 0; i <editable.length()-1 ; i++) {
-                f=f+  paint.measureText(String.valueOf(editable.charAt(i)));
-                if (f + paint.measureText(String.valueOf(editable.charAt(i))) > 400) {
-                    f = 0L;
-                    editable.insert(i, "\n");
-                }
-            }
-       // }*/
-
-        if (width != 0L) {
-            editable = autoSplit(editable, new Paint(), width);
+        float tvWidth = 2 * 2 * context.getResources().getDisplayMetrics().density;
+        int x = context.getResources().getDisplayMetrics().widthPixels;
+        if (paint != null) {
+            autoSplit(editable, paint, x - tvWidth);
         }
         return editable;
     }
@@ -328,32 +317,22 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
         if (textWidth <= width) {
             return content;
         }
-
         int start = 0, end = 1, i = 0;
         int lines = (int) Math.ceil(textWidth / width); //计算行数
         Editable lineTexts = null;
-
         while (start < length) {
-            if ((end - start) == 10) { //文本宽度超出控件宽度时
-                lineTexts = content.insert(end - 1, " ");
+            if (p.measureText(content, start, end) > width) { //文本宽度超出控件宽度时
+                end = end - 5;
+                lineTexts = content.insert(end, "\n");
                 start = end;
             }
-            /*if(end == length) { //不足一行的文本
-                lineTexts[i] = (String) content.subSequence(start, end);
+            if (end == length) { //不足一行的文本
                 break;
-            }*/
+            }
             end += 1;
         }
         return lineTexts;
     }
 
-  /*  private Editable subEditabloe(Editable content,int start,int end) {
 
-        Editable editable = new Editable.Factory().newEditable("");
-        editable=content.re
-        editable = content.replace(0, start, "");
-
-
-        return content;
-    }*/
 }

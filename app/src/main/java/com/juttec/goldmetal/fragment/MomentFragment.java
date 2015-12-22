@@ -205,6 +205,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
             public void run() {
                 refreshLayout.setRefreshing(true);
                 getInfo(1, MyApplication.DYNAMIC_TYPE_ALL);
+
+
             }
         });//初次进入加载
 
@@ -234,7 +236,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         mHeadPhoto.setOnClickListener(this);
         if (app.isLogin()) {//如果用户已经登陆
             if (!"null".equals(app.getUserInfoBean().getUserPhoto())) {
-               imageLoader.displayImage(app.getImgBaseUrl() + app.getUserInfoBean().getUserPhoto(), mHeadPhoto, options);
+                imageLoader.displayImage(app.getImgBaseUrl() + app.getUserInfoBean().getUserPhoto(), mHeadPhoto, options);
             }
         }
 
@@ -571,9 +573,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
      * @param type 类型 all：所有 attention：关注 personal：个人
      */
     private void getInfo(int page, String type) {
-        LogUtil.d("交易圈 首页  current page:"+page);
+        LogUtil.d("交易圈 首页  current page:" + page);
         RequestParams params = new RequestParams();
-
 
 
         if (app.isLogin()) {
@@ -613,7 +614,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                             i++;//每次加载后页数加一
                         } catch (Exception e) {
                             e.printStackTrace();
-                            LogUtil.e("交易圈异常："+ e.toString());
+                            LogUtil.e("交易圈异常：" + e.toString());
                         }
                         if (adapter == null) {
                             adapter = new MomentRecyclerViewAdapter(entityList, getActivity(), app, MomentFragment.this);
@@ -657,6 +658,19 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     public void onDestroy() {
         super.onDestroy();
         getActivity().unregisterReceiver(myBroadcastReceiver);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (app.getUserInfoBean() != null) {
+            imageLoader.displayImage(app.getImgBaseUrl() + app.getUserInfoBean().getUserPhoto(), mHeadPhoto, options);
+        } else {
+            mHeadPhoto.setImageResource(R.mipmap.content_moment_pho_user);
+        }
+        getInfo(1, MyApplication.DYNAMIC_TYPE_ALL);
+
 
     }
 }

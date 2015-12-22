@@ -57,24 +57,7 @@ public class MACDEntity {
             }
 
             int a = 0;
-            for (Double d : DEAs
-                    ) {
-                LogUtil.e("DEA  " + a + "  " + d);
-                a++;
-            }
-             a = 0;
-            for (Double d : DIFs
-                    ) {
-                LogUtil.e("DIF  " + a + "  " + d);
-                a++;
 
-            }
-             a = 0;
-            for (Double d : MACDs
-                    ) {
-                LogUtil.e("MACD  " + a + "  " + d);
-                a++;
-            }
         }
 
     }
