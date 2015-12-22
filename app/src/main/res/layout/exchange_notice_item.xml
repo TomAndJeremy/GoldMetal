@@ -9,14 +9,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:gravity="center">
         <TextView
             android:text="2015-24-34"
             android:id="@+id/exchange_notice_item_time"
-            android:textSize="17sp"
+            android:textSize="@dimen/normal_size"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="#4D4D4D"/>
 
         <View
             android:layout_marginLeft="7dp"
@@ -31,11 +32,15 @@
         android:layout_width="1dp"
         android:layout_height="match_parent" />
     <TextView
+        android:layout_gravity="center_vertical"
         android:id="@+id/exchange_notice_item_content"
         android:background="@drawable/exchange_notice_textview_bg"
         android:layout_margin="10dp"
         android:padding="5dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="#313131"
+        android:textSize="@dimen/normal_size"
+        />
 
 </LinearLayout>

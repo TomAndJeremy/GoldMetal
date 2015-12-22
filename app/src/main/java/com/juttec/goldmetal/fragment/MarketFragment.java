@@ -466,7 +466,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                     //如果没有登录
                     final MyAlertDialog mdialog = new MyAlertDialog(getActivity());
                     mdialog.builder().setTitle("提示")
-                            .setMsg("您还没有登录，请先登录后再执行操作！")
+                            .setMsg("您还没有登录，请先登录后再进行操作！")
                             .setSingleButton("前去登录", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -475,7 +475,6 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                                     mdialog.dismiss();
                                 }
                             }).show();
-
                 }
 
                 break;

@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
-import com.juttec.goldmetal.customview.CBAlignTextView;
 import com.juttec.goldmetal.customview.listview.LoadMoreListView;
 import com.juttec.goldmetal.customview.listview.LoadingFooter;
+import com.juttec.goldmetal.utils.ImgUtil;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
@@ -119,6 +119,10 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
                     JSONObject object = new JSONObject(responseInfo.result.toString());
                     LogUtil.e(responseInfo.result.toString());
                     int pageNum = Integer.parseInt(object.getString("message1"));
+                    if(pageNum==0){
+                        ToastUtil.showShort(AnnouncementActivity.this,"还没有数据，请再等等");
+                        return;
+                    }
                     if ("1".equals(object.getString("status"))) {
 
                         JSONArray jsonArray = object.getJSONArray("entityList");
@@ -148,8 +152,10 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
 
                         if (pageIndex == pageNum) {
                             listView.setState(LoadingFooter.State.TheEnd);
+                        }else{
+                            ++pageIndex;
                         }
-                        ++pageIndex;
+
                     } else {
                         ToastUtil.showShort(getApplicationContext(), object.getString("promptInfor"));
 
@@ -208,7 +214,7 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
             viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.announcement_title);
             viewHolder.tvTime = (TextView) convertView.findViewById(R.id.announcement_time);
 //                viewHolder.tvContent = (JustifyTextView) convertView.findViewById(R.id.announcement_content);
-            viewHolder.tvContent = (CBAlignTextView) convertView.findViewById(R.id.announcement_content);
+            viewHolder.tvContent = (TextView) convertView.findViewById(R.id.announcement_content);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -216,7 +222,8 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
 
         viewHolder.tvTitle.setText(maps.get(position).get("title"));
         viewHolder.tvTime.setText(maps.get(position).get("time"));
-        viewHolder.tvContent.setText(maps.get(position).get("details").trim());
+        String str = ImgUtil.ToDBC(maps.get(position).get("details").trim());
+        viewHolder.tvContent.setText(str);
 
         return convertView;
 
@@ -226,7 +233,7 @@ public class AnnouncementActivity extends AppCompatActivity implements SwipeRefr
             TextView tvTitle;
             TextView tvTime;
             // JustifyTextView tvContent;
-            CBAlignTextView tvContent;
+            TextView tvContent;
            //TextView tvContent;
         }
     }

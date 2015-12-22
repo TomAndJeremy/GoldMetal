@@ -116,6 +116,10 @@ public class TradeOrgActivity extends AppCompatActivity implements SwipeRefreshL
                     JSONObject object = new JSONObject(responseInfo.result.toString());
 
                     int pageNum = Integer.parseInt(object.getString("message1"));
+                    if(pageNum==0){
+                        ToastUtil.showShort(TradeOrgActivity.this,"还没有数据，请再等等");
+                        return;
+                    }
 
 
                     if ("1".equals(object.getString("status"))) {
@@ -135,6 +139,7 @@ public class TradeOrgActivity extends AppCompatActivity implements SwipeRefreshL
 
                             maps.add(map);
                         }
+
 
                         if (myAdapter == null) {
                             myAdapter = new MyAdapter(maps);

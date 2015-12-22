@@ -99,7 +99,7 @@ public class InvestmentOrgActivity extends AppCompatActivity implements SwipeRef
         listView.setOnLoadNextListener(new LoadMoreListView.OnLoadNextListener() {
             @Override
             public void onLoadNext() {
-
+                LogUtil.e("加载更多pageindex:"+pageIndex);
                 getData(pageIndex);
 
             }
@@ -109,14 +109,14 @@ public class InvestmentOrgActivity extends AppCompatActivity implements SwipeRef
 
     }
 
-    private void getData(int i) {
+    private void getData(final int i) {
 
         RequestParams requestParams = new RequestParams();
         requestParams.addBodyParameter("pageIndex", i + "");
         new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetInvestmentOrgUrl(), requestParams, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-
+                LogUtil.e("pageIndex:"+i+"----"+responseInfo.result.toString());
                 swipeLayout.setRefreshing(false);
 
                 Map<String, String> map;
@@ -124,7 +124,10 @@ public class InvestmentOrgActivity extends AppCompatActivity implements SwipeRef
                     JSONObject object = new JSONObject(responseInfo.result.toString());
 
                     int pageNum = Integer.parseInt(object.getString("message1"));
-
+                    if(pageNum==0){
+                        ToastUtil.showShort(InvestmentOrgActivity.this,"还没有数据，请再等等");
+                        return;
+                    }
 
                     if ("1".equals(object.getString("status"))) {
 
@@ -134,7 +137,7 @@ public class InvestmentOrgActivity extends AppCompatActivity implements SwipeRef
                         if (pageIndex == 1) {
                             maps.clear();
                         }
-                        LogUtil.e(responseInfo.result.toString());
+
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject object1 = jsonArray.getJSONObject(i);
                             map = new HashMap<>();
@@ -144,6 +147,7 @@ public class InvestmentOrgActivity extends AppCompatActivity implements SwipeRef
 
                             maps.add(map);
                         }
+
 
                         if (myAdapter == null) {
                             myAdapter = new MyAdapter(maps);
@@ -155,8 +159,12 @@ public class InvestmentOrgActivity extends AppCompatActivity implements SwipeRef
 
                         if (pageIndex == pageNum) {
                             listView.setState(LoadingFooter.State.TheEnd);
+                        }else{
+                            ++pageIndex;
                         }
-                        ++pageIndex;
+
+
+
                     } else {
                         ToastUtil.showShort(getApplicationContext(), object.getString("promptInfor"));
 
@@ -181,6 +189,7 @@ public class InvestmentOrgActivity extends AppCompatActivity implements SwipeRef
     public void onRefresh() {
         pageIndex = 1;
         listView.setState(LoadingFooter.State.Idle);
+        LogUtil.e("刷新pageindex:"+pageIndex);
         getData(pageIndex);
     }
 

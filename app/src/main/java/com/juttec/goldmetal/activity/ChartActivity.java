@@ -14,7 +14,9 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.customview.HeadLayout;
+import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.fragment.MarketKChartsFragment;
 import com.juttec.goldmetal.fragment.MarketTimesFragment;
 import com.juttec.goldmetal.utils.LogUtil;
@@ -348,10 +350,27 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.btn_free_remind:
                 //免费提醒
-                Intent intent = new Intent(ChartActivity.this, FreeRemindActivity.class);
-                intent.putExtra("symbol", symbol);
-                intent.putExtra("currentValue", tvCurrent.getText()+"");
-                startActivity(intent);
+                //判断是否登录
+                if (((MyApplication)getApplication()).getUserInfoBean()!=null) {
+                    Intent intent = new Intent(ChartActivity.this, FreeRemindActivity.class);
+                    intent.putExtra("symbol", symbol);
+                    intent.putExtra("currentValue", tvCurrent.getText()+"");
+                    startActivity(intent);
+                } else {
+                    //如果没有登录
+                    final MyAlertDialog mdialog = new MyAlertDialog(ChartActivity.this);
+                    mdialog.builder().setTitle("提示")
+                            .setMsg("您还没有登录，请先登录后再进行操作！")
+                            .setSingleButton("前去登录", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(ChartActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    mdialog.dismiss();
+                                }
+                            }).show();
+                }
+
                 break;
         }
 

@@ -37,7 +37,7 @@ import java.util.Map;
 
 /**
  * Created by Jeremy on 2015/10/15.
- * 机构评论界面
+ * 机构评论界面   财经头条界面
  */
 public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     LoadMoreListView listView;
@@ -144,6 +144,10 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
                     JSONObject object = new JSONObject(responseInfo.result.toString());
                     LogUtil.e(responseInfo.result.toString());
                     int pagenum = Integer.parseInt(object.getString("message1"));
+                    if(pagenum==0){
+                        ToastUtil.showShort(ReviewActivity.this,"还没有数据，请再等等");
+                        return;
+                    }
                     if ("1".equals(object.getString("status"))) {
 
                         JSONArray jsonArray = object.getJSONArray("entityList");
@@ -170,8 +174,10 @@ public class ReviewActivity extends AppCompatActivity implements SwipeRefreshLay
 
                         if (pageIndex == pagenum) {
                             listView.setState(LoadingFooter.State.TheEnd);
+                        }else{
+                            ++pageIndex;
                         }
-                        ++pageIndex;
+
                     } else {
                         ToastUtil.showShort(getApplicationContext(), object.getString("promptInfor"));
 

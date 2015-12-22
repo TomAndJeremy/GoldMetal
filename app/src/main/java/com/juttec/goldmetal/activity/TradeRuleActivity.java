@@ -1,9 +1,10 @@
 package com.juttec.goldmetal.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
@@ -23,7 +24,8 @@ import org.json.JSONObject;
 public class TradeRuleActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     MyApplication app;
-    TextView content, tvTitle;
+    TextView  tvTitle;
+    private WebView mWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,8 @@ public class TradeRuleActivity extends AppCompatActivity {
         final String id = intent.getStringExtra("id");
         String tradeOrg = intent.getStringExtra("tradeOrg");
         tvTitle = (TextView) this.findViewById(R.id.trade_rule_title);
-        content = (TextView) this.findViewById(R.id.trade_rule_summary);
+//        content = (TextView) this.findViewById(R.id.trade_rule_summary);
+        mWebView = (WebView) findViewById(R.id.webview);
         tvTitle.setText(tradeOrg);
         swipeRefreshLayout = new SwipeRefreshLayout(this);
         swipeRefreshLayout.post(new Runnable() {
@@ -52,10 +55,12 @@ public class TradeRuleActivity extends AppCompatActivity {
 
                             JSONObject object = new JSONObject(responseInfo.result.toString());
                             if ("1".equals(object.getString("status"))) {
-
-
-                                content.setText(object.getString("message1"));
-
+//                                content.setText(object.getString("message1"));
+                                String str = object.getString("message1").trim();
+                                str = str.replaceAll("\\n","</p><p>");
+                                String ht =  "<html><head></head><body><p>"+str+"</p></body></html>";
+                                LogUtil.d("html:"+ht);
+                                mWebView.loadDataWithBaseURL("", ht, "text/html", "utf-8", "");
                             }
                         } catch (JSONException e) {
 

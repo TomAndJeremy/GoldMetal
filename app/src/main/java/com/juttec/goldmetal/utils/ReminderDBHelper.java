@@ -30,9 +30,9 @@ public class ReminderDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         //创建表，列为id，股票号，基准价，浮动值
-        String sql_float = "create table if not exists " + TABLE_NAME_FLOAT + " (Id integer primary key autoincrement, StockSymbol text, BasePrice double, FloatPrice double)";
+        String sql_float = "create table if not exists " + TABLE_NAME_FLOAT + " (Id integer primary key autoincrement, UserId text, StockSymbol text, BasePrice double, FloatPrice double)";
         //创建表，列为id，股票号，操作符（大于/小于），点位值
-        String sql_point = "create table if not exists " + TABLE_NAME_POINT + " (Id integer primary key autoincrement, StockSymbol text, Operator text,Value double)";
+        String sql_point = "create table if not exists " + TABLE_NAME_POINT + " (Id integer primary key autoincrement, UserId text, StockSymbol text, Operator text,Value double)";
         sqLiteDatabase.execSQL(sql_float);
         sqLiteDatabase.execSQL(sql_point);
     }

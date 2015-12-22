@@ -160,8 +160,10 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
 
                         if (pageIndex == pageNum) {
                             listView.setState(LoadingFooter.State.TheEnd);
+                        }else{
+                            ++pageIndex;
                         }
-                        ++pageIndex;
+
                     } else {
                         ToastUtil.showShort(getApplicationContext(), object.getString("promptInfor"));
 
@@ -229,7 +231,7 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
             }
 
             viewHolder.title.setText(maps.get(position).get("title"));
-            viewHolder.summary.setText(maps.get(position).get("briefDetails"));
+            viewHolder.summary.setText(maps.get(position).get("briefDetails").trim());
             viewHolder.time.setText(maps.get(position).get("time"));
             ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + maps.get(position).get("titlePhoto"), viewHolder.img);
 

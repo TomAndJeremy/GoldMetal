@@ -6,10 +6,10 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="3dp"
         android:id="@+id/news_investment_org_img"
-        android:layout_width="110dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
         android:layout_centerVertical="true"
         android:scaleType="centerCrop"
         android:src="@mipmap/content_news_notice_qingdaoguojin" />
@@ -19,19 +19,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/news_investment_org_img"
         android:singleLine="true"
         android:text="青岛国金贵金属有限公司"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="@dimen/large_size"/>
 
     <TextView
         android:id="@+id/news_exchange_item_infor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-       android:layout_alignBottom="@+id/news_investment_org_img"
+        android:layout_alignBottom="@+id/news_investment_org_img"
         android:layout_marginRight="10dp"
         android:layout_marginTop="6dp"
         android:drawablePadding="5dp"

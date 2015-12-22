@@ -180,7 +180,7 @@ public class NetWorkUtils {
         if (NET_CNNT_BAIDU_OK == getNetState(context)) {
             ToastUtil.showShort(context, "请检查网络是否正常连接");
         } else {
-            ToastUtil.showShort(context, "获取数据出错了，请稍候重试");
+            ToastUtil.showShort(context, "出错了，请稍候重试");
         }
 
     }

@@ -135,7 +135,10 @@ public class  ReminderDao {
     }
 
 
-
+    /**
+     * 根据用户Id查出 此用户Id下所有的浮动提醒数据
+     * @return
+     */
     public List<ReminderFloatBeen> getAllFloatDate() {
         SQLiteDatabase db = null;
         Cursor cursor = null;

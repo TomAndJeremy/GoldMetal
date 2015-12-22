@@ -126,8 +126,11 @@ public class ExchangeInforActivity extends AppCompatActivity implements SwipeRef
 
 
                         if (pageIndex == 1) {
+                            LogUtil.d("清除数据------------");
                             maps.clear();
                         }
+                        LogUtil.d("加载数据------------"+pageIndex+pagenum);
+
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject object1 = jsonArray.getJSONObject(i);
                             map = new HashMap<String, String>();
@@ -150,11 +153,12 @@ public class ExchangeInforActivity extends AppCompatActivity implements SwipeRef
 
                         if (pageIndex == pagenum) {
                             listView.setState(LoadingFooter.State.TheEnd);
+                        }else{
+                            ++pageIndex;
                         }
-                        ++pageIndex;
+
                     } else {
                         ToastUtil.showShort(getApplicationContext(), object.getString("promptInfor"));
-
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

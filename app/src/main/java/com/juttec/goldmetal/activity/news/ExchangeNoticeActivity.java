@@ -156,8 +156,10 @@ public class ExchangeNoticeActivity extends AppCompatActivity implements SwipeRe
 
                         if (pageIndex == pageNum) {
                             listView.setState(LoadingFooter.State.TheEnd);
+                        }else{
+                            ++pageIndex;
                         }
-                        ++pageIndex;
+
                     } else {
                         ToastUtil.showShort(getApplicationContext(), object.getString("promptInfor"));
 

@@ -613,7 +613,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                             i++;//每次加载后页数加一
                         } catch (Exception e) {
                             e.printStackTrace();
-                            LogUtil.e("");
+                            LogUtil.e("交易圈异常："+ e.toString());
                         }
                         if (adapter == null) {
                             adapter = new MomentRecyclerViewAdapter(entityList, getActivity(), app, MomentFragment.this);
@@ -629,10 +629,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                             myBroadcastReceiver.setMyAdapter(myAdapter);
 
                         } else {
-
                             adapter.notifyDataSetChanged();
                             myAdapter.notifyDataSetChanged();
-
                         }
 
                         isLoadingMore = false;

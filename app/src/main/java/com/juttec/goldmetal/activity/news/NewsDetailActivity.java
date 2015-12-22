@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
@@ -29,7 +30,8 @@ import org.json.JSONObject;
 public class NewsDetailActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     MyApplication app;
-    TextView content;
+//    TextView content;
+    WebView mWebView;
     TextView tvTitle, tvTime;
     String url;
 
@@ -69,7 +71,8 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         tvTitle = (TextView) this.findViewById(R.id.new_detail_title);
         tvTime = (TextView) this.findViewById(R.id.new_detail_time);
-        content = (TextView) this.findViewById(R.id.new_detail_content);
+//        content = (TextView) this.findViewById(R.id.new_detail_content);
+        mWebView = (WebView) findViewById(R.id.webview);
 
         tvTime.setText(time);
         tvTitle.setText(title);
@@ -91,20 +94,29 @@ public class NewsDetailActivity extends AppCompatActivity {
                             if ("1".equals(object.getString("status"))) {
 
                                 if (url.equals(app.getGetInvestmentOrgDetailsUrl())) {
-                                    LogUtil.e(object.toString());
+                                    LogUtil.d("投资机构详情"+id);
                                     JSONObject object1 = object.getJSONObject("entityList");
                                     tvTitle.setText(object1.getString("orgName"));
                                     tvTime.setText(object1.getString("addTime"));
-                                    content.setText(object1.getString("details"));
+//                                    content.setText(object1.getString("details"));
+                                    String str = object1.getString("details").trim();
+                                    str = str.replaceAll("\\n","</p><p>");
+                                    String ht =  "<html><head></head><body><p>"+str+"</p></body></html>";
+                                    LogUtil.d("html:"+ht);
+                                    mWebView.loadDataWithBaseURL("", ht, "text/html", "utf-8", "");
+
 
                                 } else {
-                                    content.setText(object.getString("message1"));
+//                                    content.setText(object.getString("message1"));
+                                    String str = object.getString("message1").trim();
+                                    str = str.replaceAll("\\n","</p><p>");
+                                    String ht =  "<html><head></head><body><p>"+str+"</p></body></html>";
+                                    LogUtil.d("html:"+ht);
+                                    mWebView.loadDataWithBaseURL("", ht, "text/html", "utf-8", "");
                                 }
 
                             }
                         } catch (JSONException e) {
-
-
                         }
                     }
 

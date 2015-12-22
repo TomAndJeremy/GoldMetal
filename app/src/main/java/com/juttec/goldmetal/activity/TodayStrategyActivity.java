@@ -123,6 +123,7 @@ public class TodayStrategyActivity extends AppCompatActivity implements SwipeRef
                     int pageNum = Integer.parseInt(object.getString("message1"));
                     if(pageNum==0){
                         ToastUtil.showShort(TodayStrategyActivity.this,"还没有数据，请再等等");
+                        return;
                     }
                     if ("1".equals(object.getString("status"))) {
                         JSONArray jsonArray = object.getJSONArray("entityList");

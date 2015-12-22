@@ -6,12 +6,12 @@
     android:padding="10dp">
 
     <TextView
-
         android:id="@+id/announcement_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:textSize="16sp" />
+        android:textColor="#333"
+        android:textSize="@dimen/large_size"/>
 
     <TextView
         android:id="@+id/announcement_time"
@@ -19,28 +19,25 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@id/announcement_title"
-        android:textColor="@color/secondary_dark"
-        android:textSize="12sp" />
+        android:textColor="@color/secondary_text"
+        android:layout_marginTop="3dp"
+        android:textSize="12sp"/>
 
-   <!-- <TextView
-        android:id="@+id/announcement_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/announcement_time"
-        android:textSize="15sp" />
--->
-    <com.juttec.goldmetal.customview.CBAlignTextView
+
+   <!-- <com.juttec.goldmetal.customview.CBAlignTextView
         android:id="@+id/announcement_content"
         android:layout_width="match_parent"
         android:textIsSelectable="false"
+        android:layout_marginTop="8dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/announcement_time"
-        android:textSize="15sp" />
-    <!--  <me.biubiubiu.justifytext.library.JustifyTextView
-          android:id="@+id/announcement_content"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_below="@id/announcement_time"
-          android:textSize="15sp"
-          />-->
+        android:textSize="16sp" />-->
+    <TextView
+        android:id="@+id/announcement_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/announcement_time"
+        android:textSize="16sp" />
+
 </RelativeLayout>

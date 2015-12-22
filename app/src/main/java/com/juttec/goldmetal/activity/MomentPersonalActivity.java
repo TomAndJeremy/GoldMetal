@@ -294,7 +294,7 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
      * 调接口 设置关注与取消关注
      */
     private void setFocusOr(){
-        dialog.builder().show();
+        dialog.builder().setMessage("请稍等~").show();
         RequestParams params = new RequestParams();
         params.addBodyParameter("userId", app.getUserInfoBean().getUserId());//关注人编号ID
         params.addBodyParameter("userName", app.getUserInfoBean().getUserNickName());//关注人昵称
