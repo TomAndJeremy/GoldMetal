@@ -71,6 +71,12 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
     protected void onDestroy() {
         releaseWakeLock();
         unregisterReceiver(myReceiver);
+
+         //停止个推服务
+//        PushManager.getInstance().stopService(getApplicationContext());
+//        LogUtil.d("MainActivity 个推服务停止---------------");
+
+        System.exit(0);
         super.onDestroy();
     }
 
@@ -109,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
             TabLayout.Tab tab = tabLayout.getTabAt(i);
             if (tab != null) {
                 tab.setCustomView(myFragmentPagerAdapter.getTabView(i));
-
             }
         }
 
@@ -125,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
 
             @Override
             public void onPageSelected(int position) {
-
                 if (position == 0) {
                     MyApplication.canCycle = true;
                 } else {
@@ -184,7 +188,8 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
                     firstTime = secondTime;//更新firstTime
                     return true;
                 } else {   //两次按键小于2秒时，退出应用
-                    System.exit(0);
+                    MainActivity.this.finish();
+//
                 }
                 break;
         }

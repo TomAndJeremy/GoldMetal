@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.igexin.sdk.PushManager;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.UserInfoBean;
@@ -38,6 +39,10 @@ public class SplashActivity extends AppCompatActivity {
 
         app = (MyApplication) getApplication();
 
+        float width = getResources().getDisplayMetrics().widthPixels;
+        float height = getResources().getDisplayMetrics().heightPixels;
+        LogUtil.d(width+"--------------"+height);
+
 
         mUserName = (String) SharedPreferencesUtil.getParam(this, "username", "");
         mPwd = (String) SharedPreferencesUtil.getParam(this, "pwd", "");
@@ -56,7 +61,6 @@ public class SplashActivity extends AppCompatActivity {
                     enterMain();
                 }
             }, 2000);
-
         } else {
             //执行登录
             login();
@@ -72,6 +76,7 @@ public class SplashActivity extends AppCompatActivity {
         params.addBodyParameter("userMobile", mUserName);
         params.addBodyParameter("password", mPwd);
         params.addBodyParameter("cId", mCID);
+        params.addBodyParameter("systemMark", "Android");//系统标识
 
         HttpUtils httpUtils = new HttpUtils(2000);//设置 2秒超时
         httpUtils.send(HttpRequest.HttpMethod.POST, app.getUserLoginUrl(), params, new RequestCallBack<String>() {
@@ -97,6 +102,16 @@ public class SplashActivity extends AppCompatActivity {
                         userInfoBean.setUserPhoto(userObject.getString("userPhoto"));
                         app.setUserInfoBean(userInfoBean);
 
+                        //初始化个推SDK
+                        PushManager.getInstance().initialize(SplashActivity.this.getApplicationContext());
+                        PushManager.getInstance().turnOnPush(SplashActivity.this);
+                        LogUtil.d("SplashActivity 个推服务开启---------------");
+
+                        //个推 绑定用户别名
+                        boolean isSuccdess = PushManager.getInstance().bindAlias(SplashActivity.this,mUserName);
+                        if(isSuccdess){
+                            LogUtil.d("SplashActivity 个推别名绑定成功---------------");
+                        }
                     } else {
                     }
 
@@ -113,8 +128,6 @@ public class SplashActivity extends AppCompatActivity {
                     }else{
                         enterMain();
                     }
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

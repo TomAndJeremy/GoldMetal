@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.igexin.sdk.PushManager;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.UserInfoBean;
@@ -258,11 +259,20 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 SharedPreferencesUtil.clearParam(AccountActivity.this, "pwd");
                 //将个人信息实体类置空
                 app.setUserInfoBean(null);
+
+                //停止个推服务
+                PushManager.getInstance().turnOffPush(getApplicationContext());
+                LogUtil.d("AccountActivity 个推服务停止---------------");
+                //个推解绑用户别名
+                PushManager.getInstance().unBindAlias(AccountActivity.this,app.getUserInfoBean().getMobile(),true);
+
                 //跳转到LoginActivity
                 Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
                 startActivity(intent);
                 //将自己finish()掉
                 finish();
+
+
                 break;
         }
     }

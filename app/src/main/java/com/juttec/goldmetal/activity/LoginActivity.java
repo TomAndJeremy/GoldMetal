@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.igexin.sdk.PushManager;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.UserInfoBean;
@@ -64,6 +65,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //初始化个推SDK
+        PushManager.getInstance().initialize(this.getApplicationContext());
+        LogUtil.d("LoginActivity 个推服务开启---------------");
+        //关闭推送
+        PushManager.getInstance().turnOffPush(getApplicationContext());
 
         app = (MyApplication) getApplication();
         dialog = new MyProgressDialog(this);
@@ -208,8 +215,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
 
-
-
             case R.id.login_tv_fergotpwd:
                 Intent intent_forget = new Intent(LoginActivity.this, RegisterActivity.class);
                 intent_forget.putExtra("ToActivity","ForgetPwdActivity");
@@ -260,6 +265,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         params.addBodyParameter("userMobile", mUserName.getText().toString());
         params.addBodyParameter("password",mPwd.getText().toString());
         params.addBodyParameter("cId", (String)SharedPreferencesUtil.getParam(LoginActivity.this, "CID", ""));
+        params.addBodyParameter("systemMark", "Android");//系统标识
 
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.send(HttpRequest.HttpMethod.POST, app.getUserLoginUrl(), params, new RequestCallBack<String>() {
@@ -288,6 +294,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                       /*  Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);*/
+
+                        //开启推送
+                        PushManager.getInstance().turnOnPush(LoginActivity.this);
+                        //个推 绑定用户别名
+                        boolean isSuccdess = PushManager.getInstance().bindAlias(LoginActivity.this,mUserName.getText().toString().trim());
+                        if(isSuccdess){
+                            LogUtil.d("LoginActivity 个推别名绑定成功---------------");
+                        }
 
                         ToastUtil.showShort(LoginActivity.this, "登录成功");
                         finish();

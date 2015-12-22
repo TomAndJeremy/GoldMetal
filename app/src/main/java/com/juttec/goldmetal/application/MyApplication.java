@@ -5,7 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Paint;
 
-import com.igexin.sdk.PushManager;
 import com.juttec.goldmetal.bean.UserInfoBean;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -30,14 +29,14 @@ public class MyApplication extends Application {
     // 图片缓存目录
     public File cacheDir;
 
-    public static final String BASEURL = "http://117.132.8.93:9988/App_Areas/";
+//    public static final String BASEURL = "http://117.132.8.93:9988/App_Areas/";
     public static final String ImgBASEURL = "http://117.132.8.93:9988";
 
     public static final int ENUM=60;//表情图片的数目
 
 
 //    http://192.168.1.64:8155/
-//    public static final String BASEURL = "http://192.168.1.64:8155/App_Areas/";
+    public static final String BASEURL = "http://192.168.1.64:8155/App_Areas/";
 //    public static final String ImgBASEURL = "http://192.168.1.5:8899";
 
 
@@ -73,11 +72,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        //初始化个推服务
-        PushManager.getInstance().initialize(getApplicationContext());
-
         cacheDir = StorageUtils.getOwnCacheDirectory(getApplicationContext(), "imageloader/Cache");
-
         initImageLoader(getApplicationContext());
     }
 
