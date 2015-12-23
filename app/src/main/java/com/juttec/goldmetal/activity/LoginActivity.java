@@ -66,11 +66,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //初始化个推SDK
-        PushManager.getInstance().initialize(this.getApplicationContext());
-        LogUtil.d("LoginActivity 个推服务开启---------------");
-        //关闭推送
-        PushManager.getInstance().turnOffPush(getApplicationContext());
 
         app = (MyApplication) getApplication();
         dialog = new MyProgressDialog(this);
@@ -295,12 +290,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                       /*  Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);*/
 
-                        //开启推送
-                        PushManager.getInstance().turnOnPush(LoginActivity.this);
                         //个推 绑定用户别名
                         boolean isSuccdess = PushManager.getInstance().bindAlias(LoginActivity.this,mUserName.getText().toString().trim());
                         if(isSuccdess){
+                            //开启推送
+                            PushManager.getInstance().turnOnPush(LoginActivity.this);
                             LogUtil.d("LoginActivity 个推别名绑定成功---------------");
+                        }else{
+                            LogUtil.d("LoginActivity 个推别名绑定失败---------------");
                         }
 
                         ToastUtil.showShort(LoginActivity.this, "登录成功");

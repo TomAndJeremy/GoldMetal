@@ -255,16 +255,21 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.btn_exit:
+                //个推解绑用户别名
+                boolean isSuccess = PushManager.getInstance().unBindAlias(AccountActivity.this,app.getUserInfoBean().getMobile(),false);
+                if(isSuccess){
+                    LogUtil.d("AccountActivity 个推解绑成功---------------");
+                }else{
+                    LogUtil.d("AccountActivity 个推解绑失败---------------");
+                }
                 //退出当前账号    将当前账号的密码清除
                 SharedPreferencesUtil.clearParam(AccountActivity.this, "pwd");
                 //将个人信息实体类置空
                 app.setUserInfoBean(null);
 
-                //停止个推服务
-                PushManager.getInstance().turnOffPush(getApplicationContext());
-                LogUtil.d("AccountActivity 个推服务停止---------------");
-                //个推解绑用户别名
-                PushManager.getInstance().unBindAlias(AccountActivity.this,app.getUserInfoBean().getMobile(),true);
+                //关闭推送
+                PushManager.getInstance().turnOffPush(AccountActivity.this);
+                LogUtil.d("AccountActivity 关闭推送---------------");
 
                 //跳转到LoginActivity
                 Intent intent = new Intent(AccountActivity.this, LoginActivity.class);

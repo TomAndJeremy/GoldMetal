@@ -39,6 +39,9 @@ public class SplashActivity extends AppCompatActivity {
 
         app = (MyApplication) getApplication();
 
+        //初始化个推SDK
+        PushManager.getInstance().initialize(SplashActivity.this.getApplicationContext());
+
         float width = getResources().getDisplayMetrics().widthPixels;
         float height = getResources().getDisplayMetrics().heightPixels;
         LogUtil.d(width+"--------------"+height);
@@ -102,14 +105,11 @@ public class SplashActivity extends AppCompatActivity {
                         userInfoBean.setUserPhoto(userObject.getString("userPhoto"));
                         app.setUserInfoBean(userInfoBean);
 
-                        //初始化个推SDK
-                        PushManager.getInstance().initialize(SplashActivity.this.getApplicationContext());
-                        PushManager.getInstance().turnOnPush(SplashActivity.this);
-                        LogUtil.d("SplashActivity 个推服务开启---------------");
-
                         //个推 绑定用户别名
                         boolean isSuccdess = PushManager.getInstance().bindAlias(SplashActivity.this,mUserName);
                         if(isSuccdess){
+                            //开启推送
+                            PushManager.getInstance().turnOnPush(SplashActivity.this);
                             LogUtil.d("SplashActivity 个推别名绑定成功---------------");
                         }
                     } else {
