@@ -18,8 +18,8 @@ import java.util.List;
 public class  ReminderDao {
     Context context;
     // 列定义
-    private final String[] ORDER_COLUMNS_FLOATE = new String[]{"Id", "StockSymbol", "BasePrice", "FloatPrice"};
-    private final String[] ORDER_COLUMNS_POINT = new String[]{"Id", "StockSymbol", "Operator", "Value"};
+    private final String[] ORDER_COLUMNS_FLOATE = new String[]{"Id", "UserId","StockSymbol", "BasePrice", "FloatPrice"};
+    private final String[] ORDER_COLUMNS_POINT = new String[]{"Id","UserId", "StockSymbol", "Operator", "Value"};
 
     ReminderDBHelper reminderDBHelper;
 
@@ -44,7 +44,7 @@ public class  ReminderDao {
         }
 
         //如果该浮动提醒的股票号已经存在则更新
-        if (flag == 1 && isExist(db, contentValues.get("StockSymbol").toString())) {
+        if (flag == 1 && isExist(db, contentValues.get("UserId").toString(),contentValues.get("StockSymbol").toString())) {
             updata(contentValues);
             return;
         }
@@ -66,12 +66,12 @@ public class  ReminderDao {
     }
 
     //删除点位提醒
-    public boolean deletePoint(String symblo,String operator,String value) {
+    public boolean deletePoint(String userId,String symblo,String operator,String value) {
         SQLiteDatabase db = null;
         try {
             db = reminderDBHelper.getWritableDatabase();
             db.beginTransaction();
-            db.delete(reminderDBHelper.TABLE_NAME_POINT, "StockSymbol = ? AND  Operator=? AND Value=?", new String[]{symblo, operator, value});
+            db.delete(reminderDBHelper.TABLE_NAME_POINT, "UserId = ? AND StockSymbol = ? AND  Operator=? AND Value=?", new String[]{userId,symblo, operator, value});
             db.setTransactionSuccessful();
             return true;
         } catch (Exception e) {
@@ -87,19 +87,18 @@ public class  ReminderDao {
         }
     }
 
-    //跟新浮动提醒的数据
+    //更新浮动提醒的数据
     public void updata(ContentValues contentValues) {
         SQLiteDatabase db = null;
         String name = contentValues.get("StockSymbol").toString();
+        String userId = contentValues.get("UserId").toString();
         try {
             db = reminderDBHelper.getWritableDatabase();
             db.beginTransaction();
-
-
             db.update(reminderDBHelper.TABLE_NAME_FLOAT,
                     contentValues,
-                    "StockSymbol = ?",
-                    new String[]{name});
+                    "UserId = ? AND StockSymbol = ?",
+                    new String[]{userId , name});
             db.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,16 +111,14 @@ public class  ReminderDao {
         }
     }
 
- //删除浮动提醒提醒
-    public void deleteFloat(String stocksymbol) {
+ //删除浮动提醒
+    public void deleteFloat(String userId , String stocksymbol) {
         SQLiteDatabase db = null;
-
-
         try {
             db = reminderDBHelper.getWritableDatabase();
             db.beginTransaction();
 
-            db.delete(reminderDBHelper.TABLE_NAME_FLOAT, "StockSymbol = ?  ", new String[]{stocksymbol});
+            db.delete(reminderDBHelper.TABLE_NAME_FLOAT, "UserId = ? AND StockSymbol = ?  ", new String[]{userId,stocksymbol});
             db.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,14 +136,14 @@ public class  ReminderDao {
      * 根据用户Id查出 此用户Id下所有的浮动提醒数据
      * @return
      */
-    public List<ReminderFloatBeen> getAllFloatDate() {
+    public List<ReminderFloatBeen> getAllFloatDate(String userId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
         List<ReminderFloatBeen> reminderList = null;
         try {
             db = reminderDBHelper.getReadableDatabase();
             // select * from Orders
-            cursor = db.query(reminderDBHelper.TABLE_NAME_FLOAT, ORDER_COLUMNS_FLOATE, null, null, null, null, null);
+            cursor = db.query(reminderDBHelper.TABLE_NAME_FLOAT, ORDER_COLUMNS_FLOATE, "UserID = ? ", new String[]{userId}, null, null, null);
 
             if (cursor.getCount() > 0) {
                 reminderList = new ArrayList<ReminderFloatBeen>();
@@ -168,13 +165,14 @@ public class  ReminderDao {
         }
     }
 
-    public List<ReminderPointBeen> getAllPointDate() {
+
+    public List<ReminderPointBeen> getAllPointDate(String userId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
         try {
             db = reminderDBHelper.getReadableDatabase();
             // select * from Orders
-            cursor = db.query(reminderDBHelper.TABLE_NAME_POINT, ORDER_COLUMNS_POINT, null, null, null, null, null);
+            cursor = db.query(reminderDBHelper.TABLE_NAME_POINT, ORDER_COLUMNS_POINT,"UserID = ? ", new String[]{userId}, null, null, null);
 
             if (cursor.getCount() > 0) {
                 List<ReminderPointBeen> reminderList = new ArrayList<>(cursor.getCount());
@@ -193,20 +191,19 @@ public class  ReminderDao {
                 db.close();
             }
         }
-
         return null;
     }
 
 
     //判断浮动提醒股票是否已存在
-    private boolean isExist(SQLiteDatabase db, String name) {
+    private boolean isExist(SQLiteDatabase db, String userId ,String stockSymbol) {
         Cursor cursor = null;
         db = reminderDBHelper.getReadableDatabase();
         // select * from Orders where CustomName = 'Bor'
         cursor = db.query(reminderDBHelper.TABLE_NAME_FLOAT,
                 ORDER_COLUMNS_FLOATE,
-                "StockSymbol = ?",
-                new String[]{name},
+                "UserId = ? AND StockSymbol = ?",
+                new String[]{userId,stockSymbol},
                 null, null, null);
         if (cursor.getCount() > 0) {
             cursor.close();

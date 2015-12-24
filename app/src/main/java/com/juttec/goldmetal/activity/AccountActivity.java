@@ -413,7 +413,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 .setSingleButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        result = dialog.getResult();
+                        result = dialog.getResult().trim();
                         if (result == null || TextUtils.isEmpty(result)) {
                             ToastUtil.showShort(AccountActivity.this, "修改的内容不能为空");
                         } else {

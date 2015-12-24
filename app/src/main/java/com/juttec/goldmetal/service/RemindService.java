@@ -13,6 +13,7 @@ import android.support.v7.app.NotificationCompat;
 
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.activity.MainActivity;
+import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.ReminderFloatBeen;
 import com.juttec.goldmetal.bean.ReminderPointBeen;
 import com.juttec.goldmetal.utils.LogUtil;
@@ -40,6 +41,8 @@ public class RemindService extends Service {
     List<ReminderFloatBeen> floatBeens;
     List<ReminderPointBeen> pointBeens;
 
+    private MyApplication app;
+
     //初始化
     public RemindService() {
         reminderDao = new ReminderDao(this);
@@ -49,26 +52,25 @@ public class RemindService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        app = (MyApplication) getApplication();
         LogUtil.e("RemindService  onCreate");
         new Thread(new Runnable() {
             @Override
             public void run() {
+                while (true){
+                    if(app.getUserInfoBean()!=null){
+//                        LogUtil.d("提醒服务在运行----------------");
+                        floatReminder();//循环检测浮动提醒的值
+                        pointReminder();//循环检测点位提醒的值
 
-                do {
-                    floatReminder();//循环检测浮动提醒的值
-                    pointReminder();//循环检测点位提醒的值
-
-                    try {
-                        Thread.sleep(20000);//每20秒检测一次
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        try {
+                            Thread.sleep(20000);//每20秒检测一次
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                } while (true);
-
-
+                }
             }
-
 
         }).start();
 
@@ -86,7 +88,7 @@ public class RemindService extends Service {
      * 浮动提醒
      */
     private void floatReminder() {
-        floatBeens = reminderDao.getAllFloatDate();
+        floatBeens = reminderDao.getAllFloatDate(app.getUserInfoBean().getUserId());
 
         if (floatBeens == null) {
             return;
@@ -132,6 +134,7 @@ public class RemindService extends Service {
                                     ContentValues contentValues = new ContentValues();
                                     contentValues.put("StockSymbol", stockSymbol);
                                     contentValues.put("BasePrice", newPrice);
+                                    contentValues.put("UserId", app.getUserInfoBean().getUserId());
                                     reminderDao.updata(contentValues);
 
                                     showNotigication(1, object.getString("Name"), stockSymbol, "最新价" + newPrice + "<" + (basePrice - floatPrice));
@@ -141,6 +144,7 @@ public class RemindService extends Service {
                                     ContentValues contentValues = new ContentValues();
                                     contentValues.put("StockSymbol", stockSymbol);
                                     contentValues.put("BasePrice", newPrice);
+                                    contentValues.put("UserId", app.getUserInfoBean().getUserId());
                                     reminderDao.updata(contentValues);
 
 
@@ -168,7 +172,7 @@ public class RemindService extends Service {
 
 
     private void pointReminder() {
-        pointBeens = reminderDao.getAllPointDate();
+        pointBeens = reminderDao.getAllPointDate(app.getUserInfoBean().getUserId());
         if (pointBeens == null) {
             return;
         }
@@ -213,12 +217,12 @@ public class RemindService extends Service {
                                         if (been.getOperator().equals(">")) {
                                             if (newPrice > Double.parseDouble(been.getValue())) {
 
-                                                reminderDao.deletePoint(stockSymbol, ">", been.getValue());//触发提醒后删除
+                                                reminderDao.deletePoint(app.getUserInfoBean().getUserId(),stockSymbol, ">", been.getValue());//触发提醒后删除
                                                 showNotigication(-1, stockName, stockSymbol, "最新价" + newPrice + ">" + been.getValue());
                                             }
                                         } else if ((been.getOperator().equals("<"))) {
                                             if (newPrice < Double.parseDouble(been.getValue())) {
-                                                reminderDao.deletePoint(stockSymbol, "<", been.getValue());//触发提醒后删除
+                                                reminderDao.deletePoint(app.getUserInfoBean().getUserId(),stockSymbol, "<", been.getValue());//触发提醒后删除
                                                 showNotigication(-1, stockName, stockSymbol, "最新价" + newPrice + "<" + been.getValue());
                                             }
                                         }
