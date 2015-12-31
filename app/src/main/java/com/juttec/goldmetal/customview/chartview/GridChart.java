@@ -125,7 +125,7 @@ public class GridChart extends View {
 
 
 	private void init(Context context) {
-		DEFAULT_AXIS_TITLE_SIZE = ImgUtil.dip2px(context,10);
+		DEFAULT_AXIS_TITLE_SIZE = ImgUtil.dip2px(context,8);
 		LogUtil.d("DEFAULT_AXIS_TITLE_SIZE:"+DEFAULT_AXIS_TITLE_SIZE);
 
 		mBackGround = DEFAULT_BACKGROUD;

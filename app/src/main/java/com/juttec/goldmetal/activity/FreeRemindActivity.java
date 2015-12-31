@@ -19,12 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
+import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.ReminderFloatBeen;
 import com.juttec.goldmetal.bean.ReminderPointBeen;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.ReminderDao;
-import com.juttec.goldmetal.utils.SharedPreferencesUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 
 import java.text.DecimalFormat;
@@ -64,10 +64,14 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
 
     private ReminderDao reminderDao;
 
+    private MyApplication app;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_free_remind);
+        app = (MyApplication) getApplication();
+
         myAlertDialog = new MyAlertDialog(this);
         dialog = new MyAlertDialog(this);
         reminderDao = new ReminderDao(this);
@@ -102,11 +106,10 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
 
         switchCompat = (SwitchCompat) this.findViewById(R.id.switch_remind);
         //浮动提醒开关 默认为false
-        switchCompat.setChecked((Boolean) SharedPreferencesUtil.getParam(this, symbol, false));//当前的股票代码为key值
+        switchCompat.setChecked(isSetedFloat(reminderDao.getAllFloatDate(app.getUserInfoBean().getUserId())));
         if (switchCompat.isChecked()) {
             //此股票设置了浮动提醒
             //从数据库中取出 此股票的基准价和浮动值
-            isSetedFloat(reminderDao.getAllFloatDate());
             //提醒值显示
             valueRemind.setVisibility(View.VISIBLE);
             valueRemind.setText(getTextValue(etBase.getText().toString(), etFloat.getText().toString()));
@@ -120,11 +123,10 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
             save.setClickable(false);
             //设置基准价(股票的当前价)和 浮动值 （默认的值）
             etBase.setText("" + currentValueBase);
-            etFloat.setText("" +1.0);
-
+            etFloat.setText("" +(Float.parseFloat(currentValueBase)-1>0?Float.parseFloat(currentValueBase)-1:Float.parseFloat(currentValueBase)));
         }
 
-        showPointReminder(reminderDao.getAllPointDate());
+        showPointReminder(reminderDao.getAllPointDate(app.getUserInfoBean().getUserId()));
     }
 
 
@@ -195,8 +197,6 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 LogUtil.d("switchCompat.setOnCheckedChange:" + isChecked);
-                //将浮动开关的状态保存  key为此股票代码
-                SharedPreferencesUtil.setParam(FreeRemindActivity.this,symbol,isChecked);
                 if (isChecked) {
                     //打开浮动开关
                     valueRemind.setVisibility(View.VISIBLE);
@@ -212,7 +212,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                     valueRemind.setVisibility(View.GONE);
 
                     //如果关闭，则删除数据库中的该条数据
-                    reminderDao.deleteFloat(symbol);
+                    reminderDao.deleteFloat(app.getUserInfoBean().getUserId(),symbol);
 
                 }
             }
@@ -272,6 +272,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                         contentValues.put("StockSymbol", symbol);
                         contentValues.put("Operator", dialog.s);
                         contentValues.put("Value", Double.parseDouble(value));
+                        contentValues.put("UserId", app.getUserInfoBean().getUserId());
 
                         reminderDao.insert(contentValues, 2);
 
@@ -312,6 +313,8 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
         String floatvalue = etFloat.getText().toString().trim();
         contentValues.put("BasePrice", Float.parseFloat(mDecimalFormat.format(Float.parseFloat(base))));
         contentValues.put("FloatPrice", Float.parseFloat(mDecimalFormat.format(Float.parseFloat(floatvalue))));
+        contentValues.put("UserId", app.getUserInfoBean().getUserId());
+
         reminderDao.insert(contentValues, 1);
         ToastUtil.showShort(FreeRemindActivity.this,"浮动提醒值设置成功");
     }
@@ -339,7 +342,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                                 String operator = s.substring(3, 4);
                                 String value = s.substring(4);
 
-                                if (reminderDao.deletePoint(symbol, operator, value)) {
+                                if (reminderDao.deletePoint(app.getUserInfoBean().getUserId(),symbol, operator, value)) {
                                     remindContent.removeView(addview);
                                     ToastUtil.showShort(FreeRemindActivity.this, "删除成功");
                                 }
@@ -403,22 +406,19 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
      * 是否设置了浮动提醒
      * @param floatBeens
      */
-    private void isSetedFloat(List<ReminderFloatBeen> floatBeens) {
+    private boolean isSetedFloat(List<ReminderFloatBeen> floatBeens) {
         if (floatBeens == null) {
-            return;
-        }
-        for (ReminderFloatBeen been :
-                floatBeens) {
-            if (symbol.equals(been.getStock())) {
-//                switchCompat.setChecked(true);
-//                save.setSelected(true);
-//                save.setClickable(true);
-
-                etBase.setText(been.getBasePrice());
-                etFloat.setText(been.getFloatPrice());
-
+            return false;
+        }else{
+            for (ReminderFloatBeen been :floatBeens) {
+                if (symbol.equals(been.getStock())) {
+                    etBase.setText(been.getBasePrice());
+                    etFloat.setText(been.getFloatPrice());
+                }
             }
+            return true;
         }
+
     }
 
 

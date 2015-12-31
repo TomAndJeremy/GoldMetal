@@ -615,7 +615,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                             return ;
                         }
 
-                        ToastUtil.showShort(getActivity(), "加载更多数据...");
+//                        ToastUtil.showShort(getActivity(), "加载更多数据...");
                         if (page % 2 == 0) {
                             recyclerView.setBackgroundColor(Color.rgb(34, 34, 34));
                         } else {
