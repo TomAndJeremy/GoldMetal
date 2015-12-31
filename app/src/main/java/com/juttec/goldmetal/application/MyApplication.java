@@ -18,7 +18,6 @@ import java.io.File;
 public class MyApplication extends Application {
 
 
-
     public boolean isLogin() {
         if (this.userInfoBean != null) {
             return true;
@@ -29,17 +28,13 @@ public class MyApplication extends Application {
     // 图片缓存目录
     public File cacheDir;
 
-//    public static final String BASEURL = "http://117.132.8.93:9988/App_Areas/";
+    public static final String BASEURL = "http://117.132.8.93:9988/App_Areas/";
     public static final String ImgBASEURL = "http://117.132.8.93:9988";
 
-    public static final int ENUM=60;//表情图片的数目
+    public static final int ENUM = 60;//表情图片的数目
 
-
-//    http://192.168.1.64:8155/
-    public static final String BASEURL = "http://192.168.1.64:8155/App_Areas/";
-//    public static final String ImgBASEURL = "http://192.168.1.5:8899";
-
-
+    //  public static final String BASEURL = "http://192.168.1.64:8155/App_Areas/";
+    //  public static final String ImgBASEURL = "http://192.168.1.5:8899";
 
 
     public static final String DYNAMIC_TYPE_ALL = "all";
@@ -88,7 +83,7 @@ public class MyApplication extends Application {
         config.tasksProcessingOrder(QueueProcessingType.LIFO);
         config.writeDebugLogs(); // Remove for release app
         config.diskCache(new UnlimitedDiskCache(cacheDir));//自定义缓存路径
-        config.memoryCacheExtraOptions(480,800);
+        config.memoryCacheExtraOptions(480, 800);
 
         // Initialize ImageLoader with configuration.
         ImageLoader.getInstance().init(config.build());
@@ -272,7 +267,7 @@ public class MyApplication extends Application {
         return BASEURL + "App_Consulting/GetTradeRule";
     }
 
-   //获取今日策略
+    //获取今日策略
     public String getGetTodayStrategyUrl() {
 
         return BASEURL + "App_Consulting/GetTodayStrategy";
@@ -290,11 +285,11 @@ public class MyApplication extends Application {
 
         return BASEURL + "App_User/SubmitAdvice";
     }
-//提交反馈信息
+
+    //提交反馈信息
     public String getGetExchangeRateUrl() {
         return BASEURL + "App_Consulting/GetExchangeRate";
     }
-
 
 
     // 股票数据刷新：判断是否循环 获取股票数据
@@ -322,15 +317,15 @@ public class MyApplication extends Application {
 
 
     //将字符串替换成相等长度的空格
-    public static String  getBlank(String s,float textSize){
+    public static String getBlank(String s, float textSize) {
 
         Paint paint = new Paint();
         paint.setTextSize(textSize);
         float sLength = paint.measureText(s);
         float blankLengtn = paint.measureText(" ");
 
-        float ff = (float) (sLength / blankLengtn+0.5);
-        int num = (int)ff;
+        float ff = (float) (sLength / blankLengtn + 0.5);
+        int num = (int) ff;
         String rs = "";
         for (int i = 0; i < num; i++) {
             rs += " ";
@@ -338,5 +333,45 @@ public class MyApplication extends Application {
 
         return rs;
     }
+
+    /**
+     * unicode 转字符串
+     */
+    public static String unicode2String(String unicode) {
+
+        StringBuffer string = new StringBuffer();
+
+        String[] hex = unicode.split("\\\\u");
+
+        for (int i = 1; i < hex.length; i++) {
+
+            // 转换出每一个代码点
+            int data = Integer.parseInt(hex[i], 16);
+
+            // 追加成string
+            string.append((char) data);
+        }
+
+        return string.toString();
+    }
+
+
+    //字符串转unicode
+    public static String string2Unicode(String string) {
+
+        StringBuffer unicode = new StringBuffer();
+
+        for (int i = 0; i < string.length(); i++) {
+
+            // 取出每一个字符
+            char c = string.charAt(i);
+
+            // 转换为unicode
+            unicode.append("\\u" + Integer.toHexString(c));
+        }
+
+        return unicode.toString();
+    }
+
 
 }
