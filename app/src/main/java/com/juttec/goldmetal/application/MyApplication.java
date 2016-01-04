@@ -290,10 +290,41 @@ public class MyApplication extends Application {
 
         return BASEURL + "App_User/SubmitAdvice";
     }
-//提交反馈信息
+    //提交反馈信息
     public String getGetExchangeRateUrl() {
         return BASEURL + "App_Consulting/GetExchangeRate";
     }
+
+    //添加点位提醒
+    public String addPtWarn() {
+        return BASEURL + "App_Consulting/PtWarn";
+    }
+
+    //添加浮动提醒
+    public String addFloatWarn() {
+        return BASEURL + "App_Consulting/FloatWarn";
+    }
+
+    //删除点位提醒
+    public String delPtWarn() {
+        return BASEURL + "App_Consulting/DelPtWarn";
+    }
+
+    //删除浮动提醒
+    public String delFloatWarn() {
+        return BASEURL + "App_Consulting/DelFloatWarn";
+    }
+
+    //获取提醒数据
+    public String getWarnData() {
+        return BASEURL + "App_Consulting/LoadWarn";
+    }
+
+
+
+
+
+
 
 
 

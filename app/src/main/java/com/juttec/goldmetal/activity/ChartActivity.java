@@ -357,6 +357,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                 if (((MyApplication)getApplication()).getUserInfoBean()!=null) {
                     Intent intent = new Intent(ChartActivity.this, FreeRemindActivity.class);
                     intent.putExtra("symbol", symbol);
+                    intent.putExtra("stockName",name);
                     intent.putExtra("currentValue", tvCurrent.getText()+"");
                     startActivity(intent);
                 } else {

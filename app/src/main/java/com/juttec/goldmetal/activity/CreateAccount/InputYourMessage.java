@@ -117,7 +117,7 @@ public class InputYourMessage extends AppCompatActivity {
     //检查手机号 是否正确
     private boolean checkMobile(String phoneNum){
         if(!TextUtils.isEmpty(phoneNum)){
-            Pattern pattern = Pattern.compile("^[0-9]{11}$");
+            Pattern pattern = Pattern.compile("^(1)\\d{10}$");
             Matcher matcher = pattern.matcher(phoneNum);
             boolean isMatcher = matcher.find();
             if (!isMatcher) {

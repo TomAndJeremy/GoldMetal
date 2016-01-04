@@ -105,11 +105,11 @@ public class SplashActivity extends AppCompatActivity {
                         userInfoBean.setUserPhoto(userObject.getString("userPhoto"));
                         app.setUserInfoBean(userInfoBean);
 
+                        //开启推送
+                        PushManager.getInstance().turnOnPush(SplashActivity.this);
                         //个推 绑定用户别名
                         boolean isSuccdess = PushManager.getInstance().bindAlias(SplashActivity.this,mUserName);
                         if(isSuccdess){
-                            //开启推送
-                            PushManager.getInstance().turnOnPush(SplashActivity.this);
                             LogUtil.d("SplashActivity 个推别名绑定成功---------------");
                         }
                     } else {

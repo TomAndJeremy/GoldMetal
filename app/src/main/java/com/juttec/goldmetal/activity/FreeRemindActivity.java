@@ -1,6 +1,5 @@
 package com.juttec.goldmetal.activity;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,16 +17,31 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
-import com.juttec.goldmetal.bean.ReminderFloatBeen;
+import com.juttec.goldmetal.bean.PointWarnBean;
 import com.juttec.goldmetal.bean.ReminderPointBeen;
+import com.juttec.goldmetal.customview.HeadLayout;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
+import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.utils.LogUtil;
-import com.juttec.goldmetal.utils.ReminderDao;
+import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,13 +49,13 @@ import java.util.List;
  */
 public class FreeRemindActivity extends AppCompatActivity implements View.OnClickListener {
 
-
     /**
      * 输入框小数的位数
      */
     private static final int DECIMAL_DIGITS = 2;
 
 
+    private HeadLayout mHeadLayout;//标题布局
     private SwitchCompat switchCompat;//浮动提醒的开关
     private TextView valueRemind;//根据浮动值 和 基准值 算出来的 提醒值
 
@@ -58,13 +72,25 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
     private MyAlertDialog dialog;//添加点位提醒的dialog
 
 
+    //正在加载 进度框
+    private MyProgressDialog dialog_progress;
+
     private String symbol;//当前股票号码 由前个界面传递过来的  作为sharepreference的key值  value为boolean型代表浮动开关是否打开
+    private String stockName;//此股票的股票名称  由前个界面传递过来的
     private String currentValueBase;//此股票的当前价  由前个界面传递过来的
 
+    private String mLessThan;//基准价-浮动值
+    private String mGreaterThan;//基准价+浮动值
 
-    private ReminderDao reminderDao;
+    private List<PointWarnBean> mPointWarnBeanList = new ArrayList<PointWarnBean>();
 
     private MyApplication app;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,25 +100,34 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
 
         myAlertDialog = new MyAlertDialog(this);
         dialog = new MyAlertDialog(this);
-        reminderDao = new ReminderDao(this);
-
-
+        dialog_progress = new MyProgressDialog(this);
 
         Intent intent = getIntent();
         symbol = intent.getStringExtra("symbol");
+        stockName = intent.getStringExtra("stockName");
         currentValueBase = intent.getStringExtra("currentValue");
 
         initView();
         initEnent();
+
+        //调接口查询点位提醒和浮动提醒
+        getWarnData();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     //初始化控件
     private void initView() {
+        mHeadLayout = (HeadLayout) findViewById(R.id.head_layout);
+        TextView tv_title = (TextView) mHeadLayout.findViewById(R.id.head_title);
+        //设置标题
+        tv_title.setText(stockName + "免费提醒");
+
         remindContent = (LinearLayout) this.findViewById(R.id.point_remind_content);
         btAdd = (Button) this.findViewById(R.id.remind_bt_add);
         btAdd.setSelected(true);
         btAdd.setOnClickListener(this);
-
 
 
         save = (TextView) this.findViewById(R.id.tv_save_ar);
@@ -101,32 +136,24 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
         etBase = (EditText) this.findViewById(R.id.et_base_value);
         etFloat = (EditText) this.findViewById(R.id.et_float_value);
 
-
         valueRemind = (TextView) this.findViewById(R.id.value_remind);
 
         switchCompat = (SwitchCompat) this.findViewById(R.id.switch_remind);
-        //浮动提醒开关 默认为false
-        switchCompat.setChecked(isSetedFloat(reminderDao.getAllFloatDate(app.getUserInfoBean().getUserId())));
-        if (switchCompat.isChecked()) {
-            //此股票设置了浮动提醒
-            //从数据库中取出 此股票的基准价和浮动值
-            //提醒值显示
-            valueRemind.setVisibility(View.VISIBLE);
-            valueRemind.setText(getTextValue(etBase.getText().toString(), etFloat.getText().toString()));
-            //保存按钮设置为可点击状态
-            save.setSelected(true);
-            save.setClickable(true);
 
-        } else {
-            //此股票没有设置浮动提醒
-            save.setSelected(false);
-            save.setClickable(false);
-            //设置基准价(股票的当前价)和 浮动值 （默认的值）
-            etBase.setText("" + currentValueBase);
-            etFloat.setText("" +(Float.parseFloat(currentValueBase)-1>0?Float.parseFloat(currentValueBase)-1:Float.parseFloat(currentValueBase)));
-        }
+        //设置基准价(股票的当前价)和 浮动值 （默认的值）
+        etBase.setText(mDecimalFormat.format(Float.parseFloat(currentValueBase)));
+        etFloat.setText(mDecimalFormat.format((Float.parseFloat(currentValueBase) / 10)));
 
-        showPointReminder(reminderDao.getAllPointDate(app.getUserInfoBean().getUserId()));
+    }
+
+
+    /**
+     * 根据接口获取的提醒数据  在界面上显示
+     */
+    private void initData() {
+        //设置浮动开关
+        //设置基准价和浮动值
+        //显示点位提醒
     }
 
 
@@ -152,7 +179,6 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                 }
                 if ("".equals(etBase.getText().toString().trim())) {
                     etBase.removeTextChangedListener(this);
-
                     etBase.setText("");
                     etBase.addTextChangedListener(this);//防止循环调用
                 }
@@ -167,6 +193,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
         etFloat.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
@@ -196,24 +223,11 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                LogUtil.d("switchCompat.setOnCheckedChange:" + isChecked);
+                LogUtil.d("switchCompat.setOnCheckedChange---------------:" + isChecked);
                 if (isChecked) {
-                    //打开浮动开关
-                    valueRemind.setVisibility(View.VISIBLE);
-                    valueRemind.setText(getTextValue(etBase.getText().toString(), etFloat.getText().toString()));
-                    save.setSelected(true);
-                    save.setClickable(true);
-                    //设置浮动提醒
-                    setFloatValue();
+                    //调用添加浮动提醒  的 接口
                 } else {
-                    //关闭浮动开关
-                    save.setSelected(false);
-                    save.setClickable(false);
-                    valueRemind.setVisibility(View.GONE);
-
-                    //如果关闭，则删除数据库中的该条数据
-                    reminderDao.deleteFloat(app.getUserInfoBean().getUserId(),symbol);
-
+                    //删除浮动提醒接口
                 }
             }
         });
@@ -223,206 +237,132 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
         switchCompat.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                String base = etBase.getText().toString().trim();
-                String floatvalue = etFloat.getText().toString().trim();
-                if ("".equals(base) || "".equals(floatvalue)) {
-                    ToastUtil.showShort(FreeRemindActivity.this, "基准价或浮动值不能为空");
-                    return true;
+
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        isNotReasonable();
+                        break;
                 }
-
-                if ((Float.parseFloat(base) - Float.parseFloat(floatvalue)) < 0) {
-                    ToastUtil.showShort(FreeRemindActivity.this, "基准价不能小于浮动值");
-                    return true;
-                }
-                return false;
-            }
-        });
-
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.remind_bt_add:
-                //添加点位提醒
-                dialog.builder()
-                        .setTitle("添加提醒").setEditText("请输入价格");
-
-                dialog.setRadioGroupVisiable();
-                dialog.setPositiveButton("确定", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-//                        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-//                        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).
-                                hideSoftInputFromWindow(FreeRemindActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
-
-                        String sPoint = "最新价";
-                        LogUtil.e(FreeRemindActivity.this, 54, dialog.getResult());
-                        if (dialog.getResult() == null || "".equals(dialog.getResult())) {
-                            ToastUtil.showShort(FreeRemindActivity.this, "提醒值不能为空");
-                            return;
-                        }
-                        String value = mDecimalFormat.format(Double.parseDouble(dialog.getResult()));
-                        sPoint = sPoint + dialog.s + value;
-
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put("StockSymbol", symbol);
-                        contentValues.put("Operator", dialog.s);
-                        contentValues.put("Value", Double.parseDouble(value));
-                        contentValues.put("UserId", app.getUserInfoBean().getUserId());
-
-                        reminderDao.insert(contentValues, 2);
-
-                        addView(sPoint);
-                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).
-                                hideSoftInputFromWindow(FreeRemindActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
-                    }
-                });
-                dialog.setNegativeButton("取消", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(FreeRemindActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                    }
-                });
-                dialog.show();
-                dialog.setEditType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);//InputType.TYPE_NUMBER_FLAG_DECIMAL |
-
-                break;
-            case R.id.tv_save_ar:
-                //保存按钮  设置浮动提醒
-                setFloatValue();
-                break;
-        }
-    }
-
-
-
-
-    /**
-     * 设置浮动提醒
-     * 将数据存入数据库 若已存在该股票 则执行更新操作
-     */
-    private void setFloatValue(){
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("StockSymbol", symbol);
-        String base = etBase.getText().toString().trim();
-        String floatvalue = etFloat.getText().toString().trim();
-        contentValues.put("BasePrice", Float.parseFloat(mDecimalFormat.format(Float.parseFloat(base))));
-        contentValues.put("FloatPrice", Float.parseFloat(mDecimalFormat.format(Float.parseFloat(floatvalue))));
-        contentValues.put("UserId", app.getUserInfoBean().getUserId());
-
-        reminderDao.insert(contentValues, 1);
-        ToastUtil.showShort(FreeRemindActivity.this,"浮动提醒值设置成功");
-    }
-
-
-
-    private void addView(final String s) {
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.point_remind_layout, null);
-        view.setLayoutParams(lp);
-
-        view.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(final View addview) {
-
-                myAlertDialog.builder().setTitle("删除点位提醒")
-                        .setMsg(s)
-                        .setPositiveButton("确定", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                String operator = s.substring(3, 4);
-                                String value = s.substring(4);
-
-                                if (reminderDao.deletePoint(app.getUserInfoBean().getUserId(),symbol, operator, value)) {
-                                    remindContent.removeView(addview);
-                                    ToastUtil.showShort(FreeRemindActivity.this, "删除成功");
-                                }
-                            }
-                        }).setNegativeButton("取消", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        myAlertDialog.dismiss();
-                    }
-                }).show();
-
                 return true;
             }
         });
 
-        TextView tv = (TextView) view.findViewById(R.id.tv_remind_level);
-        tv.setText(s);
-        remindContent.addView(view);
-
     }
 
-
-    //根据基准价和 浮动值 计算提醒值
-    private String getTextValue(String base, String index) {
-
-        if ("".equals(base) || "".equals(index)) {
-            ToastUtil.showShort(FreeRemindActivity.this, "基准价或浮动值不能为空");
-            //关闭浮动开关
-            save.setSelected(false);
-            save.setClickable(false);
-            return "";
-        }else{
-            //打开浮动开关
-            save.setSelected(true);
-            save.setClickable(true);
-        }
-
-        if (switchCompat.isChecked()) {
-            float highBoard = 0;
-            float lowBoard = 0;
-            try {
-                highBoard = Float.parseFloat(base) + Float.parseFloat(index);
-                lowBoard = Float.parseFloat(base) - Float.parseFloat(index);
-
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                return "";
-            }
-
-            if (lowBoard < 0) {
-                ToastUtil.showShort(this, "基准价不能小于浮动值");
-                return "";
-            }
-
-            return "报价>=" + mDecimalFormat.format(highBoard) + "或报价<=" + mDecimalFormat.format(lowBoard);
-        }
-        return "";
-    }
 
     /**
-     * 是否设置了浮动提醒
-     * @param floatBeens
+     * 判断输入的 基准价和浮动值是否不合理
+     *
+     * @return
      */
-    private boolean isSetedFloat(List<ReminderFloatBeen> floatBeens) {
-        if (floatBeens == null) {
-            return false;
-        }else{
-            for (ReminderFloatBeen been :floatBeens) {
-                if (symbol.equals(been.getStock())) {
-                    etBase.setText(been.getBasePrice());
-                    etFloat.setText(been.getFloatPrice());
-                }
-            }
+    private boolean isNotReasonable() {
+        String base = etBase.getText().toString().trim();
+        String floatvalue = etFloat.getText().toString().trim();
+        if ("".equals(base) || "".equals(floatvalue)) {
+            ToastUtil.showShort(FreeRemindActivity.this, "基准价或浮动值不能为空");
             return true;
         }
 
+        if ((Float.parseFloat(base) - Float.parseFloat(floatvalue)) < 0) {
+            ToastUtil.showShort(FreeRemindActivity.this, "基准价不能小于浮动值");
+            return true;
+        }
+
+        //根据开关的状态 调添加浮动提醒和删除浮动提醒的接口
+        if (switchCompat.isChecked()) {
+            //删除浮动提醒的接口
+            delFloatWarn();
+        } else {
+            //调添加浮动提醒的接口
+            addFloatWarn();
+        }
+        return true;
     }
 
 
-    //如果设置了点位提醒，则添加到界面上
+    /**
+     * 点击事件的监听
+     *
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.remind_bt_add:
+                //弹出   添加点位提醒数据 的dialog  进行点位数据的添加
+                showAddPointDialog();
+
+                break;
+            case R.id.tv_save_ar:
+                //保存按钮  调用添加 浮动提醒 的接口
+                String base = etBase.getText().toString().trim();
+                String floatvalue = etFloat.getText().toString().trim();
+                if ("".equals(base) || "".equals(floatvalue)) {
+                    ToastUtil.showShort(FreeRemindActivity.this, "基准价或浮动值不能为空");
+                    return;
+                }
+                if ((Float.parseFloat(base) - Float.parseFloat(floatvalue)) < 0) {
+                    ToastUtil.showShort(FreeRemindActivity.this, "基准价不能小于浮动值");
+                    return;
+                }
+                addFloatWarn();
+                break;
+        }
+    }
+
+
+    /**
+     * 显示添加点位提醒的dialog
+     */
+    private void showAddPointDialog() {
+        //添加点位提醒
+        dialog.builder().setTitle("添加提醒").setEditText("请输入价格");
+        dialog.setRadioGroupVisiable();
+        dialog.setPositiveButton("确定", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                LogUtil.d("添加提醒---符号：", dialog.getResult());
+                if (dialog.getResult() == null || "".equals(dialog.getResult())) {
+                    ToastUtil.showShort(FreeRemindActivity.this, "提醒值不能为空");
+                    return;
+                }
+                String value = mDecimalFormat.format(Double.parseDouble(dialog.getResult()));
+
+                //判断添加的数据是否已存在
+                for (int i = 0; i < mPointWarnBeanList.size(); i++) {
+                    if (value.equals(mPointWarnBeanList.get(i).getNewestPrice())) {
+                        if (dialog.s.equals(mPointWarnBeanList.get(i).getLogicOperator())) {
+                            ToastUtil.showShort(FreeRemindActivity.this, "该点位提醒已存在");
+                            return;
+                        }
+                    }
+
+                }
+
+                //调接口 添加点位提醒
+                addPtWarn(dialog.s, value);
+
+
+            }
+        });
+        dialog.setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(FreeRemindActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        });
+        dialog.show();
+        dialog.setEditType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);//InputType.TYPE_NUMBER_FLAG_DECIMAL |
+
+    }
+
+
+    /**
+     * 如果设置了点位提醒，则添加到界面上
+     *
+     * @param pointBeens
+     */
     private void showPointReminder(List<ReminderPointBeen> pointBeens) {
         if (pointBeens == null) {
             return;
@@ -435,5 +375,400 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
             }
         }
     }
+
+
+    /**
+     * 添加点位提醒布局
+     * 并监听点位数据的删除事件
+     *
+     * @param strWarnData
+     */
+    private void addView(final String strWarnData) {
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.point_remind_layout, null);
+        view.setLayoutParams(lp);
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //删除点位提醒的dialog
+                showDelPtDialog(strWarnData, view);
+            }
+        });
+
+        TextView tv = (TextView) view.findViewById(R.id.tv_remind_level);
+        tv.setText(strWarnData);
+        remindContent.addView(view);
+    }
+
+
+    /**
+     * 删除点位提醒的dialog
+     *
+     * @param strWarnData
+     * @param addView
+     */
+    private void showDelPtDialog(final String strWarnData, final View addView) {
+        myAlertDialog.builder().setTitle("删除点位提醒")
+                .setMsg(strWarnData)
+                .setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String operator = strWarnData.substring(3, 4);
+                        String value = strWarnData.substring(4);
+
+                        //删除点位提醒的接口
+                        delPtWarn(addView, operator.equals(">") ? "大于" : "小于", value);
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myAlertDialog.dismiss();
+            }
+        }).show();
+    }
+
+
+    //根据基准价和 浮动值 计算提醒值
+    private String getTextValue(String base, String index) {
+
+        if ("".equals(base) || "".equals(index)) {
+            ToastUtil.showShort(FreeRemindActivity.this, "基准价或浮动值不能为空");
+            //将保存按钮设置为 不可以点击的状态
+            save.setSelected(false);
+            save.setClickable(false);
+            return "";
+        }
+
+
+        if (switchCompat.isChecked()) {
+
+            try {
+                if (Float.parseFloat(base) - Float.parseFloat(index) < 0) {
+                    //将保存按钮设置为 不可以点击的状态
+                    save.setSelected(false);
+                    save.setClickable(false);
+                    ToastUtil.showShort(this, "基准价不能小于浮动值");
+                    return "";
+                } else {
+                    //将保存按钮设置为 可以点击的状态
+                    save.setSelected(true);
+                    save.setClickable(true);
+                }
+
+
+                mLessThan = mDecimalFormat.format(Float.parseFloat(base) - Float.parseFloat(index));
+                mGreaterThan = mDecimalFormat.format(Float.parseFloat(base) + Float.parseFloat(index));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "";
+            }
+
+
+            return "报价>=" + mGreaterThan + "或报价<=" + mLessThan;
+        }
+        return "";
+    }
+
+
+    /**
+     * 添加点位提醒
+     * operator：大于 或是  小于
+     * value：用户设置的点位值
+     */
+    private void addPtWarn(final String operator, final String value) {
+        dialog_progress.builder().setMessage("请稍等~").show();
+
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("mobile", app.getUserInfoBean().getMobile());
+        params.addBodyParameter("stockCode", symbol);
+        params.addBodyParameter("stockName", stockName);
+        params.addBodyParameter("logicOperator", operator.equals(">") ? "大于" : "小于");
+        params.addBodyParameter("rulingPrice", value);
+        LogUtil.d("添加点位提醒接口参数：" + app.getUserInfoBean().getMobile() + symbol + stockName + operator + value);
+
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.send(HttpRequest.HttpMethod.POST, app.addPtWarn(), params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog_progress.dismiss();
+
+                LogUtil.d("添加点位提醒：" + responseInfo.result.toString());
+                JSONObject object = null;
+                try {
+                    object = new JSONObject(responseInfo.result.toString());
+                    String status = object.getString("status");
+                    String promptInfor = object.getString("promptInfor");
+                    if ("1".equals(status)) {
+                        //添加此点位的布局
+                        String sPoint = "最新价" + operator + value;
+                        addView(sPoint);
+                        PointWarnBean pointWarnBean = new PointWarnBean();
+                        pointWarnBean.setLogicOperator(operator);
+                        pointWarnBean.setNewestPrice(value);
+                        mPointWarnBeanList.add(pointWarnBean);
+
+                    } else {
+                    }
+                    ToastUtil.showShort(FreeRemindActivity.this, promptInfor);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog_progress.dismiss();
+                NetWorkUtils.showMsg(FreeRemindActivity.this);
+            }
+        });
+    }
+
+
+    /**
+     * 添加浮动提醒
+     * lessThan：基准价-浮动值
+     * greaterThan：基准价+浮动值
+     */
+    private void addFloatWarn() {
+        dialog_progress.builder().setMessage("请稍等~").show();
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("mobile", app.getUserInfoBean().getMobile());
+        params.addBodyParameter("stockCode", symbol);
+        params.addBodyParameter("stockName", stockName);
+        params.addBodyParameter("lessThan", mLessThan);
+        params.addBodyParameter("greaterThan", mGreaterThan);
+
+        LogUtil.d("添加浮动提醒接口参数：" + app.getUserInfoBean().getMobile() + symbol + stockName + mLessThan + mGreaterThan);
+
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.send(HttpRequest.HttpMethod.POST, app.addFloatWarn(), params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog_progress.dismiss();
+
+                LogUtil.d("添加浮动提醒：" + responseInfo.result.toString());
+                JSONObject object = null;
+                try {
+                    object = new JSONObject(responseInfo.result.toString());
+                    String status = object.getString("status");
+                    String promptInfor = object.getString("promptInfor");
+                    if ("1".equals(status)) {
+                        //打开浮动开关
+                        switchCompat.setChecked(true);
+                        //显示 提醒值布局
+                        valueRemind.setVisibility(View.VISIBLE);
+                        valueRemind.setText(getTextValue(etBase.getText().toString(), etFloat.getText().toString()));
+                        //保存按钮设置为可点击
+                        save.setSelected(true);
+                        save.setClickable(true);
+                    } else {
+
+                    }
+                    ToastUtil.showShort(FreeRemindActivity.this, promptInfor);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog_progress.dismiss();
+                NetWorkUtils.showMsg(FreeRemindActivity.this);
+            }
+        });
+
+    }
+
+
+    /**
+     * 获取用户添加的浮动提醒和点位提醒 数据
+     */
+    private void getWarnData() {
+        dialog_progress.builder().setMessage("请稍等~").show();
+
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("mobile", app.getUserInfoBean().getMobile());
+//        params.addBodyParameter("stockCode",symbol);
+        params.addBodyParameter("stockName", stockName);
+
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.send(HttpRequest.HttpMethod.POST, app.getWarnData(), params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog_progress.dismiss();
+
+                LogUtil.d("获取提醒数据：" + responseInfo.result.toString());
+                JSONObject object = null;
+                try {
+                    object = new JSONObject(responseInfo.result.toString());
+                    String status = object.getString("status");
+                    String promptInfor = object.getString("promptInfor");
+                    if ("1".equals(status)) {
+
+                        JSONObject obj = object.getJSONObject("entityList");
+                        String lessThan = obj.getString("lessThan");
+                        String greaterThan = obj.getString("greaterThan");
+
+                        JSONArray jsonArray = obj.getJSONArray("pointList");
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            PointWarnBean pointWarnBean = new PointWarnBean();
+                            JSONObject objArray = (JSONObject) jsonArray.get(i);
+                            pointWarnBean.setLogicOperator(objArray.getString("logicOperator"));
+                            pointWarnBean.setNewestPrice(objArray.getDouble("rulingPrice") + "");
+                            mPointWarnBeanList.add(pointWarnBean);
+                        }
+
+                        //添加点位提醒
+                        for (int i = 0; i < mPointWarnBeanList.size(); i++) {
+//                            LogUtil.d("点位提醒Unicode1："+mPointWarnBeanList.get(i).getLogicOperator());
+//                            LogUtil.d("点位提醒符号1："+MyApplication.unicode2String(mPointWarnBeanList.get(i).getLogicOperator()));
+                            addView("最新价" + mPointWarnBeanList.get(i).getLogicOperator() + mPointWarnBeanList.get(i).getNewestPrice());
+                        }
+
+
+                        if (Float.parseFloat(lessThan) >= 0 && Float.parseFloat(greaterThan) >= 0) {
+                            //如果用户设置了浮动提醒
+                            switchCompat.setChecked(true);
+                            float fFloat = ((Float.parseFloat(greaterThan) - Float.parseFloat(lessThan)) / 2);
+                            float fBase = (Float.parseFloat(greaterThan) - fFloat);
+//                            LogUtil.d("-----greaterThan："+Float.parseFloat(greaterThan)+"-----lessThan:"+Float.parseFloat(lessThan));
+//                            LogUtil.d("-----fFloat："+fFloat+"-----fBase:"+fBase);
+
+                            etBase.setText(mDecimalFormat.format(fBase));
+                            etFloat.setText(mDecimalFormat.format(fFloat));
+                            valueRemind.setVisibility(View.VISIBLE);
+                            valueRemind.setText(getTextValue(etBase.getText().toString(), etFloat.getText().toString()));
+                        } else {
+                            //此股票没有设置浮动提醒
+                            switchCompat.setChecked(false);
+                            save.setSelected(false);
+                            save.setClickable(false);
+                            //设置基准价(股票的当前价)和 浮动值 （默认的值）
+                            etBase.setText(mDecimalFormat.format(Float.parseFloat(currentValueBase)));
+                            etFloat.setText(mDecimalFormat.format((Float.parseFloat(currentValueBase) / 10)));
+
+                            mLessThan = mDecimalFormat.format(Float.parseFloat(currentValueBase) - (Float.parseFloat(currentValueBase) / 10));
+                            mGreaterThan = mDecimalFormat.format(Float.parseFloat(currentValueBase) + (Float.parseFloat(currentValueBase) / 10));
+                        }
+                    } else {
+
+                    }
+                    ToastUtil.showShort(FreeRemindActivity.this, promptInfor);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog_progress.dismiss();
+                NetWorkUtils.showMsg(FreeRemindActivity.this);
+            }
+        });
+    }
+
+
+    /**
+     * 删除点位提醒
+     */
+    private void delPtWarn(final View addView, String logicOperator, String rulingPrice) {
+        dialog_progress.builder().setMessage("请稍等~").show();
+
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("mobile", app.getUserInfoBean().getMobile());
+//        params.addBodyParameter("stockCode",symbol);
+        params.addBodyParameter("stockName", stockName);
+        params.addBodyParameter("logicOperator", logicOperator);//操作符
+        params.addBodyParameter("rulingPrice", rulingPrice);//设置的提醒值
+
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.send(HttpRequest.HttpMethod.POST, app.delPtWarn(), params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog_progress.dismiss();
+
+                LogUtil.d("删除点位提醒：" + responseInfo.result.toString());
+                JSONObject object = null;
+                try {
+                    object = new JSONObject(responseInfo.result.toString());
+                    String status = object.getString("status");
+                    String promptInfor = object.getString("promptInfor");
+                    if ("1".equals(status)) {
+                        //将布局删除
+                        remindContent.removeView(addView);
+                        ToastUtil.showShort(FreeRemindActivity.this, "删除成功");
+                    } else {
+                        ToastUtil.showShort(FreeRemindActivity.this, promptInfor);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog_progress.dismiss();
+                NetWorkUtils.showMsg(FreeRemindActivity.this);
+            }
+        });
+    }
+
+
+    /**
+     * 删除浮动提醒
+     */
+    private void delFloatWarn() {
+        dialog_progress.builder().setMessage("请稍等~").show();
+
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("mobile", app.getUserInfoBean().getMobile());
+//        params.addBodyParameter("stockCode",symbol);
+        params.addBodyParameter("stockName", stockName);
+
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.send(HttpRequest.HttpMethod.POST, app.delFloatWarn(), params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                dialog_progress.dismiss();
+
+                LogUtil.d("删除浮动提醒：" + responseInfo.result.toString());
+                JSONObject object = null;
+                try {
+                    object = new JSONObject(responseInfo.result.toString());
+                    String status = object.getString("status");
+                    String promptInfor = object.getString("promptInfor");
+                    if ("1".equals(status)) {
+                        //关闭浮动开关
+                        switchCompat.setChecked(false);
+                        //保存按钮设置为不可点
+                        save.setSelected(false);
+                        save.setClickable(false);
+                        //将提醒值布局隐藏
+                        valueRemind.setVisibility(View.GONE);
+                    } else {
+
+                    }
+                    ToastUtil.showShort(FreeRemindActivity.this, promptInfor);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                dialog_progress.dismiss();
+                NetWorkUtils.showMsg(FreeRemindActivity.this);
+            }
+        });
+    }
+
+
 
 }

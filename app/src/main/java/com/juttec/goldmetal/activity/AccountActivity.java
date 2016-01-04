@@ -84,7 +84,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private MyProgressDialog dialog_progress;//正在加载 进度框
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 

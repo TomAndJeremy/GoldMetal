@@ -23,7 +23,6 @@ public class SharedPreferencesUtil {
 
 
 
-    //KDJ_DAY  影响KDJ指标变化的变量  默认值为：9   int
 
 
 

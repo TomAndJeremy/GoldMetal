@@ -526,6 +526,8 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                 return data;
             }
         });
+        dialog.getEt().setMaxEms(8);
+        dialog.getEt().setSingleLine(true);
     }
 
 

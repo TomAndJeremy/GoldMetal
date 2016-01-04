@@ -9,6 +9,7 @@
     tools:context="com.juttec.goldmetal.activity.FreeRemindActivity">
 
     <com.juttec.goldmetal.customview.HeadLayout
+        android:id="@+id/head_layout"
         style="@style/HeadBarStytle"
         app:headtitle="@string/head_title_freeremaind"
         app:leftimg="@mipmap/nav_btn_back_arrow">
