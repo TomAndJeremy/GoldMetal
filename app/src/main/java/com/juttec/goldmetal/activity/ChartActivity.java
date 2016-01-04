@@ -349,7 +349,10 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.btn_free_remind:
-                //免费提醒
+
+
+
+              /*  //免费提醒
                 //判断是否登录
                 if (((MyApplication)getApplication()).getUserInfoBean()!=null) {
                     Intent intent = new Intent(ChartActivity.this, FreeRemindActivity.class);
@@ -369,7 +372,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                                     mdialog.dismiss();
                                 }
                             }).show();
-                }
+                }*/
 
                 break;
         }

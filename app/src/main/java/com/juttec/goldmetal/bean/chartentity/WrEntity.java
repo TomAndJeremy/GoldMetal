@@ -1,5 +1,7 @@
 package com.juttec.goldmetal.bean.chartentity;
 
+import com.juttec.goldmetal.utils.LogUtil;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,10 +52,19 @@ public class WrEntity {
 
 
     public List<Double> getWr1s() {
+
+        for (Double dd:wr1s
+             ) {
+            LogUtil.e("wr1s  " + dd);
+        }
         return wr1s;
     }
 
     public List<Double> getWr2s() {
+        for (Double dd:wr2s
+                ) {
+            LogUtil.e("wr2s  " + dd);
+        }
         return wr2s;
     }
 

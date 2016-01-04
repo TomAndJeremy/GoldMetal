@@ -1,5 +1,7 @@
 package com.juttec.goldmetal.bean.chartentity;
 
+import com.juttec.goldmetal.utils.LogUtil;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -86,10 +88,19 @@ public class MtmEntity {
 
 
     public List<Double> getMTMs() {
+        for (Double dd:MTMs
+                ) {
+            LogUtil.e("MTMs  " + dd);
+        }
         return MTMs;
     }
 
     public List<Double> getMTMMAs() {
+
+        for (Double dd:MTMMAs
+                ) {
+            LogUtil.e("MTMMAs  " + dd);
+        }
         return MTMMAs;
     }
 

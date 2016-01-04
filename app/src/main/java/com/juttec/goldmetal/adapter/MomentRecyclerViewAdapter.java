@@ -153,7 +153,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         holder.name.setText(entityList.get(position).getUserName());//设置用户名
         holder.time.setText(entityList.get(position).getAddTime());//时间
         if (entityList.get(position).getDyContent() != null) {
-            holder.content.setText(readEmoji.getEditable(entityList.get(position).getDyContent()));// 正文
+            holder.content.setText(readEmoji.getEditable((entityList.get(position).getDyContent())));// 正文
         }
 
 
@@ -425,26 +425,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
     }
 
-    /**
-     * unicode 转字符串
-     */
-    private String unicode2String(String unicode) {
 
-        StringBuffer string = new StringBuffer();
-
-        String[] hex = unicode.split("\\\\u");
-
-        for (int i = 1; i < hex.length; i++) {
-
-            // 转换出每一个代码点
-            int data = Integer.parseInt(hex[i], 16);
-
-            // 追加成string
-            string.append((char) data);
-        }
-
-        return string.toString();
-    }
 
 
     //添加评论布局
@@ -452,7 +433,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         for (int i = 0; i < entityList.get(position).getDyCommentReply().size(); i++) {
             //获得评论人的姓名与评论内容并设置显示
             final String commentName = entityList.get(position).getDyCommentReply().get(i).getDiscussantName() + ":";//
-            String commentContent = MyApplication.ToDBC(entityList.get(position).getDyCommentReply().get(i).getCommentContent());
+            String commentContent = MyApplication.ToDBC((entityList.get(position).getDyCommentReply().get(i).getCommentContent()));
             final int finalI = i;
           /*  TextView comment = (TextView) LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
             SpannableString string = new SpannableString(commentName);

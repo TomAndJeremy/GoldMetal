@@ -322,7 +322,8 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
         Editable lineTexts = null;
         while (start < length) {
             if (p.measureText(content, start, end) > width) { //文本宽度超出控件宽度时
-                end = end - 5;
+
+                end = end - 4;
                 lineTexts = content.insert(end, "\n");
                 start = end;
             }

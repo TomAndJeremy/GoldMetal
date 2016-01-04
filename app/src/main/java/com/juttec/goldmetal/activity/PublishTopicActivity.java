@@ -374,22 +374,6 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     }
 
 
-    public static String string2Unicode(String string) {
-
-        StringBuffer unicode = new StringBuffer();
-
-        for (int i = 0; i < string.length(); i++) {
-
-            // 取出每一个字符
-            char c = string.charAt(i);
-
-            // 转换为unicode
-            unicode.append("\\u" + Integer.toHexString(c));
-        }
-
-        return unicode.toString();
-    }
-
 
     @Override
     public void onClick(View v) {
@@ -636,8 +620,8 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         }
         list.clear();//发送完成后清除数据
 
+        //params.addBodyParameter("dyContent",content);
         params.addBodyParameter("dyContent",content);
-        //params.addBodyParameter("dyContent", string2Unicode(content));
         //params.addBodyParameter("dyContent", string2Unicode(toSend));
 
         for (int i = 0; i < photoList.size(); i++) {

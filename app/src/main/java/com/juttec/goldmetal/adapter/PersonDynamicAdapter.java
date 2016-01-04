@@ -177,7 +177,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
         holder.name.setText(dynamicEntityList.getUserName());//设置用户名
         holder.time.setText(dynamicEntityList.getAddTime());//时间
         if(dynamicEntityList.getDyContent()!=null){
-            holder.content.setText(readEmoji.getEditable(dynamicEntityList.getDyContent()));//正文
+            holder.content.setText(readEmoji.getEditable(MyApplication.unicode2String(dynamicEntityList.getDyContent())));//正文
         }
         //设置头像
         ImageLoader.getInstance().displayImage(MyApplication.ImgBASEURL + dynamicEntityList.getUserPhoto(), holder.headPortrait, options);

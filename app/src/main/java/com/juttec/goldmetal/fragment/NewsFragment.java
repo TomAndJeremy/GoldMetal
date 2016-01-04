@@ -26,7 +26,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     //机构评论详情   深度解析详情  投资结构详情  财经头条详情
     public static final String HEADTITLE = "headtitle";//标题栏中的标题
     public static final String HEADTLINES = "财经头条";//财经头条
-    public static final String REVIEW = "评论机构";//机构评论
+    public static final String REVIEW = "机构评论";//机构评论
     public static final String ANALYSIS = "深度解析";//深度解析
     public static final String INSTITUTION = "投资机构";//投资机构
     public static final String BROADCAST = "快讯直播";//快讯直播
