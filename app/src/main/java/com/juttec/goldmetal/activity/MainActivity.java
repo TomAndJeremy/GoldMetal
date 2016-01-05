@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
 
 
     @Override
-    protected void onResume() {
+    protected void onResume(){
         if ((Boolean) SharedPreferencesUtil.getParam(MainActivity.this, "isScreenLight", true)) {
             acquireWakeLock();
             LogUtil.d("----------mWakeLock.acquire()");
@@ -74,8 +75,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
          //停止个推服务
 //        PushManager.getInstance().stopService(getApplicationContext());
 //        LogUtil.d("MainActivity 个推服务停止---------------");
-
-        System.exit(0);
+//        System.exit(0);
         super.onDestroy();
     }
 
@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
 
         //tablayout与viewpager关联
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setSmoothScrollingEnabled(false);
         // 自定义tablayout布局
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
@@ -194,5 +195,11 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnFr
         }
         return super.onKeyUp(keyCode, event);
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
 
 }

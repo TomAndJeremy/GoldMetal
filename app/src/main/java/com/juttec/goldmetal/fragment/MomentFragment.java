@@ -175,6 +175,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        LogUtil.d("onCreateView----------------MomentFragment");
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_moment, container, false);
 
@@ -489,6 +490,9 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     }
 
 
+
+
+
     //上传用户头像  的接口
     private void uploadUserPhoto() {
 
@@ -657,13 +661,22 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
+        LogUtil.d("onDestroy--------------MomentFragment");
         getActivity().unregisterReceiver(myBroadcastReceiver);
 
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        LogUtil.d("onStop--------------MomentFragment");
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+        LogUtil.d("onResume----------------MomentFragment");
+
         if (app.getUserInfoBean() != null) {
             imageLoader.displayImage(app.getImgBaseUrl() + app.getUserInfoBean().getUserPhoto(), mHeadPhoto, options);
         } else {

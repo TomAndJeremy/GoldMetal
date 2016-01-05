@@ -7,7 +7,15 @@ public class PointWarnBean {
 
     private String  logicOperator;//操作符
     private String  newestPrice;//设定值
+    private String  pointWarnId;//提醒值id
 
+    public String getPointWarnId() {
+        return pointWarnId;
+    }
+
+    public void setPointWarnId(String pointWarnId) {
+        this.pointWarnId = pointWarnId;
+    }
 
     public String getNewestPrice() {
         return newestPrice;

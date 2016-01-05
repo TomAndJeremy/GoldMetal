@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -49,7 +50,6 @@ import com.juttec.goldmetal.utils.FileUtil;
 import com.juttec.goldmetal.utils.GetContentUrl;
 import com.juttec.goldmetal.utils.ImgUtil;
 import com.juttec.goldmetal.utils.LogUtil;
-import com.juttec.goldmetal.utils.SnackbarUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -65,9 +65,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
@@ -136,7 +134,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_topic);
         app = (MyApplication) getApplication();
-        LogUtil.d("onCreate------------");
+        LogUtil.d("onCreate------------PublishTopicActivity");
 
         dialog_progress = new MyProgressDialog(this);
 
@@ -144,9 +142,16 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        LogUtil.d("onResume------------PublishTopicActivity");
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-        LogUtil.d("onStop------------");
+
+        LogUtil.d("onStop------------PublishTopicActivity");
     }
 
     @Override
@@ -154,7 +159,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         super.onDestroy();
         //清除数据
         clearData();
-        LogUtil.d("onDestroy------------");
+        LogUtil.d("onDestroy------------PublishTopicActivity");
     }
 
 
@@ -692,4 +697,8 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
     }
 
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 }

@@ -42,6 +42,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SplashActivity"
@@ -336,12 +337,7 @@
         <service
             android:name=".service.RemindService"
             android:enabled="true"
-            android:exported="true"></service><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
+            android:exported="true"></service>
 
     </application>
 

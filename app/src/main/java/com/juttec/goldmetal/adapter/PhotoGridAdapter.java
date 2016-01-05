@@ -10,7 +10,6 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.bean.PhotoBean;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.utils.ImgUtil;
-import com.juttec.goldmetal.utils.LogUtil;
 
 import java.util.List;
 
@@ -55,7 +54,7 @@ public class PhotoGridAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        LogUtil.d("展示图片---------------------------");
+//        LogUtil.d("展示图片---------------------------");
 
         View view = View.inflate(ctx, R.layout.item_photo, null);
         final ImageView imageView = (ImageView) view.findViewById(R.id.iv_image);
@@ -85,8 +84,6 @@ public class PhotoGridAdapter extends BaseAdapter {
         iv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 dialog.builder().setTitle("移除提示")
                         .setMsg("放弃上传这张照片")
                         .setPositiveButton("确定", new View.OnClickListener() {

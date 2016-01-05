@@ -17,12 +17,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.PointWarnBean;
-import com.juttec.goldmetal.bean.ReminderPointBeen;
 import com.juttec.goldmetal.customview.HeadLayout;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.dialog.MyProgressDialog;
@@ -85,11 +82,9 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
     private List<PointWarnBean> mPointWarnBeanList = new ArrayList<PointWarnBean>();
 
     private MyApplication app;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+
+    private String floatWarnId;//浮动提醒的id
+
 
 
     @Override
@@ -112,9 +107,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
 
         //调接口查询点位提醒和浮动提醒
         getWarnData();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
     }
 
     //初始化控件
@@ -358,23 +351,6 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
     }
 
 
-    /**
-     * 如果设置了点位提醒，则添加到界面上
-     *
-     * @param pointBeens
-     */
-    private void showPointReminder(List<ReminderPointBeen> pointBeens) {
-        if (pointBeens == null) {
-            return;
-        }
-        for (ReminderPointBeen been : pointBeens
-                ) {
-            if (symbol.equals(been.getStock())) {
-
-                addView("最新价" + been.getOperator() + been.getValue());
-            }
-        }
-    }
 
 
     /**
@@ -383,7 +359,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
      *
      * @param strWarnData
      */
-    private void addView(final String strWarnData) {
+    private void addView(final String pointWarnId,final String strWarnData) {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -395,7 +371,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onClick(View view) {
                 //删除点位提醒的dialog
-                showDelPtDialog(strWarnData, view);
+                showDelPtDialog(pointWarnId,strWarnData, view);
             }
         });
 
@@ -411,7 +387,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
      * @param strWarnData
      * @param addView
      */
-    private void showDelPtDialog(final String strWarnData, final View addView) {
+    private void showDelPtDialog(final String pointWarnId,final String strWarnData, final View addView) {
         myAlertDialog.builder().setTitle("删除点位提醒")
                 .setMsg(strWarnData)
                 .setPositiveButton("确定", new View.OnClickListener() {
@@ -421,7 +397,8 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                         String value = strWarnData.substring(4);
 
                         //删除点位提醒的接口
-                        delPtWarn(addView, operator.equals(">") ? "大于" : "小于", value);
+//                        delPtWarn(addView, operator.equals(">") ? "大于" : "小于", value);
+                        delPtWarn(pointWarnId,addView);
                     }
                 }).setNegativeButton("取消", new View.OnClickListener() {
             @Override
@@ -503,14 +480,20 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                     object = new JSONObject(responseInfo.result.toString());
                     String status = object.getString("status");
                     String promptInfor = object.getString("promptInfor");
+                    JSONObject object1 =object.getJSONObject("message1");
+                    String pointWarnId = object1.getString("id");
+
+
                     if ("1".equals(status)) {
-                        //添加此点位的布局
-                        String sPoint = "最新价" + operator + value;
-                        addView(sPoint);
                         PointWarnBean pointWarnBean = new PointWarnBean();
                         pointWarnBean.setLogicOperator(operator);
                         pointWarnBean.setNewestPrice(value);
+                        pointWarnBean.setPointWarnId(pointWarnId);
                         mPointWarnBeanList.add(pointWarnBean);
+
+                        //添加此点位的布局
+                        String sPoint = "最新价" + operator + value;
+                        addView(pointWarnId,sPoint);
 
                     } else {
                     }
@@ -557,6 +540,9 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                     object = new JSONObject(responseInfo.result.toString());
                     String status = object.getString("status");
                     String promptInfor = object.getString("promptInfor");
+                    JSONObject object1 =object.getJSONObject("message1");
+                    floatWarnId = object1.getString("id");
+
                     if ("1".equals(status)) {
                         //打开浮动开关
                         switchCompat.setChecked(true);
@@ -613,6 +599,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                         JSONObject obj = object.getJSONObject("entityList");
                         String lessThan = obj.getString("lessThan");
                         String greaterThan = obj.getString("greaterThan");
+                        floatWarnId = obj.getString("id");
 
                         JSONArray jsonArray = obj.getJSONArray("pointList");
 
@@ -621,6 +608,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                             JSONObject objArray = (JSONObject) jsonArray.get(i);
                             pointWarnBean.setLogicOperator(objArray.getString("logicOperator"));
                             pointWarnBean.setNewestPrice(objArray.getDouble("rulingPrice") + "");
+                            pointWarnBean.setPointWarnId(objArray.getString("id"));
                             mPointWarnBeanList.add(pointWarnBean);
                         }
 
@@ -628,7 +616,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                         for (int i = 0; i < mPointWarnBeanList.size(); i++) {
 //                            LogUtil.d("点位提醒Unicode1："+mPointWarnBeanList.get(i).getLogicOperator());
 //                            LogUtil.d("点位提醒符号1："+MyApplication.unicode2String(mPointWarnBeanList.get(i).getLogicOperator()));
-                            addView("最新价" + mPointWarnBeanList.get(i).getLogicOperator() + mPointWarnBeanList.get(i).getNewestPrice());
+                            addView(mPointWarnBeanList.get(i).getPointWarnId(),"最新价" + mPointWarnBeanList.get(i).getLogicOperator() + mPointWarnBeanList.get(i).getNewestPrice());
                         }
 
 
@@ -670,6 +658,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onFailure(HttpException error, String msg) {
                 dialog_progress.dismiss();
+                LogUtil.d("onFailure--------------:"+error.toString());
                 NetWorkUtils.showMsg(FreeRemindActivity.this);
             }
         });
@@ -679,15 +668,16 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
     /**
      * 删除点位提醒
      */
-    private void delPtWarn(final View addView, String logicOperator, String rulingPrice) {
+    private void delPtWarn(String pointWarnId,final View addView) {
         dialog_progress.builder().setMessage("请稍等~").show();
 
         RequestParams params = new RequestParams();
-        params.addBodyParameter("mobile", app.getUserInfoBean().getMobile());
+        params.addBodyParameter("id", pointWarnId);
+//        params.addBodyParameter("mobile", app.getUserInfoBean().getMobile());
 //        params.addBodyParameter("stockCode",symbol);
-        params.addBodyParameter("stockName", stockName);
-        params.addBodyParameter("logicOperator", logicOperator);//操作符
-        params.addBodyParameter("rulingPrice", rulingPrice);//设置的提醒值
+//        params.addBodyParameter("stockName", stockName);
+//        params.addBodyParameter("logicOperator", logicOperator);//操作符
+//        params.addBodyParameter("rulingPrice", rulingPrice);//设置的提醒值
 
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.send(HttpRequest.HttpMethod.POST, app.delPtWarn(), params, new RequestCallBack<String>() {
@@ -728,9 +718,10 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
         dialog_progress.builder().setMessage("请稍等~").show();
 
         RequestParams params = new RequestParams();
-        params.addBodyParameter("mobile", app.getUserInfoBean().getMobile());
+        params.addBodyParameter("id", floatWarnId);
+//        params.addBodyParameter("mobile", app.getUserInfoBean().getMobile());
 //        params.addBodyParameter("stockCode",symbol);
-        params.addBodyParameter("stockName", stockName);
+//        params.addBodyParameter("stockName", stockName);
 
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.send(HttpRequest.HttpMethod.POST, app.delFloatWarn(), params, new RequestCallBack<String>() {

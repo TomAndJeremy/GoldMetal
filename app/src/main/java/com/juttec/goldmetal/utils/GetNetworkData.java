@@ -107,8 +107,6 @@ public class GetNetworkData {
                             int sleepTime = 60 * 1000;//默认1分钟
                             if (refreshTime == null) {
                                 sleepTime = (int)(SharedPreferencesUtil.getParam(context, "refreshTime", 10))*1000;
-
-
                                 LogUtil.e("sleeptime  " + sleepTime);
                             } else {
                                 sleepTime = refreshTime;
