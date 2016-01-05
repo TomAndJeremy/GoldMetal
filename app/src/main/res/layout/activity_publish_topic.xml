@@ -19,9 +19,12 @@
     <EditText
         android:id="@+id/publis_topic_et"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/head_layout"
         android:layout_margin="@dimen/activity_horizontal_margin"
+        android:minHeight="100dp"
+        android:maxLines="5"
+        android:maxHeight="150dp"
         android:background="@drawable/login_input_border"
         android:gravity="top"
         android:padding="8dp" />

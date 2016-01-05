@@ -76,8 +76,6 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
     private String stockName;//此股票的股票名称  由前个界面传递过来的
     private String currentValueBase;//此股票的当前价  由前个界面传递过来的
 
-    private String mLessThan;//基准价-浮动值
-    private String mGreaterThan;//基准价+浮动值
 
     private List<PointWarnBean> mPointWarnBeanList = new ArrayList<PointWarnBean>();
 
@@ -267,7 +265,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
             delFloatWarn();
         } else {
             //调添加浮动提醒的接口
-            addFloatWarn();
+            addFloatWarn(base,floatvalue);
         }
         return true;
     }
@@ -298,7 +296,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                     ToastUtil.showShort(FreeRemindActivity.this, "基准价不能小于浮动值");
                     return;
                 }
-                addFloatWarn();
+                addFloatWarn(base,floatvalue);
                 break;
         }
     }
@@ -397,7 +395,6 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                         String value = strWarnData.substring(4);
 
                         //删除点位提醒的接口
-//                        delPtWarn(addView, operator.equals(">") ? "大于" : "小于", value);
                         delPtWarn(pointWarnId,addView);
                     }
                 }).setNegativeButton("取消", new View.OnClickListener() {
@@ -437,8 +434,8 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                 }
 
 
-                mLessThan = mDecimalFormat.format(Float.parseFloat(base) - Float.parseFloat(index));
-                mGreaterThan = mDecimalFormat.format(Float.parseFloat(base) + Float.parseFloat(index));
+//               mDecimalFormat.format(Float.parseFloat(base) - Float.parseFloat(index));
+//               mDecimalFormat.format(Float.parseFloat(base) + Float.parseFloat(index));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -446,7 +443,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
             }
 
 
-            return "报价>=" + mGreaterThan + "或报价<=" + mLessThan;
+            return "报价>=" + mDecimalFormat.format(Float.parseFloat(base) + Float.parseFloat(index)) + "或报价<=" + mDecimalFormat.format(Float.parseFloat(base) - Float.parseFloat(index));
         }
         return "";
     }
@@ -517,16 +514,16 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
      * lessThan：基准价-浮动值
      * greaterThan：基准价+浮动值
      */
-    private void addFloatWarn() {
+    private void addFloatWarn(String baseValue,String floatValue) {
         dialog_progress.builder().setMessage("请稍等~").show();
         RequestParams params = new RequestParams();
         params.addBodyParameter("mobile", app.getUserInfoBean().getMobile());
         params.addBodyParameter("stockCode", symbol);
         params.addBodyParameter("stockName", stockName);
-        params.addBodyParameter("lessThan", mLessThan);
-        params.addBodyParameter("greaterThan", mGreaterThan);
+        params.addBodyParameter("lessThan", mDecimalFormat.format(Float.parseFloat(baseValue)));//基准价
+        params.addBodyParameter("greaterThan", mDecimalFormat.format(Float.parseFloat(floatValue)));//浮动值
 
-        LogUtil.d("添加浮动提醒接口参数：" + app.getUserInfoBean().getMobile() + symbol + stockName + mLessThan + mGreaterThan);
+        LogUtil.d("添加浮动提醒接口参数：" + app.getUserInfoBean().getMobile() + symbol + stockName + mDecimalFormat.format(Float.parseFloat(baseValue)) + mDecimalFormat.format(Float.parseFloat(floatValue)));
 
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.send(HttpRequest.HttpMethod.POST, app.addFloatWarn(), params, new RequestCallBack<String>() {
@@ -597,8 +594,8 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                     if ("1".equals(status)) {
 
                         JSONObject obj = object.getJSONObject("entityList");
-                        String lessThan = obj.getString("lessThan");
-                        String greaterThan = obj.getString("greaterThan");
+                        String baseValue = obj.getString("lessThan");//基准价
+                        String floatValue = obj.getString("greaterThan");//浮动值
                         floatWarnId = obj.getString("id");
 
                         JSONArray jsonArray = obj.getJSONArray("pointList");
@@ -620,16 +617,12 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                         }
 
 
-                        if (Float.parseFloat(lessThan) >= 0 && Float.parseFloat(greaterThan) >= 0) {
+                        if (Float.parseFloat(baseValue) >= 0 && Float.parseFloat(floatValue) >= 0) {
                             //如果用户设置了浮动提醒
                             switchCompat.setChecked(true);
-                            float fFloat = ((Float.parseFloat(greaterThan) - Float.parseFloat(lessThan)) / 2);
-                            float fBase = (Float.parseFloat(greaterThan) - fFloat);
-//                            LogUtil.d("-----greaterThan："+Float.parseFloat(greaterThan)+"-----lessThan:"+Float.parseFloat(lessThan));
-//                            LogUtil.d("-----fFloat："+fFloat+"-----fBase:"+fBase);
 
-                            etBase.setText(mDecimalFormat.format(fBase));
-                            etFloat.setText(mDecimalFormat.format(fFloat));
+                            etBase.setText(baseValue);
+                            etFloat.setText(floatValue);
                             valueRemind.setVisibility(View.VISIBLE);
                             valueRemind.setText(getTextValue(etBase.getText().toString(), etFloat.getText().toString()));
                         } else {
@@ -641,8 +634,8 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                             etBase.setText(mDecimalFormat.format(Float.parseFloat(currentValueBase)));
                             etFloat.setText(mDecimalFormat.format((Float.parseFloat(currentValueBase) / 10)));
 
-                            mLessThan = mDecimalFormat.format(Float.parseFloat(currentValueBase) - (Float.parseFloat(currentValueBase) / 10));
-                            mGreaterThan = mDecimalFormat.format(Float.parseFloat(currentValueBase) + (Float.parseFloat(currentValueBase) / 10));
+//                           mDecimalFormat.format(Float.parseFloat(currentValueBase) - (Float.parseFloat(currentValueBase) / 10));
+//                           mDecimalFormat.format(Float.parseFloat(currentValueBase) + (Float.parseFloat(currentValueBase) / 10));
                         }
                     } else {
 
