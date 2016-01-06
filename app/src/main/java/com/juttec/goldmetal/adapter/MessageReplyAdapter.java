@@ -11,6 +11,7 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.DyReplyInfoBean;
 import com.juttec.goldmetal.utils.EmojiUtil;
+import com.juttec.goldmetal.utils.LogUtil;
 
 import java.util.List;
 
@@ -84,8 +85,9 @@ public class MessageReplyAdapter extends BaseAdapter{
         dyReplyInfoBean = mLists.get(position);
         holder.tv_reply.setText(dyReplyInfoBean.getUserName());
         holder.tv_replyed.setText(dyReplyInfoBean.getRepliedName());
+        LogUtil.e("MessageReplyAdapter  " + dyReplyInfoBean.getReplyContent());
         holder.tv_content.setText(readEmoji.getEditable(dyReplyInfoBean.getReplyContent()));
-
+        LogUtil.e("MessageReplyAdapter eee  " + holder.tv_content.getText());
 
         return convertView;
     }

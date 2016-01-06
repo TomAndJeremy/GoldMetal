@@ -79,18 +79,13 @@
         android:layout_gravity="right"
         android:layout_margin="5dp"
         android:background="@mipmap/content_moment_btn_comment_normal" />
-
-
             <com.juttec.goldmetal.customview.listview.NoScrollListView
                 android:id="@+id/reply_listview"
                 android:layout_margin="10dp"
                 android:divider="@null"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
             </com.juttec.goldmetal.customview.listview.NoScrollListView>
-
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -162,6 +162,7 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
         Editable editable = new Editable.Factory().newEditable("");
 
         content.replace("\n", "");
+
 /***************************************************************************/
         String regex = "\\[[\\u4e00-\\u9fa5]+\\]";//匹配“[‘汉字’]”
         List<String> emojis = getMatcher(regex, content);
@@ -172,9 +173,17 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
 
         //之前表情的协议是`x.png`,现在的协议是[‘汉字’],此段代码将其转换为原先的协议（这样可以不用修改后面的代码）
 /***************************************************************************/
+
+
+
+
         final String[] s = content.split("`");
         for (int i = 0; i < s.length; i++) {
 
+            if (i < s.length && !s[i].contains(".png")) {//如果没有".png"就跳过后面的代码
+                editable.append(s[i]);
+                continue;
+            }
 
             StringTokenizer st = new StringTokenizer(s[i], ".");
 
@@ -209,6 +218,7 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
         if (paint != null) {
             autoSplit(editable, paint, x - tvWidth);
         }
+        LogUtil.e("EmojiUtil  content22 "+editable.toString());
         return editable;
     }
 

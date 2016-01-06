@@ -10,18 +10,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.DigitsKeyListener;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.juttec.goldmetal.R;
@@ -31,11 +31,12 @@ import com.juttec.goldmetal.activity.ChartActivity;
 import com.juttec.goldmetal.activity.CreateAccount.AccountNoticeActivity;
 import com.juttec.goldmetal.activity.LoginActivity;
 import com.juttec.goldmetal.activity.TodayStrategyActivity;
-import com.juttec.goldmetal.adapter.MarketRecyclerAdapter;
+import com.juttec.goldmetal.adapter.MarketListAdapter;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.MarketFormInfo;
 import com.juttec.goldmetal.bean.MyEntity;
 import com.juttec.goldmetal.bean.OptionalStockBean;
+import com.juttec.goldmetal.customview.PullToRefreshLayout;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
 import com.juttec.goldmetal.utils.GetNetworkData;
 import com.juttec.goldmetal.utils.LogUtil;
@@ -49,7 +50,7 @@ import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 
-public class MarketFragment extends BaseFragment implements View.OnClickListener {
+public class MarketFragment extends BaseFragment implements View.OnClickListener, PullToRefreshLayout.OnRefreshListener {
 
     GetNetworkData getNetWorkData;
     private static final String ARG_PARAM1 = "param1";
@@ -69,13 +70,10 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     private String SZB_URL = "http://db2015.wstock.cn/wsDB_API/stock.php?market=SZ2&r_type=2&num=20&page=";
 
 
-
-
     //返回指定代码的指定字段的行情  默认（最多）返回50行
     //http://db2015.wstock.cn/wsDB_API/stock.php?symbol=SH000001,SH000002&query=Date,Symbol,NewPrice,Volume,Amount&q_type=2
-   // http://db2015.wstock.cn/wsDB_API/stock.php?symbol=SZ000009&r_type=2
+    // http://db2015.wstock.cn/wsDB_API/stock.php?symbol=SZ000009&r_type=2
     private String SEARCH_URL = "http://db2015.wstock.cn/wsDB_API/stock.php?r_type=2";
-
 
 
     private String mParam1;
@@ -84,8 +82,6 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     private List<String> mLists;
 
     private ImageView iv_search;//搜索
-    private RecyclerView recyclerView;
-    private LinearLayoutManager layoutManager;
     private TabLayout tabLayout;
     private List<MarketFormInfo.ResultEntity> datas;
     private Button btCreateAccount;//开户按钮
@@ -97,7 +93,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
 
     private MarketFormInfo marketFormInfo;
-    private MarketRecyclerAdapter adapter;
+    private MarketListAdapter adapter;
     MyHandler myHandler;
 
     private MyApplication app;
@@ -108,19 +104,15 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     private boolean isOptional = true;//当前显示的数据是否是自选股  默认为：true
     private boolean isSearch = false;//是否点击了搜索个股tab 默认为：false
     private String resetURL;//保存最后的url
-    private boolean isLoadingMore = false;//是否正在加载更多  默认为false
-
-    private boolean isNoMore = false;//是否还有更多数据    默认为false
 
 
     private int page = 1;//默认加载第一页的数据
     private int lastPage = 1;//与page比较判断当前加载的是否是同一页
 
 
-
-
-    private float firstY = 0;//按下时的坐标
-    private int n = 1;//Action_MOVE时 用到
+    private ListView listView;
+    private PullToRefreshLayout ptrl;
+    private boolean isFirstIn = true;
 
 
     public static MarketFragment newInstance(String param1) {
@@ -135,20 +127,23 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         // Required empty public constructor
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
         }
-        
+
         marketFormInfo = new MarketFormInfo();
         myEntity = new MyEntity(marketFormInfo);
 
-        myRealm =  Realm.getInstance(new RealmConfiguration.Builder(getActivity())
-                                .name("optionalstock.realm")
-                                .build()
-                );
+        myRealm = Realm.getInstance(new RealmConfiguration.Builder(getActivity())
+                .name("optionalstock.realm")
+                .build()
+        );
 
         mLists = new ArrayList<String>();
     }
@@ -162,7 +157,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_market, container, false);
         tabLayout = (TabLayout) view.findViewById(R.id.market_tablayout);
-        tabLayout.addTab(tabLayout.newTab().setText("自选").setTag(1),true);
+        tabLayout.addTab(tabLayout.newTab().setText("自选").setTag(1), true);
         tabLayout.addTab(tabLayout.newTab().setText("上证A股").setTag(2));
         tabLayout.addTab(tabLayout.newTab().setText("上证B股").setTag(3));
         tabLayout.addTab(tabLayout.newTab().setText("深证A股").setTag(4));
@@ -175,7 +170,6 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
             public void onTabSelected(TabLayout.Tab tab) {
                 //当点击tab时  将加载的页数设置为  加载第一页
                 page = 1;
-                isNoMore = false;
                 switch ((int) tab.getTag()) {
                     case 1:
                         //获取自选股数据
@@ -234,7 +228,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
         init(view);
 
-      
+
         return view;
     }
 
@@ -242,15 +236,15 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     /**
      * 获取自选股  数据
      */
-    private void getOptionalData(){
+    private void getOptionalData() {
         //将 标志设置为：自选股
         isOptional = true;
         isSearch = false;
         //查数据库  将股票代码放入list中
         queryData();
         //判断是否有自选股
-        if(mLists.size()==0){
-            ToastUtil.showShort(getActivity(),"您还没有自选股，快去添加吧");
+        if (mLists.size() == 0) {
+            ToastUtil.showShort(getActivity(), "您还没有自选股，快去添加吧");
             //将股票数据清空
             datas.clear();
             //将resetURL置空
@@ -258,7 +252,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
             //停止网络访问
             getNetWorkData.stop();
 
-            if(adapter!=null){
+            if (adapter != null) {
                 adapter.notifyDataSetChanged();
             }
             return;
@@ -266,24 +260,29 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         //将股票代码 拼接成指定url
         String url = "";
         //自选
-        for(int i=0;i<mLists.size();i++){
-            if(i!=mLists.size()-1){
-                url = url+mLists.get(i)+",";
-            }else{
-                url = url+mLists.get(i);
+        for (int i = 0; i < mLists.size(); i++) {
+            if (i != mLists.size() - 1) {
+                url = url + mLists.get(i) + ",";
+            } else {
+                url = url + mLists.get(i);
             }
 
         }
-    
+
         //调接口获取自选股数据
         getData(OPTIONAL_URL + url);
     }
 
 
-
-
     //初始化view
     private void init(View view) {
+
+
+        ptrl = (PullToRefreshLayout) view.findViewById(R.id.refresh_view);
+        ptrl.setOnRefreshListener(this);
+
+        listView = (ListView) view.findViewById(R.id.fragment_market_ListView);
+
         iv_search = (ImageView) view.findViewById(R.id.market_search);
 
         ImageView rightImg = (ImageView) view.findViewById(R.id.right_img);
@@ -299,93 +298,94 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         btCreateAccount = (Button) view.findViewById(R.id.fragment_market_bt_createaccount);
         btCreateAccount.setOnClickListener(this);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_market_recyclerview);
-        layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new SampleDivider(getActivity(), R.drawable.divider_shape));
-        //监听 recycleview的触摸事件
-        recyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
-                int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
-                int totalItemCount = layoutManager.getItemCount();
 
-                if (firstVisibleItem == 0 || lastVisibleItem >= totalItemCount - 1) {
-                    switch (event.getAction()) {
-
-                        case MotionEvent.ACTION_MOVE:
-                            if (n == 1) {
-                                firstY = event.getY();
-                                LogUtil.d("firstY-----:" + firstY);
-                                n++;
-                            }
-                            break;
-
-                        case MotionEvent.ACTION_UP:
-                            //将n重新设置为1
-                            n = 1;
+//        //监听 recycleview的触摸事件
+//        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+//                int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+//                int totalItemCount = layoutManager.getItemCount();
+//
+//                if (firstVisibleItem == 0 || lastVisibleItem >= totalItemCount - 1) {
+//                    switch (event.getAction()) {
+//
+//                        case MotionEvent.ACTION_MOVE:
+//                            if (n == 1) {
+//                                firstY = event.getY();
+//                                LogUtil.d("firstY-----:" + firstY);
+//                                n++;
+//                            }
+//                            break;
+//
+//                        case MotionEvent.ACTION_UP:
+//                            //将n重新设置为1
+//                            n = 1;
 //                            LogUtil.d("MotionEvent.ACTION_UP-----:" + event.getY());
-                            LogUtil.d("MotionEvent.ACTION_UP======" + page + ":" + firstVisibleItem + ":" + (firstY - event.getY()));
-                            //下拉 加载上一页数据
-                            //当前不是第一页数据 当前显示的第一条数据的position为0  向下滑动的手势距离大于20
-                            if (page != 1 && firstY - event.getY() < -200) {
-                                //下拉  加载上一页数据
-                                if (!isLoadingMore) {
-                                    page--;
-                                    LogUtil.d("下拉  加载上一页数据-----page:"+page);
-                                    //
-                                    isNoMore = false;
-                                    loadData(page);
-                                }
-                            }
-                            //上拉 加载下一页数据
-                            //当前显示的最后一条数据的position==totalItemCount的position  向上滑动的手势距离大于30
-                            if (firstY - event.getY() > 200) {
-                                //上拉 加载下一页数据
-                                if (!isLoadingMore) {
-                                    if (!isNoMore) {
-                                        page++;
-                                        LogUtil.d("上拉 加载下一页数据-----page:"+page);
-                                        loadData(page);
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                }
-
-                return false;
-            }
-        });
+//                            LogUtil.d("MotionEvent.ACTION_UP======" + page + ":" + firstVisibleItem + ":" + (firstY - event.getY()));
+//                            //下拉 加载上一页数据
+//                            //当前不是第一页数据 当前显示的第一条数据的position为0  向下滑动的手势距离大于20
+//                         /*   if (page != 1 && firstY - event.getY() < -200) {
+//                                //下拉  加载上一页数据
+//                                if (!isLoadingMore) {
+//                                    page--;
+//                                    LogUtil.d("下拉  加载上一页数据-----page:"+page);
+//                                    //
+//                                    isNoMore = false;
+//                                    loadData(page);
+//                                }
+//                            }*/
+//                            //上拉 加载下一页数据
+//                            //当前显示的最后一条数据的position==totalItemCount的position  向上滑动的手势距离大于30
+//
+//                            if (firstY - event.getY() > screenHigh / 5) {
+//                                //上拉 加载下一页数据
+//                                if (!isLoadingMore) {
+//                                    if (!isNoMore) {
+//                                        progressDialog.show();
+//
+//                                        page++;
+//                                        LogUtil.d("上拉 加载下一页数据-----page:" + page);
+//                                        loadData(page);
+//                                    }
+//                                }
+//                            }
+//                            break;
+//                    }
+//                }
+//
+//                return false;
+//            }
+//        });
 
 
         datas = new ArrayList<>();
         myHandler = new MyHandler();
-      
-        }
+
+    }
 
     /**
      * 加载上一页 或者 下一页 数据
-     * @param page  第几页的数据
+     *
+     * @param page 第几页的数据
      */
-    private void loadData(int page){
-        switch (tabLayout.getSelectedTabPosition()){
+    private void loadData(int page) {
+        switch (tabLayout.getSelectedTabPosition()) {
             case 1:
                 //上证A股
-                getData(SHA_URL+page);
+                getData(SHA_URL + page);
                 break;
             case 2:
                 //上证B股
-                getData(SHB_URL+page);
+                getData(SHB_URL + page);
                 break;
             case 3:
                 //深证A股
-                getData(SZA_URL+page);
+                getData(SZA_URL + page);
                 break;
             case 4:
                 //深证B股
-                getData(SZB_URL+page);
+                getData(SZB_URL + page);
                 break;
 
         }
@@ -397,13 +397,13 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         super.onResume();
         myRealm = Realm.getInstance(getActivity());
 
-        if(isFirst){
+        if (isFirst) {
             //第一次进入  默认加载自选股数据
             //获取自选股数据
             getOptionalData();
             isFirst = false;
         }
-        if (resetURL!=null) {
+        if (resetURL != null) {
             getData(resetURL);//重新获取最后显示的数据
         }
     }
@@ -411,7 +411,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onStop() {
         super.onStop();
-        if(myRealm!=null){
+        if (myRealm != null) {
             myRealm.close();//关闭数据库
         }
         getNetWorkData.stop();//停止网络访问
@@ -420,8 +420,8 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         final Intent intent;
-        switch (v.getId()){
-            case  R.id.market_search:
+        switch (v.getId()) {
+            case R.id.market_search:
                 //搜索个股
                 showSearchStock();
 
@@ -431,9 +431,9 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
             case R.id.right_img:
                 //个人账户
-                if(app.getUserInfoBean()!=null){
+                if (app.getUserInfoBean() != null) {
                     startActivity(new Intent(getActivity(), AccountActivity.class));
-                }else{
+                } else {
                     //如果没有登录
                     final MyAlertDialog mdialog = new MyAlertDialog(getActivity());
                     mdialog.builder().setTitle("提示")
@@ -454,7 +454,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
             case R.id.left_img:
                 //公告
                 startActivity(new Intent(getActivity(), AnnouncementActivity.class));
-                LogUtil.d("trim:"+"   111    111   ".trim());
+                LogUtil.d("trim:" + "   111    111   ".trim());
                 break;
 
 
@@ -481,7 +481,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
             case R.id.fragment_market_strategy:
                 //今日策略
                 intent = new Intent(getActivity(), TodayStrategyActivity.class);
-                intent.putExtra(NewsFragment.HEADTITLE,"今日策略");
+                intent.putExtra(NewsFragment.HEADTITLE, "今日策略");
                 startActivity(intent);
                 break;
         }
@@ -491,7 +491,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     /**
      * 搜索个股
      */
-    private void showSearchStock(){
+    private void showSearchStock() {
         final MyAlertDialog dialog = new MyAlertDialog(getActivity());
 
         dialog.builder()
@@ -520,14 +520,32 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
             public int getInputType() {
                 return InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
             }
+
             @Override
             protected char[] getAcceptedChars() {
-                char[] data =  getResources().getString(R.string.only_can_input).toCharArray();
+                char[] data = getResources().getString(R.string.only_can_input).toCharArray();
                 return data;
             }
         });
         dialog.getEt().setMaxEms(8);
         dialog.getEt().setSingleLine(true);
+    }
+
+    @Override
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+
+        if (page != 1) {
+            page--;
+            loadData(page);
+        } else {
+            ptrl.refreshFinish(PullToRefreshLayout.SUCCEED);
+
+        }
+    }
+
+    @Override
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+        loadData(++page);
     }
 
 
@@ -568,17 +586,18 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     //根据制定URL  获取股票数据
     private void getData(String url) {
         LogUtil.d("股票URL-------------" + url);
-        if (url != null&& !TextUtils.isEmpty(url)) {
-            isLoadingMore = true;
+        if (url != null && !TextUtils.isEmpty(url)) {
+
             resetURL = url;
             if (getNetWorkData.isAlive()) {
                 getNetWorkData.setUrl(url);
             } else {
                 getNetWorkData.getKLineData(url, myEntity, getActivity(), myHandler, NEWEST);
             }
-        } }
+        }
+    }
 
-   
+
     /**
      * 自定义Handler
      */
@@ -593,70 +612,67 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
             marketFormInfo = (MarketFormInfo) myEntity.getObject();
             switch (msg.what) {
                 case NEWEST:
-                    //加载完数据  将标志更改为false
-                    isLoadingMore = false;
-                    if (marketFormInfo.getResult().size() == 0)
-                    {
-                        //没有更多数据
-                        isNoMore = true;
-                        //将page页数减1
+
+                    if (marketFormInfo.getResult().size() == 0) {
+
                         page--;
                         loadData(page);
-                        LogUtil.d("当前页：-----------"+page);
+                        LogUtil.d("当前页：-----------" + page);
                         ToastUtil.showShort(getActivity(), "数据已全部加载...");
                         break;
                     } else {
                         datas = marketFormInfo.getResult();
 
                         //如果当前 选中的是自选股并且 mlist中没有数据   则直接return
-                        if(isOptional&&mLists.size()==0 ){
+                        if (isOptional && mLists.size() == 0) {
                             return;
                         }
                         //当前点击了搜索个股Tab  并且issearch为false 则直接退出
-                        if(tabLayout.getSelectedTabPosition()==5&&!isSearch){
-                            return ;
+                        if (tabLayout.getSelectedTabPosition() == 5 && !isSearch) {
+                            return;
                         }
 
 //                        ToastUtil.showShort(getActivity(), "加载更多数据...");
                         if (page % 2 == 0) {
-                            recyclerView.setBackgroundColor(Color.rgb(34, 34, 34));
+                            listView.setBackgroundColor(Color.rgb(34, 34, 34));
                         } else {
-                            recyclerView.setBackgroundColor(Color.rgb(0, 0, 0));
+                            listView.setBackgroundColor(Color.rgb(0, 0, 0));
                         }
-                        if(adapter==null){
-                            adapter = new MarketRecyclerAdapter(datas, getActivity());
-                            recyclerView.setAdapter(adapter);
-                        }else{
+                        if (adapter == null) {
+                            adapter = new MarketListAdapter(datas, getActivity());
+                            listView.setAdapter(adapter);
+                        } else {
                             adapter.notifyData(datas);
 
                             if (lastPage != page) {
 
-                                layoutManager.scrollToPosition(0);
-                                recyclerView.setLayoutManager(layoutManager);
+                                listView.setSelection(0);
                             }
-                            lastPage = page;  }
+                            lastPage = page;
+                        }
 
 
                         //item的短按事件   进入分时图
-                        adapter.setOnItemClickListener(new MarketRecyclerAdapter.OnItemClickListener() {
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
-                            public void itemclickListener(View view, int position) {
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                 Intent intent = new Intent(getActivity(), ChartActivity.class);
                                 Bundle bundle = new Bundle();
-                                bundle.putString("name", datas.get(position).getName());
-                                bundle.putString("symbol", datas.get(position).getSymbol());
+                                bundle.putString("name", datas.get(i).getName());
+                                bundle.putString("symbol", datas.get(i).getSymbol());
                                 intent.putExtras(bundle);
                                 startActivity(intent);
+
                             }
                         });
 
                         //item的长按事件   加入或移除  自选股
-                        adapter.setOnItemLongClickListener(new MarketRecyclerAdapter.OnItemLongClickListener() {
+                        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                             @Override
-                            public void itemLongClickListener(View view, final int position) {
+                            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
                                 if (!isOptional && mLists.contains(datas.get(position).getSymbol())) {
                                     ToastUtil.showShort(getActivity(), datas.get(position).getName() + "已加入到自选股");
-                                    return;
+                                    return true;
                                 }
 
                                 myAlertDialog.builder().setTitle(isOptional ? "移除自选股" : "添加自选股")
@@ -680,10 +696,13 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                                     }
                                 }).show();
 
+                                return true;
                             }
                         });
 
+                        ptrl.refreshFinish(PullToRefreshLayout.SUCCEED);
 
+                        ptrl.loadmoreFinish(PullToRefreshLayout.SUCCEED);
                         break;
                     }
             }
@@ -694,7 +713,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     /**
      * 往数据库中保存数据
      */
-    private void saveData(String symbol_save){
+    private void saveData(String symbol_save) {
         myRealm.beginTransaction();
         // Create an object
         OptionalStockBean bean = myRealm.createObject(OptionalStockBean.class);
@@ -708,35 +727,34 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     }
 
 
-
     /**
      * 从数据库中查询数据
      */
-    private void queryData(){
+    private void queryData() {
         //先将list中的数据清空
         mLists.clear();
         RealmResults<OptionalStockBean> results =
                 myRealm.where(OptionalStockBean.class).findAll();
 
-        for(OptionalStockBean c:results) {
+        for (OptionalStockBean c : results) {
             mLists.add(c.getSymbol());
         }
 
-        LogUtil.d("从数据库检索到的数据："+mLists.toString());
+        LogUtil.d("从数据库检索到的数据：" + mLists.toString());
     }
 
 
     /**
      * 从数据库中删除数据
      */
-    private void deleteData(String symbol_del){
+    private void deleteData(String symbol_del) {
 
         myRealm.beginTransaction();
         RealmResults<OptionalStockBean> results =
                 myRealm.where(OptionalStockBean.class).findAll();
 
-        for(int i=0;i<results.size();i++){
-            if(results.get(i).getSymbol().equals(symbol_del)){
+        for (int i = 0; i < results.size(); i++) {
+            if (results.get(i).getSymbol().equals(symbol_del)) {
                 results.remove(i);
                 //同时将list中的数据删除
                 mLists.remove(i);
@@ -744,19 +762,19 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         }
         myRealm.commitTransaction();
 
-        if(mLists.size()==0){
+        if (mLists.size() == 0) {
             //将resetURL置空
             resetURL = "";
             getNetWorkData.stop();//停止网络访问
-        }else{
+        } else {
             //将股票代码 拼接成指定url
             String url = "";
             //自选
-            for(int j=0;j<mLists.size();j++){
-                if(j!=mLists.size()-1){
-                    url = url+mLists.get(j)+",";
-                }else{
-                    url = url+mLists.get(j);
+            for (int j = 0; j < mLists.size(); j++) {
+                if (j != mLists.size() - 1) {
+                    url = url + mLists.get(j) + ",";
+                } else {
+                    url = url + mLists.get(j);
                 }
             }
             //调接口获取自选股数据

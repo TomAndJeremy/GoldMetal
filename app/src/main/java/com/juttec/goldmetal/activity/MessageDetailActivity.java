@@ -202,6 +202,9 @@ public class MessageDetailActivity extends AppCompatActivity implements View.OnC
      * @param content  回复内容
      */
     private void reply( final String content) {
+
+
+        LogUtil.e("content  :"+content);
         dialog.builder().setMessage("正在提交~").show();
         RequestParams param = new RequestParams();
         param.addBodyParameter("dyId", messageBean.getMsgDyId());

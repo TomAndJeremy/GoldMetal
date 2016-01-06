@@ -84,7 +84,6 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
     private String floatWarnId;//浮动提醒的id
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,8 +104,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
 
         //调接口查询点位提醒和浮动提醒
         getWarnData();
-
-    }
+       }
 
     //初始化控件
     private void initView() {
@@ -349,6 +347,12 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
     }
 
 
+    /**
+     * 如果设置了点位提醒，则添加到界面上
+     *
+     * @param pointBeens
+     */
+
 
 
     /**
@@ -479,18 +483,17 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                     String promptInfor = object.getString("promptInfor");
                     JSONObject object1 =object.getJSONObject("message1");
                     String pointWarnId = object1.getString("id");
-
-
                     if ("1".equals(status)) {
+                        //添加此点位的布局
                         PointWarnBean pointWarnBean = new PointWarnBean();
                         pointWarnBean.setLogicOperator(operator);
                         pointWarnBean.setNewestPrice(value);
                         pointWarnBean.setPointWarnId(pointWarnId);
                         mPointWarnBeanList.add(pointWarnBean);
-
                         //添加此点位的布局
                         String sPoint = "最新价" + operator + value;
                         addView(pointWarnId,sPoint);
+
 
                     } else {
                     }
@@ -539,7 +542,6 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                     String promptInfor = object.getString("promptInfor");
                     JSONObject object1 =object.getJSONObject("message1");
                     floatWarnId = object1.getString("id");
-
                     if ("1".equals(status)) {
                         //打开浮动开关
                         switchCompat.setChecked(true);
@@ -666,7 +668,6 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
 
         RequestParams params = new RequestParams();
         params.addBodyParameter("id", pointWarnId);
-//        params.addBodyParameter("mobile", app.getUserInfoBean().getMobile());
 //        params.addBodyParameter("stockCode",symbol);
 //        params.addBodyParameter("stockName", stockName);
 //        params.addBodyParameter("logicOperator", logicOperator);//操作符
