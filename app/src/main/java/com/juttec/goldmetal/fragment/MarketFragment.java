@@ -538,7 +538,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
             page--;
             loadData(page);
         } else {
-            ptrl.refreshFinish(PullToRefreshLayout.SUCCEED);
+            ptrl.refreshFinish(PullToRefreshLayout.SUCCEED, true);
 
         }
     }

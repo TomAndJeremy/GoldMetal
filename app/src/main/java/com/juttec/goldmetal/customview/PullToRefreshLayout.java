@@ -214,6 +214,8 @@ public class PullToRefreshLayout extends RelativeLayout
 		timer.schedule(5);
 	}
 
+
+
 	/**
 	 * 完成刷新操作，显示刷新结果。注意：刷新完成后一定要调用这个方法
 	 */
@@ -223,6 +225,12 @@ public class PullToRefreshLayout extends RelativeLayout
 	 */
 	public void refreshFinish(int refreshResult)
 	{
+		refreshFinish(refreshResult, false);
+
+	}
+
+	public void refreshFinish(int refreshResult,boolean isFirstPage)
+	{
 		refreshingView.clearAnimation();
 		refreshingView.setVisibility(View.GONE);
 		switch (refreshResult)
@@ -230,7 +238,12 @@ public class PullToRefreshLayout extends RelativeLayout
 		case SUCCEED:
 			// 刷新成功
 			refreshStateImageView.setVisibility(View.VISIBLE);
-			refreshStateTextView.setText(R.string.refresh_succeed);
+			if (isFirstPage) {
+				refreshStateTextView.setText("当前为第一页");
+			} else {
+				refreshStateTextView.setText(R.string.refresh_succeed);
+
+			}
 			refreshStateImageView
 					.setBackgroundResource(R.mipmap.refresh_succeed);
 			break;

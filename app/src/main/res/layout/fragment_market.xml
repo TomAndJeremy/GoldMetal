@@ -132,13 +132,16 @@
 <com.juttec.goldmetal.customview.PullToRefreshLayout
     android:id="@+id/refresh_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_weight="1">
 
     <include layout="@layout/refresh_head" />
     <com.juttec.goldmetal.customview.listview.PullableListView
 
         android:id="@+id/fragment_market_ListView"
 
+        android:divider="@color/gray"
+        android:dividerHeight="0.3dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black">

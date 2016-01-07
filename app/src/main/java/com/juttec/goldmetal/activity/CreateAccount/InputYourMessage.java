@@ -92,12 +92,12 @@ public class InputYourMessage extends AppCompatActivity {
     private boolean checkInformation(){
         String nameContent = et_name.getText().toString();
         if(TextUtils.isEmpty(nameContent) || "".equals(nameContent) || nameContent.trim().length() <= 0){
-            ToastUtil.showShort(this,"请填写姓名");
+            ToastUtil.showShort(this,"请输入姓名");
             return false;
         }else{
             String phoneContent = et_phone.getText().toString();
             if(TextUtils.isEmpty(phoneContent) || "".equals(phoneContent) || phoneContent.trim().length() <= 0){
-                ToastUtil.showShort(this,"请填写手机号");
+                ToastUtil.showShort(this,"请输入手机号码");
                 return false;
             }else{
                 if(checkMobile(phoneContent)){
@@ -121,13 +121,13 @@ public class InputYourMessage extends AppCompatActivity {
             Matcher matcher = pattern.matcher(phoneNum);
             boolean isMatcher = matcher.find();
             if (!isMatcher) {
-                Toast.makeText(InputYourMessage.this, "手机号有错误", Toast.LENGTH_SHORT)
+                Toast.makeText(InputYourMessage.this, "手机号码不正确", Toast.LENGTH_SHORT)
                         .show();
                 return false;
             }
 
         }else{
-            Toast.makeText(InputYourMessage.this, "请填写手机号", Toast.LENGTH_SHORT)
+            Toast.makeText(InputYourMessage.this, "请输入手机号码", Toast.LENGTH_SHORT)
                     .show();
             return false;
         }

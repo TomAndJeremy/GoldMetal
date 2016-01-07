@@ -12,16 +12,34 @@ public class ToastUtil {
     public static boolean isShow = true;
 
 
+    private static Toast toast = null;
+
     public static void showShort(Context context,String msg){
 
-        if(isShow)
-            Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+        if(isShow){
+
+            if (toast == null) {
+                toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+            } else {
+                toast.setText(msg);
+            }
+            toast.show();
+
+        }
+
     }
 
 
     public static void showLong(Context context,String msg){
 
         if(isShow)
-            Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
+        {
+            if (toast == null) {
+                toast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
+            } else {
+                toast.setText(msg);
+            }
+            toast.show();
+        }
     }
 }

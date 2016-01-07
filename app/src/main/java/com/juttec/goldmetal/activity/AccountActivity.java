@@ -313,15 +313,15 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
     //判断验证码是否正确
     private boolean  checkCode( String code){
-        if (code == null || "".equals(code)) {
-            ToastUtil.showShort(this, "请输入验证码");
-            return false;
-        }else if(code_back==null) {
+        if(code_back==null) {
             ToastUtil.showShort(this, "请获取验证码");
+            return false;
+        }else if (code == null || "".equals(code)) {
+            ToastUtil.showShort(this, "请输入验证码");
             return false;
         }else{
             if(!code.equals(code_back)){
-                ToastUtil.showShort(this, "验证码错误");
+                ToastUtil.showShort(this, "验证码不正确");
                 return false;
             }
         }
