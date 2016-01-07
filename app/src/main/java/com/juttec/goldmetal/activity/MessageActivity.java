@@ -268,6 +268,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onFailure(HttpException error, String msg) {
                 dialog.dismiss();
+                mListView.setState(LoadingFooter.State.Idle);
                 NetWorkUtils.showMsg(MessageActivity.this);
 
             }

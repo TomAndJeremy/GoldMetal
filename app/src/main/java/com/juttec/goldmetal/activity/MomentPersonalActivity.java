@@ -282,6 +282,7 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
                         if (state == MSG_REFRESH) {
                             swipeLayout.setRefreshing(false);
                         }
+                        mListView.setState(LoadingFooter.State.Idle);
                         NetWorkUtils.showMsg(MomentPersonalActivity.this);
                     }
 
