@@ -195,7 +195,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 if(checkMobile(mUserName.getText().toString())){
                     if(checkPwd(mPwd.getText().toString())){
-                        if("".equals((String)SharedPreferencesUtil.getParam(LoginActivity.this, "CID", ""))){
+                        if(app.getCID()==null&&"".equals((String)SharedPreferencesUtil.getParam(LoginActivity.this, "CID", ""))){
                             ToastUtil.showShort(this,"请检查网络状态是否良好");
                             return;
                         }

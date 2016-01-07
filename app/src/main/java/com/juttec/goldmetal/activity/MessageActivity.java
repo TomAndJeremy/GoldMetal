@@ -257,6 +257,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                         //填充数据
                         initData(flag);
                     } else {
+                        mListView.setState(LoadingFooter.State.Idle);
                         ToastUtil.showShort(MessageActivity.this, promptInfor);
                     }
 
