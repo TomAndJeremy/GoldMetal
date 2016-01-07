@@ -13,7 +13,15 @@ public class UserInfoBean {
     private String userNickName;//用户昵称
     private String userQQ;//用户QQ
     private String userPhoto;//用户头像(地址)
+    private String noteWarn;//“noteWarn”:”xxxxx”//短信提醒 0：未开启，1开启
 
+    public String getNoteWarn() {
+        return noteWarn;
+    }
+
+    public void setNoteWarn(String noteWarn) {
+        this.noteWarn = noteWarn;
+    }
 
     public String getMobile() {
         return mobile;

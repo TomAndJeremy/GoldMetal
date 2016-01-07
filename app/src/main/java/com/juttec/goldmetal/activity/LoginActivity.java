@@ -283,6 +283,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         userInfoBean.setUserNickName(userObject.getString("userNickName"));
                         userInfoBean.setUserQQ(userObject.getString("userQQ"));
                         userInfoBean.setUserPhoto(userObject.getString("userPhoto"));
+                        userInfoBean.setNoteWarn(userObject.getString("noteWarn"));
 
                         app.setUserInfoBean(userInfoBean);
 

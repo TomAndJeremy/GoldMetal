@@ -103,6 +103,7 @@ public class SplashActivity extends AppCompatActivity {
                         userInfoBean.setUserNickName(userObject.getString("userNickName"));
                         userInfoBean.setUserQQ(userObject.getString("userQQ"));
                         userInfoBean.setUserPhoto(userObject.getString("userPhoto"));
+                        userInfoBean.setNoteWarn(userObject.getString("noteWarn"));
                         app.setUserInfoBean(userInfoBean);
 
                         //开启推送
