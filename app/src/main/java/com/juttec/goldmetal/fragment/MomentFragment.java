@@ -246,6 +246,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         initTabs(myHead);
 
 
+
+
         /*初始化Recyclerview*/
         recyclerView = (RecyclerView) view.findViewById(R.id.moment_recyclerview);
         recyclerView.setHasFixedSize(true);
@@ -271,6 +273,19 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                 }
             }
         });
+
+
+        adapter = new MomentRecyclerViewAdapter(entityList, getActivity(), app, MomentFragment.this);
+
+
+        // 添加头部
+        myAdapter = new RecycleViewWithHeadAdapter<>(adapter);
+        myAdapter.addHeader(myHead);
+        adapter.setHeadAdapter(myAdapter);
+
+        // 设置Adapter
+        recyclerView.setAdapter(myAdapter);
+        myBroadcastReceiver.setMyAdapter(myAdapter);
 
     }
 
@@ -621,7 +636,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                             LogUtil.e("交易圈异常：" + e.toString());
                         }
                         if (adapter == null) {
-                            adapter = new MomentRecyclerViewAdapter(entityList, getActivity(), app, MomentFragment.this);
+                           /* adapter = new MomentRecyclerViewAdapter(entityList, getActivity(), app, MomentFragment.this);
 
 
                             // 添加头部
@@ -631,7 +646,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
                             // 设置Adapter
                             recyclerView.setAdapter(myAdapter);
-                            myBroadcastReceiver.setMyAdapter(myAdapter);
+                            myBroadcastReceiver.setMyAdapter(myAdapter);*/
 
                         } else {
                             adapter.notifyDataSetChanged();
