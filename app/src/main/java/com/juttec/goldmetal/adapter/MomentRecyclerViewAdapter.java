@@ -1,23 +1,19 @@
 package com.juttec.goldmetal.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -35,8 +31,6 @@ import com.juttec.goldmetal.bean.DyReplyInfoBean;
 import com.juttec.goldmetal.bean.DySupportInfoBean;
 import com.juttec.goldmetal.bean.DynamicEntityList;
 import com.juttec.goldmetal.bean.PhotoBean;
-import com.juttec.goldmetal.customview.AlignTextView;
-import com.juttec.goldmetal.customview.CBAlignTextView;
 import com.juttec.goldmetal.customview.CircleImageView;
 import com.juttec.goldmetal.customview.NoScrollGridView;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
@@ -44,7 +38,6 @@ import com.juttec.goldmetal.dialog.ReplyPopupWindow;
 import com.juttec.goldmetal.utils.EmojiUtil;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
-import com.juttec.goldmetal.utils.TextJustification;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -94,6 +87,9 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
         options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)//设置下载的图片是否缓存在内存中
                 .cacheOnDisk(true)//设置下载的图片是否缓存在SD卡中
+                .showImageOnLoading(R.mipmap.content_moment_pho_others)          // 设置图片下载期间显示的图片
+                .showImageForEmptyUri(R.mipmap.content_moment_pho_others)  // 设置图片Uri为空或是错误的时候显示的图片
+                .showImageOnFail(R.mipmap.content_moment_pho_others)       // 设置图片加载或解码过程中发生错误显示的图片
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .build();//构建完成
 

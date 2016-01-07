@@ -635,7 +635,6 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                             //设置基准价(股票的当前价)和 浮动值 （默认的值）
                             etBase.setText(mDecimalFormat.format(Float.parseFloat(currentValueBase)));
                             etFloat.setText(mDecimalFormat.format((Float.parseFloat(currentValueBase) / 10)));
-
 //                           mDecimalFormat.format(Float.parseFloat(currentValueBase) - (Float.parseFloat(currentValueBase) / 10));
 //                           mDecimalFormat.format(Float.parseFloat(currentValueBase) + (Float.parseFloat(currentValueBase) / 10));
                         }

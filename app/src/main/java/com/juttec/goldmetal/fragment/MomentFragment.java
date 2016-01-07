@@ -417,7 +417,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                 i = 1;
                 getInfo(i, MyApplication.DYNAMIC_TYPE_ALL);
 
-                recyclerView.scrollToPosition(0);
+                recyclerView.smoothScrollToPosition(0);
 
                 break;
             case LOGIN://登陆后设置头像,刷新数据
@@ -576,7 +576,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
      * @param page 页数
      * @param type 类型 all：所有 attention：关注 personal：个人
      */
-    private void getInfo(int page, String type) {
+    private void getInfo(final int page, String type) {
         LogUtil.d("交易圈 首页  current page:" + page);
         RequestParams params = new RequestParams();
 
@@ -607,7 +607,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
                         DynamicMsgBean dynamicMsgBean = gson.fromJson(responseInfo.result.toString(), DynamicMsgBean.class);//解析数据
-                        if (i == 1) {
+                        if (page == 1) {
                             entityList.clear();//刷新时先清空集合
                         }
                         List<DynamicEntityList> dynamicEntityLists = dynamicMsgBean.getEntityList();
@@ -648,12 +648,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                     public void onFailure(HttpException error, String msg) {
                         refreshLayout.setRefreshing(false);
                         NetWorkUtils.showMsg(getActivity());
-
                     }
-
-
                 }
-
         );
 
     }
@@ -682,8 +678,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         } else {
             mHeadPhoto.setImageResource(R.mipmap.content_moment_pho_user);
         }
-        getInfo(1, MyApplication.DYNAMIC_TYPE_ALL);
-
+//        getInfo(1, MyApplication.DYNAMIC_TYPE_ALL);
 
     }
 }

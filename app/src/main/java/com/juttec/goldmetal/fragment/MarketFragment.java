@@ -454,7 +454,6 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
             case R.id.left_img:
                 //公告
                 startActivity(new Intent(getActivity(), AnnouncementActivity.class));
-                LogUtil.d("trim:" + "   111    111   ".trim());
                 break;
 
 

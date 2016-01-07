@@ -1,6 +1,7 @@
 package com.juttec.goldmetal.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.juttec.goldmetal.R;
 import com.juttec.goldmetal.application.MyApplication;
 import com.juttec.goldmetal.bean.MessageBean;
 import com.juttec.goldmetal.utils.EmojiUtil;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -35,6 +37,11 @@ public class MessageAdapter extends BaseAdapter{
 
     private EmojiUtil readEmoji;
 
+    protected ImageLoader imageLoader;//图片加载工具
+    private DisplayImageOptions options;//
+
+
+
 
     public MessageAdapter(Context context,List<MessageBean> list){
         app = (MyApplication) context.getApplicationContext();
@@ -44,6 +51,16 @@ public class MessageAdapter extends BaseAdapter{
 
         readEmoji = new EmojiUtil(context);
         readEmoji.readEmojiIcons();
+
+        imageLoader = ImageLoader.getInstance();
+        options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)//设置下载的图片是否缓存在内存中
+                .cacheOnDisk(true)//设置下载的图片是否缓存在SD卡中
+                .showImageOnLoading(R.mipmap.content_moment_pho_others)          // 设置图片下载期间显示的图片
+                .showImageForEmptyUri(R.mipmap.content_moment_pho_others)  // 设置图片Uri为空或是错误的时候显示的图片
+                .showImageOnFail(R.mipmap.content_moment_pho_others)       // 设置图片加载或解码过程中发生错误显示的图片
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();//构建完成
 
     }
 
@@ -87,7 +104,7 @@ public class MessageAdapter extends BaseAdapter{
         holder.tv_title.setText(readEmoji.getEditable(messageBean.getMsgBirefTitle()));
         holder.tv_content.setText(readEmoji.getEditable(messageBean.getMsgBriefContent()));
         holder.tv_time.setText(messageBean.getMsgAddTime());
-        ImageLoader.getInstance().displayImage(app.getImgBaseUrl() + messageBean.getMsgUserPhoto(), holder.iv_photo);
+        ImageLoader.getInstance().displayImage(app.getImgBaseUrl() + messageBean.getMsgUserPhoto(), holder.iv_photo,options);
 
         return convertView;
     }

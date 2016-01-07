@@ -195,7 +195,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 if(checkMobile(mUserName.getText().toString())){
                     if(checkPwd(mPwd.getText().toString())){
-                        if(app.getCID()==null){
+                        if("".equals((String)SharedPreferencesUtil.getParam(LoginActivity.this, "CID", ""))){
                             ToastUtil.showShort(this,"请检查网络状态是否良好");
                             return;
                         }
@@ -205,7 +205,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }else{
                     return;
                 }
-                SharedPreferencesUtil.setParam(this,"CID",app.getCID());
+                if(app.getCID()!=null){
+                    SharedPreferencesUtil.setParam(this,"CID",app.getCID());
+                }
+
                 login();
 
                 break;
@@ -249,11 +252,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(cb_remember.isChecked()){
             SharedPreferencesUtil.setParam(this, "pwd", mPwd.getText().toString());
         }
-        if("".equals((String)SharedPreferencesUtil.getParam(LoginActivity.this, "CID", ""))){
-            ToastUtil.showShort(this,"请检查网络状态是否良好");
-            dialog.dismiss();
-            return;
-        }
+
 
         RequestParams params = new RequestParams();
 
