@@ -47,7 +47,6 @@
                     android:layout_height="40dp"
                     android:background="@drawable/etcorner_shape"
                     android:gravity="center"
-                    android:text="16.18"
                     android:textColor="#ffffff"
                     android:textSize="16sp" />
 
@@ -91,7 +90,6 @@
                     android:inputType="numberDecimal"
                     android:background="@drawable/etcorner_shape"
                     android:gravity="center"
-                    android:text="3180"
                     android:textColor="#ffffff"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -129,7 +127,6 @@
                     android:background="@drawable/etcorner_shape"
                     android:gravity="center"
                     android:inputType="numberDecimal"
-                    android:text="98.92"
                     android:textColor="#ffffff"
                     android:textSize="16sp" />
             </LinearLayout>

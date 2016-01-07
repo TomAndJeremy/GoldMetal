@@ -218,7 +218,7 @@ public class EmojiUtil implements EmoticonsGridAdapter.KeyClickListener {
         if (paint != null) {
             autoSplit(editable, paint, x - tvWidth);
         }
-        LogUtil.e("EmojiUtil  content22 "+editable.toString());
+
         return editable;
     }
 

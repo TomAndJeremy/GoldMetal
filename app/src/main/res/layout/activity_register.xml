@@ -76,6 +76,7 @@
 
 
         <EditText
+            android:layout_marginRight="3dp"
             android:id="@+id/register_et_pwd"
             style="@style/EditTextStyle"
             android:background="@null"
@@ -94,7 +95,7 @@
             android:id="@+id/register_et_pwd_config"
             style="@style/EditTextStyle"
             android:background="@null"
-            android:drawableLeft="@mipmap/content_account_icon_password_config"
+            android:drawableLeft="@drawable/icon_config_pwd"
             android:hint="@string/register_confirm_pwd"
             android:inputType="textPassword" />
 

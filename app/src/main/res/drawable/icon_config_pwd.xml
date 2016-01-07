@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/pwd_lock" android:drawable="@mipmap/content_account_icon_password" />
+    <item android:id="@+id/pwd_insure" android:drawable="@mipmap/content_account_icon_password_insure"
+         />
+</layer-list>

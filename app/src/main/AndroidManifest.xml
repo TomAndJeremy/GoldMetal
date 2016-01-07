@@ -74,9 +74,6 @@
             android:name=".activity.ContactUsActivity"
             android:label="ContactUsActivity" />
         <activity
-            android:name=".activity.FindBcakPWDActivity"
-            android:label="FindBcakPWDActivity" />
-        <activity
             android:name=".activity.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="MainActivity"

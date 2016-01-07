@@ -24,9 +24,13 @@ import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,7 +43,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     private TextView tv_title;//标题
 
     private TextView tvHigh, tvLow, tvOpen, tvLastClose,tvCurrent,tvAmount;
-    private Button btn_times, btn_Kline, btn_free_remind;//分时图，K线图，免费提醒
+    private Button btn_times, btn_Kline, btn_free_remind,btn_msg_remid;//分时图，K线图，免费提醒
 
 
     private HeadLayout mHeadLayout;
@@ -111,11 +115,14 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     //qt_type     // 分钟数据，例如qt_type=1 则返回1分钟数据、qt_type=3 则返回3分钟数据，以此类推  (默认值为1)
     private int qt_type = 15;
 
+    private MyApplication app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
+
+        app = (MyApplication) getApplication();
 
         symbol = getIntent().getStringExtra("symbol");
         name = getIntent().getStringExtra("name");
@@ -164,6 +171,10 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
         btn_free_remind = (Button) findViewById(R.id.btn_free_remind);
         btn_free_remind.setOnClickListener(this);
+
+        btn_msg_remid = (Button) findViewById(R.id.btn_msg_remind);
+        btn_msg_remid.setOnClickListener(this);
+
 
         tvHigh = (TextView) this.findViewById(R.id.ca_tv_high);
         tvLow = (TextView) this.findViewById(R.id.ca_tv_low);
@@ -354,7 +365,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
                 //免费提醒
                 //判断是否登录
-                if (((MyApplication)getApplication()).getUserInfoBean()!=null) {
+                if (app.getUserInfoBean()!=null) {
                     Intent intent = new Intent(ChartActivity.this, FreeRemindActivity.class);
                     intent.putExtra("symbol", symbol);
                     intent.putExtra("stockName",name);
@@ -376,6 +387,72 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                 }
 
                 break;
+            case R.id.btn_msg_remind:
+
+                if (app.getUserInfoBean()==null) {
+                    //如果没有登录
+                    final MyAlertDialog mdialog = new MyAlertDialog(ChartActivity.this);
+                    mdialog.builder().setTitle("提示")
+                            .setMsg("您还没有登录，请先登录后再进行操作！")
+                            .setSingleButton("前去登录", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(ChartActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    mdialog.dismiss();
+                                }
+                            }).show();
+                    return;
+
+                }
+
+                    String msg = "";
+                if ("0".equals(app.getUserInfoBean().getNoteWarn())) {
+                    msg = "是否开启短信提醒";
+                } else if ("1".equals(app.getUserInfoBean().getNoteWarn())) {
+                    msg = "是否关闭短信提醒";
+                }
+
+                final MyAlertDialog mdialog = new MyAlertDialog(ChartActivity.this);
+                mdialog.builder().setTitle("提示")
+                        .setMsg(msg)
+                        .setSingleButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                RequestParams params = new RequestParams();
+                                params.addBodyParameter("mobile", app.getUserInfoBean().getMobile());
+                                new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getNoteWarn(), params, new RequestCallBack<String>() {
+
+                                    @Override
+                                    public void onSuccess(ResponseInfo<String> responseInfo) {
+                                        try {
+                                            JSONObject object = new JSONObject(responseInfo.result.toString());
+                                            ToastUtil.showShort(ChartActivity.this,object.getString("promptInfor"));
+                                            if ("1".equals(object.getString("status"))) {
+                                                if ("1".equals(app.getUserInfoBean().getNoteWarn())) {
+                                                    app.getUserInfoBean().setNoteWarn("0");
+                                                } else {
+                                                    app.getUserInfoBean().setNoteWarn("1");
+                                                }
+                                            }
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(HttpException error, String msg) {
+                                        NetWorkUtils.showMsg(ChartActivity.this);
+
+                                    }
+                                });
+                                mdialog.dismiss();
+                            }
+                        }).show();
+                break;
+
         }
 
     }

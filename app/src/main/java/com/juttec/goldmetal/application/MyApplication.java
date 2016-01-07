@@ -320,6 +320,13 @@ public class MyApplication extends Application {
         return BASEURL + "App_Consulting/LoadWarn";
     }
 
+    //设置或取消短信提醒
+    public String getNoteWarn() {
+        return BASEURL + "App_Consulting/noteWarn";
+    }
+
+
+
 
 
 

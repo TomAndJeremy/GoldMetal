@@ -179,8 +179,10 @@ public class NetWorkUtils {
     public static void showMsg(Context context){
         LogUtil.d("getNetState:"+getNetState(context));
 
-        if (!(NET_CNNT_BAIDU_OK == getNetState(context))) {
+        if (NET_NOT_PREPARE == getNetState(context)) {
             ToastUtil.showShort(context, "请检查网络是否正常连接");
+        } else if (NET_CNNT_BAIDU_TIMEOUT == getNetState(context)) {
+            ToastUtil.showShort(context, "网络连接超时");
         } else {
             ToastUtil.showShort(context, "出错了，请稍候重试");
         }
