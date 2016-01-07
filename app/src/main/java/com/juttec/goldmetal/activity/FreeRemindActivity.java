@@ -319,15 +319,14 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                 String value = mDecimalFormat.format(Double.parseDouble(dialog.getResult()));
 
                 //判断添加的数据是否已存在
-                for (int i = 0; i < mPointWarnBeanList.size(); i++) {
-                    if (value.equals(mPointWarnBeanList.get(i).getNewestPrice())) {
-                        if (dialog.s.equals(mPointWarnBeanList.get(i).getLogicOperator())) {
-                            ToastUtil.showShort(FreeRemindActivity.this, "该点位提醒已存在");
-                            return;
-                        }
-                    }
-
-                }
+//                for (int i = 0; i < mPointWarnBeanList.size(); i++) {
+//                    if (value.equals(mPointWarnBeanList.get(i).getNewestPrice())) {
+//                        if (dialog.s.equals(mPointWarnBeanList.get(i).getLogicOperator())) {
+//                            ToastUtil.showShort(FreeRemindActivity.this, "该点位提醒已存在");
+//                            return;
+//                        }
+//                    }
+//                }
 
                 //调接口 添加点位提醒
                 addPtWarn(dialog.s, value);
@@ -465,7 +464,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
         params.addBodyParameter("mobile", app.getUserInfoBean().getMobile());
         params.addBodyParameter("stockCode", symbol);
         params.addBodyParameter("stockName", stockName);
-        params.addBodyParameter("logicOperator", operator.equals(">") ? "大于" : "小于");
+        params.addBodyParameter("logicOperator", operator);
         params.addBodyParameter("rulingPrice", value);
         LogUtil.d("添加点位提醒接口参数：" + app.getUserInfoBean().getMobile() + symbol + stockName + operator + value);
 
@@ -481,10 +480,11 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                     object = new JSONObject(responseInfo.result.toString());
                     String status = object.getString("status");
                     String promptInfor = object.getString("promptInfor");
-                    JSONObject object1 =object.getJSONObject("message1");
-                    String pointWarnId = object1.getString("id");
+
                     if ("1".equals(status)) {
                         //添加此点位的布局
+                        JSONObject object1 =object.getJSONObject("message1");
+                        String pointWarnId = object1.getString("id");
                         PointWarnBean pointWarnBean = new PointWarnBean();
                         pointWarnBean.setLogicOperator(operator);
                         pointWarnBean.setNewestPrice(value);
@@ -493,8 +493,6 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
                         //添加此点位的布局
                         String sPoint = "最新价" + operator + value;
                         addView(pointWarnId,sPoint);
-
-
                     } else {
                     }
                     ToastUtil.showShort(FreeRemindActivity.this, promptInfor);
@@ -639,9 +637,9 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
 //                           mDecimalFormat.format(Float.parseFloat(currentValueBase) + (Float.parseFloat(currentValueBase) / 10));
                         }
                     } else {
-
+                        ToastUtil.showShort(FreeRemindActivity.this, promptInfor);
                     }
-                    ToastUtil.showShort(FreeRemindActivity.this, promptInfor);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (Exception e) {
