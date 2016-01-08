@@ -182,8 +182,6 @@
             style="@style/MarketFragment_Bottom_Button"
             android:background="@drawable/market_button_red"
             android:text="@string/market_button_red" />
-
-
     </LinearLayout>
 </LinearLayout>
 

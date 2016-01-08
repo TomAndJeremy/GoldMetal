@@ -5,7 +5,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -37,16 +36,13 @@ public class NetWorkUtils {
                 NetworkInfo networkinfo = connectivity.getActiveNetworkInfo();
                 if (networkinfo != null) {
                     if (networkinfo.isAvailable() && networkinfo.isConnected()) {
-                        if (!connectionNetwork())
-                            return NET_CNNT_BAIDU_TIMEOUT;
-                        else
                             return NET_CNNT_BAIDU_OK;
-                    } else {
-                        return NET_NOT_PREPARE;
                     }
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
+            LogUtil.d("getNetState:"+e.toString());
         }
         return NET_ERROR;
     }
@@ -58,19 +54,29 @@ public class NetWorkUtils {
      */
     static private boolean connectionNetwork() {
         boolean result = false;
-        HttpURLConnection httpUrl = null;
+        HttpURLConnection connection = null;
         try {
-            httpUrl = (HttpURLConnection) new URL("http://www.baidu.com")
+            connection = (HttpURLConnection) new URL("https://www.baidu.com")
                     .openConnection();
-            httpUrl.setConnectTimeout(TIMEOUT);
-            httpUrl.connect();
+            connection.setConnectTimeout(TIMEOUT);
+//            connection.setRequestMethod("GET");
+//            // 默认为GET
+//            connection.setUseCaches(false);
+//            //不使用缓存
+//            //设置超时时间
+//            connection.setReadTimeout(10000);
+//            //设置读取超时时间
+//            connection.setDoInput(true);
+            connection.connect();
             result = true;
-        } catch (IOException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
+            LogUtil.d("connectionNetwork:"+e.toString());
         } finally {
-            if (null != httpUrl) {
-                httpUrl.disconnect();
+            if (null != connection) {
+                connection.disconnect();
             }
-            httpUrl = null;
+            connection = null;
         }
         return result;
     }
@@ -179,11 +185,7 @@ public class NetWorkUtils {
     public static void showMsg(Context context){
         LogUtil.d("getNetState:"+getNetState(context));
 
-        if (NET_NOT_PREPARE == getNetState(context)) {
-            ToastUtil.showShort(context, "网络未准备好...");
-        } else if (NET_CNNT_BAIDU_TIMEOUT == getNetState(context)) {
-            ToastUtil.showShort(context, "网络连接超时...");
-        } else if(NET_CNNT_BAIDU_OK == getNetState(context)){
+       if(NET_CNNT_BAIDU_OK == getNetState(context)){
             ToastUtil.showShort(context, "出错了，请稍候重试...");
         }else if(NET_ERROR == getNetState(context)){
             ToastUtil.showShort(context, "网络不给力...");

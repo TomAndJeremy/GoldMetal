@@ -48,7 +48,6 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
     public static final int MSG_REFRESH = 1;
 
 
-
     private SwipeRefreshLayout swipeLayout;//刷新控件
 
     private PersonLoadListView mListView;//自定义的ListView
@@ -153,18 +152,16 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
     }
 
 
-
     //数据加载完毕后 填充数据
-    private void initData(){
-        if(mAdapter==null){
-            mAdapter  = new PersonDynamicAdapter(this,entityList,userId);
+    private void initData() {
+        if (mAdapter == null) {
+            mAdapter = new PersonDynamicAdapter(this, entityList, userId);
             mListView.setAdapter(mAdapter);
-        }else{
+        } else {
             mAdapter.notifyDataSetChanged();
         }
         mListView.setState(LoadingFooter.State.Idle);
     }
-
 
 
     /**
@@ -172,7 +169,7 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
      */
     @Override
     public void onRefresh() {
-        pageIndex =1;
+        pageIndex = 1;
         getData(MSG_REFRESH);
     }
 
@@ -182,7 +179,7 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
      */
     @Override
     public void onLoadNext() {
-        if(pageIndex>=totalPage){
+        if (pageIndex >= totalPage) {
             //没有更多数据了
             mListView.setState(LoadingFooter.State.TheEnd);
             return;
@@ -204,7 +201,7 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
     //点击事件
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.right_text:
                 //发布消息的点击事件
                 startActivity(new Intent(MomentPersonalActivity.this, PublishTopicActivity.class));
@@ -215,13 +212,11 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
     }
 
 
-
-
     /**
      * 获取动态的接口
-     *
+     * <p/>
      * type 类型 all：所有 attention：关注 personal：个人
-     *  state:分为刷新和加载
+     * state:分为刷新和加载
      */
     private void getData(final int state) {
         //第一次进来 或者 刷新时
@@ -239,7 +234,7 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
         } else {
             params.addBodyParameter("userId", "123");
         }
-        params.addBodyParameter("pageIndex", pageIndex +"");
+        params.addBodyParameter("pageIndex", pageIndex + "");
         params.addBodyParameter("dyType", MyApplication.DYNAMIC_TYPE_PERSONAL);
         new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getGetDynamicUrl(), params, new RequestCallBack<String>() {
                     @Override
@@ -247,31 +242,40 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
                         //第一次进来 或者 刷新时
                         if (state == MSG_REFRESH) {
                             swipeLayout.setRefreshing(false);
-                            if(entityList!=null){
+                            if (entityList != null) {
                                 //将entityList里的数据清空
                                 entityList.clear();
                             }
                         }
                         LogUtil.d("个人中心全部动态：---------------" + responseInfo.result.toString());
 
-                        PersonDynamicMsgBean dynamicMsgBean = gson.fromJson(responseInfo.result.toString(), PersonDynamicMsgBean.class);
-
-
+                        try {
+                            JSONObject object = new JSONObject(responseInfo.result.toString());
+                            if ("0".equals(object.getString("status"))) {
+                                ToastUtil.showShort(MomentPersonalActivity.this, object.getString("promptInfor"));
+                            } else {
+                                PersonDynamicMsgBean dynamicMsgBean = gson.fromJson(responseInfo.result.toString(), PersonDynamicMsgBean.class);
 //                      entityList = dynamicMsgBean.getEntityList();
-                        entityList.addAll(dynamicMsgBean.getEntityList());
-                        //设置是否关注
-                        isFocus = Integer.parseInt(dynamicMsgBean.getMessage2()) == 0 ? true : false;
-                        mListView.getHeaderView().setFocusOr(isFocus);
 
-                        totalPage = Integer.parseInt(dynamicMsgBean.getMessage1());
-                        if(totalPage ==0){
-                            ToastUtil.showShort(MomentPersonalActivity.this,name+"没有任何动态");
-                            return;
+                                entityList.addAll(dynamicMsgBean.getEntityList());
+                                //设置是否关注
+                                isFocus = Integer.parseInt(dynamicMsgBean.getMessage2()) == 0 ? true : false;
+                                mListView.getHeaderView().setFocusOr(isFocus);
+
+                                totalPage = Integer.parseInt(dynamicMsgBean.getMessage1());
+                                if (totalPage == 0) {
+                                    ToastUtil.showShort(MomentPersonalActivity.this, name + "没有任何动态");
+                                    return;
+                                }
+
+
+                                //填充数据
+                                initData();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-
-
-                        //填充数据
-                        initData();
 
                     }
 
@@ -294,14 +298,14 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
     /**
      * 调接口 设置关注与取消关注
      */
-    private void setFocusOr(){
+    private void setFocusOr() {
         dialog.builder().setMessage("请稍等~").show();
         RequestParams params = new RequestParams();
         params.addBodyParameter("userId", app.getUserInfoBean().getUserId());//关注人编号ID
         params.addBodyParameter("userName", app.getUserInfoBean().getUserNickName());//关注人昵称
         params.addBodyParameter("attentionedId", userId);//被关注人编号ID
         params.addBodyParameter("attentionedName", name);//被关注人昵称
-        params.addBodyParameter("status",""+(isFocus?1:0));//关注标记  0：关注 1：取消关注
+        params.addBodyParameter("status", "" + (isFocus ? 1 : 0));//关注标记  0：关注 1：取消关注
 
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.send(HttpRequest.HttpMethod.POST, app.getAddOrCancelAttentionUrl(), params, new RequestCallBack<String>() {
@@ -337,7 +341,6 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
             }
         });
     }
-
 
 
     //获取用户头像的  接口
@@ -376,13 +379,13 @@ public class MomentPersonalActivity extends Activity implements View.OnClickList
 
     private boolean isLogin() {
         if (!app.isLogin()) {
-            ToastUtil.showShort(this,"请先登录再进行操作");
+            ToastUtil.showShort(this, "请先登录再进行操作");
             startActivity(new Intent(this, LoginActivity.class));
             return false;
         }
 
         if (app.getUserInfoBean().getUserNickName() == null) {
-            ToastUtil.showShort(this,"请先设置昵称再进行操作");
+            ToastUtil.showShort(this, "请先设置昵称再进行操作");
             return false;
         }
         return true;

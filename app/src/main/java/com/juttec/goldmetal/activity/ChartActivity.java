@@ -95,7 +95,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
             "KDJ指标",
             "RSI指标",
             "DMA指标",
-            "FS指标",
+//            "FS指标",
             "WR指标",
             "MTM指标"
     };
