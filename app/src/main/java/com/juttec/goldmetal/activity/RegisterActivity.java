@@ -275,6 +275,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             phone_back = jsonObject.getString("message1");
                             code_back = jsonObject.getString("message2");
                         } else {
+                            timeCount.cancel();
                             getCode.setText("重新获取");
                             getCode.setClickable(true);
                             SnackbarUtil.showShort(getApplicationContext(), promptInfor);
@@ -288,6 +289,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                 @Override
                 public void onFailure(HttpException error, String msg) {
+                    timeCount.cancel();
                     getCode.setText("重新获取");
                     getCode.setClickable(true);
                     NetWorkUtils.showMsg(RegisterActivity.this);

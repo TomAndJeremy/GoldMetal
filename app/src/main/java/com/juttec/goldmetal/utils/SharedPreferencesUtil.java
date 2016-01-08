@@ -9,8 +9,21 @@ import android.content.SharedPreferences;
  * 用于存储某些信息的  工具类
  */
 public class SharedPreferencesUtil {
-    //username 用户名  String
-    //pwd 密码   String
+    //isFirst 判断用户是否是第一次使用  boolean  默认为：false
+    //isLogining 判断用户是否是登录状态  boolean 默认为：false   登录成功之后为：true 直到用户点击退出登录将值置为：false
+
+
+    //username          手机号  String
+    //pwd               密码   String
+    //userId            用户id   String
+    //goldMetalId       掌金ID   String
+    //realName          真实姓名   String
+    //userNickName       用户昵称   String
+    //userQQ             用户QQ   String
+    //userPhoto          用户头像(地址)   String
+    //noteWarn          短信提醒 0：未开启，1开启   String
+
+
     //remember 是否记住密码  boolean
 
     //isScreenLight 是否设置屏幕常亮  boolean

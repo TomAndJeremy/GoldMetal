@@ -12,6 +12,7 @@ import com.juttec.goldmetal.activity.AboutActivity;
 import com.juttec.goldmetal.activity.FeedbackActivity;
 import com.juttec.goldmetal.activity.SettingActivity;
 import com.juttec.goldmetal.dialog.MyAlertDialog;
+import com.juttec.goldmetal.utils.NetWorkUtils;
 
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
@@ -147,6 +148,7 @@ public class MoreFragment extends BaseFragment implements View.OnClickListener{
                 break;
             case R.id.fragment_more_tv_update:
                 //检查版本更新
+                NetWorkUtils.showMsg(getActivity());
                 final MyAlertDialog dialog = new MyAlertDialog(getActivity());
                 dialog.builder().setTitle("提示")
                         .setMsg("您的软件为最新版本")

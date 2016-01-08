@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -595,7 +594,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
         params.addBodyParameter("userName", app.getUserInfoBean().getUserNickName());
         params.addBodyParameter("status", thumb.isSelected() ? "1" : "0");//如果已点赞 则取消赞   如果没点赞 则点赞
 
-        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getAddOrCancelSupportUrl(), params, new RequestCallBack<String>() {
+        new HttpUtils(3000).send(HttpRequest.HttpMethod.POST, app.getAddOrCancelSupportUrl(), params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
 
@@ -713,7 +712,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
         param.addBodyParameter("repliedName", repliedName);
         param.addBodyParameter("replyContent", content);
 
-        new HttpUtils().send(HttpRequest.HttpMethod.POST, app.getReplyUrl(), param, new RequestCallBack<String>() {
+        new HttpUtils(3000).send(HttpRequest.HttpMethod.POST, app.getReplyUrl(), param, new RequestCallBack<String>() {
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

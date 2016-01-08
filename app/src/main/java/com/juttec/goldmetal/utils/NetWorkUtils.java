@@ -180,11 +180,13 @@ public class NetWorkUtils {
         LogUtil.d("getNetState:"+getNetState(context));
 
         if (NET_NOT_PREPARE == getNetState(context)) {
-            ToastUtil.showShort(context, "请检查网络是否正常连接");
+            ToastUtil.showShort(context, "网络未准备好...");
         } else if (NET_CNNT_BAIDU_TIMEOUT == getNetState(context)) {
-            ToastUtil.showShort(context, "网络连接超时");
-        } else {
-            ToastUtil.showShort(context, "出错了，请稍候重试");
+            ToastUtil.showShort(context, "网络连接超时...");
+        } else if(NET_CNNT_BAIDU_OK == getNetState(context)){
+            ToastUtil.showShort(context, "出错了，请稍候重试...");
+        }else if(NET_ERROR == getNetState(context)){
+            ToastUtil.showShort(context, "网络不给力...");
         }
 
 

@@ -41,6 +41,7 @@ import com.juttec.goldmetal.utils.GetContentUrl;
 import com.juttec.goldmetal.utils.ImgUtil;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
+import com.juttec.goldmetal.utils.SharedPreferencesUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -529,6 +530,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                         setImg();
                         //修改用户头像的路径
                         app.getUserInfoBean().setUserPhoto(object.getString("message1"));
+                        SharedPreferencesUtil.setParam(getActivity(),"userPhoto",object.getString("message1"));
                         ToastUtil.showShort(getActivity(), "上传成功");
 
                     } else {

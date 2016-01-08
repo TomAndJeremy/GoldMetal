@@ -21,6 +21,7 @@ import com.juttec.goldmetal.fragment.MarketKChartsFragment;
 import com.juttec.goldmetal.fragment.MarketTimesFragment;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
+import com.juttec.goldmetal.utils.SharedPreferencesUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -321,8 +322,9 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
                         LogUtil.e(ChartActivity.this, 145, "index   " + index);
                         if (kChartsFragment != null) {
+                            //index.equals("FS")
                             if (index.equals("MACD") || index.equals("KDJ") || index.equals("RSI") || index.equals("DMA")
-                                    || index.equals("FS")|| index.equals("MTM")|| index.equals("WR")) {
+                                    || index.equals("MTM")|| index.equals("WR")) {
                                 tabIndex_kline = index;
                                 kChartsFragment.setIndex(index);
                             } else {
@@ -416,7 +418,13 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                 final MyAlertDialog mdialog = new MyAlertDialog(ChartActivity.this);
                 mdialog.builder().setTitle("提示")
                         .setMsg(msg)
-                        .setSingleButton("确定", new View.OnClickListener() {
+                        .setNegativeButton("点错了", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        })
+                        .setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
 
@@ -432,8 +440,10 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                                             if ("1".equals(object.getString("status"))) {
                                                 if ("1".equals(app.getUserInfoBean().getNoteWarn())) {
                                                     app.getUserInfoBean().setNoteWarn("0");
+                                                    SharedPreferencesUtil.setParam(ChartActivity.this,"noteWarn","0");
                                                 } else {
                                                     app.getUserInfoBean().setNoteWarn("1");
+                                                    SharedPreferencesUtil.setParam(ChartActivity.this,"noteWarn","1");
                                                 }
                                             }
 

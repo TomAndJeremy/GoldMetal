@@ -264,6 +264,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 }
                 //退出当前账号    将当前账号的密码清除
                 SharedPreferencesUtil.clearParam(AccountActivity.this, "pwd");
+                //将登录状态置为false
+                SharedPreferencesUtil.setParam(AccountActivity.this, "isLogining",false);
                 //将个人信息实体类置空
                 app.setUserInfoBean(null);
 
@@ -477,12 +479,16 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
                         if (type == NICKNAME) {
                             userInfoBean.setUserNickName(result);
+                            SharedPreferencesUtil.setParam(AccountActivity.this,"userNickName",result);
                         } else if (type == NAME) {
                             userInfoBean.setUserName(result);
+                            SharedPreferencesUtil.setParam(AccountActivity.this,"realName",result);
                         } else if (type == QQ) {
                             userInfoBean.setUserQQ(result);
+                            SharedPreferencesUtil.setParam(AccountActivity.this,"userQQ",result);
                         }else if(type == MOBILE){
                             userInfoBean.setMobile(result);
+                            SharedPreferencesUtil.setParam(AccountActivity.this,"username",result);
                         }
                     } else {
 

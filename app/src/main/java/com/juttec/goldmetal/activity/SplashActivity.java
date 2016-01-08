@@ -30,6 +30,7 @@ public class SplashActivity extends AppCompatActivity {
     private String mPwd;//密码
     private String mCID;//推送用的cid
 
+
     private MyApplication app;
 
     @Override
@@ -47,16 +48,44 @@ public class SplashActivity extends AppCompatActivity {
         LogUtil.d(width+"--------------"+height);
 
 
-        mUserName = (String) SharedPreferencesUtil.getParam(this, "username", "");
-        mPwd = (String) SharedPreferencesUtil.getParam(this, "pwd", "");
-        mCID = (String) SharedPreferencesUtil.getParam(this, "CID", "");
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        Handler handler = new Handler();
+
+        //查看登录状态
+        if(!(boolean) SharedPreferencesUtil.getParam(this,"isLogining", false)){
+            //非登录状态
+
+        }else{
+            //已登录状态
+            //从sharedpreference中取出 设置的用户信息
+            LogUtil.d("login------------------------isLogining:"+(boolean) SharedPreferencesUtil.getParam(this,"isLogining", false));
+            UserInfoBean userInfoBean = new UserInfoBean();
+            userInfoBean.setUserId((String) SharedPreferencesUtil.getParam(this, "userId", ""));
+            userInfoBean.setMobile((String) SharedPreferencesUtil.getParam(this, "username", ""));
+            userInfoBean.setGoldMetalId((String) SharedPreferencesUtil.getParam(this, "goldMetalId", ""));
+            userInfoBean.setUserName((String) SharedPreferencesUtil.getParam(this, "realName", ""));
+            userInfoBean.setUserNickName((String) SharedPreferencesUtil.getParam(this, "userNickName", ""));
+            userInfoBean.setUserQQ((String) SharedPreferencesUtil.getParam(this, "userQQ", ""));
+            userInfoBean.setUserPhoto((String) SharedPreferencesUtil.getParam(this, "userPhoto", ""));
+            userInfoBean.setNoteWarn((String) SharedPreferencesUtil.getParam(this, "noteWarn", ""));
+            app.setUserInfoBean(userInfoBean);
+            //将登录状态置为true
+            SharedPreferencesUtil.setParam(this,"isLogining",true);
+        }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                enterMain();
+            }
+        }, 2000);
+
+
+       /* Handler handler = new Handler();
         if ("".equals(mUserName) || "".equals(mPwd) || "".equals(mCID)) {
             handler.postDelayed(new Runnable() {
                 @Override
@@ -64,11 +93,17 @@ public class SplashActivity extends AppCompatActivity {
                     enterMain();
                 }
             }, 2000);
-        } else {
-            //执行登录
+        } else if(!(boolean) SharedPreferencesUtil.getParam(this, "isLogining", "")){
+            //非登录状态   执行登录
             login();
             LogUtil.d("login------------------------" + mUserName + mPwd + mCID);
+        }else{
+            //登录状态
+
         }
+*/
+
+
     }
 
     //登录接口
@@ -133,7 +168,6 @@ public class SplashActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-
             @Override
             public void onFailure(HttpException error, String msg) {
                 enterMain();
