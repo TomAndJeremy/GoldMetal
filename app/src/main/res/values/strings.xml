@@ -198,7 +198,7 @@
 
 
     <!--启动页-->
-    <string name="splash_introduce">投资改变生活\n欢迎使用</string>
+    <string name="splash_introduce">投资改变生活\n科技用心诠释</string>
 
 
     <string name="title_activity_search_stock">SearchStockActivity</string>

@@ -84,7 +84,6 @@ public class SplashActivity extends AppCompatActivity {
             }
         }, 2000);
 
-
        /* Handler handler = new Handler();
         if ("".equals(mUserName) || "".equals(mPwd) || "".equals(mCID)) {
             handler.postDelayed(new Runnable() {
@@ -105,6 +104,8 @@ public class SplashActivity extends AppCompatActivity {
 
 
     }
+
+
 
     //登录接口
     private void login() {
