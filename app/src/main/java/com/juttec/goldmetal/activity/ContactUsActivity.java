@@ -3,6 +3,10 @@ package com.juttec.goldmetal.activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -47,6 +51,10 @@ public class ContactUsActivity extends AppCompatActivity {
         final List<Map<String, String>> maps = new ArrayList<>();
         final RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.contact_us_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        SampleDivider dividerLine = new SampleDivider(this,R.drawable.recyclec_divider_shape);
+
+        recyclerView.addItemDecoration(dividerLine);
 
         final MyProgressDialog progressDialog = new MyProgressDialog(this);
         progressDialog.builder().show();
@@ -187,4 +195,36 @@ public class ContactUsActivity extends AppCompatActivity {
         }
     }
 
+
+}
+class SampleDivider extends RecyclerView.ItemDecoration {
+    private Drawable mDrawable;
+
+    public SampleDivider(Context context, int resId) {
+        //在这里我们传入作为Divider的Drawable对象
+        mDrawable = context.getResources().getDrawable(resId);
+    }
+
+    @Override
+    public void onDrawOver(Canvas c, RecyclerView parent) {
+        final int left = parent.getPaddingLeft();
+        final int right = parent.getWidth() - parent.getPaddingRight();
+
+        final int childCount = parent.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            final View child = parent.getChildAt(i);
+            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+                    .getLayoutParams();
+            //以下计算主要用来确定绘制的位置
+            final int top = child.getBottom() + params.bottomMargin;
+            final int bottom = top + mDrawable.getIntrinsicHeight();
+            mDrawable.setBounds(left, top, right, bottom);
+            mDrawable.draw(c);
+        }
+    }
+
+    @Override
+    public void getItemOffsets(Rect outRect, int position, RecyclerView parent) {
+        outRect.set(0, 0, 0, mDrawable.getIntrinsicWidth());
+    }
 }

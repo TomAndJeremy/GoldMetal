@@ -127,6 +127,13 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
                     JSONObject object = new JSONObject(responseInfo.result.toString());
 
                     int pageNum = Integer.parseInt(object.getString("message1"));
+
+                    if(pageNum==0){
+                        ToastUtil.showShort(AnalysisActivity.this,"还没有数据，请再等等");
+                        return;
+                    }
+
+
                     if ("1".equals(object.getString("status"))) {
 
                         JSONArray jsonArray = object.getJSONArray("entityList");

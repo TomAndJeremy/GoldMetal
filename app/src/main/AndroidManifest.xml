@@ -66,24 +66,24 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AccountActivity"
-            android:label="AccountActivity" />
+            android:label="AccountActivity"  android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ChangePWDActivity"
-            android:label="ChangePWDActivity" />
+            android:label="ChangePWDActivity"  android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ContactUsActivity"
-            android:label="ContactUsActivity" />
+            android:label="ContactUsActivity"  android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="MainActivity"
+            android:label="MainActivity" android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activity.PriceReductionActivity"
-            android:label="PriceReductionActivity" />
+            android:label="PriceReductionActivity" android:screenOrientation="portrait"  />
         <activity
             android:name=".activity.RegisterActivity"
-            android:label="RegisterActivity" />
+            android:label="RegisterActivity"  android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SettingActivity"
             android:label="SettingActivity"

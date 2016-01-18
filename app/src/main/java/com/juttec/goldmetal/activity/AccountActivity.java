@@ -165,7 +165,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.account_change_name:
-                showDialog("名字修改","请输入姓名",tv_name,NAME);
+                showDialog("姓名修改","请输入姓名",tv_name,NAME);
 
                 break;
 

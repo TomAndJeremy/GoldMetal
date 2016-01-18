@@ -36,7 +36,7 @@ public class MyApplication extends Application {
 
 
 //    http://192.168.1.64:8155/
-//    public static final String BASEURL = "http://192.168.1.64:8155/App_Areas/";
+ //  public static final String BASEURL = "http://192.168.1.64:8155/App_Areas/";
 //    public static final String ImgBASEURL = "http://192.168.1.5:8899";
 
 
@@ -370,7 +370,7 @@ public class MyApplication extends Application {
         float ff = (float) (sLength / blankLengtn+0.5);
         int num = (int)ff;
         String rs = "";
-        for (int i = 0; i < num; i++) {
+        for (int i = 0; i < num+1; i++) {
             rs += " ";
         }
 

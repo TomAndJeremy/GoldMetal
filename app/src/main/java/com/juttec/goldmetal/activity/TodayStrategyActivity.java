@@ -121,8 +121,8 @@ public class TodayStrategyActivity extends AppCompatActivity implements SwipeRef
                     JSONObject object = new JSONObject(responseInfo.result.toString());
                     LogUtil.e(responseInfo.result.toString());
                     int pageNum = Integer.parseInt(object.getString("message1"));
-                    if(pageNum==0){
-                        ToastUtil.showShort(TodayStrategyActivity.this,"还没有数据，请再等等");
+                    if (pageNum == 0) {
+                        ToastUtil.showShort(TodayStrategyActivity.this, "还没有数据，请再等等");
                         return;
                     }
                     if ("1".equals(object.getString("status"))) {
@@ -134,9 +134,14 @@ public class TodayStrategyActivity extends AppCompatActivity implements SwipeRef
                             JSONObject object1 = jsonArray.getJSONObject(i);
                             map = new HashMap<String, String>();
                             map.put("id", object1.getString("id"));
-                            map.put("title", object1.getString("title"));
+                            if (object.get("title") != null) {
+
+                                map.put("title", object1.getString("title"));
+                            } else {
+                                map.put("title", "");
+                            }
                             String time = object1.getString("addTime");
-                          time=  time.replace(" ", "\n");
+                            time = time.replace(" ", "\n");
                             map.put("time", time);
                             maps.add(map);
                         }
@@ -224,7 +229,7 @@ public class TodayStrategyActivity extends AppCompatActivity implements SwipeRef
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            if(head_title.equals(NewsFragment.BROADCAST)){
+            if (head_title.equals(NewsFragment.BROADCAST)) {
                 //快讯直播  设置内容的背景
                 viewHolder.tvContent.setBackgroundResource(R.drawable.exchange_notice_textview_bg);
             }

@@ -190,11 +190,14 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     private void setCycle() {
         if (isKLine) {
             tv_index.setVisibility(View.VISIBLE);
+            tv_cycle.setVisibility(View.VISIBLE);
+
             cycles_current = cycles_klines;
             btn_times.setSelected(false);
             btn_Kline.setSelected(true);
         } else {
             tv_index.setVisibility(View.GONE);
+            tv_cycle.setVisibility(View.GONE);
             cycles_current = cycles_time;
             btn_times.setSelected(true);
             btn_Kline.setSelected(false);

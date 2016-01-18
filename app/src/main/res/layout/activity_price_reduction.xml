@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dip">
+        android:layout_marginTop="40dip">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -157,7 +157,7 @@
     </LinearLayout>
 
 
-    <android.support.v7.widget.RecyclerView
+  <!--  <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/input_to_board"
@@ -172,6 +172,6 @@
         android:layout_marginTop="10dip"
         android:text="备注：括号内数值为对应平台与标准报价的溢价值"
         android:textColor="#797979"
-        android:textSize="14sp" />
+        android:textSize="14sp" />-->
 
 </LinearLayout>

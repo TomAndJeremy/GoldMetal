@@ -390,7 +390,7 @@ public class FreeRemindActivity extends AppCompatActivity implements View.OnClic
      */
     private void showDelPtDialog(final String pointWarnId,final String strWarnData, final View addView) {
         myAlertDialog.builder().setTitle("删除点位提醒")
-                .setMsg(strWarnData)
+                .setMsg(stockName+","+strWarnData+"\n提醒方式:在线推送")
                 .setPositiveButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

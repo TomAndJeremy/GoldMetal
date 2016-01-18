@@ -120,6 +120,11 @@ public class ExchangeInforActivity extends AppCompatActivity implements SwipeRef
                     JSONObject object = new JSONObject(responseInfo.result.toString());
                     LogUtil.e(responseInfo.result.toString());
                     int pagenum = Integer.parseInt(object.getString("message1"));
+                    if(pagenum==0){
+                        ToastUtil.showShort(ExchangeInforActivity.this,"还没有数据，请再等等");
+                        return;
+                    }
+
                     if ("1".equals(object.getString("status"))) {
 
                         JSONArray jsonArray = object.getJSONArray("entityList");

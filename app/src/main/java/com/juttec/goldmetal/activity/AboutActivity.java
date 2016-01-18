@@ -11,7 +11,7 @@ import com.juttec.goldmetal.customview.HeadLayout;
 /**
  * 关于我们界面
  */
-public class AboutActivity extends AppCompatActivity implements View.OnClickListener{
+public class AboutActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     //头部布局
@@ -42,31 +42,29 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 
         mTopbar = (HeadLayout) findViewById(R.id.head_layout);
         mTitle = (TextView) mTopbar.findViewById(R.id.head_title);
-        tv_title= (TextView) findViewById(R.id.tv_title);
-        tv_content= (TextView) findViewById(R.id.tv_content);
+        tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_content = (TextView) findViewById(R.id.tv_content);
 
         mTitle.setText(fromActivity);
         tv_title.setText(fromActivity);
 
-        if("关于我们".equals(fromActivity)){
+        if ("关于我们".equals(fromActivity)) {
 
-        }else if("免责声明".equals(fromActivity)){
+        } else if ("免责声明".equals(fromActivity)) {
 
-        }else if("使用说明".equals(fromActivity)){
-
+        } else if ("使用说明".equals(fromActivity)) {
+            tv_title.setVisibility(View.GONE);
         }
-
 
 
     }
 
 
-
     @Override
     public void onClick(View v) {
-            switch (v.getId()){
+        switch (v.getId()) {
 
 
-            }
+        }
     }
 }

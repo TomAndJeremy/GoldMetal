@@ -86,7 +86,8 @@
                 android:id="@+id/account_change_nickname"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
-                android:background="@mipmap/content_account_btn_change" />
+                android:text="修改"
+                android:background="@drawable/login_input_border" />
 
 
         </LinearLayout>
@@ -111,7 +112,8 @@
                 android:id="@+id/account_change_name"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
-                android:background="@mipmap/content_account_btn_change" />
+                android:text="修改"
+                android:background="@drawable/login_input_border"  />
 
 
         </LinearLayout>
@@ -136,7 +138,8 @@
                 android:id="@+id/account_change_phone"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
-                android:background="@mipmap/content_account_btn_change" />
+                android:text="绑定"
+                android:background="@drawable/login_input_border"  />
 
 
         </LinearLayout>
@@ -161,7 +164,8 @@
                 android:id="@+id/account_change_qq"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
-                android:background="@mipmap/content_account_btn_change" />
+                android:text="修改"
+                android:background="@drawable/login_input_border" />
 
 
         </LinearLayout>

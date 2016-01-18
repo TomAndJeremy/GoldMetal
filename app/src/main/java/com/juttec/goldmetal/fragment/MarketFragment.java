@@ -91,6 +91,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     private static final int NEWEST = 0;  //加载最新数据的标识
     private static final int SEARCH_DATA = 1;  //加载搜索到的 个股数据的标识
 
+    boolean show;//是否显示"您还没有自选股，快去添加吧"
 
     private MarketFormInfo marketFormInfo;
     private MarketListAdapter adapter;
@@ -173,6 +174,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                 switch ((int) tab.getTag()) {
                     case 1:
                         //获取自选股数据
+                        show = true;
                         getOptionalData();
                         break;
                     case 2:
@@ -244,8 +246,13 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         queryData();
         //判断是否有自选股
         if (mLists.size() == 0) {
-            ToastUtil.showShort(getActivity(), "您还没有自选股，快去添加吧");
-            //将股票数据清空
+
+
+            if (show) {
+                ToastUtil.showShort(getActivity(), "您还没有自选股，快去添加吧");
+                show = false;
+            }
+           //将股票数据清空
             datas.clear();
             //将resetURL置空
             resetURL = "";

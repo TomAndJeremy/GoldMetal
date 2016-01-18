@@ -18,7 +18,7 @@ import com.juttec.goldmetal.dialog.MyProgressDialog;
 import com.juttec.goldmetal.utils.LogUtil;
 import com.juttec.goldmetal.utils.NetWorkUtils;
 import com.juttec.goldmetal.utils.SharedPreferencesUtil;
-import com.juttec.goldmetal.utils.SnackbarUtil;
+import com.juttec.goldmetal.utils.ToastUtil;
 import com.juttec.goldmetal.utils.ToastUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -167,13 +167,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private boolean phoneVerification() {
         String temp = phone.getText().toString().trim();
         if (temp == null || "".equals(temp)) {
-            SnackbarUtil.showShort(this, "请先输入手机号");
+            ToastUtil.showShort(this, "请先输入手机号");
             return false;
         }
         Pattern pattern = Pattern.compile("^(1)\\d{10}$");
         Matcher matcher = pattern.matcher(temp);
         if (!matcher.find()) {
-            SnackbarUtil.showShort(this, "请检查手机号码是否正确");
+            ToastUtil.showShort(this, "请检查手机号码是否正确");
             return false;
         }
         return true;
@@ -184,14 +184,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private boolean checkCode() {
         String code = identifyCode.getText().toString().trim();
         if (code == null || "".equals(code)) {
-            SnackbarUtil.showShort(this, "请输入验证码");
+            ToastUtil.showShort(this, "请输入验证码");
             return false;
         } else if (code_back == null) {
-            SnackbarUtil.showShort(this, "请获取验证码");
+            ToastUtil.showShort(this, "请获取验证码");
             return false;
         } else {
             if (!code.equals(code_back)) {
-                SnackbarUtil.showShort(this, "验证码错误");
+                ToastUtil.showShort(this, "验证码错误");
                 return false;
             }
         }
@@ -205,7 +205,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String confirmPwd = pwdConfig.getText().toString().trim();
 
         if (pwd == null || "".equals(pwd)) {
-            SnackbarUtil.showShort(this, "请输入密码");
+            ToastUtil.showShort(this, "请输入密码");
             return false;
         } else {
             // 判断密码是否符合规则
@@ -213,19 +213,19 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             Matcher matcher1 = pattern1.matcher(pwd);
             boolean isMatcher1 = matcher1.find();
             if (!isMatcher1) {
-                SnackbarUtil.showShort(this, "密码必须6到15位");
+                ToastUtil.showShort(this, "密码必须6到15位");
                 return false;
             } else {
                 // 判断确认密码是否为空
                 if (confirmPwd == null || "".equals(confirmPwd)) {
-                    SnackbarUtil.showShort(this, "请确认密码");
+                    ToastUtil.showShort(this, "请确认密码");
                     return false;
                 } else {
 
                     if (pwd.equals(confirmPwd)) {
                         return true;
                     } else {
-                        SnackbarUtil.showShort(this, "两次密码输入不一致,请重新输入");
+                        ToastUtil.showShort(this, "两次密码输入不一致,请重新输入");
                         return false;
                     }
                 }
@@ -238,10 +238,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private boolean checkIsOutTime() {
         lastTime = System.currentTimeMillis();
         if (lastTime - firstTime > codeTime) {
-            SnackbarUtil.showShort(this, "验证码已过期,请重新获取");
+            ToastUtil.showShort(this, "验证码已过期,请重新获取");
             return false;
         } else if (!phone.getText().toString().trim().equals(phone_back)) {
-            SnackbarUtil.showShort(this, "验证码错误");
+            ToastUtil.showShort(this, "验证码错误");
             return false;
         }
         return true;
@@ -269,7 +269,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
                         if ("1".equals(status)) {
-                            SnackbarUtil.showShort(RegisterActivity.this, "验证码已发送，请注意查收");
+                            ToastUtil.showShort(RegisterActivity.this, "验证码已发送，请注意查收");
                             firstTime = System.currentTimeMillis();
 
                             phone_back = jsonObject.getString("message1");
@@ -278,7 +278,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             timeCount.cancel();
                             getCode.setText("重新获取");
                             getCode.setClickable(true);
-                            SnackbarUtil.showShort(getApplicationContext(), promptInfor);
+                            ToastUtil.showShort(getApplicationContext(), promptInfor);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

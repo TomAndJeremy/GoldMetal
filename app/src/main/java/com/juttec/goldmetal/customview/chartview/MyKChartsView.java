@@ -974,15 +974,17 @@ public class MyKChartsView extends GridChart /*implements GridChart.OnTabClickLi
             float left = (float) (width - 2 - mCandleWidth * (i + 1));
             float right = (float) (width - 3 - mCandleWidth * i);
             float startX = (float) (width - 3 - mCandleWidth * i - (mCandleWidth - 1) / 2);
-            if (open > close) {
-                canvas.drawRect(left, close, right, open, greenPaint);
-                canvas.drawLine(startX, high, startX, low, greenPaint);
+
+            //此时的大小已经不是实际的大小,而是据屏幕顶部的距离
+            if (open >close) {//标示实际收盘价小于开盘价
+                canvas.drawRect(left, close, right, open, redPaint);
+                canvas.drawLine(startX, high, startX, low, redPaint);
             } else if (open == close) {
                 canvas.drawLine(left, open, right, open, redPaint);
                 canvas.drawLine(startX, high, startX, low, redPaint);
             } else {
-                canvas.drawRect(left, open, right, close, redPaint);
-                canvas.drawLine(startX, high, startX, low, redPaint);
+                canvas.drawRect(left, open, right, close, greenPaint);
+                canvas.drawLine(startX, high, startX, low, greenPaint);
             }
 
         }
