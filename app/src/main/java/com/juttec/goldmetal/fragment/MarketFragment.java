@@ -444,7 +444,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                     //如果没有登录
                     final MyAlertDialog mdialog = new MyAlertDialog(getActivity());
                     mdialog.builder().setTitle("提示")
-                            .setMsg("您还没有登录，请先登录后再执行操作！")
+                            .setMsg("您还没有登录，请先登录后再执行操作")
                             .setSingleButton("前去登录", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -472,7 +472,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                     //如果没有登录
                     final MyAlertDialog mdialog = new MyAlertDialog(getActivity());
                     mdialog.builder().setTitle("提示")
-                            .setMsg("您还没有登录，请先登录后再进行操作！")
+                            .setMsg("您还没有登录，请先登录后再进行操作")
                             .setSingleButton("前去登录", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -501,7 +501,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         final MyAlertDialog dialog = new MyAlertDialog(getActivity());
 
         dialog.builder()
-                .setTitle("搜索个股").setEditText("请输入个股代码 例如SH600016")
+                .setTitle("搜索个股").setEditText("请输入完整的个股代码 例如SH600016")
                 .setSingleButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -516,7 +516,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                             isOptional = false;
                             dialog.dismiss();
                         } else {
-                            ToastUtil.showShort(getActivity(), "请输入完整正确的个股代码！");
+                            ToastUtil.showShort(getActivity(), "请输入完整正确的个股代码");
                         }
                     }
                 }).show();

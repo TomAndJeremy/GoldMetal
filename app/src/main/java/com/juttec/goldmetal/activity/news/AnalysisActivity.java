@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -104,6 +105,24 @@ public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshL
                 swipeLayout.setRefreshing(true);
 
                 getData(pageIndex);
+            }
+        });
+
+
+        listView.getHeader().getViewPager().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        swipeLayout.setEnabled(false);
+                     break;
+                    case MotionEvent.ACTION_UP:
+                      case MotionEvent.ACTION_CANCEL:
+                          swipeLayout.setEnabled(true);
+                        break;
+                   }
+
+                return false;
             }
         });
     }

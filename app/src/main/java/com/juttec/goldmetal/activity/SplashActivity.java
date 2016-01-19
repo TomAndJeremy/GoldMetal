@@ -48,6 +48,12 @@ public class SplashActivity extends AppCompatActivity {
         LogUtil.d(width+"--------------"+height);
 
 
+        mUserName = (String) SharedPreferencesUtil.getParam(this, "username", "");
+        mPwd = (String) SharedPreferencesUtil.getParam(this, "pwd", "");
+        mCID = (String) SharedPreferencesUtil.getParam(this, "CID", "");
+
+
+
     }
 
 
@@ -55,7 +61,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        //查看登录状态
+       /* //查看登录状态
         if(!(boolean) SharedPreferencesUtil.getParam(this,"isLogining", false)){
             //非登录状态
 
@@ -82,25 +88,25 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 enterMain();
             }
-        }, 2000);
+        }, 3000);*/
 
-       /* Handler handler = new Handler();
+
+
+
+
+        Handler handler = new Handler();
         if ("".equals(mUserName) || "".equals(mPwd) || "".equals(mCID)) {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     enterMain();
                 }
-            }, 2000);
-        } else if(!(boolean) SharedPreferencesUtil.getParam(this, "isLogining", "")){
-            //非登录状态   执行登录
+            }, 3000);
+        } else {
+            //执行登录
             login();
-            LogUtil.d("login------------------------" + mUserName + mPwd + mCID);
-        }else{
-            //登录状态
-
+            LogUtil.d("login------------------------" );
         }
-*/
 
 
     }
@@ -117,7 +123,7 @@ public class SplashActivity extends AppCompatActivity {
         params.addBodyParameter("cId", mCID);
         params.addBodyParameter("systemMark", "Android");//系统标识
 
-        HttpUtils httpUtils = new HttpUtils(2000);//设置 2秒超时
+        HttpUtils httpUtils = new HttpUtils(3000);//设置 2秒超时
         httpUtils.send(HttpRequest.HttpMethod.POST, app.getUserLoginUrl(), params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -153,14 +159,14 @@ public class SplashActivity extends AppCompatActivity {
                     }
 
                     long timeEnd = System.currentTimeMillis();
-                    if(timeEnd-timeStart<2000){
+                    if(timeEnd-timeStart<3000){
                         new Handler().postDelayed(
                                 new Runnable() {
                                     @Override
                                     public void run() {
                                         enterMain();
                                     }
-                                },(2000-(timeEnd-timeStart))
+                                },(3000-(timeEnd-timeStart))
                         );
                     }else{
                         enterMain();

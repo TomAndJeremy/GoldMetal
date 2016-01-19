@@ -134,8 +134,7 @@ public class TodayStrategyActivity extends AppCompatActivity implements SwipeRef
                             JSONObject object1 = jsonArray.getJSONObject(i);
                             map = new HashMap<String, String>();
                             map.put("id", object1.getString("id"));
-                            if (object.get("title") != null) {
-
+                            if (object1.get("title") != null) {
                                 map.put("title", object1.getString("title"));
                             } else {
                                 map.put("title", "");

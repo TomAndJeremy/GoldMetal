@@ -56,7 +56,7 @@
             android:layout_marginLeft="8dp"
             android:background="@drawable/btn_comment_selector"
             android:text="发送"
-            android:textColor="#A5A5A5"
+            android:textColor="@drawable/textcolor_send_selector"
             android:textSize="@dimen/normal_size" />
     </LinearLayout>
 

@@ -189,6 +189,9 @@ public class MyAlertDialog {
         return this;
     }
 
+
+
+
     public MyAlertDialog setPositiveButton(String text,
                                            final OnClickListener listener) {
         showPosBtn = true;

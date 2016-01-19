@@ -67,11 +67,13 @@
             <EditText
                 android:id="@+id/et_refresh_time"
                 android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:gravity="center"
                 android:numeric="integer"
                 android:inputType="number"
                 android:maxLength="3"
+                android:textSize="14sp"
+                android:background="@null"
                 android:text="5"/>
 
             <ImageView

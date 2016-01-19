@@ -51,6 +51,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         dialog_progress = new MyProgressDialog(this);
 
         initView();
+
     }
 
 

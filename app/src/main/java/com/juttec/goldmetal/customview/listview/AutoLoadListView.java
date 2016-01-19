@@ -43,6 +43,11 @@ public class AutoLoadListView extends ListView implements
 		setOnScrollListener(this);
 	}
 
+
+	public AdHeader getHeader(){
+		return mAdHeader;
+	}
+
 	public void setOnLoadNextListener(OnLoadNextListener listener) {
 		mLoadNextListener = listener;
 	}

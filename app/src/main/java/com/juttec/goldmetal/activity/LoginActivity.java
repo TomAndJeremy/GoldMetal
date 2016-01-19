@@ -287,17 +287,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         app.setUserInfoBean(userInfoBean);
 
                         //将用户信息存起来
-                        SharedPreferencesUtil.setParam(LoginActivity.this,"userNickName",userObject.getString("userNickName"));
-                        SharedPreferencesUtil.setParam(LoginActivity.this,"realName",userObject.getString("userName"));
-                        SharedPreferencesUtil.setParam(LoginActivity.this,"userQQ",userObject.getString("userQQ"));
-                        SharedPreferencesUtil.setParam(LoginActivity.this,"username",userObject.getString("userMobile"));
-                        SharedPreferencesUtil.setParam(LoginActivity.this,"noteWarn",userObject.getString("noteWarn"));
-                        SharedPreferencesUtil.setParam(LoginActivity.this,"userId",userObject.getString("id"));
-                        SharedPreferencesUtil.setParam(LoginActivity.this,"goldMetalId",userObject.getString("goldMetalId"));
-                        SharedPreferencesUtil.setParam(LoginActivity.this,"userPhoto",userObject.getString("userPhoto"));
-
-                        //将登录状态置为true
-                        SharedPreferencesUtil.setParam(LoginActivity.this,"isLogining",true);
+//                        SharedPreferencesUtil.setParam(LoginActivity.this,"userNickName",userObject.getString("userNickName"));
+//                        SharedPreferencesUtil.setParam(LoginActivity.this,"realName",userObject.getString("userName"));
+//                        SharedPreferencesUtil.setParam(LoginActivity.this,"userQQ",userObject.getString("userQQ"));
+//                        SharedPreferencesUtil.setParam(LoginActivity.this,"username",userObject.getString("userMobile"));
+//                        SharedPreferencesUtil.setParam(LoginActivity.this,"noteWarn",userObject.getString("noteWarn"));
+//                        SharedPreferencesUtil.setParam(LoginActivity.this,"userId",userObject.getString("id"));
+//                        SharedPreferencesUtil.setParam(LoginActivity.this,"goldMetalId",userObject.getString("goldMetalId"));
+//                        SharedPreferencesUtil.setParam(LoginActivity.this,"userPhoto",userObject.getString("userPhoto"));
+//
+//                        //将登录状态置为true
+//                        SharedPreferencesUtil.setParam(LoginActivity.this,"isLogining",true);
 
 
                         //开启推送

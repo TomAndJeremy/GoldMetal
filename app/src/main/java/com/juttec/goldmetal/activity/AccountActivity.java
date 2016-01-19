@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -429,7 +429,9 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 }).show();
         if (type==QQ) {
             //设置EditText只能输数字
-            dialog.setEditType(EditorInfo.TYPE_CLASS_PHONE);
+            dialog.setEditType(InputType.TYPE_CLASS_NUMBER);
+        }else{
+            dialog.setEditType(InputType.TYPE_CLASS_TEXT);
         }
     }
 

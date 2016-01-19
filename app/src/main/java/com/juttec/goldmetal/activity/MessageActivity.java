@@ -94,6 +94,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         TextView rightText = (TextView) head.findViewById(R.id.right_text);
         rightText.setOnClickListener(this);
 
+
         tv_delete = new TextView(this);
         tv_delete.setText("删除");
         tv_delete.setTextColor(Color.WHITE);
@@ -210,6 +211,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         httpUtils.send(HttpRequest.HttpMethod.POST, app.getGetMyMessageUrl(), params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
+                swipeLayout.setRefreshing(false);
                 dialog.dismiss();
                 LogUtil.d("getMessageData--------" + responseInfo.result.toString());
 
@@ -222,7 +224,8 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                     if ("1".equals(status)) {
                         totalPage =  Integer.parseInt(object.getString("message1"));
                         if(totalPage ==0){
-                            ToastUtil.showShort(MessageActivity.this,"您还没有任何消息");
+                            LogUtil.d("-----------------------当前没有数据");
+                          ToastUtil.showShort(MessageActivity.this,"您还没有任何消息");
                             return;
                         }
                         JSONArray msgArray = object.getJSONArray("entityList");
@@ -269,6 +272,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onFailure(HttpException error, String msg) {
                 dialog.dismiss();
+                swipeLayout.setRefreshing(false);
                 mListView.setState(LoadingFooter.State.Idle);
                 NetWorkUtils.showMsg(MessageActivity.this);
 
@@ -328,7 +332,6 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 pw.dismiss();
-
                 deleteMessage(messageBeanList.get(position).getMsgId(), position);
             }
         });
