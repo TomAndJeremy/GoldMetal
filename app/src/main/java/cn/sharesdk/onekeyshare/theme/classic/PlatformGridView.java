@@ -45,7 +45,6 @@ import static com.mob.tools.utils.R.getBitmapRes;
 @SuppressWarnings("deprecation")
 public class PlatformGridView extends LinearLayout implements
 		OnClickListener, Callback {
-
 	private static final int MIN_CLICK_INTERVAL = 1000;
 	private static final int MSG_PLATFORM_LIST_GOT = 1;
 	// grids in each line
