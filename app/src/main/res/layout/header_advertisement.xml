@@ -25,18 +25,21 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:text="11111111111111"
+                android:text="联储纪要续命金银 后市震荡等待良机"
                 android:maxEms="15"
                 android:singleLine="true"
-                android:textColor="#ffffff"/>
+                android:textColor="#ffffff"
+                android:textSize="@dimen/normal_size"/>
 
             <LinearLayout
+                android:id="@+id/ll_dot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:orientation="horizontal"
                 android:gravity="center" >
 
-                <View
+               <!-- <View
                     android:id="@+id/v_dot0"
                     style="@style/dot_style"
                     android:background="@drawable/dot_focused" />
@@ -55,7 +58,7 @@
 
                 <View
                     android:id="@+id/v_dot4"
-                    style="@style/dot_style" />
+                    style="@style/dot_style" />-->
             </LinearLayout>
         </LinearLayout>
 </FrameLayout>

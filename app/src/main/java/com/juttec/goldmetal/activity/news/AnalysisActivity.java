@@ -43,10 +43,6 @@ import java.util.Map;
 
 public class AnalysisActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
 
-
-
-
-
     private SwipeRefreshLayout swipeLayout;
     private AutoLoadListView listView;
 

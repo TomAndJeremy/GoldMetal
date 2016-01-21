@@ -48,11 +48,11 @@ public class AdHeaderBackUp {
 
 
 		dots = new ArrayList<View>();
-		dots.add(mHeader.findViewById(R.id.v_dot0));
-		dots.add(mHeader.findViewById(R.id.v_dot1));
-		dots.add(mHeader.findViewById(R.id.v_dot2));
-		dots.add(mHeader.findViewById(R.id.v_dot3));
-		dots.add(mHeader.findViewById(R.id.v_dot4));
+//		dots.add(mHeader.findViewById(R.id.v_dot0));
+//		dots.add(mHeader.findViewById(R.id.v_dot1));
+//		dots.add(mHeader.findViewById(R.id.v_dot2));
+//		dots.add(mHeader.findViewById(R.id.v_dot3));
+//		dots.add(mHeader.findViewById(R.id.v_dot4));
 
 		tv_title = (TextView) mHeader.findViewById(R.id.tv_title);
 		viewPager = (ViewPager) mHeader.findViewById(R.id.vp);
