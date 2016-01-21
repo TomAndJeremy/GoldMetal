@@ -51,7 +51,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private int QQ = 4;
 
 
-
     private RelativeLayout head;//头部布局
 
     private Button bt_nickname, bt_name, bt_phone, bt_qq;
@@ -61,12 +60,11 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private int countDown = 60 * 1000;//倒计时的时间  默认为60秒
     private TimeCount timeCount;//用于倒计时
     private EditText et_phone;//手机号
-    private EditText et_code ;//验证码
-    private Button btn_code ;//获取验证码按钮
+    private EditText et_code;//验证码
+    private Button btn_code;//获取验证码按钮
 
     private String phone_back;//返回的手机号
     private String code_back;//返回的验证码
-
 
 
     private TextView tv_goldId;//掌金ID
@@ -74,7 +72,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private Button btn_exit;//退出当前账号
     private TextView tv_change_pwd;//修改密码
 
-    private MyAlertDialog dialog,phoneDialog;//对话框
+    private MyAlertDialog dialog, phoneDialog;//对话框
 
     private String result;//修改后的结果
 
@@ -84,7 +82,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private MyProgressDialog dialog_progress;//正在加载 进度框
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
@@ -135,7 +133,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         tv_qq = (TextView) this.findViewById(R.id.account_tv_qq);
 
 
-
         bt_nickname.setOnClickListener(this);
         bt_name.setOnClickListener(this);
         bt_phone.setOnClickListener(this);
@@ -146,7 +143,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
 
     //初始化数据
-    private void initData(){
+    private void initData() {
         tv_goldId.setText(userInfoBean.getGoldMetalId());
         tv_nickname.setText(userInfoBean.getUserNickName());
         tv_name.setText(userInfoBean.getUserName());
@@ -160,12 +157,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
 
             case R.id.account_change_nickname:
-                showDialog("昵称修改","请输入昵称",tv_nickname,NICKNAME);
+                showDialog("昵称修改", "请输入昵称", tv_nickname, NICKNAME);
 
                 break;
 
             case R.id.account_change_name:
-                showDialog("姓名修改","请输入姓名",tv_name,NAME);
+                showDialog("姓名修改", "请输入姓名", tv_name, NAME);
 
                 break;
 
@@ -174,11 +171,10 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 timeCount = new TimeCount(countDown, 1000);
 
 
-
-                View view  = LayoutInflater.from(this).inflate(R.layout.view_phone,null);
-                 et_phone = (EditText) view.findViewById(R.id.et_phone);
-                 et_code = (EditText) view.findViewById(R.id.et_code);
-                 btn_code = (Button) view.findViewById(R.id.btn_code);
+                View view = LayoutInflater.from(this).inflate(R.layout.view_phone, null);
+                et_phone = (EditText) view.findViewById(R.id.et_phone);
+                et_code = (EditText) view.findViewById(R.id.et_code);
+                btn_code = (Button) view.findViewById(R.id.btn_code);
 
                 String phoneContent = et_phone.getText().toString();
                 String codeContent = et_code.getText().toString();
@@ -207,7 +203,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 btn_code.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(phoneVerification(et_phone.getText().toString().trim())){
+                        if (phoneVerification(et_phone.getText().toString().trim())) {
                             //
                             getCode();
                         }
@@ -246,7 +242,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.account_change_qq:
-                showDialog("QQ号码修改","请输入QQ号码",tv_qq,QQ);
+                showDialog("QQ号码修改", "请输入QQ号码", tv_qq, QQ);
                 break;
 
             case R.id.tv_change_pwd:
@@ -255,30 +251,44 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.btn_exit:
-                //个推解绑用户别名
-                boolean isSuccess = PushManager.getInstance().unBindAlias(AccountActivity.this,app.getUserInfoBean().getMobile(),false);
-                if(isSuccess){
-                    LogUtil.d("AccountActivity 个推解绑成功---------------");
-                }else{
-                    LogUtil.d("AccountActivity 个推解绑失败---------------");
-                }
-                //退出当前账号    将当前账号的密码清除
-                SharedPreferencesUtil.clearParam(AccountActivity.this, "pwd");
-                //将登录状态置为false
-                SharedPreferencesUtil.setParam(AccountActivity.this, "isLogining",false);
-                //将个人信息实体类置空
-                app.setUserInfoBean(null);
+                dialog.builder().setTitle("提示")
+                        .setMsg("您确定退出当前账号吗?")
+                        .setNegativeButton("点错了", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        }).setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        //个推解绑用户别名
+                        boolean isSuccess = PushManager.getInstance().unBindAlias(AccountActivity.this, app.getUserInfoBean().getMobile(), false);
+                        if (isSuccess) {
+                            LogUtil.d("AccountActivity 个推解绑成功---------------");
+                        } else {
+                            LogUtil.d("AccountActivity 个推解绑失败---------------");
+                        }
+                        //退出当前账号    将当前账号的密码清除
+                        SharedPreferencesUtil.clearParam(AccountActivity.this, "pwd");
+                        //将登录状态置为false
+                        SharedPreferencesUtil.setParam(AccountActivity.this, "isLogining", false);
+                        //将个人信息实体类置空
+                        app.setUserInfoBean(null);
 
-                //关闭推送
-                PushManager.getInstance().turnOffPush(AccountActivity.this);
-                LogUtil.d("AccountActivity 关闭推送---------------");
+                        //关闭推送
+                        PushManager.getInstance().turnOffPush(AccountActivity.this);
+                        LogUtil.d("AccountActivity 关闭推送---------------");
 
-                //跳转到LoginActivity
-                Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
-                startActivity(intent);
-                //将自己finish()掉
-                finish();
+                        //跳转到LoginActivity
+                        Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+                        startActivity(intent);
 
+                        //将自己finish()掉
+                        finish();
+
+                    }
+                }).show();
 
                 break;
         }
@@ -286,15 +296,14 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
 
     //diaolog   隐藏的监听
-    DialogInterface.OnDismissListener keylistener = new DialogInterface.OnDismissListener(){
+    DialogInterface.OnDismissListener keylistener = new DialogInterface.OnDismissListener() {
         @Override
         public void onDismiss(DialogInterface dialog) {
             timeCount.cancel();
             btn_code.setText("获取验证码");
             btn_code.setClickable(true);
         }
-    } ;
-
+    };
 
 
     //判断手机号 是否符合规范
@@ -314,15 +323,15 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
 
     //判断验证码是否正确
-    private boolean  checkCode( String code){
-        if(code_back==null) {
+    private boolean checkCode(String code) {
+        if (code_back == null) {
             ToastUtil.showShort(this, "请获取验证码");
             return false;
-        }else if (code == null || "".equals(code)) {
+        } else if (code == null || "".equals(code)) {
             ToastUtil.showShort(this, "请输入验证码");
             return false;
-        }else{
-            if(!code.equals(code_back)){
+        } else {
+            if (!code.equals(code_back)) {
                 ToastUtil.showShort(this, "验证码不正确");
                 return false;
             }
@@ -331,11 +340,10 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
     /**
      * 获取验证码 接口
      */
-    private void getCode(){
+    private void getCode() {
         if (phoneVerification(et_phone.getText().toString().trim())) {
             timeCount.start();
             RequestParams params = new RequestParams();
@@ -381,7 +389,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
     /**
      * 倒计时
      */
@@ -406,9 +413,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
-
-    public  void showDialog(String title,String edittext, final TextView tv, final int type){
+    public void showDialog(String title, String edittext, final TextView tv, final int type) {
 
         dialog.builder()
                 .setTitle(title).setEditText(edittext)
@@ -418,19 +423,21 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                         result = dialog.getResult().trim();
                         if (result == null || TextUtils.isEmpty(result)) {
                             ToastUtil.showShort(AccountActivity.this, "修改的内容不能为空");
-                        } else {
+                        } else if(containsEmoji(result)){
+                            //判断是否含有表情
+                            ToastUtil.showShort(AccountActivity.this, "修改的内容不能含有表情等特殊符号");
+                        }else{
                             // tv.setText(dialog.getResult());
-
                             editUserInfo(type, tv, result);
                         }
 
                         dialog.dismiss();
                     }
                 }).show();
-        if (type==QQ) {
+        if (type == QQ) {
             //设置EditText只能输数字
             dialog.setEditType(InputType.TYPE_CLASS_NUMBER);
-        }else{
+        } else {
             dialog.setEditType(InputType.TYPE_CLASS_TEXT);
         }
     }
@@ -438,25 +445,26 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
     /**
      * 修改用户信息接口
+     *
      * @param type
      * @param tv
      * @param result
      */
-    private void editUserInfo(final int type,final TextView tv,final String result){
+    private void editUserInfo(final int type, final TextView tv, final String result) {
         dialog_progress.builder().setMessage("请稍等~").show();
 
-       // userNickName  userName userMobile  userQQ
+        // userNickName  userName userMobile  userQQ
         RequestParams params = new RequestParams();
-        params.addBodyParameter("userId",userInfoBean.getUserId());
+        params.addBodyParameter("userId", userInfoBean.getUserId());
 
-        if(type==NICKNAME){
-            params.addBodyParameter("userNickName",result);
-        }else if(type==NAME){
-            params.addBodyParameter("userName",result);
-        }else if(type==QQ){
-            params.addBodyParameter("userQQ",result);
-        }else if(type==MOBILE){
-            params.addBodyParameter("userMobile",result);
+        if (type == NICKNAME) {
+            params.addBodyParameter("userNickName", result);
+        } else if (type == NAME) {
+            params.addBodyParameter("userName", result);
+        } else if (type == QQ) {
+            params.addBodyParameter("userQQ", result);
+        } else if (type == MOBILE) {
+            params.addBodyParameter("userMobile", result);
         }
 
         HttpUtils httpUtils = new HttpUtils();
@@ -471,7 +479,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                     String status = object.getString("status");
                     String promptInfor = object.getString("promptInfor");
                     if ("1".equals(status)) {
-                        if(type==MOBILE){
+                        if (type == MOBILE) {
                             timeCount.cancel();
                             btn_code.setText("获取验证码");
                             btn_code.setClickable(true);
@@ -481,16 +489,16 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
                         if (type == NICKNAME) {
                             userInfoBean.setUserNickName(result);
-                            SharedPreferencesUtil.setParam(AccountActivity.this,"userNickName",result);
+                            SharedPreferencesUtil.setParam(AccountActivity.this, "userNickName", result);
                         } else if (type == NAME) {
                             userInfoBean.setUserName(result);
-                            SharedPreferencesUtil.setParam(AccountActivity.this,"realName",result);
+                            SharedPreferencesUtil.setParam(AccountActivity.this, "realName", result);
                         } else if (type == QQ) {
                             userInfoBean.setUserQQ(result);
-                            SharedPreferencesUtil.setParam(AccountActivity.this,"userQQ",result);
-                        }else if(type == MOBILE){
+                            SharedPreferencesUtil.setParam(AccountActivity.this, "userQQ", result);
+                        } else if (type == MOBILE) {
                             userInfoBean.setMobile(result);
-                            SharedPreferencesUtil.setParam(AccountActivity.this,"username",result);
+                            SharedPreferencesUtil.setParam(AccountActivity.this, "username", result);
                         }
                     } else {
 
@@ -511,6 +519,28 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         });
 
     }
+
+
+    public  boolean containsEmoji(String source) {
+        int len = source.length();
+        for (int i = 0; i < len; i++) {
+            char codePoint = source.charAt(i);
+            if (!isEmojiCharacter(codePoint)) {
+                // /如果不能匹配,则该字符是Emoji表情
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private  boolean isEmojiCharacter(char codePoint) {
+        return (codePoint == 0x0) ||
+                (codePoint == 0x9) || (codePoint == 0xA) || (codePoint == 0xD) ||
+                ((codePoint >= 0x20) && (codePoint <= 0xD7FF)) || ((codePoint >= 0xE000) && (codePoint <= 0xFFFD)) ||
+                ((codePoint >= 0x10000) && (codePoint <= 0x10FFFF));
+    }
+
 
 
 

@@ -108,7 +108,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/content_moment_icon_praise" />
+            android:src="@mipmap/content_moment_icon_praise"/>
 
 
         <LinearLayout

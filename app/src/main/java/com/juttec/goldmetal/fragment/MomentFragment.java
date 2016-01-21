@@ -99,6 +99,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     private CircleImageView mHeadPhoto;//头像
 
     private MyProgressDialog dialog_progress;//正在加载的进度框
+    private MyAlertDialog mDialog;//提示对话框
 
     private static String path;//存放照相或者从相册选择的图片的路径
 
@@ -110,7 +111,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     SwipeRefreshLayout refreshLayout;
     MyBroadcastReceiver myBroadcastReceiver;//同步点赞或者评论
 
-    private MyAlertDialog mDialog;//对话框
+
 
     protected ImageLoader imageLoader;//图片加载工具
     private DisplayImageOptions options;//
@@ -334,9 +335,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                 if (app.isLogin()) {
                     setHeadPhoto();
                 } else {
-                    ToastUtil.showShort(getActivity(), "请先登录再进行操作");
-                    startActivityForResult(new Intent(getActivity(), LoginActivity.class), LOGIN);
-
+                    showLoginDialog();
                 }
 
                 break;
@@ -472,7 +471,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     //判断用户是否编辑了个人的昵称和头像
     private boolean checkNameAndPhoto() {
         if (!app.isLogin()) {
-            startActivityForResult(new Intent(getActivity(), LoginActivity.class), LOGIN);
+           showLoginDialog();
             return false;
         }
         if ("".equals(app.getUserInfoBean().getUserNickName()) || null == (app.getUserInfoBean().getUserNickName())) {
@@ -671,6 +670,25 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     }
 
+
+    /**
+     * 显示登录的dialog
+     */
+    private void showLoginDialog(){
+            mDialog.builder().setTitle("提示")
+                    .setMsg("您还没有登录，请先登录后再执行操作")
+                    .setSingleButton("前去登录", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+                            mDialog.dismiss();
+                        }
+                    }).show();
+    }
+
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -695,7 +713,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         } else {
             mHeadPhoto.setImageResource(R.mipmap.content_moment_pho_user);
         }
-//        getInfo(1, MyApplication.DYNAMIC_TYPE_ALL);
+        getInfo(1, MyApplication.DYNAMIC_TYPE_ALL);
 
     }
 }

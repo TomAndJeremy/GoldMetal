@@ -651,11 +651,27 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     }
 
 
+
+    /**
+     * 显示登录的dialog
+     */
+    private void showLoginDialog(){
+        mDialog.builder().setTitle("提示")
+                .setMsg("您还没有登录，请先登录后再执行操作")
+                .setSingleButton("前去登录", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mDialog.dismiss();
+                        mFragment.startActivityForResult(new Intent(context, LoginActivity.class), LOGIN);
+                    }
+                }).show();
+    }
+
+
     //判断用户是否编辑了个人的昵称和头像
     private boolean checkNameAndPhoto() {
         if (!app.isLogin()) {
-            ToastUtil.showShort(context, "请先登录");
-            mFragment.startActivityForResult(new Intent(context, LoginActivity.class), LOGIN);
+            showLoginDialog();
             return false;
         }
 
