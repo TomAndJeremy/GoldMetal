@@ -102,7 +102,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     private MyAlertDialog myAlertDialog;//加入自选股 或从自选股移除的  对话框
 
     private boolean isFirst = true;//第一次进入时  在onResume()方法中 加载自选股数据
-    private boolean isOptional = true;//当前显示的数据是否是自选股  默认为：true
+    private boolean isOptional = false;//当前显示的数据是否是自选股  默认为：true
     private boolean isSearch = false;//是否点击了搜索个股tab 默认为：false
     private String resetURL;//保存最后的url
 
@@ -158,8 +158,8 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_market, container, false);
         tabLayout = (TabLayout) view.findViewById(R.id.market_tablayout);
-        tabLayout.addTab(tabLayout.newTab().setText("自选").setTag(1), true);
-        tabLayout.addTab(tabLayout.newTab().setText("上证A股").setTag(2));
+        tabLayout.addTab(tabLayout.newTab().setText("自选").setTag(1));
+        tabLayout.addTab(tabLayout.newTab().setText("上证A股").setTag(2),true);
         tabLayout.addTab(tabLayout.newTab().setText("上证B股").setTag(3));
         tabLayout.addTab(tabLayout.newTab().setText("深证A股").setTag(4));
         tabLayout.addTab(tabLayout.newTab().setText("深证B股").setTag(5));
@@ -169,6 +169,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                LogUtil.d("(int) tab.getTag():"+(int) tab.getTag());
                 //当点击tab时  将加载的页数设置为  加载第一页
                 page = 1;
                 switch ((int) tab.getTag()) {
@@ -407,7 +408,8 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         if (isFirst) {
             //第一次进入  默认加载自选股数据
             //获取自选股数据
-            getOptionalData();
+//            getOptionalData();
+            getData(SHA_URL + page);
             isFirst = false;
         }
         if (resetURL != null) {
