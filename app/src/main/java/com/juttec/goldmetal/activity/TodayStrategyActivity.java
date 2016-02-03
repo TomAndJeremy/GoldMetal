@@ -95,6 +95,8 @@ public class TodayStrategyActivity extends AppCompatActivity implements SwipeRef
             public void run() {
                 swipeLayout.setRefreshing(true);
 
+
+
                 getData(pageIndex);
             }
         });
@@ -182,6 +184,8 @@ public class TodayStrategyActivity extends AppCompatActivity implements SwipeRef
     public void onRefresh() {
         pageIndex = 1;
         listView.setState(LoadingFooter.State.Idle);
+        maps.clear();
+
         getData(pageIndex);
 
     }

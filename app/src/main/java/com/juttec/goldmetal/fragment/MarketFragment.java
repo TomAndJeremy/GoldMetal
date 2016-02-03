@@ -623,11 +623,18 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
 
                     if (marketFormInfo.getResult().size() == 0) {
 
-                        page--;
-                        loadData(page);
-                        LogUtil.d("当前页：-----------" + page);
-                        ToastUtil.showShort(getActivity(), "数据已全部加载...");
-                        break;
+                        if (isOptional) {
+                            datas.clear();
+                            adapter.notifyDataSetChanged();
+
+                        } else {
+                            page--;
+                            loadData(page);
+                            LogUtil.d("当前页：-----------" + page);
+                            ToastUtil.showShort(getActivity(), "数据已全部加载...");
+
+                        }
+                       break;
                     } else {
                         datas = marketFormInfo.getResult();
 

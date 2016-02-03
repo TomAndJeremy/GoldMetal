@@ -386,7 +386,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
             //获得评论人的姓名与评论内容并设置显示
             String commentName = mLists.get(position).getDyCommentReply().get(i).getDiscussantName();
-            String commentContent = mLists.get(position).getDyCommentReply().get(i).getCommentContent();
+            String commentContent = ": "+mLists.get(position).getDyCommentReply().get(i).getCommentContent();
 
           /*  SpannableString string = new SpannableString(commentName+":");
             setPartClick(string, mLists.get(position).getDyCommentReply().get(i).getDiscussantId(), commentName, 0, commentName.length());
@@ -421,12 +421,12 @@ public class PersonDynamicAdapter extends BaseAdapter {
             TextView tvCommentName = (TextView) commentView.findViewById(R.id.comment_name);
             TextView tvCommentContent = (TextView) commentView.findViewById(R.id.comment_content);
 
-            tvCommentName.setText(commentName+":");
+            tvCommentName.setText(commentName);
             clickName(tvCommentName, commentUserId, commentName);
 
             //填补空格
           //  tvCommentContent.append(MyApplication.getBlank(commentName + " ", tvCommentName.getTextSize()));
-            String blank = MyApplication.getBlank(commentName + ":", tvCommentName.getTextSize());
+            String blank = MyApplication.getBlank(commentName , tvCommentName.getTextSize());
             Paint paint = tvCommentContent.getPaint();
             tvCommentContent.append(readEmoji.getEditable(blank+commentContent,paint));
 
@@ -463,7 +463,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
 
                 String replyName = mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserName();
                 String repliedName = mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedName();
-                String replyContent = mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent();
+                String replyContent = ": "+mLists.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent();
 
                 String userId = mLists.get(position).getDyCommentReply().get(finalI).getDyReply().get(j).getUserId();
                 String repliedId = mLists.get(position).getDyCommentReply().get(finalI).getDyReply().get(j).getRepliedId();
@@ -485,7 +485,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
                 hint.setVisibility(View.VISIBLE);
 
                 tvReplyName.setText(replyName);
-                tvRepliedName.setText(repliedName+":");
+                tvRepliedName.setText(repliedName);
 
                 clickName(tvReplyName,userId , replyName);
                 clickName(tvRepliedName, repliedId,repliedName);
@@ -494,7 +494,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
                 //得到对应长度的空格
                 String toBlank = MyApplication.getBlank(replyName,tvReplyName.getTextSize());
                 toBlank += MyApplication.getBlank(hint.getText().toString(),hint.getTextSize());
-                toBlank += MyApplication.getBlank(repliedName+":", tvRepliedName.getTextSize());
+                toBlank += MyApplication.getBlank(repliedName, tvRepliedName.getTextSize());
 
 
               //  tvReplyContent.append(toBlank);

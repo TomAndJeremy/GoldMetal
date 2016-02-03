@@ -6,12 +6,16 @@ import android.os.Message;
 
 import com.alibaba.fastjson.JSON;
 import com.juttec.goldmetal.application.MyApplication;
+import com.juttec.goldmetal.bean.MarketFormInfo;
 import com.juttec.goldmetal.bean.MyEntity;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -81,7 +85,19 @@ public class GetNetworkData {
 
                                     try {
 
-                                        myEntity.setObject(JSON.parseObject(str, myEntity.getObject().getClass()));
+                                        if (responseInfo.result.toString().contains("errcode")) {
+
+                                            List<MarketFormInfo.ResultEntity> result = new ArrayList<MarketFormInfo.ResultEntity>();
+                                            MarketFormInfo marketFormInfo = new MarketFormInfo();
+                                            marketFormInfo.setResult(result);
+
+                                            myEntity.setObject(marketFormInfo);
+
+                                        } else {
+                                            myEntity.setObject(JSON.parseObject(str, myEntity.getObject().getClass()));
+                                        }
+
+
                                         Message message = new Message();
                                         message.what = flag;
                                         LogUtil.d("发消息通知页面更新数据---------");
@@ -90,7 +106,7 @@ public class GetNetworkData {
                                     } catch (Exception e) {
                                         e.printStackTrace();
 
-                                        ToastUtil.showShort(context, responseInfo.result.toString());
+                                        // ToastUtil.showShort(context, responseInfo.result.toString());
 
                                     }
                                 }
@@ -106,7 +122,7 @@ public class GetNetworkData {
                         try {
                             int sleepTime = 60 * 1000;//默认1分钟
                             if (refreshTime == null) {
-                                sleepTime = (int)(SharedPreferencesUtil.getParam(context, "refreshTime", 10))*1000;
+                                sleepTime = (int) (SharedPreferencesUtil.getParam(context, "refreshTime", 10)) * 1000;
                                 LogUtil.e("sleeptime  " + sleepTime);
                             } else {
                                 sleepTime = refreshTime;
@@ -146,7 +162,7 @@ public class GetNetworkData {
     public void setUrl(String sUrl, boolean shouldConnect) {
         url = sUrl;
         if (myEntity != null) {
-                synchronized (myEntity) {
+            synchronized (myEntity) {
                 myEntity.notifyAll();//唤醒线程
             }
         }

@@ -428,8 +428,8 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
     private void addCommentView(LinearLayout viewRoot, final int position) {
         for (int i = 0; i < entityList.get(position).getDyCommentReply().size(); i++) {
             //获得评论人的姓名与评论内容并设置显示
-            final String commentName = entityList.get(position).getDyCommentReply().get(i).getDiscussantName() + ":";//
-            String commentContent = MyApplication.ToDBC((entityList.get(position).getDyCommentReply().get(i).getCommentContent()));
+            final String commentName = entityList.get(position).getDyCommentReply().get(i).getDiscussantName() /*+ ":"*/;//
+            String commentContent = ": "+(entityList.get(position).getDyCommentReply().get(i).getCommentContent());
             final int finalI = i;
           /*  TextView comment = (TextView) LayoutInflater.from(context).inflate(R.layout.item_comment_msg, null);
             SpannableString string = new SpannableString(commentName);
@@ -473,7 +473,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
             tvCommentName.setText(commentName);
             clickName(tvCommentName, commentUserId, commentName);
             //填补空格
-            String blank = MyApplication.getBlank(commentName + " ", tvCommentName.getTextSize());
+            String blank = MyApplication.getBlank(commentName , tvCommentName.getTextSize());
 
            // tvCommentContent.append(blank);
 
@@ -595,11 +595,11 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 final String userId = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getUserId();
                 String repliedId = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getRepliedId();
 
-                String replyContent = entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent();
+                String replyContent = ": "+entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent();
 
 
                 tvReplyName.setText(userName);
-                tvRepliedName.setText(repliedName+ ": ");
+                tvRepliedName.setText(repliedName);
 
 
                 //得到对应长度的空格
@@ -609,7 +609,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
                /* tvReplyContent.append(toBlank);*/
                 Paint p = tvReplyContent.getPaint();
-                tvReplyContent.append(readEmoji.getEditable(toBlank + entityList.get(position).getDyCommentReply().get(i).getDyReply().get(j).getReplyContent(),p));
+                tvReplyContent.append(readEmoji.getEditable(toBlank +replyContent ,p));
 
 
                 replyRoot.addView(replyMsg);

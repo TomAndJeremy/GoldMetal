@@ -89,7 +89,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
 
     //K线图指标
     private String indexs[] = new String[]{
-            "SMA指标",
+        /*    "SMA指标",*/
             "BOLL指标",
             "MACD指标",
             "KDJ指标",
