@@ -136,9 +136,9 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                 replyPopupWindow.setHint(0, entityList.get(position).getUserName());
                 replyPopupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
                     @Override
-                    public void onClickSend(String content) {
+                    public void onClickSend(String content, Map<Integer, Integer> map) {
 
-                        comment(position, replyPopupWindow, entityList.get(position).getId(), content);
+                        comment(position, replyPopupWindow, entityList.get(position).getId(), content,map);
 
                     }
                 });
@@ -503,7 +503,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
                         replyPopupWindow.setHint(1, entityList.get(position).getDyCommentReply().get(finalI).getDiscussantName());
                         replyPopupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
                             @Override
-                            public void onClickSend(String content) {
+                            public void onClickSend(String content, Map<Integer, Integer> map) {
                                 reply(position, finalI, content);
                             }
                         });
@@ -634,7 +634,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
                             replyPopupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
                                 @Override
-                                public void onClickSend(String content) {
+                                public void onClickSend(String content, Map<Integer, Integer> map) {
                                     reply(position, finalI, finalJ, content);
                                 }
                             });
@@ -735,7 +735,7 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
 
     //发送评论
-    private void comment(final int position, final ReplyPopupWindow popupWindow, String dyId, final String content) {
+    private void comment(final int position, final ReplyPopupWindow popupWindow, String dyId, final String content, final Map<Integer, Integer> map) {
 
         final String discussantId = app.getUserInfoBean().getUserId();
         final String discussantName = app.getUserInfoBean().getUserNickName();
@@ -759,6 +759,8 @@ public class MomentRecyclerViewAdapter extends RecyclerView.Adapter<MomentRecycl
 
                     ToastUtil.showShort(context, object.getString("promptInfor"));
                     if ("1".equals(object.getString("status"))) {
+
+                        map.clear();
 
                         DyCommentReplyBean dyCommentReplyBean = new DyCommentReplyBean(discussantId, discussantName, content, new ArrayList<DyReplyInfoBean>());
 

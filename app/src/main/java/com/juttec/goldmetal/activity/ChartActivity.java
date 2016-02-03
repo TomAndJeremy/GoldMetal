@@ -57,7 +57,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
     private String name_cycle_kline = "15分钟";//k线图的周期
     private String name_cycle_time="24小时";//分时图的周期
 
-    private String upIndex_kline = "SMA";//k线图的上面显示的指标
+    private String upIndex_kline = "BOLL";//k线图的上面显示的指标
     private String tabIndex_kline = "MACD";//k线图下面显示的指标
 
     private FragmentManager fragmentManager;
@@ -335,7 +335,7 @@ public class ChartActivity extends AppCompatActivity implements View.OnClickList
                                 kChartsFragment.setUpIndex(index);
                             }
                         }
-                        ToastUtil.showShort(ChartActivity.this, index + "被选中");
+                       /* ToastUtil.showShort(ChartActivity.this, index + "被选中");*/
                     }
 
                 });

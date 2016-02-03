@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
 /**
  * Created by Administrator on 2015/10/11.
@@ -69,9 +70,11 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
 
     private int keyboardHeight;
 
+    String ss;//临时记录文本框中的文字
 
-    //private Map<Integer, Integer> map = new HashMap<>();
-    private List<Integer> list = new ArrayList<>();//顺序存储图片编号
+
+    private Map<Integer, Integer> map = new TreeMap<>();
+    //private List<Integer> list = new ArrayList<>();//顺序存储图片编号
 
     public ReplyPopupWindow(Context context) {
 
@@ -121,6 +124,7 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
         mEditText.setFocusableInTouchMode(true);
         mEditText.requestFocus();
 
+
         //键盘弹出
         InputMethodManager imm = (InputMethodManager) mEditText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
@@ -140,7 +144,6 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
         mImageButton = (ImageButton) contentview.findViewById(R.id.comment_ib_emoji);
         readEmojiIcons();//读取表情
         enablePopUpView(popupLayout);
-
 
 
         //表情按钮点击事件
@@ -170,26 +173,26 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
                 mSend.setClickable(false);
 
                 String content = mEditText.getText().toString();
-                /*for (Map.Entry entry : map.entrySet()) {
+                for (Map.Entry entry : map.entrySet()) {
 
                     Integer key = (Integer) entry.getKey();
                     Integer value = (Integer) entry.getValue();
 
                     content = content.replaceFirst("￼", EmojiUtil.getEmojiText(value));//图片在字符串中会变为￼，每次都把第一个￼字符替换掉
 
+                }
 
-                }*/
-                for (int i = 0; i < list.size(); i++) {
+               /* for (int i = 0; i < list.size(); i++) {
                     content = content.replaceFirst("￼", EmojiUtil.getEmojiText(list.get(i)));//图片在字符串中会变为￼，每次都把第一个￼字符替换掉
 
                 }
-                list.clear();//发送完成清除数据，防止影响下一次
+                list.clear();//发送完成清除数据，防止影响下一次*/
                 if (TextUtils.isEmpty(content) || "".equals(content) || content.trim().length() <= 0) {
                     mSend.setClickable(true);
                     ToastUtil.showShort(mContext, "内容不能为空");
                     return;
                 }
-                mOnClickSendListener.onClickSend(content);
+                mOnClickSendListener.onClickSend(content,map);
             }
         });
 
@@ -198,7 +201,13 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if (s.length() < 1) {
+                    return;
+                }
 
+                if (String.valueOf(s.charAt(s.length() - 1)).equals("￼") && after == 0) {//如果删除掉一个表情之后就从集合中去掉
+                    map.remove(start);
+                }
             }
 
             @Override
@@ -213,6 +222,7 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
 
             @Override
             public void afterTextChanged(Editable s) {
+
 
             }
         });
@@ -264,14 +274,14 @@ public class ReplyPopupWindow implements EmoticonsGridAdapter.KeyClickListener {
         int cursorPosition = mEditText.getSelectionStart();
         mEditText.getText().insert(cursorPosition, cs);
         String position = index.replace(".png", "");//将X.png转变为X
-       // map.put(cursorPosition, Integer.parseInt(position));
-        list.add( Integer.parseInt(position));
+         map.put(cursorPosition, Integer.parseInt(position));
+        //list.add(Integer.parseInt(position));
     }
 
 
     //接口  作用：发送按钮的点击事件
     public interface OnClickSendListener {
-        void onClickSend(String content);
+        void onClickSend(String content, Map<Integer, Integer> map);
     }
 
 

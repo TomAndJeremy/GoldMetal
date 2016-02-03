@@ -78,7 +78,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
     private boolean isLoadingMore;//判断是否加载
     View view;//显示界面
-    private int i = 1;//加载第一页
+    private int page = 1;//页数，默认加载第一页
 
     //tabs
     private TextView dynamic, message, follow;//动态，消息，关注
@@ -203,15 +203,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         refreshLayout.setColorSchemeColors(Color.BLUE, Color.RED, Color.GREEN);
 
-        refreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                refreshLayout.setRefreshing(true);
-                getInfo(1, MyApplication.DYNAMIC_TYPE_ALL);
-
-
-            }
-        });//初次进入加载
 
 
         //下拉监听
@@ -220,8 +211,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
             public void onRefresh() {
                 // TODO: 2015/9/14
                 refreshLayout.setRefreshing(true);
-                i = 1;
-                getInfo(i, MyApplication.DYNAMIC_TYPE_ALL);
+                page = 1;
+                getInfo(page, MyApplication.DYNAMIC_TYPE_ALL);
 
             }
         });
@@ -269,7 +260,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                 // dy>0 表示上拉
                 if (lastVisibleItem >= totalItemCount - 1 && dy > 0) {
                     if (!isLoadingMore) {
-                        getInfo(i, MyApplication.DYNAMIC_TYPE_ALL);
+                        getInfo(page, MyApplication.DYNAMIC_TYPE_ALL);
                         isLoadingMore = true;
                     }
                 }
@@ -429,8 +420,8 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                 }
                 break;
             case REFRESH:
-                i = 1;
-                getInfo(i, MyApplication.DYNAMIC_TYPE_ALL);
+                page = 1;
+                getInfo(page, MyApplication.DYNAMIC_TYPE_ALL);
 
                 recyclerView.smoothScrollToPosition(0);
 
@@ -589,10 +580,10 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     /**
      * 获取动态
      *
-     * @param page 页数
+     * @param page2 页数
      * @param type 类型 all：所有 attention：关注 personal：个人
      */
-    private void getInfo(final int page, String type) {
+    private void getInfo(final int page2, String type) {
         LogUtil.d("交易圈 首页  current page:" + page);
         RequestParams params = new RequestParams();
 
@@ -623,15 +614,22 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
 
 
                         DynamicMsgBean dynamicMsgBean = gson.fromJson(responseInfo.result.toString(), DynamicMsgBean.class);//解析数据
-                        if (page == 1) {
+                        if (page2 == 1) {
                             entityList.clear();//刷新时先清空集合
                         }
                         List<DynamicEntityList> dynamicEntityLists = dynamicMsgBean.getEntityList();
 
+                        if (dynamicEntityLists.size() == 0) {
+                            ToastUtil.showShort(getActivity(), "已加载全部信息");
+
+                        }
 
                         try {
-                            entityList.addAll(dynamicEntityLists);//向集合中添加数据
-                            i++;//每次加载后页数加一
+                            if (entityList.addAll(dynamicEntityLists)){;//向集合中添加数据
+                                page++;//每次加载后页数加一
+                            }
+
+
                         } catch (Exception e) {
                             e.printStackTrace();
                             LogUtil.e("交易圈异常：" + e.toString());
@@ -713,7 +711,18 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         } else {
             mHeadPhoto.setImageResource(R.mipmap.content_moment_pho_user);
         }
-        getInfo(1, MyApplication.DYNAMIC_TYPE_ALL);
+
+        refreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                refreshLayout.setRefreshing(true);
+                page = 1;
+                getInfo(page, MyApplication.DYNAMIC_TYPE_ALL);
+
+
+            }
+        });//初次进入加载
+
 
     }
 }

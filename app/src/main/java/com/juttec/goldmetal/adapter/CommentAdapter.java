@@ -33,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2015/10/8.
@@ -179,7 +180,7 @@ public class CommentAdapter extends BaseAdapter{
                 //发送按钮的点击事件
                 popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
                     @Override
-                    public void onClickSend(String content) {
+                    public void onClickSend(String content, Map<Integer, Integer> map) {
                         //回复接口
                         reply(position, dyId, mLists.get(position).getId(), mLists.get(position).getDiscussantId(), mLists.get(position).getDiscussantName(), content);
                     }
@@ -204,7 +205,7 @@ public class CommentAdapter extends BaseAdapter{
                 //发送按钮的点击事件
                 popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
                     @Override
-                    public void onClickSend(String content) {
+                    public void onClickSend(String content, Map<Integer, Integer> map) {
                         //回复接口
                         reply(position, dyId, mLists.get(position).getDyReply().get(pos).getId(),
                                 mLists.get(position).getDyReply().get(pos).getUserId(),

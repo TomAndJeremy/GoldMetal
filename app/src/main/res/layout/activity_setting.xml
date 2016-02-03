@@ -53,9 +53,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:gravity="center_vertical"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
@@ -68,13 +68,13 @@
                 android:id="@+id/et_refresh_time"
                 android:layout_width="40dp"
                 android:layout_height="30dp"
+                android:background="@null"
                 android:gravity="center"
-                android:numeric="integer"
                 android:inputType="number"
                 android:maxLength="3"
-                android:textSize="14sp"
-                android:background="@null"
-                android:text="5"/>
+                android:numeric="integer"
+                android:text="5"
+                android:textSize="14sp" />
 
             <ImageView
                 android:id="@+id/iv_refresh_time_plus"
@@ -89,7 +89,9 @@
 
     <View style="@style/divide_line_style" />
 
-    <RelativeLayout style="@style/relativeLayout_style">
+    <RelativeLayout
+        style="@style/relativeLayout_style"
+        android:visibility="gone">
 
         <TextView
             style="@style/rl_text_style_normal"
@@ -117,7 +119,8 @@
     <TextView
         android:id="@+id/setting_parameter"
         style="@style/rl_text_style"
-        android:text="@string/setting_parameter" />
+        android:text="@string/setting_parameter"
+        android:visibility="gone" />
 
     <View style="@style/divide_line_style" />
 

@@ -65,8 +65,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
 /**
  * 发布消息  界面
@@ -77,8 +80,6 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
     public final static int REQUEST_CODE_CAMERA = 111;
     public final static int REQUEST_CODE_ALBUM = 222;
-
-
 
 
     private View popUpView;
@@ -120,9 +121,8 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
     private MyProgressDialog dialog_progress;//正在加载的  进度框
 
-   // private Map<Integer, Integer> map = new HashMap<>();//标志文字中的第X位置上的图片为第Y张
-    private List<Integer> list = new ArrayList<>();//标志文字中的第X位置上的图片为第Y张
-
+    private Map<Integer, Integer> map = new TreeMap<>();//标志文字中的第X位置上的图片为第Y张
+    //private Map<Integer,String> list = new HashMap<>();//标志文字中的第X位置上的图片为第Y张
 
 //    private HeadLayout mHeadLayout;//标题栏
 //    private ImageView iv_back;//返回按钮
@@ -183,15 +183,28 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
         mBtnPush.setOnClickListener(this);
 
+
         //edittext监听内容变化   更改发送按钮的背景
         mContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                LogUtil.e("beforeTextChanged  " + s + "  start :" + start + " count :" + count + " after :" + after);
+
+                if (s.length() < 1) {
+                    return;
+                }
+
+                if (String.valueOf(s.charAt(s.length() - 1)).equals("￼") && after == 0) {//如果删除掉一个表情之后就从集合中去掉
+                    map.remove(start);
+                }
 
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                LogUtil.e("onTextChanged  " + s + "  start :" + start + " before :" + before);
+
                /* LogUtil.e("start  " + start);
                 LogUtil.e("before  " + before);
                 LogUtil.e("s  " + s);
@@ -210,6 +223,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
             @Override
             public void afterTextChanged(Editable s) {
 
+                LogUtil.e("afterTextChanged  " + s);
             }
         });
 
@@ -289,12 +303,16 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         backSpace = (TextView) popUpView.findViewById(R.id.back);
         backSpace.setOnClickListener(new View.OnClickListener() {
 
+            //TODO
             @Override
             public void onClick(View v) {
+
                 KeyEvent event = new KeyEvent(0, 0, 0, KeyEvent.KEYCODE_DEL, 0, 0, 0, 0, KeyEvent.KEYCODE_ENDCALL);
                 mContent.dispatchKeyEvent(event);
+
             }
         });
+
 
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
 
@@ -359,8 +377,8 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
 
 
         String position = index.replace(".png", "");//将X.png转变为X
-       // map.put(cursorPosition, Integer.parseInt(position));
-        list.add( Integer.parseInt(position));
+        map.put(cursorPosition, Integer.parseInt(position));
+        //list.add( Integer.parseInt(position));
     }
 
 
@@ -377,7 +395,6 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
             return super.onKeyDown(keyCode, event);
         }
     }
-
 
 
     @Override
@@ -607,7 +624,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
         params.addBodyParameter("userName", app.getUserInfoBean().getUserNickName());
 
         String content = mContent.getText().toString();
-      /*  for (Map.Entry entry : map.entrySet()) {
+        for (Map.Entry entry : map.entrySet()) {
 
             Integer key = (Integer) entry.getKey();
             Integer value = (Integer) entry.getValue();
@@ -615,18 +632,18 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
             LogUtil.e("11  " + value);
             content = content.replaceFirst("￼", EmojiUtil.getEmojiText(value));//图片在字符串中会变为￼，每次都把第一个￼字符替换掉
 
-           // LogUtil.e("22  " + content);
+            // LogUtil.e("22  " + content);
 
-        }*/
-        for (int i = 0; i < list.size(); i++) {
+        }
+      /*  for (int i = 0; i < list.size(); i++) {
             LogUtil.e("11  " + list.get(i));
             content = content.replaceFirst("￼", EmojiUtil.getEmojiText(list.get(i)));//图片在字符串中会变为￼，每次都把第一个￼字符替换掉
 
         }
         list.clear();//发送完成后清除数据
-
+*/
         //params.addBodyParameter("dyContent",content);
-        params.addBodyParameter("dyContent",content);
+        params.addBodyParameter("dyContent", content);
         //params.addBodyParameter("dyContent", string2Unicode(toSend));
 
         for (int i = 0; i < photoList.size(); i++) {
@@ -651,6 +668,7 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
                     String status = object.getString("status");
                     String promptInfor = object.getString("promptInfor");
                     if ("1".equals(status)) {
+                        map.clear();
                         finish();
                     } else {
 

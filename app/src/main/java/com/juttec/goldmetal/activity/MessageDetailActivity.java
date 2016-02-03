@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 消息详情界面
@@ -183,7 +184,7 @@ public class MessageDetailActivity extends AppCompatActivity implements View.OnC
                 //发送按钮的点击事件
                 popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
                     @Override
-                    public void onClickSend(String content) {
+                    public void onClickSend(String content, Map<Integer, Integer> map) {
                         //回复接口
                         reply( content);
                     }

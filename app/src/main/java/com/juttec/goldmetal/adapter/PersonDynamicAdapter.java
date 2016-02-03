@@ -52,6 +52,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2015/10/8.
@@ -230,7 +231,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
                 //发送按钮的点击事件
                 popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
                     @Override
-                    public void onClickSend(String content) {
+                    public void onClickSend(String content, Map<Integer, Integer> map) {
                         //评论接口
                         if (isLogin()) {
                             comment(position, mLists.get(position).getId(), content);
@@ -439,7 +440,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
                         popupWindow.setHint(1, mLists.get(position).getDyCommentReply().get(finalI).getDiscussantName());
                         popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
                             @Override
-                            public void onClickSend(String content) {
+                            public void onClickSend(String content, Map<Integer, Integer> map) {
                                 reply(position, finalI, content);
                             }
                         });
@@ -510,7 +511,7 @@ public class PersonDynamicAdapter extends BaseAdapter {
                             popupWindow.setHint(1, mLists.get(position).getDyCommentReply().get(finalI).getDyReply().get(finalJ).getUserName());
                             popupWindow.setOnClickSendListener(new ReplyPopupWindow.OnClickSendListener() {
                                 @Override
-                                public void onClickSend(String content) {
+                                public void onClickSend(String content, Map<Integer, Integer> map) {
                                     reply(position, finalI, finalJ, content);
                                 }
                             });
