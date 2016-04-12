@@ -18,6 +18,7 @@ import java.io.File;
 public class MyApplication extends Application {
 
 
+
     public boolean isLogin() {
         if (this.userInfoBean != null) {
             return true;
@@ -269,7 +270,7 @@ public class MyApplication extends Application {
         return BASEURL + "App_Consulting/GetTradeRule";
     }
 
-    //获取今日策略
+   //获取今日策略
     public String getGetTodayStrategyUrl() {
 
         return BASEURL + "App_Consulting/GetTodayStrategy";
@@ -287,7 +288,6 @@ public class MyApplication extends Application {
 
         return BASEURL + "App_User/SubmitAdvice";
     }
-
     //提交反馈信息
     public String getGetExchangeRateUrl() {
         return BASEURL + "App_Consulting/GetExchangeRate";
@@ -349,24 +349,24 @@ public class MyApplication extends Application {
 
 
     //将字符串替换成相等长度的空格
-    public static String getBlank(String s, float textSize) {
+    public static String  getBlank(String s,float textSize){
 
         Paint paint = new Paint();
         paint.setTextSize(textSize);
         float sLength = paint.measureText(s);
         float blankLengtn = paint.measureText(" ");
 
-        float ff = (float) (sLength / blankLengtn + 0.5);
-        int num = (int) ff;
+        float ff = (float) (sLength / blankLengtn+0.5);
+        int num = (int)ff;
         String rs = "";
-        for (int i = 0; i < num; i++) {
+        for (int i = 0; i < num+1; i++) {
             rs += " ";
         }
 
 
+
         return rs;
     }
-
     /**
      * unicode 转字符串
      */

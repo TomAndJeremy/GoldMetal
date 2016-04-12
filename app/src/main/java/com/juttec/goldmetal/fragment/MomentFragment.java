@@ -619,7 +619,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                         }
                         List<DynamicEntityList> dynamicEntityLists = dynamicMsgBean.getEntityList();
 
-                        if (dynamicEntityLists.size() == 0) {
+                        if (dynamicEntityLists!=null && dynamicEntityLists.size() == 0) {
                             ToastUtil.showShort(getActivity(), "已加载全部信息");
 
                         }
