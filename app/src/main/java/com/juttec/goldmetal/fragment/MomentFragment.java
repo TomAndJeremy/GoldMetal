@@ -112,7 +112,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     MyBroadcastReceiver myBroadcastReceiver;//同步点赞或者评论
 
 
-
     protected ImageLoader imageLoader;//图片加载工具
     private DisplayImageOptions options;//
 
@@ -204,7 +203,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         refreshLayout.setColorSchemeColors(Color.BLUE, Color.RED, Color.GREEN);
 
 
-
         //下拉监听
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -247,6 +245,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+
 
 
         //设置上拉加载
@@ -406,15 +405,25 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
             // 从手机相册返回
             case REQUEST_CODE_ALBUM:
                 if (resultCode == Activity.RESULT_OK) {
-                    Uri selectedImage = GetContentUrl.geturi(data, getActivity());
-                    String[] filePathColumns = {MediaStore.Images.Media.DATA};
-                    Cursor c = getActivity().getContentResolver().query(selectedImage,
-                            filePathColumns, null, null, null);
-                    c.moveToFirst();
-                    int columnIndex = c.getColumnIndex(filePathColumns[0]);
-                    path = c.getString(columnIndex);
-                    LogUtil.d("选取相册中图片的路径：" + path);
-                    c.close();
+
+
+                    Uri uri = data.getData();
+                    String type = data.getType();
+                    if (uri.getScheme().equals("file") && (type.contains("image/"))) {
+                        path = uri.getEncodedPath();
+                    } else {
+                        Uri selectedImage = GetContentUrl.geturi(uri, type, getActivity());
+                        String[] filePathColumns = {MediaStore.Images.Media.DATA};
+                        Cursor c = getActivity().getContentResolver().query(selectedImage,
+                                filePathColumns, null, null, null);
+                        c.moveToFirst();
+                        int columnIndex = c.getColumnIndex(filePathColumns[0]);
+                        path = c.getString(columnIndex);
+                        LogUtil.d("选取相册中图片的路径：" + path);
+                        c.close();
+                    }
+
+
                     //上传头像
                     uploadUserPhoto();
                 }
@@ -462,7 +471,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     //判断用户是否编辑了个人的昵称和头像
     private boolean checkNameAndPhoto() {
         if (!app.isLogin()) {
-           showLoginDialog();
+            showLoginDialog();
             return false;
         }
         if ("".equals(app.getUserInfoBean().getUserNickName()) || null == (app.getUserInfoBean().getUserNickName())) {
@@ -496,9 +505,6 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     }
 
 
-
-
-
     //上传用户头像  的接口
     private void uploadUserPhoto() {
 
@@ -520,7 +526,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                         setImg();
                         //修改用户头像的路径
                         app.getUserInfoBean().setUserPhoto(object.getString("message1"));
-                        SharedPreferencesUtil.setParam(getActivity(),"userPhoto",object.getString("message1"));
+                        SharedPreferencesUtil.setParam(getActivity(), "userPhoto", object.getString("message1"));
                         ToastUtil.showShort(getActivity(), "上传成功");
 
                     } else {
@@ -581,7 +587,7 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
      * 获取动态
      *
      * @param page2 页数
-     * @param type 类型 all：所有 attention：关注 personal：个人
+     * @param type  类型 all：所有 attention：关注 personal：个人
      */
     private void getInfo(final int page2, String type) {
         LogUtil.d("交易圈 首页  current page:" + page);
@@ -619,13 +625,14 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
                         }
                         List<DynamicEntityList> dynamicEntityLists = dynamicMsgBean.getEntityList();
 
-                        if (dynamicEntityLists!=null && dynamicEntityLists.size() == 0) {
+                        if (dynamicEntityLists != null && dynamicEntityLists.size() == 0) {
                             ToastUtil.showShort(getActivity(), "已加载全部信息");
 
                         }
 
                         try {
-                            if (entityList.addAll(dynamicEntityLists)){;//向集合中添加数据
+                            if (entityList.addAll(dynamicEntityLists)) {
+                                ;//向集合中添加数据
                                 page++;//每次加载后页数加一
                             }
 
@@ -672,19 +679,18 @@ public class MomentFragment extends BaseFragment implements View.OnClickListener
     /**
      * 显示登录的dialog
      */
-    private void showLoginDialog(){
-            mDialog.builder().setTitle("提示")
-                    .setMsg("您还没有登录，请先登录后再执行操作")
-                    .setSingleButton("前去登录", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), LoginActivity.class);
-                            startActivity(intent);
-                            mDialog.dismiss();
-                        }
-                    }).show();
+    private void showLoginDialog() {
+        mDialog.builder().setTitle("提示")
+                .setMsg("您还没有登录，请先登录后再执行操作")
+                .setSingleButton("前去登录", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                        mDialog.dismiss();
+                    }
+                }).show();
     }
-
 
 
     @Override

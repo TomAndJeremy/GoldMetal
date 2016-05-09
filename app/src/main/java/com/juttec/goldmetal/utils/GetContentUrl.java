@@ -8,12 +8,12 @@ import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 
+/**
+ *用于获取选中的文件的真是路径（一般适用于miui）
+ */
 public class GetContentUrl {
-	public static Uri geturi(Intent intent,Context context) {
+	public static Uri geturi(Uri uri,String type ,Context context) {
 
-		Uri uri = intent.getData();
-
-		String type = intent.getType();
 
 		if (uri.getScheme().equals("file") && (type.contains("image/"))) {
 

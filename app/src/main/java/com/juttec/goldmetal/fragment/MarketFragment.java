@@ -129,7 +129,6 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,7 +158,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_market, container, false);
         tabLayout = (TabLayout) view.findViewById(R.id.market_tablayout);
         tabLayout.addTab(tabLayout.newTab().setText("自选").setTag(1));
-        tabLayout.addTab(tabLayout.newTab().setText("上证A股").setTag(2),true);
+        tabLayout.addTab(tabLayout.newTab().setText("上证A股").setTag(2), true);
         tabLayout.addTab(tabLayout.newTab().setText("上证B股").setTag(3));
         tabLayout.addTab(tabLayout.newTab().setText("深证A股").setTag(4));
         tabLayout.addTab(tabLayout.newTab().setText("深证B股").setTag(5));
@@ -169,7 +168,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                LogUtil.d("(int) tab.getTag():"+(int) tab.getTag());
+                LogUtil.d("(int) tab.getTag():" + (int) tab.getTag());
                 //当点击tab时  将加载的页数设置为  加载第一页
                 page = 1;
                 switch ((int) tab.getTag()) {
@@ -253,7 +252,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                 ToastUtil.showShort(getActivity(), "您还没有自选股，快去添加吧");
                 show = false;
             }
-           //将股票数据清空
+            //将股票数据清空
             datas.clear();
             //将resetURL置空
             resetURL = "";
@@ -624,8 +623,20 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                     if (marketFormInfo.getResult().size() == 0) {
 
                         if (isOptional) {
+
+
+                            myRealm.beginTransaction();
+                            RealmResults<OptionalStockBean> results =
+                                    myRealm.where(OptionalStockBean.class).findAll();
+                            results.clear();
+                            myRealm.commitTransaction();
+
                             datas.clear();
-                            adapter.notifyDataSetChanged();
+
+                            if (adapter != null) {
+                                adapter.notifyDataSetChanged();
+                            }
+
 
                         } else {
                             page--;
@@ -634,7 +645,7 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
                             ToastUtil.showShort(getActivity(), "数据已全部加载...");
 
                         }
-                       break;
+                        break;
                     } else {
                         datas = marketFormInfo.getResult();
 

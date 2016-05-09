@@ -542,19 +542,29 @@ public class PublishTopicActivity extends AppCompatActivity implements KeyClickL
             // 从手机相册返回
             case REQUEST_CODE_ALBUM:
                 if (resultCode == RESULT_OK) {
-                    Uri selectedImage = GetContentUrl.geturi(data, getApplicationContext());
-                    String[] filePathColumns = {MediaStore.Images.Media.DATA};
-                    Cursor c = this.getContentResolver().query(selectedImage,
-                            filePathColumns, null, null, null);
-                    c.moveToFirst();
-                    int columnIndex = c.getColumnIndex(filePathColumns[0]);
-                    String picturePath = c.getString(columnIndex);
+                    Uri uri = data.getData();
+                    String type = data.getType();
+                    String picturePath = "";
+
+                    if (uri.getScheme().equals("file") && (type.contains("image/"))) {
+                        picturePath = uri.getEncodedPath();
+                    } else {
+
+                        Uri selectedImage = GetContentUrl.geturi(uri, type, getApplicationContext());
+                        String[] filePathColumns = {MediaStore.Images.Media.DATA};
+                        Cursor c = this.getContentResolver().query(selectedImage,
+                                filePathColumns, null, null, null);
+                        c.moveToFirst();
+                        int columnIndex = c.getColumnIndex(filePathColumns[0]);
+                        picturePath = c.getString(columnIndex);
+
+                        LogUtil.d("选取相册中图片的路径：" + picturePath);
+                        c.close();
+                    }
                     PhotoBean photoBean = new PhotoBean();
                     photoBean.setDyPhoto(picturePath);
                     photoBean.setIsDelete(false);
                     picPathList.add(photoBean);
-                    LogUtil.d("选取相册中图片的路径：" + picturePath);
-                    c.close();
                     setImg();
                 }
                 break;

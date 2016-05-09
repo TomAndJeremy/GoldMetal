@@ -45,6 +45,10 @@ dependencies {
     compile files('src/main/libs/weibosdkcore.jar')
     compile 'com.alibaba:fastjson:1.2.7'
     compile 'me.biubiubiu.justifytext:library:1.1'
+    compile 'com.demievil.library:refreshlayout:1.0.0@aar'
+
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'cn.bingoogolapple:bga-refreshlayout:1.0.0@aar'
 
 
 }
